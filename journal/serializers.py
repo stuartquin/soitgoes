@@ -1,4 +1,4 @@
-from .models import Thought
+from .models import Thought, Tag
 from rest_framework import serializers
 
 
@@ -17,3 +17,10 @@ class ThoughtSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Thought
         fields = ['id', 'content', 'created_at', 'user', 'tags']
+
+
+class TagSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['id', 'created_at', 'tag']
+        read_only_fields = ('tag',)
