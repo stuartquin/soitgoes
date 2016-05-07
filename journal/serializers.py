@@ -11,15 +11,12 @@ from rest_framework import serializers
 #         fields = ['id', 'content', 'created_at', 'user', 'tags']
 
 
-class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-    contact = serializers.ReadOnlyField(source='contact')
-
+class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ['name', 'contact', 'created_at']
 
 
-
-class TimeSlipSerializer(serializers.HyperlinkedModelSerializer):
+class TimeSlipSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlip

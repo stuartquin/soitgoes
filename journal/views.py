@@ -1,25 +1,39 @@
+from django.shortcuts import get_object_or_404
+
 from rest_framework import generics
+from rest_framework.response import Response
 
 from .models import Project, Invoice, TimeSlip
 from .serializers import ProjectSerializer, TimeSlipSerializer
 
 
-class ProjectList(generics.ListCreateAPIView):
+class ProjectList(generics.ListAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
-    def get_queryset(self):
-        return Project.objects.filter(user=self.request.user)
+
+class ProjectDetail(generics.RetrieveAPIView):
+    serializer_class = ProjectSerializer
+
+    def retrieve(self, request, pk=None):
+        project = get_object_or_404(Project.objects.all(), pk=pk)
+        serializer = ProjectSerializer(project)
+        return Response(serializer.data)
 
 
-class TimeSlipList(generics.ListCreateAPIView):
+class TimeSlipList(generics.ListAPIView):
     serializer_class = TimeSlipSerializer
+    queryset = TimeSlip.objects.all()
 
-    def get_queryset(self):
-        import ipdb; ipdb.set_trace()
-        project = self.request.query_params.get("project", None)
-        return TimeSlip.objects.filter(project=project)
+    def list(self, request, project=None):
+        timeslips = TimeSlip.objects.filter(project=project)
+        serializer = TimeSlipSerializer(timeslips, many=True)
+        return Response(serializer.data)
 
+
+class TimeSlipDetail(generics.RetrieveAPIView):
+    queryset = TimeSlip.objects.all()
+    serializer_class = TimeSlipSerializer
 
 # class ThoughtList(generics.ListCreateAPIView):
 #     queryset = Thought.objects.all()

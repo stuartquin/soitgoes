@@ -37,7 +37,7 @@ class TimeSlip(models.Model):
     date = models.DateField()
     hours = models.FloatField(default=0.0)
 
-    comment = models.CharField(models.SET_NULL, max_length=512, blank=True, null=True)
+    comment = models.CharField(max_length=512, blank=True, null=True)
     invoice = models.ForeignKey(Invoice, models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
