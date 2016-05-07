@@ -1,4 +1,4 @@
-from .models import Project, TimeSlip
+from .models import Project, TimeSlip, Invoice
 from rest_framework import serializers
 
 
@@ -20,3 +20,10 @@ class ProjectSerializer(serializers.ModelSerializer):
 class TimeSlipSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlip
+
+
+class InvoiceSerializer(serializers.ModelSerializer):
+    timeslips = serializers.CharField(max_length=1000)
+
+    class Meta:
+        model = Invoice

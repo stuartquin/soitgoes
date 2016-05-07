@@ -4,7 +4,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 
 from .models import Project, Invoice, TimeSlip
-from .serializers import ProjectSerializer, TimeSlipSerializer
+from .serializers import ProjectSerializer, TimeSlipSerializer, InvoiceSerializer
 
 
 class ProjectList(generics.ListAPIView):
@@ -21,7 +21,15 @@ class ProjectDetail(generics.RetrieveAPIView):
         return Response(serializer.data)
 
 
-class TimeSlipList(generics.ListAPIView):
+class InvoiceCreate(generics.CreateAPIView):
+    serializer_class = InvoiceSerializer
+
+    def perform_create(self, serializer):
+        import ipdb; ipdb.set_trace()
+        serializer.save()
+
+
+class TimeSlipList(generics.ListCreateAPIView):
     serializer_class = TimeSlipSerializer
     queryset = TimeSlip.objects.all()
 
