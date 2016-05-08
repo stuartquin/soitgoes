@@ -15,7 +15,10 @@ class ProjectAdmin(admin.ModelAdmin):
 
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
-    list_display = ('sequence_num', )
+    list_display = ('name', 'created_at')
+
+    def name(self, obj):
+        return obj
 
 
 @admin.register(TimeSlip)

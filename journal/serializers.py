@@ -2,6 +2,8 @@ from django.db.models import Max
 from .models import Project, TimeSlip, Invoice
 from rest_framework import serializers
 
+from libs import pdf
+
 
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,10 +35,10 @@ class InvoiceSerializer(serializers.ModelSerializer):
         invoice = Invoice(sequence_num=sequence_num, project=data['project'])
         invoice.save()
 
-        TimeSlip.objects.filter(
-            id__in=data['timeslips']
-        ).update(invoice=invoice.id)
+        timeslips = TimeSlip.objects.filter(id__in=data['timeslips'])
+        timeslips.update(invoice=invoice.id)
 
+        pdf.generate_invoice(invoice, timeslips)
 
     class Meta:
         model = Invoice
