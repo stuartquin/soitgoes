@@ -20,7 +20,7 @@ class InvoiceAdmin(admin.ModelAdmin):
 
 @admin.register(TimeSlip)
 class TimeSlipAdmin(admin.ModelAdmin):
-    list_display = ('name', 'hours', 'date')
+    list_display = ('name', 'hours', 'invoice', 'date')
 
     def name(self, obj):
         return obj

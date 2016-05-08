@@ -1,14 +1,6 @@
+from django.db.models import Max
 from .models import Project, TimeSlip, Invoice
 from rest_framework import serializers
-
-
-# class ThoughtSerializer(serializers.HyperlinkedModelSerializer):
-#     user = serializers.ReadOnlyField(source='user.username')
-#     tags = TagField()
-#
-#     class Meta:
-#         model = Thought
-#         fields = ['id', 'content', 'created_at', 'user', 'tags']
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -18,12 +10,33 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class TimeSlipSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(many=True, *args, **kwargs)
+
     class Meta:
         model = TimeSlip
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
-    timeslips = serializers.CharField(max_length=1000)
+    timeslips = serializers.ListField(
+        child=serializers.IntegerField(),
+        write_only=True
+    )
+    sequence_num = serializers.IntegerField(read_only=True)
+
+    def save(self):
+        data = self.validated_data
+        invoices = Invoice.objects.filter(project=data['project'])
+        max = invoices.aggregate(Max('sequence_num')).get('sequence_num__max')
+        sequence_num = (max or 0) + 1
+
+        invoice = Invoice(sequence_num=sequence_num, project=data['project'])
+        invoice.save()
+
+        TimeSlip.objects.filter(
+            id__in=data['timeslips']
+        ).update(invoice=invoice.id)
+
 
     class Meta:
         model = Invoice

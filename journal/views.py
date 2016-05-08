@@ -3,66 +3,46 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.response import Response
 
-from .models import Project, Invoice, TimeSlip
-from .serializers import ProjectSerializer, TimeSlipSerializer, InvoiceSerializer
+from . import serializers, models
 
 
 class ProjectList(generics.ListAPIView):
-    queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
+    queryset = models.Project.objects.all()
+    serializer_class = serializers.ProjectSerializer
 
 
 class ProjectDetail(generics.RetrieveAPIView):
-    serializer_class = ProjectSerializer
+    serializer_class = serializers.ProjectSerializer
 
     def retrieve(self, request, pk=None):
-        project = get_object_or_404(Project.objects.all(), pk=pk)
-        serializer = ProjectSerializer(project)
+        project = get_object_or_404(models.Project.objects.all(), pk=pk)
+        serializer = serializers.ProjectSerializer(project)
         return Response(serializer.data)
 
 
-class InvoiceCreate(generics.CreateAPIView):
-    serializer_class = InvoiceSerializer
-
-    def perform_create(self, serializer):
-        import ipdb; ipdb.set_trace()
-        serializer.save()
+class InvoiceList(generics.ListCreateAPIView):
+    queryset = models.Invoice.objects.all()
+    serializer_class = serializers.InvoiceSerializer
 
 
 class TimeSlipList(generics.ListCreateAPIView):
-    serializer_class = TimeSlipSerializer
-    queryset = TimeSlip.objects.all()
+    queryset = models.TimeSlip.objects.all()
+    serializer_class = serializers.TimeSlipSerializer
 
-    def list(self, request, project=None):
-        timeslips = TimeSlip.objects.filter(project=project)
-        serializer = TimeSlipSerializer(timeslips, many=True)
+    def create(self, request, project=None):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
         return Response(serializer.data)
 
+    def list(self, request, project=None):
+        filters = {
+            'project': project
+        }
+        if 'invoice' in request.query_params:
+            invoice = request.query_params['invoice']
+            filters['invoice'] = invoice if invoice != 'null' else None
 
-class TimeSlipDetail(generics.RetrieveAPIView):
-    queryset = TimeSlip.objects.all()
-    serializer_class = TimeSlipSerializer
-
-# class ThoughtList(generics.ListCreateAPIView):
-#     queryset = Thought.objects.all()
-#     serializer_class = ThoughtSerializer
-# 
-#     def perform_create(self, serializer):
-#         for tag in self.request.data["tags"]:
-#             try:
-#                 Tag.objects.create(tag=tag, user=self.request.user)
-#             except IntegrityError:
-#                 print("Tag Exists %s" % tag)
-# 
-#         serializer.save(user=self.request.user)
-# 
-#     def get_queryset(self):
-#         tags = self.request.query_params.get("tags", None)
-#         filters = []
-#         if tags:
-#             filters = self.filter_by_tags(tags.split(","))
-# 
-#         return Thought.objects.filter(*filters)
-# 
-#     def filter_by_tags(self, tags):
-#         return list(map(lambda x: Q(tags__contains=x), tags))
+        timeslips = models.TimeSlip.objects.filter(**filters)
+        serializer = serializers.TimeSlipSerializer(timeslips, many=True)
+        return Response(serializer.data)
