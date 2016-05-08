@@ -38,7 +38,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
         timeslips = TimeSlip.objects.filter(id__in=data['timeslips'])
         timeslips.update(invoice=invoice.id)
 
-        pdf.generate_invoice(invoice, timeslips)
+        pdf.generate_invoice(invoice)
 
     class Meta:
         model = Invoice
