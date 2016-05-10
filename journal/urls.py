@@ -1,11 +1,9 @@
 from django.conf.urls import url
-from . import views
+from . import apiviews
 
 urlpatterns = [
-    url(r'projects/$', views.ProjectList.as_view()),
-    url(r'projects/(?P<pk>[0-9]+)/$', views.ProjectDetail.as_view()),
-    url(r'projects/(?P<project>[0-9]+)/timeslips$', views.TimeSlipList.as_view()),
-    url(r'projects/(?P<project>[0-9]+)/invoices$', views.InvoiceList.as_view()),
-
-    url(r'timeslips/', views.TimeSlipList.as_view()),
+    url(r'projects/$', apiviews.ProjectList.as_view()),
+    url(r'projects/(?P<pk>[0-9]+)/$', apiviews.ProjectDetail.as_view()),
+    url(r'projects/(?P<project>[0-9]+)/timeslips$', apiviews.TimeSlipList.as_view()),
+    url(r'projects/(?P<project>[0-9]+)/invoices$', apiviews.InvoiceList.as_view()),
 ]

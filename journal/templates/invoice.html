@@ -1,0 +1,107 @@
+<html>
+  <head>
+  <style>
+body {
+    -webkit-print-color-adjust: exact;
+    font-family: Helvetica, Arial,  sans-serif;
+    line-height: 1.2em;
+
+    display: -webkit-box;
+    display: flex;
+
+    -webkit-box-pack: center; /* wkhtmltopdf uses this one */
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+
+.wrapper {
+    width: 800px;
+}
+
+.header {
+    display: -webkit-box;
+    display: flex;
+
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+}
+
+.client {
+    display: -webkit-box;
+    display: flex;
+
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+}
+
+hr {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+h3 {
+    margin-top: 0;
+}
+
+.alt {
+    background-color: #E2E2E2;
+}
+
+table {
+    width: 100%;
+}
+
+th {
+    text-align: left;
+}
+
+.price-list {
+    margin-top: 40px;
+}
+  </style>
+  </head>
+  <body>
+
+    <div class='wrapper'>
+      <section class='header'>
+        <div class='company-logo'>
+          <img src='screen.png' />
+        </div>
+        <div class='company-details'>
+          Test Co. <br />
+          123 Fake Gardens <br />
+          London <br />
+          E1 2YD
+        </div>
+      </section>
+
+      <hr />
+
+      <section class='client'>
+        <div class='client-details'>
+          John Doe <br />
+          Super Corp Ltd.
+        </div>
+
+        <div class='invoice-details'>
+          <h3>Invoice SuperCorp [01]</h3>
+          <span class='invoice-sent-date'>2016-05-05</span><br />
+          <span class='invoice-due-date'>Due on receipt</span>
+        </div>
+      </section>
+
+      <section class='price-list'>
+        <table>
+          <tr><th>Details</th><th>Unit Price (&pound;)</th><th>Subtotal (&pound;)</th></tr>
+          {% for timeslip in timeslips %}
+          <tr class='{% if forloop.counter|divisibleby:2 %}alt{% endif %}'>
+            <td>{{ timeslip.hours }} Hours on {{ timeslip.date }}: {{ timeslip.project.name }}</td>
+            <td>{{ timeslip.project.hourly_rate }}</td>
+            <td>60.00</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </section>
+    </div>
+  </body>
+</html>
