@@ -1,3 +1,4 @@
+{% load invoice_extras %}
 <html>
   <head>
   <style>
@@ -58,6 +59,10 @@ th {
 .price-list {
     margin-top: 40px;
 }
+
+.company-logo img {
+    width: 100px;
+}
   </style>
   </head>
   <body>
@@ -97,7 +102,7 @@ th {
           <tr class='{% if forloop.counter|divisibleby:2 %}alt{% endif %}'>
             <td>{{ timeslip.hours }} Hours on {{ timeslip.date }}: {{ timeslip.project.name }}</td>
             <td>{{ timeslip.project.hourly_rate }}</td>
-            <td>60.00</td>
+            <td>{{ timeslip.project.hourly_rate|multiply:timeslip.hours }}</td>
           </tr>
           {% endfor %}
         </table>
