@@ -65,13 +65,13 @@ th {
     <div class='wrapper'>
       <section class='header'>
         <div class='company-logo'>
-          <img src='screen.png' />
+            <img src="{{ company.logo_image }}" alt="Company Logo"/>
         </div>
         <div class='company-details'>
-          Test Co. <br />
-          123 Fake Gardens <br />
-          London <br />
-          E1 2YD
+          {{ company.name }}<br />
+          {{ company.address1 }}<br />
+          {{ company.city }} <br />
+          {{ company.post_code }}
         </div>
       </section>
 
@@ -79,13 +79,13 @@ th {
 
       <section class='client'>
         <div class='client-details'>
-          John Doe <br />
-          Super Corp Ltd.
+          {{ contact.name }} <br />
+          {{ contact.company.name }}
         </div>
 
         <div class='invoice-details'>
-          <h3>Invoice SuperCorp [01]</h3>
-          <span class='invoice-sent-date'>2016-05-05</span><br />
+          <h3>Invoice #{{invoice.sequence_num}}</h3>
+          <span class='invoice-sent-date'>{{ sent_date }}</span><br />
           <span class='invoice-due-date'>Due on receipt</span>
         </div>
       </section>

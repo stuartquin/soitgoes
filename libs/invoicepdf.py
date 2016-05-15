@@ -3,7 +3,7 @@ import tempfile
 import subprocess
 
 
-def render(invoice):
+def render(invoice, account, project):
     template = loader.get_template('invoice.html')
     temp_name = tempfile.NamedTemporaryFile().name
     html_name = temp_name + '.html'
@@ -11,6 +11,8 @@ def render(invoice):
 
     context = {
         'invoice': invoice,
+        'contact': project.contact,
+        'company': account.company,
         'timeslips': invoice.timeslip_set.all()
     }
 

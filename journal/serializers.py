@@ -1,8 +1,15 @@
 from django.db.models import Max
-from .models import Project, TimeSlip, Invoice
 from rest_framework import serializers
 
-from libs import invoice
+from .models import Project, TimeSlip, Invoice
+from libs import invoicepdf
+
+
+def user_account(func):
+    def wrapper(self, *args, **kwargs):
+        kwargs['account'] = self.context['request'].user.account_set.first()
+        func(self, *args, **kwargs)
+    return wrapper
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -26,7 +33,8 @@ class InvoiceSerializer(serializers.ModelSerializer):
     )
     sequence_num = serializers.IntegerField(read_only=True)
 
-    def save(self):
+    @user_account
+    def save(self, account):
         data = self.validated_data
         invoices = Invoice.objects.filter(project=data['project'])
         max = invoices.aggregate(Max('sequence_num')).get('sequence_num__max')
@@ -37,8 +45,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
         timeslips = TimeSlip.objects.filter(id__in=data['timeslips'])
         timeslips.update(invoice=invoice.id)
-
-        invoice.render(invoice)
+        invoicepdf.render(invoice, account, data['project'])
 
     class Meta:
         model = Invoice

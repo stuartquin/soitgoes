@@ -1,21 +1,9 @@
 from django.shortcuts import get_object_or_404
 
 from rest_framework import generics
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import BasePermission
 
 from . import serializers, models
-
-
-class HasProjectAccess(BasePermission):
-    def has_permission(self, request, view):
-        project_id = request.parser_context['kwargs']['project']
-        project = models.Project.objects.filter(id=project_id).first()
-        return len(project.account.users.filter(id=request.user.id)) > 0
-
-    def has_object_permission(self, request, view, obj):
-        return True
 
 
 class ProjectList(generics.ListAPIView):
@@ -23,11 +11,10 @@ class ProjectList(generics.ListAPIView):
     serializer_class = serializers.ProjectSerializer
 
 
-class ProjectDetail(APIView):
+class ProjectDetail(generics.RetrieveAPIView):
     serializer_class = serializers.ProjectSerializer
-    permission_classes = (HasProjectAccess,)
 
-    def get(self, request, pk=None):
+    def retrieve(self, request, pk=None):
         project = get_object_or_404(models.Project.objects.all(), pk=pk)
         serializer = serializers.ProjectSerializer(project)
         return Response(serializer.data)
@@ -41,7 +28,12 @@ class InvoiceList(generics.ListCreateAPIView):
 class TimeSlipList(generics.ListCreateAPIView):
     queryset = models.TimeSlip.objects.all()
     serializer_class = serializers.TimeSlipSerializer
-    permission_classes = (HasProjectAccess,)
+
+    def create(self, request, project=None):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data)
 
     def list(self, request, project=None):
         filters = {
