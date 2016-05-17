@@ -105,6 +105,13 @@ th {
             <td>{{ timeslip.project.hourly_rate|multiply:timeslip.hours }}</td>
           </tr>
           {% endfor %}
+          {% for item in items %}
+          <tr class='{% if forloop.counter|divisibleby:2 %}alt{% endif %}'>
+            <td>{{ item.qty }} {{ item.unit }}: {{ item.name }}</td>
+            <td>{{ item.cost_per_unit }}</td>
+            <td>{{ item.qty|multiply:item.cost_per_unit }}</td>
+          </tr>
+          {% endfor %}
         </table>
       </section>
     </div>

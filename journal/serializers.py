@@ -2,7 +2,7 @@ from django.db.models import Max
 from rest_framework import serializers
 
 from .models import Project, TimeSlip, Invoice
-from libs import invoicepdf
+from libs import invoicepdf, vat
 
 
 def user_account(func):
@@ -36,7 +36,8 @@ class InvoiceSerializer(serializers.ModelSerializer):
     @user_account
     def save(self, account):
         data = self.validated_data
-        invoices = Invoice.objects.filter(project=data['project'])
+        project = data['project']
+        invoices = Invoice.objects.filter(project=project)
         max = invoices.aggregate(Max('sequence_num')).get('sequence_num__max')
         sequence_num = (max or 0) + 1
 
@@ -45,7 +46,14 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
         timeslips = TimeSlip.objects.filter(id__in=data['timeslips'])
         timeslips.update(invoice=invoice.id)
-        invoicepdf.render(invoice, account, data['project'])
+        timeslip_total = sum([t.hours for t in timeslips]) * project.hourly_rate
+
+        # Adds additional invoice items, maybe should be elsewhere
+        items = []
+        if project.account.company.vat_number:
+            items.append(vat.create_vat_item(timeslip_total, invoice))
+
+        invoicepdf.render(invoice, account, project, items)
 
     class Meta:
         model = Invoice

@@ -10,6 +10,7 @@ class Company(models.Model):
     post_code = models.CharField(max_length=128, blank=True, null=True)
     reg_number = models.CharField(max_length=128, blank=True, null=True)
     logo_image = models.TextField(blank=True, null=True)
+    vat_number = models.CharField(max_length=128, blank=True, null=True)
 
     def __str__(self):
         return "%s, %s" % (self.name, self.city)
@@ -56,6 +57,21 @@ class Invoice(models.Model):
 
     def __str__(self):
         return "[%s] %s" % (self.sequence_num, self.project.name)
+
+
+class InvoiceItem(models.Model):
+    name = models.CharField(max_length=128)
+    units = models.CharField(max_length=128)
+    qty = models.CharField(max_length=128)
+    cost_per_unit = models.FloatField(default=0.0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    invoice = models.ForeignKey(
+        Invoice, models.SET_NULL, blank=True, null=True
+    )
+
+    def __str__(self):
+        return "[%s] %s" % (self.project.name, self.comment)
 
 
 class TimeSlip(models.Model):
