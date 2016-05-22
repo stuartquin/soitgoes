@@ -41,12 +41,12 @@ class InvoiceList(generics.ListCreateAPIView):
 class TimeSlipList(generics.ListCreateAPIView):
     queryset = models.TimeSlip.objects.all()
     serializer_class = serializers.TimeSlipSerializer
-    permission_classes = (HasProjectAccess,)
 
     def list(self, request, project=None):
-        filters = {
-            'project': project
-        }
+        filters = {}
+        if project:
+            filters['project'] = project
+
         if 'invoice' in request.query_params:
             invoice = request.query_params['invoice']
             filters['invoice'] = invoice if invoice != 'null' else None

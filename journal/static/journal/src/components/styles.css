@@ -1,0 +1,28 @@
+.timeslipGridHeaderDate {
+    text-align: center;
+    width: 75px;
+}
+
+.timeslipGridHeaderProjects {
+    width: 200px;
+}
+
+.timeslipGridHeader {
+  display: flex;
+}
+
+.timeslipGridRow {
+  display: flex;
+}
+
+.timeslipGridCell {
+    width: 75px;
+}
+
+.timeslipGridCell input {
+    width: 100%;
+}
+
+.timeslipGridRowProject {
+    width: 200px;
+}

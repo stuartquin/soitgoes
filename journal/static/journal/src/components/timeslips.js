@@ -2,6 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {getTimeslips} from '../actions/api';
 
+import {TimeslipGrid} from './timeslipgrid'
+
 const getProjectsWithTimeslips = (projects, timeslips) => {
   return projects.map((p) => {
     return p.set('timeslips', timeslips.filter((t) => {
@@ -17,12 +19,10 @@ class Timeslips extends React.Component {
   }
   render() {
     if (this.props.projects.count()) {
-      const projects = getProjectsWithTimeslips(this.props.projects, this.props.timeslips);
-      return (<ul>
-        {projects.map(project =>(
-          <li>{project.get('name')}</li>
-        ))}
-      </ul>);
+      return (
+        <TimeslipGrid
+          projects={getProjectsWithTimeslips(this.props.projects, this.props.timeslips)} />
+      );
     } else {
       return (<p>No Timeslips</p>);
     }
@@ -39,7 +39,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
       onLoad: () => {
-        dispatch(getTimeslips(1));
+        dispatch(getTimeslips());
       }
   }
 };

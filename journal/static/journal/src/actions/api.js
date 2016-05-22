@@ -28,7 +28,7 @@ const getTimeslipsError = (error, dispatch) => {
 };
 
 export const getTimeslips = (projectId) => {
-    const url = baseUrl + `projects/${projectId}/timeslips?format=json`;
+    const url = baseUrl + `timeslips/?format=json`;
     return (dispatch) => {
         return fetch(url, getOptions('get')).then(
             res => {
