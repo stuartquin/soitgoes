@@ -7,7 +7,7 @@ const getOptions = (method) => {
   return {
       method: 'get',
       headers: {
-        Authorization: 'Basic '+btoa('stuart:topsecret'),
+        Authorization: 'Basic ' + btoa('stuart:topsecret'),
         'Content-Type': 'application/json'
       }
   };

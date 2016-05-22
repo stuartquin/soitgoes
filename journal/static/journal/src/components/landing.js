@@ -1,12 +1,14 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {TimeslipsContainer} from './timeslips';
-import {getProjects, getTimeslips} from '../actions/api';
+import {LoginContainer} from './login';
+import {getProjects} from '../actions/api';
+import {getUserAuth} from '../actions/user';
 
 class Landing extends React.Component {
   constructor(props) {
     super(props);
-    this.props.onLoadProjects();
+    this.props.onLoad();
   }
   render() {
       if (this.props.projects.count()) {
@@ -14,7 +16,9 @@ class Landing extends React.Component {
           <TimeslipsContainer />
         );
       } else {
-        return (<p>Loading Projects...</p>);
+        return (
+          <LoginContainer />
+        );
       }
   }
 }
@@ -22,12 +26,16 @@ class Landing extends React.Component {
 const mapStateToProps = (state, props) => {
   return {
     projects: state.get('projects'),
-    timeslips: state.get('timeslips')
+    timeslips: state.get('timeslips'),
+    userAuth: state.get('userAuth')
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
+    onLoad: () => {
+      dispatch(getUserAuth());
+    },
     onLoadProjects: () => {
       dispatch(getProjects());
     }
