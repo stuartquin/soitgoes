@@ -71,7 +71,7 @@ class InvoiceItem(models.Model):
     )
 
     def __str__(self):
-        return "[%s] %s" % (self.project.name, self.comment)
+        return self.name
 
 
 class TimeSlip(models.Model):
