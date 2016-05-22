@@ -75,6 +75,7 @@ class InvoiceItem(models.Model):
 
 
 class TimeSlip(models.Model):
+    user = models.ForeignKey(User)
     project = models.ForeignKey(Project)
     created_at = models.DateTimeField(auto_now_add=True)
     date = models.DateField()

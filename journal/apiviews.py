@@ -51,6 +51,12 @@ class TimeSlipList(generics.ListCreateAPIView):
             invoice = request.query_params['invoice']
             filters['invoice'] = invoice if invoice != 'null' else None
 
+        if 'user' in request.query_params:
+            # @TODO This doesn't work yet, should check permissions etc.
+            filters['user'] = request.query_params['user']
+        else:
+            filters['user'] = request.user
+
         timeslips = models.TimeSlip.objects.filter(**filters)
         serializer = serializers.TimeSlipSerializer(timeslips, many=True)
         return Response(serializer.data)

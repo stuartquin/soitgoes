@@ -36,6 +36,7 @@ class TimeSlipList(generics.ListCreateAPIView):
         return Response(serializer.data)
 
     def list(self, request, project=None):
+        import ipdb; ipdb.set_trace()
         filters = {
             'project': project
         }
