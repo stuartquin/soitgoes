@@ -1,0 +1,14 @@
+{
+  "ecmaVersion": 6,
+  "ecmaFeatures": {
+    "modules": true,
+    "jsx": true
+  },
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "plugins": {
+    "es_modules": {}
+  }
+}

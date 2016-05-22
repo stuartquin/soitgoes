@@ -15,7 +15,7 @@ def user_account(func):
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ['name', 'contact', 'created_at']
+        fields = ['id', 'name', 'contact', 'created_at']
 
 
 class TimeSlipSerializer(serializers.ModelSerializer):
