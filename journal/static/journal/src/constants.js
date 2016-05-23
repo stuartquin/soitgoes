@@ -1,6 +1,9 @@
 const values = [
   'SET_STATE',
 
+  'SET_USER_AUTH',
+  'SET_USER_AUTH_SUCCESS',
+
   'GET_USER_AUTH',
   'GET_USER_AUTH_ERROR',
   'GET_USER_AUTH_SUCCESS',

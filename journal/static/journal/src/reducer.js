@@ -22,6 +22,10 @@ const setUserAuth = (state, auth) => {
 };
 
 export default function(state, action) {
+  if (state) {
+    console.log(action, state.toJS());
+  }
+
   switch(action.type) {
     case constants.SET_STATE:
       return initialState();
@@ -37,5 +41,14 @@ export default function(state, action) {
 
     case constants.GET_USER_AUTH_ERROR:
       return setUserAuth(state, null);
+
+    case constants.SET_USER_AUTH_SUCCESS:
+      return setUserAuth(state, action.auth);
+  }
+
+  if (state) {
+    return state;
+  } else {
+    return initialState();
   }
 }

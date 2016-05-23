@@ -11,7 +11,7 @@ class Landing extends React.Component {
     this.props.onLoad();
   }
   render() {
-      if (this.props.projects.count()) {
+      if (this.props.userAuth) {
         return (
           <TimeslipsContainer />
         );
@@ -23,7 +23,8 @@ class Landing extends React.Component {
   }
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (allState, props) => {
+  const state = allState.reducer;
   return {
     projects: state.get('projects'),
     timeslips: state.get('timeslips'),

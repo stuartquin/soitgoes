@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {LoginForm} from './loginform';
+import {setUserAuth} from '../actions/user';
 
 class Login extends React.Component {
   constructor(props) {
@@ -9,7 +10,9 @@ class Login extends React.Component {
   }
   render() {
     return (
-      <LoginForm />
+      <LoginForm
+        onSubmit={this.props.onLoginSubmit}
+      />
     );
   }
 }
@@ -21,6 +24,9 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
+    onLoginSubmit: (fields) => {
+      dispatch(setUserAuth(fields));
+    }
   }
 };
 

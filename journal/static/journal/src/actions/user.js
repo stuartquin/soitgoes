@@ -23,3 +23,13 @@ export const getUserAuth = () => {
     };
   }
 };
+
+export const setUserAuth = (fields) => {
+  const auth = btoa(`${fields.username}:${fields.password}`);
+  document.cookie = `soitgoes_auth=${auth}`;
+
+  return {
+    type: constants.SET_USER_AUTH_SUCCESS,
+    auth: auth
+  };
+};

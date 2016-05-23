@@ -3,21 +3,21 @@ import constants from '../constants';
 
 const baseUrl = 'http://localhost:8000/api/';
 
-const getOptions = (method) => {
+const getOptions = (auth, method) => {
   return {
       method: 'get',
       headers: {
-        Authorization: 'Basic ' + btoa('stuart:topsecret'),
+        Authorization: 'Basic ' + auth,
         'Content-Type': 'application/json'
       }
   };
 };
 
 const getTimeslipsSuccess = (timeslips, dispatch) => {
-    return {
-        type: constants.GET_TIMESLIPS_SUCCESS,
-        timeslips
-    };
+  return {
+    type: constants.GET_TIMESLIPS_SUCCESS,
+    timeslips
+  };
 };
 
 const getTimeslipsError = (error, dispatch) => {
@@ -27,18 +27,18 @@ const getTimeslipsError = (error, dispatch) => {
     };
 };
 
-export const getTimeslips = (projectId) => {
-    const url = baseUrl + `timeslips/?format=json`;
-    return (dispatch) => {
-        return fetch(url, getOptions('get')).then(
-            res => {
-                return res.json().then(json => {
-                    return dispatch(getTimeslipsSuccess(json, dispatch));
-                });
-            },
-            error => dispatch(getTimeslipsError(error, dispatch))
-        );
-    };
+export const getTimeslips = (auth) => {
+  const url = baseUrl + `timeslips/?format=json`;
+  return (dispatch) => {
+    return fetch(url, getOptions(auth, 'get')).then(
+      res => {
+        return res.json().then(json => {
+          return dispatch(getTimeslipsSuccess(json, dispatch));
+        });
+      },
+      error => dispatch(getTimeslipsError(error, dispatch))
+    );
+  };
 };
 
 const getProjectsSuccess = (res, dispatch) => {
@@ -55,16 +55,16 @@ const getProjectsError = (error, dispatch) => {
     };
 };
 
-export const getProjects = () => {
-    const url = baseUrl + `projects/`;
-    return (dispatch) => {
-        return fetch(url, getOptions('get')).then(
-            res => {
-                return res.json().then(json => {
-                    return dispatch(getProjectsSuccess(json, dispatch));
-                });
-            },
-            error => dispatch(getProjectsError(error, dispatch))
-        );
-    };
+export const getProjects = (auth) => {
+  const url = baseUrl + `projects/`;
+  return (dispatch) => {
+    return fetch(url, getOptions(auth, 'get')).then(
+      res => {
+        return res.json().then(json => {
+          return dispatch(getProjectsSuccess(json, dispatch));
+        });
+      },
+      error => dispatch(getProjectsError(error, dispatch))
+    );
+  };
 };

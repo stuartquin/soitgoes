@@ -7,6 +7,7 @@ const TimeslipGridCell = (props) => {
   if (props.timeslip) {
     hours = props.timeslip.get('hours');
   }
+
   return (
     <div className={styles.timeslipGridCell}>
       <input value={hours} />
