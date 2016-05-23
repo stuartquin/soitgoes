@@ -10,7 +10,9 @@ const TimeslipGridCell = (props) => {
 
   return (
     <div className={styles.timeslipGridCell}>
-      <input value={hours} />
+      <input
+        value={hours}
+        onChange={(e) => props.hourChanged(e.target.value)} />
     </div>
   );
 };

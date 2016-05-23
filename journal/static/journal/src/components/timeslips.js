@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import { getProjects, getTimeslips } from '../actions/api';
+import { updateProjectTimeslip } from '../actions/projects';
 import { getUserAuth } from '../services/user';
 
 import { TimeslipGrid } from './timeslipgrid'
@@ -23,7 +24,9 @@ class Timeslips extends React.Component {
     if (this.props.projects.count()) {
       return (
         <TimeslipGrid
-          projects={getProjectsWithTimeslips(this.props.projects, this.props.timeslips)} />
+          projects={getProjectsWithTimeslips(this.props.projects, this.props.timeslips)}
+          onHourChanged={this.props.onHourChanged}
+          />
       );
     } else {
       return (<p>No Timeslips</p>);
@@ -41,6 +44,9 @@ const mapStateToProps = (allState, props) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
+    onHourChanged: (project, date, hours) => {
+      dispatch(updateProjectTimeslip(project, date, hours));
+    },
     onLoad: (auth) => {
       dispatch(getProjects(auth)).then(() => {
         dispatch(getTimeslips(auth));

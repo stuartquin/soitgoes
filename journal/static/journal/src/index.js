@@ -22,11 +22,7 @@ store.dispatch({
   type: constants.SET_STATE
 });
 
-const history = syncHistoryWithStore(browserHistory, store, {
-  selectLocationState: (state) => {
-    return state.routing;
-  }
-});
+const history = syncHistoryWithStore(browserHistory, store);
 
 const routes = (
   <Route path='/' component={App}>

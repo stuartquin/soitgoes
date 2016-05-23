@@ -14,7 +14,9 @@ const values = [
 
   'GET_TIMESLIPS_START',
   'GET_TIMESLIPS_ERROR',
-  'GET_TIMESLIPS_SUCCESS'
+  'GET_TIMESLIPS_SUCCESS',
+
+  'UPDATE_PROJECT_TIMESLIPS'
 ];
 
 const constants = {}

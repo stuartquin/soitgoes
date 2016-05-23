@@ -25,7 +25,10 @@ const TimeslipGrid = (props) => {
         key={project.get('id')}
         project={project}
         today={today}
-        range={range} />
+        range={range}
+        hourChanged={(hours, date) => {
+          props.onHourChanged(project, date, hours);
+        }} />
     ))}
     </div>
   );

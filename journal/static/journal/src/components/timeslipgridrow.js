@@ -20,6 +20,9 @@ const TimeslipGridRow = (props) => {
       {dates.map((date, index) => (
         <TimeslipGridCell
           key={date}
+          hourChanged={(value) => {
+            props.hourChanged(value, date);
+          }}
           timeslip={filledTimeslips[date]} />
       ))}
     </div>

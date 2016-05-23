@@ -21,6 +21,25 @@ const setUserAuth = (state, auth) => {
   return state.set('userAuth', auth);
 };
 
+const updateProjectTimeslip = (state, action) => {
+  const project = action.project;
+  const date = action.date;
+  const index = state.get('timeslips').findIndex((t) => {
+    return t.get('project') === project.get('id') && t.get('date') === date;
+  });
+
+  if (index === -1) {
+    // Append a new item...
+  } else {
+    return state.updateIn(['timeslips'], (timeslips) => {
+      return timeslips.update(index, (timeslip) => {
+        return timeslip.set('hours', action.hours);
+      });
+    });
+  }
+  return state;
+}
+
 export default function(state, action) {
   if (state) {
     console.log(action, state.toJS());
@@ -44,6 +63,9 @@ export default function(state, action) {
 
     case constants.SET_USER_AUTH_SUCCESS:
       return setUserAuth(state, action.auth);
+
+    case constants.UPDATE_PROJECT_TIMESLIPS:
+      return updateProjectTimeslip(state, action);
   }
 
   if (state) {
