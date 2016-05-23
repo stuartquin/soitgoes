@@ -1,33 +1,37 @@
 import React from 'react';
 import ReacDOM from 'react-dom';
 import {Router, Route, browserHistory} from 'react-router';
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+import { push, syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
 import {createStore, applyMiddleware, combineReducers } from 'redux';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 
 import reducer from './reducer';
 import constants from './constants';
-import App from './app';
-import {LandingContainer} from './components/landing';
-import {TimeslipsContainer} from './components/timeslips';
+import { App } from './app';
+import { LoginContainer } from './components/login';
+import { TimeslipsContainer} from './components/timeslips';
+import { getUserAuth } from './services/user';
 
 const store = createStore(combineReducers({
   reducer: reducer,
   routing: routerReducer
-}), applyMiddleware(thunk));
+}), applyMiddleware(thunk, routerMiddleware(browserHistory)));
 
 store.dispatch({
   type: constants.SET_STATE
 });
 
-const history = syncHistoryWithStore(browserHistory, store)
+const history = syncHistoryWithStore(browserHistory, store, {
+  selectLocationState: (state) => {
+    return state.routing;
+  }
+});
 
 const routes = (
-  <Route component={App}>
-    <Route path='/' component={LandingContainer}>
-      <Route path='/timeslips' component={TimeslipsContainer} />
-    </Route>
+  <Route path='/' component={App}>
+    <Route path='/login' component={LoginContainer} />
+    <Route path='/timeslips' component={TimeslipsContainer} />
   </Route>
 );
 
@@ -39,3 +43,10 @@ ReacDOM.render(
   </Provider>,
   document.getElementById('root')
 );
+
+const userAuth = getUserAuth();
+if (userAuth) {
+  store.dispatch(push('/timeslips'));
+} else {
+  store.dispatch(push('/login'));
+}

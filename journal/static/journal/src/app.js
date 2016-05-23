@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class App extends Component {
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return this.props.children;
   }

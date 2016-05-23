@@ -1,8 +1,9 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import { push } from 'react-router-redux'
 
-import {LoginForm} from './loginform';
-import {setUserAuth} from '../actions/user';
+import { LoginForm } from './loginform';
+import { setUserAuth } from '../actions/user';
 
 class Login extends React.Component {
   constructor(props) {
@@ -25,7 +26,9 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     onLoginSubmit: (fields) => {
-      dispatch(setUserAuth(fields));
+      dispatch(setUserAuth(fields)).then(() => {
+        dispatch(push('/timeslips'));
+      });
     }
   }
 };

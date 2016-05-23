@@ -1,8 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { getProjects, getTimeslips } from '../actions/api';
 
-import {TimeslipGrid} from './timeslipgrid'
+import { getProjects, getTimeslips } from '../actions/api';
+import { getUserAuth } from '../services/user';
+
+import { TimeslipGrid } from './timeslipgrid'
 
 const getProjectsWithTimeslips = (projects, timeslips) => {
   return projects.map((p) => {
@@ -15,7 +17,7 @@ const getProjectsWithTimeslips = (projects, timeslips) => {
 class Timeslips extends React.Component {
   constructor(props) {
     super(props);
-    this.props.onLoad(props.userAuth);
+    this.props.onLoad(getUserAuth());
   }
   render() {
     if (this.props.projects.count()) {
@@ -33,8 +35,7 @@ const mapStateToProps = (allState, props) => {
   const state = allState.reducer;
   return {
     timeslips: state.get('timeslips'),
-    projects: state.get('projects'),
-    userAuth: state.get('userAuth')
+    projects: state.get('projects')
   };
 };
 
