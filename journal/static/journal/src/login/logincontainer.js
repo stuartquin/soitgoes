@@ -3,7 +3,11 @@ import {connect} from 'react-redux';
 import { push } from 'react-router-redux'
 
 import { LoginForm } from './loginform';
-import { setUserAuth } from '../actions/user';
+
+export const setUserAuth = (fields) => {
+  const auth = btoa(`${fields.username}:${fields.password}`);
+  document.cookie = `soitgoes_auth=${auth}`;
+};
 
 class Login extends React.Component {
   constructor(props) {
@@ -26,9 +30,8 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     onLoginSubmit: (fields) => {
-      dispatch(setUserAuth(fields)).then(() => {
-        dispatch(push('/timeslips'));
-      });
+      setUserAuth(fields);
+      dispatch(push('/timeslips'));
     }
   }
 };

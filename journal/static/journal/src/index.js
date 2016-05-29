@@ -10,7 +10,7 @@ import reducer from './reducer';
 import timeslips from './timeslips/timeslipreducer';
 import constants from './constants';
 import { App } from './app';
-import { LoginContainer } from './components/login';
+import { LoginContainer } from './login/logincontainer';
 import { TimeslipsContainer} from './timeslips/timeslipcontainer';
 import { getUserAuth } from './services/user';
 
