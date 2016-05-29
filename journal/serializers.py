@@ -19,9 +19,6 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class TimeSlipSerializer(serializers.ModelSerializer):
-    def __init__(self, *args, **kwargs):
-        super().__init__(many=True, *args, **kwargs)
-
     class Meta:
         model = TimeSlip
 

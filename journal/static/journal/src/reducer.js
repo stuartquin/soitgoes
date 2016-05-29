@@ -29,7 +29,15 @@ const updateProjectTimeslip = (state, action) => {
   });
 
   if (index === -1) {
-    // Append a new item...
+    return state.updateIn(['timeslips'], (timeslips) => {
+      return timeslips.push(Immutable.Map({
+        project: action.project.get('id'),
+        hours: action.hours,
+        date: action.date,
+        isNew: true,
+        user: 1 // @TODO this should be the real user
+      }));
+    });
   } else {
     return state.updateIn(['timeslips'], (timeslips) => {
       return timeslips.update(index, (timeslip) => {

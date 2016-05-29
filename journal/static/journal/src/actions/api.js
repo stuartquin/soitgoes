@@ -5,7 +5,7 @@ const baseUrl = 'http://localhost:8000/api/';
 
 const getOptions = (auth, method) => {
   return {
-      method: 'get',
+      method: method,
       headers: {
         Authorization: 'Basic ' + auth,
         'Content-Type': 'application/json'
@@ -65,6 +65,29 @@ export const getProjects = (auth) => {
         });
       },
       error => dispatch(getProjectsError(error, dispatch))
+    );
+  };
+};
+
+const saveTimeslipsSuccess = (res) => {
+    return {
+        type: constants.SAVE_TIMESLIPS_SUCCESS,
+        projects: res.results
+    };
+};
+
+export const saveTimeslips = (auth, projects, timeslips) => {
+  const url = baseUrl + `timeslips/`;
+  let options = getOptions(auth, 'POST');
+  options.body = JSON.stringify(timeslips.filter(t => t.get('isNew')).toJS());
+
+  return (dispatch) => {
+    return fetch(url, options).then(res => {
+        return res.json().then(json => {
+          return dispatch(saveTimeslipsSuccess(json));
+        });
+      },
+      error => dispatch(saveTimeslipsError(error))
     );
   };
 };

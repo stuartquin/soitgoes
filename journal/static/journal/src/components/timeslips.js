@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import { getProjects, getTimeslips } from '../actions/api';
+import { getProjects, getTimeslips, saveTimeslips } from '../actions/api';
 import { updateProjectTimeslip } from '../actions/projects';
 import { getUserAuth } from '../services/user';
 
@@ -23,10 +23,17 @@ class Timeslips extends React.Component {
   render() {
     if (this.props.projects.count()) {
       return (
-        <TimeslipGrid
-          projects={getProjectsWithTimeslips(this.props.projects, this.props.timeslips)}
-          onHourChanged={this.props.onHourChanged}
-          />
+        <div>
+          <TimeslipGrid
+            projects={getProjectsWithTimeslips(this.props.projects, this.props.timeslips)}
+            onHourChanged={this.props.onHourChanged}
+            />
+          <button onClick={() => {
+            this.props.onSave(getUserAuth(), this.props.projects, this.props.timeslips)
+          }}>
+            Save
+          </button>
+        </div>
       );
     } else {
       return (<p>No Timeslips</p>);
@@ -46,6 +53,9 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     onHourChanged: (project, date, hours) => {
       dispatch(updateProjectTimeslip(project, date, hours));
+    },
+    onSave: (auth, projects, timeslips) => {
+      dispatch(saveTimeslips(auth, projects, timeslips));
     },
     onLoad: (auth) => {
       dispatch(getProjects(auth)).then(() => {

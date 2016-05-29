@@ -42,6 +42,13 @@ class TimeSlipList(generics.ListCreateAPIView):
     queryset = models.TimeSlip.objects.all()
     serializer_class = serializers.TimeSlipSerializer
 
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = self.get_serializer_class()
+        kwargs['context'] = self.get_serializer_context()
+        if 'data' in kwargs:
+            kwargs['many'] = True
+        return serializer_class(*args, **kwargs)
+
     def list(self, request, project=None):
         filters = {}
         if project:
