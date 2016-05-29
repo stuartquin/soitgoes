@@ -3,6 +3,11 @@
     width: 75px;
 }
 
+.today input {
+  background-color: lightgreen;
+}
+
+
 .timeslipGridHeaderProjects {
     width: 200px;
 }

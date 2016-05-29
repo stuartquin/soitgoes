@@ -21,7 +21,9 @@ export const LoginForm = (props) => {
         value={fields.password}
         onChange={(e) => handleChange('password', e.target.value)} />
 
-      <button onClick={() => props.onSubmit(fields)}>Login</button>
+      <button
+        className='btn btn-default'
+        onClick={() => props.onSubmit(fields)}>Login</button>
     </div>
   );
 };
