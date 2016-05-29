@@ -1,6 +1,5 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {TimeslipsContainer} from './timeslips';
 import {LoginContainer} from './login';
 import {getProjects} from '../actions/api';
 import {getUserAuth} from '../actions/user';

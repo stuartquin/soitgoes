@@ -1,19 +1,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import { getProjects, getTimeslips, saveTimeslips } from '../actions/api';
+import { getProjects, getTimeslips, saveTimeslips } from '../timeslips/timeslipactions';
 import { updateProjectTimeslip } from '../actions/projects';
 import { getUserAuth } from '../services/user';
 
 import { TimeslipGrid } from './timeslipgrid'
 
-const getProjectsWithTimeslips = (projects, timeslips) => {
-  return projects.map((p) => {
-    return p.set('timeslips', timeslips.filter((t) => {
-      return t.get('project') === p.get('id');
-    }));
-  });
-};
+import { getProjectsWithTimeslips } from './timeslipselectors';
 
 class Timeslips extends React.Component {
   constructor(props) {
@@ -25,7 +19,7 @@ class Timeslips extends React.Component {
       return (
         <div>
           <TimeslipGrid
-            projects={getProjectsWithTimeslips(this.props.projects, this.props.timeslips)}
+            projects={this.props.projects}
             onHourChanged={this.props.onHourChanged}
             />
           <button onClick={() => {
@@ -42,10 +36,10 @@ class Timeslips extends React.Component {
 }
 
 const mapStateToProps = (allState, props) => {
-  const state = allState.reducer;
+  const state = allState.timeslips;
   return {
-    timeslips: state.get('timeslips'),
-    projects: state.get('projects')
+    timeslips: state.get('items'),
+    projects: getProjectsWithTimeslips(allState)
   };
 };
 

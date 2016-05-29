@@ -7,14 +7,16 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 
 import reducer from './reducer';
+import timeslips from './timeslips/timeslipreducer';
 import constants from './constants';
 import { App } from './app';
 import { LoginContainer } from './components/login';
-import { TimeslipsContainer} from './components/timeslips';
+import { TimeslipsContainer} from './timeslips/timeslipcontainer';
 import { getUserAuth } from './services/user';
 
 const store = createStore(combineReducers({
-  reducer: reducer,
+  reducer,
+  timeslips,
   routing: routerReducer
 }), applyMiddleware(thunk, routerMiddleware(browserHistory)));
 
