@@ -1,14 +1,14 @@
 {
-  "name": "react-hot-boilerplate",
+  "name": "soitgoes",
   "version": "1.0.0",
-  "description": "Boilerplate for ReactJS project with hot code reloading",
+  "description": "Time management",
   "scripts": {
     "start": "node server.js",
     "lint": "eslint src"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gaearon/react-hot-boilerplate.git"
+    "url": "https://github.com/stuartquin/soitgoes"
   },
   "keywords": [
     "react",
@@ -21,10 +21,9 @@
     "edit",
     "webpack"
   ],
-  "author": "Dan Abramov <dan.abramov@me.com> (http://github.com/gaearon)",
-  "license": "MIT",
+  "author": "Stuart Quin",
   "bugs": {
-    "url": "https://github.com/gaearon/react-hot-boilerplate/issues"
+    "url": "https://github.com/stuartquin/soitgoes"
   },
   "homepage": "https://github.com/gaearon/react-hot-boilerplate",
   "devDependencies": {
@@ -34,7 +33,6 @@
     "babel-preset-es2015": "^6.0.15",
     "babel-preset-react": "^6.0.15",
     "babel-preset-stage-0": "^6.0.15",
-    "bootstrap-css": "^3.0.0",
     "css-loader": "^0.23.1",
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^3.6.2",
