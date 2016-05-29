@@ -14,8 +14,17 @@ class HasProjectAccess(BasePermission):
         project = models.Project.objects.filter(id=project_id).first()
         return len(project.account.users.filter(id=request.user.id)) > 0
 
-    def has_object_permission(self, request, view, obj):
-        return True
+
+class HasTimeslipAccess(BasePermission):
+    def has_permission(self, request, view):
+        if request.method == 'GET':
+            return True
+
+        project_ids = set([data['project'] for data in request.data])
+        projects = models.Project.objects.filter(id__in=project_ids)
+        # list flatten
+        users = set([u.id for p in projects for u in p.account.users.all()])
+        return request.user.id in users
 
 
 class ProjectList(generics.ListAPIView):
@@ -41,6 +50,7 @@ class InvoiceList(generics.ListCreateAPIView):
 class TimeSlipList(generics.ListCreateAPIView):
     queryset = models.TimeSlip.objects.all()
     serializer_class = serializers.TimeSlipSerializer
+    permission_classes = (HasTimeslipAccess,)
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = self.get_serializer_class()
