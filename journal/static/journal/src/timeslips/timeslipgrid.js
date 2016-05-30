@@ -4,7 +4,7 @@ import moment from 'moment';
 import {TimeslipGridHeader} from './timeslipgridheader';
 import {TimeslipGridRow} from './timeslipgridrow';
 
-const PAST_DAYS = 10;
+const PAST_DAYS = 8;
 const FUTURE_DAYS = 2;
 const getDateRange = (today) => {
   let start = today.subtract(PAST_DAYS, 'days');

@@ -7,6 +7,16 @@ const getKey = (date, project) => {
   return project.get('id') + '|' + date;
 };
 
+const getUninvoicedTotal = (timeslips) => {
+  return timeslips.reduce((previous, current) => {
+    if (!current.get('invoice')) {
+      return previous + parseInt(current.get('hours', 0));
+    } else {
+      return previous;
+    }
+  }, 0);
+}
+
 const TimeslipGridRow = (props) => {
   const dates = props.range.map((m) => m.format('YYYY-MM-DD'));
   const filledTimeslips = props.project.get('timeslips').reduce( (result, item) => {
@@ -27,6 +37,7 @@ const TimeslipGridRow = (props) => {
           }}
           timeslip={filledTimeslips[date]} />
       ))}
+      <div>{getUninvoicedTotal(props.project.get('timeslips'))}</div>
     </div>
   );
 };

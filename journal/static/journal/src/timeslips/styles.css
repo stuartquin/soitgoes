@@ -8,6 +8,16 @@
 }
 
 
+.monthName {
+}
+
+.monthRow {
+}
+
+.dayRow {
+    display: flex;
+}
+
 .timeslipGridHeaderProjects {
     width: 200px;
 }
