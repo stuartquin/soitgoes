@@ -18,6 +18,13 @@ const getProjectsError = (error, dispatch) => {
     };
 };
 
+export const setActiveDate = (date) => {
+  return {
+    type: constants.SET_TIMESLIP_ACTIVE_DATE,
+    date
+  };
+};
+
 export const getProjects = (auth) => {
   const url = baseUrl + `projects/`;
   return (dispatch) => {

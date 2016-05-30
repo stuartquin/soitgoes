@@ -20,7 +20,9 @@ const values = [
 
   'SAVE_TIMESLIPS_START',
   'SAVE_TIMESLIPS_ERROR',
-  'SAVE_TIMESLIPS_SUCCESS'
+  'SAVE_TIMESLIPS_SUCCESS',
+
+  'SET_TIMESLIP_ACTIVE_DATE'
 ];
 
 const constants = {}

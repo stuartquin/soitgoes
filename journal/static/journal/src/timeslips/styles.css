@@ -4,9 +4,13 @@
 }
 
 .today input {
-  background-color: lightgreen;
+  background-color: lavender;
 }
 
+.cells {
+    width: 300px;
+    overflow-x: scroll;
+}
 
 .monthName {
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import { getProjects, getTimeslips, saveTimeslips } from '../timeslips/timeslipactions';
+import { getProjects, getTimeslips, saveTimeslips, setActiveDate } from '../timeslips/timeslipactions';
 import { updateProjectTimeslip } from '../actions/projects';
 import { getUserAuth } from '../services/user';
 
@@ -19,8 +19,10 @@ class Timeslips extends React.Component {
       return (
         <div>
           <TimeslipGrid
+            activeDate={this.props.activeDate}
             projects={this.props.projects}
             onHourChanged={this.props.onHourChanged}
+            onSetActiveDate={this.props.onSetActiveDate}
             />
           <button onClick={() => {
             this.props.onSave(getUserAuth(), this.props.projects, this.props.timeslips)
@@ -38,6 +40,7 @@ class Timeslips extends React.Component {
 const mapStateToProps = (allState, props) => {
   const state = allState.timeslips;
   return {
+    activeDate: state.get('view').get('activeDate'),
     timeslips: state.get('items'),
     projects: getProjectsWithTimeslips(allState)
   };
@@ -45,6 +48,9 @@ const mapStateToProps = (allState, props) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
+    onSetActiveDate: (date) => {
+      dispatch(setActiveDate(date));
+    },
     onHourChanged: (project, date, hours) => {
       dispatch(updateProjectTimeslip(project, date, hours));
     },

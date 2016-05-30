@@ -20,6 +20,9 @@ const TimeslipGridCell = (props) => {
     <div className={className}>
       <input
         value={hours}
+        onFocus={(e) => {
+          e.target.select();
+        }}
         onChange={(e) => props.hourChanged(e.target.value)} />
     </div>
   );
