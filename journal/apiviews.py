@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 
-from rest_framework import generics
+from rest_framework import generics, mixins
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
@@ -20,7 +20,11 @@ class HasTimeslipAccess(BasePermission):
         if request.method == 'GET':
             return True
 
-        project_ids = set([data['project'] for data in request.data])
+        if 'project' in request.data:
+            project_ids = set([request.data['project']])
+        else:
+            project_ids = set([data['project'] for data in request.data])
+
         projects = models.Project.objects.filter(id__in=project_ids)
         # list flatten
         users = set([u.id for p in projects for u in p.account.users.all()])
@@ -47,6 +51,12 @@ class InvoiceList(generics.ListCreateAPIView):
     serializer_class = serializers.InvoiceSerializer
 
 
+class TimeSlipDetail(generics.UpdateAPIView):
+    queryset = models.TimeSlip.objects.all()
+    serializer_class = serializers.TimeSlipSerializer
+    permission_classes = (HasTimeslipAccess,)
+
+
 class TimeSlipList(generics.ListCreateAPIView):
     queryset = models.TimeSlip.objects.all()
     serializer_class = serializers.TimeSlipSerializer
@@ -58,6 +68,9 @@ class TimeSlipList(generics.ListCreateAPIView):
         if 'data' in kwargs:
             kwargs['many'] = True
         return serializer_class(*args, **kwargs)
+
+    def perform_create(self, serializer):
+        serializer.save()
 
     def list(self, request, project=None):
         filters = {}

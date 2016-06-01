@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'projects/(?P<project>[0-9]+)/invoices$', apiviews.InvoiceList.as_view()),
 
     url(r'timeslips/$', apiviews.TimeSlipList.as_view()),
+    url(r'timeslips/(?P<pk>[0-9]+)$', apiviews.TimeSlipDetail.as_view()),
 ]

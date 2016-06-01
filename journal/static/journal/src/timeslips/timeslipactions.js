@@ -40,10 +40,10 @@ export const getProjects = (auth) => {
 };
 
 const saveTimeslipsSuccess = (res) => {
-    return {
-        type: constants.SAVE_TIMESLIPS_SUCCESS,
-        projects: res.results
-    };
+  return {
+    type: constants.SAVE_TIMESLIPS_SUCCESS,
+    projects: res.results
+  };
 };
 
 export const saveTimeslips = (auth, projects, timeslips) => {

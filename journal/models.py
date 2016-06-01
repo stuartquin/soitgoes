@@ -88,3 +88,6 @@ class TimeSlip(models.Model):
 
     def __str__(self):
         return "[%s] %s" % (self.project.name, self.comment)
+
+    class Meta:
+        unique_together = ('user', 'project', 'date')
