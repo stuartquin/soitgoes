@@ -22,15 +22,6 @@ class TimeSlipSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlip
 
-    def create(self, validated_data):
-        existing = TimeSlip.objects.filter(
-            project=validated_data['project'],
-            user=validated_data['user'],
-            date=validated_data['date']
-        )
-
-        super().create(validated_data)
-
 
 class InvoiceSerializer(serializers.ModelSerializer):
     timeslips = serializers.ListField(

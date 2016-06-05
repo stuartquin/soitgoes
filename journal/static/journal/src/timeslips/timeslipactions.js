@@ -39,24 +39,40 @@ export const getProjects = (auth) => {
   };
 };
 
-const saveTimeslipsSuccess = (res) => {
+const saveTimeslipsSuccess = () => {
   return {
-    type: constants.SAVE_TIMESLIPS_SUCCESS,
-    projects: res.results
+    type: constants.SAVE_TIMESLIPS_SUCCESS
   };
 };
 
-export const saveTimeslips = (auth, projects, timeslips) => {
+const getCreateTimeslipsCall = (auth, timeslips) => {
   const url = baseUrl + `timeslips/`;
   let options = getOptions(auth, 'POST');
-  options.body = JSON.stringify(timeslips.filter(t => t.get('isNew')).toJS());
+  options.body = JSON.stringify(timeslips).toJS();
+  return fetch(url, options);
+};
+
+const getUpdateTmeslipCalls = (auth, timeslips) => {
+  const url = baseUrl + `timeslips/`;
+  return timeslips.map((t) => {
+    let options = getOptions(auth, 'PUT');
+    options.body = JSON.stringify(t.toJS());
+    return fetch(url + t.get('id'), options);
+  });
+};
+
+export const saveTimeslips = (auth, projects, timeslips) => {
+  const updates = timeslips.filter(t => t.get('isUpdated') && !t.get('isNew'));
+  const creates = timeslips.filter(t => t.get('isNew'));
+  let calls = getUpdateTmeslipCalls(auth, updates);
+
+  if (creates.length) {
+    calls = calls.concat(getCreateTimeslipsCall(auth, creates));
+  }
 
   return (dispatch) => {
-    return fetch(url, options).then(res => {
-        return res.json().then(json => {
-          return dispatch(saveTimeslipsSuccess(json));
-        });
-      },
+    return Promise.all(calls).then(
+      result => dispatch(saveTimeslipsSuccess()),
       error => dispatch(saveTimeslipsError(error))
     );
   };
