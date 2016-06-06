@@ -38,6 +38,11 @@ const TimeslipGridRow = (props) => {
           timeslip={filledTimeslips[date]} />
       ))}
       <div>{getUninvoicedTotal(props.project.get('timeslips'))}</div>
+      <div>
+        <a href='#' onClick={props.onInvoice}>
+          Invoice
+        </a>
+      </div>
     </div>
   );
 };

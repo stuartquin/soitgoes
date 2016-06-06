@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 
-from rest_framework import generics, mixins
+from rest_framework import generics, status, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
@@ -46,9 +46,20 @@ class ProjectDetail(APIView):
         return Response(serializer.data)
 
 
-class InvoiceList(generics.ListCreateAPIView):
+class InvoiceDetail(generics.ListCreateAPIView):
     queryset = models.Invoice.objects.all()
     serializer_class = serializers.InvoiceSerializer
+
+
+class InvoiceViewSet(viewsets.ModelViewSet):
+    queryset = models.Invoice.objects.all()
+    serializer_class = serializers.InvoiceSerializer
+
+    def perform_create(self, serializer):
+        ids = self.request.data['timeslips']
+        invoice = serializer.save()
+        timeslips = models.TimeSlip.objects.filter(id__in=ids)
+        timeslips.update(invoice=invoice.id)
 
 
 class TimeSlipDetail(generics.UpdateAPIView):

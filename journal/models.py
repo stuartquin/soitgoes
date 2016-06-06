@@ -67,7 +67,7 @@ class InvoiceItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     invoice = models.ForeignKey(
-        Invoice, models.SET_NULL, blank=True, null=True
+        Invoice, models.SET_NULL, blank=True, null=True, related_name='items'
     )
 
     def __str__(self):
@@ -83,7 +83,7 @@ class TimeSlip(models.Model):
 
     comment = models.CharField(max_length=512, blank=True, null=True)
     invoice = models.ForeignKey(
-        Invoice, models.SET_NULL, blank=True, null=True
+        Invoice, models.SET_NULL, blank=True, null=True, related_name='timeslips'
     )
 
     def __str__(self):

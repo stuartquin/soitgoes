@@ -54,6 +54,9 @@ const mapDispatchToProps = (dispatch, props) => {
     onHourChanged: (project, date, hours) => {
       dispatch(updateProjectTimeslip(project, date, hours));
     },
+    onInvoice: (project) => {
+      dispatch(createInvoice(project));
+    },
     onSave: (auth, projects, timeslips) => {
       dispatch(saveTimeslips(auth, projects, timeslips));
     },

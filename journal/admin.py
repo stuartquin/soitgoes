@@ -34,6 +34,14 @@ class InvoiceAdmin(admin.ModelAdmin):
         return obj
 
 
+@admin.register(models.InvoiceItem)
+class InvoiceItem(admin.ModelAdmin):
+    list_display = ('name', 'created_at')
+
+    def name(self, obj):
+        return obj
+
+
 @admin.register(models.TimeSlip)
 class TimeSlipAdmin(admin.ModelAdmin):
     list_display = ('name', 'hours', 'invoice', 'date')
