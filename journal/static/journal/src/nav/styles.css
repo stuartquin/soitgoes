@@ -1,0 +1,29 @@
+.navMenu {
+  display: flex;
+  list-style: none;
+  margin-top: 0;
+
+  font-family: 'Roboto', sans-serif;
+  color: #FFFFFF;
+
+  padding-top: 20px;
+}
+
+.navMenu li {
+  margin-left: 30px;
+}
+
+.navActive {
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+.navMenu li a {
+  color: #BBCCDD;
+}
+
+.navHeader {
+  background-color: #435966;
+  width: 100%;
+  height: 60px;
+}

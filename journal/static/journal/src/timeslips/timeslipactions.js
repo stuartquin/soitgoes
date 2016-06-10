@@ -48,7 +48,7 @@ const saveTimeslipsSuccess = () => {
 const getCreateTimeslipsCall = (auth, timeslips) => {
   const url = baseUrl + `timeslips/`;
   let options = getOptions(auth, 'POST');
-  options.body = JSON.stringify(timeslips).toJS();
+  options.body = JSON.stringify(timeslips.toJS());
   return fetch(url, options);
 };
 
@@ -66,7 +66,7 @@ export const saveTimeslips = (auth, projects, timeslips) => {
   const creates = timeslips.filter(t => t.get('isNew'));
   let calls = getUpdateTmeslipCalls(auth, updates);
 
-  if (creates.length) {
+  if (creates.size) {
     calls = calls.concat(getCreateTimeslipsCall(auth, creates));
   }
 

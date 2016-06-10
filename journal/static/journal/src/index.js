@@ -12,6 +12,8 @@ import constants from './constants';
 import { App } from './app';
 import { LoginContainer } from './login/logincontainer';
 import { TimeslipsContainer} from './timeslips/timeslipcontainer';
+import { NavContainer } from './nav/navcontainer';
+import { InvoicesContainer } from './invoices/invoicecontainer';
 import { getUserAuth } from './services/user';
 
 const store = createStore(combineReducers({
@@ -27,9 +29,12 @@ store.dispatch({
 const history = syncHistoryWithStore(browserHistory, store);
 
 const routes = (
-  <Route path='/' component={App}>
-    <Route path='/login' component={LoginContainer} />
-    <Route path='/timeslips' component={TimeslipsContainer} />
+  <Route component={App}>
+    <Route component={NavContainer}>
+      <Route path='invoices' component={InvoicesContainer} />
+      <Route path='timeslips' component={TimeslipsContainer} />
+    </Route>
+    <Route path='login' component={LoginContainer} />
   </Route>
 );
 

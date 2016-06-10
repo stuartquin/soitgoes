@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import { getProjects, getTimeslips, saveTimeslips, setActiveDate } from '../timeslips/timeslipactions';
+import { createInvoice } from '../invoices/invoiceactions';
 import { updateProjectTimeslip } from '../actions/projects';
 import { getUserAuth } from '../services/user';
 
@@ -23,9 +24,10 @@ class Timeslips extends React.Component {
             projects={this.props.projects}
             onHourChanged={this.props.onHourChanged}
             onSetActiveDate={this.props.onSetActiveDate}
+            onInvoice={this.props.onInvoice}
             />
           <button onClick={() => {
-            this.props.onSave(getUserAuth(), this.props.projects, this.props.timeslips)
+            this.props.onSave(this.props.projects, this.props.timeslips)
           }}>
             Save
           </button>
@@ -55,10 +57,10 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(updateProjectTimeslip(project, date, hours));
     },
     onInvoice: (project) => {
-      dispatch(createInvoice(project));
+      dispatch(createInvoice(getUserAuth(), project));
     },
-    onSave: (auth, projects, timeslips) => {
-      dispatch(saveTimeslips(auth, projects, timeslips));
+    onSave: (projects, timeslips) => {
+      dispatch(saveTimeslips(getUserAuth(), projects, timeslips));
     },
     onLoad: (auth) => {
       dispatch(getProjects(auth)).then(() => {
