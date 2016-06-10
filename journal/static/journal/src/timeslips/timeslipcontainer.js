@@ -6,9 +6,11 @@ import { createInvoice } from '../invoices/invoiceactions';
 import { updateProjectTimeslip } from '../actions/projects';
 import { getUserAuth } from '../services/user';
 
-import { TimeslipGrid } from './timeslipgrid'
+import { TimeslipGrid } from './timeslipgrid';
 
 import { getProjectsWithTimeslips } from './timeslipselectors';
+
+import styles from './styles.css';
 
 class Timeslips extends React.Component {
   constructor(props) {
@@ -18,7 +20,7 @@ class Timeslips extends React.Component {
   render() {
     if (this.props.projects.count()) {
       return (
-        <div>
+        <div className={styles.timeslipContainer}>
           <TimeslipGrid
             activeDate={this.props.activeDate}
             projects={this.props.projects}

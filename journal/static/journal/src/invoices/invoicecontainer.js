@@ -1,13 +1,15 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
+import { InvoiceCreate } from './invoicecreate';
+
 class Invoices extends React.Component {
   constructor(props) {
     super(props);
   }
   render() {
     return (
-      <h2>Invoices</h2>
+      <InvoiceCreate />
     );
   }
 }

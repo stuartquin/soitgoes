@@ -1,3 +1,7 @@
+.timeslipContainer {
+  margin: 25px;
+}
+
 .timeslipGridHeaderDate {
     text-align: center;
     width: 75px;

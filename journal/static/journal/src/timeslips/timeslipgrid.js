@@ -21,7 +21,7 @@ const TimeslipGrid = (props) => {
   const today = moment();
 
   return (
-    <div>
+    <div className='col-sm-12'>
       <TimeslipDateControls
         today={today}
         activeDate={props.activeDate}

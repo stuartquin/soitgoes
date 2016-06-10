@@ -8,8 +8,20 @@ const NavMenu = (props) => {
 
   return (
     <ul className={styles.navMenu}>
-      <li><Link to={'/timeslips'} activeClassName={styles.navActive}>Tracking</Link></li>
-      <li><Link to={'/invoices'} activeClassName={styles.navActive}>Invoices</Link></li>
+      <li>
+        <Link to={'/timeslips'}
+            className={styles.navItem}
+            activeClassName={styles.navActive}>
+          Tracking
+        </Link>
+      </li>
+      <li>
+        <Link to={'/invoices'}
+            className={styles.navItem}
+            activeClassName={styles.navActive}>
+          Invoices
+        </Link>
+      </li>
     </ul>
   );
 };

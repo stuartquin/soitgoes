@@ -13,13 +13,14 @@
   margin-left: 30px;
 }
 
-.navActive {
-  color: #FFFFFF;
-  text-decoration: none;
+.navItem {
+  color: #BBCCDD;
 }
 
-.navMenu li a {
-  color: #BBCCDD;
+.navActive {
+  text-decoration: none;
+  font-weight: bold;
+  color: #FFFFFF;
 }
 
 .navHeader {
