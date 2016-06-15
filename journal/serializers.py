@@ -9,6 +9,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ['id', 'name', 'contact', 'created_at']
+        depth = 1
 
 
 class TimeSlipSerializer(serializers.ModelSerializer):

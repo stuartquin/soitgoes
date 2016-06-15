@@ -5,6 +5,7 @@ import { push, syncHistoryWithStore, routerReducer, routerMiddleware } from 'rea
 import {createStore, applyMiddleware, combineReducers } from 'redux';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
+import createLogger from 'redux-logger';
 
 import reducer from './reducer';
 import timeslips from './timeslips/timeslipreducer';
@@ -16,11 +17,29 @@ import { NavContainer } from './nav/navcontainer';
 import { InvoicesContainer } from './invoices/invoicecontainer';
 import { getUserAuth } from './services/user';
 
+import { Iterable } from 'immutable';
+
+const logger = createLogger({
+  stateTransformer: (state) => {
+    'use strict';
+    let newState = {};
+
+    for (var i of Object.keys(state)) {
+      if (Iterable.isIterable(state[i])) {
+        newState[i] = state[i].toJS();
+      } else {
+        newState[i] = state[i];
+      }
+    }
+    return newState;
+  }
+});
+
 const store = createStore(combineReducers({
   reducer,
   timeslips,
   routing: routerReducer
-}), applyMiddleware(thunk, routerMiddleware(browserHistory)));
+}), applyMiddleware(thunk, routerMiddleware(browserHistory), logger));
 
 store.dispatch({
   type: constants.SET_STATE
@@ -46,10 +65,3 @@ ReacDOM.render(
   </Provider>,
   document.getElementById('root')
 );
-
-const userAuth = getUserAuth();
-if (userAuth) {
-  store.dispatch(push('/timeslips'));
-} else {
-  store.dispatch(push('/login'));
-}

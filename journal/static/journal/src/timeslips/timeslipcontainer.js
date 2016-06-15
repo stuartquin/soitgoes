@@ -1,22 +1,24 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import { getProjects, getTimeslips, saveTimeslips, setActiveDate } from '../timeslips/timeslipactions';
-import { createInvoice } from '../invoices/invoiceactions';
-import { updateProjectTimeslip } from '../actions/projects';
-import { getUserAuth } from '../services/user';
+import * as actions from '../timeslips/timeslipactions';
 
 import { TimeslipGrid } from './timeslipgrid';
-
 import { getProjectsWithTimeslips } from './timeslipselectors';
 
 import styles from './styles.css';
 
 class Timeslips extends React.Component {
-  constructor(props) {
-    super(props);
-    this.props.onLoad(getUserAuth());
+  componentDidMount() {
+    this.fetchData();
   }
+
+  fetchData() {
+    this.props.fetchProjects().then( () => {
+      this.props.fetchTimeslips();
+    });
+  }
+
   render() {
     if (this.props.projects.count()) {
       return (
@@ -24,12 +26,12 @@ class Timeslips extends React.Component {
           <TimeslipGrid
             activeDate={this.props.activeDate}
             projects={this.props.projects}
-            onHourChanged={this.props.onHourChanged}
-            onSetActiveDate={this.props.onSetActiveDate}
+            onHourChanged={this.props.updateTimeslipValue}
+            onSetActiveDate={this.props.setActiveDate}
             onInvoice={this.props.onInvoice}
             />
           <button onClick={() => {
-            this.props.onSave(this.props.projects, this.props.timeslips)
+            this.props.saveTimeslips(this.props.projects, this.props.timeslips)
           }}>
             Save
           </button>
@@ -50,27 +52,5 @@ const mapStateToProps = (allState, props) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, props) => {
-  return {
-    onSetActiveDate: (date) => {
-      dispatch(setActiveDate(date));
-    },
-    onHourChanged: (project, date, hours) => {
-      dispatch(updateProjectTimeslip(project, date, hours));
-    },
-    onInvoice: (project) => {
-      dispatch(createInvoice(getUserAuth(), project));
-    },
-    onSave: (projects, timeslips) => {
-      dispatch(saveTimeslips(getUserAuth(), projects, timeslips));
-    },
-    onLoad: (auth) => {
-      dispatch(getProjects(auth)).then(() => {
-        dispatch(getTimeslips(auth));
-      });
-    }
-  }
-};
-
-const TimeslipsContainer = connect(mapStateToProps, mapDispatchToProps)(Timeslips);
+const TimeslipsContainer = connect(mapStateToProps, actions)(Timeslips);
 export {TimeslipsContainer};
