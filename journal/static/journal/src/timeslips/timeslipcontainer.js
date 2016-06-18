@@ -2,9 +2,9 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../timeslips/timeslipactions';
+import * as selectors from './timeslipselectors';
 
 import { TimeslipGrid } from './timeslipgrid';
-import { getProjectsWithTimeslips } from './timeslipselectors';
 
 import styles from './styles.css';
 
@@ -14,9 +14,7 @@ class Timeslips extends React.Component {
   }
 
   fetchData() {
-    this.props.fetchProjects().then( () => {
-      this.props.fetchTimeslips();
-    });
+    this.props.fetchTimeslips();
   }
 
   render() {
@@ -29,7 +27,7 @@ class Timeslips extends React.Component {
             onHourChanged={this.props.updateTimeslipValue}
             onSetActiveDate={this.props.setActiveDate}
             onInvoice={this.props.onInvoice}
-            />
+          />
           <button onClick={() => {
             this.props.saveTimeslips(this.props.projects, this.props.timeslips)
           }}>
@@ -47,8 +45,8 @@ const mapStateToProps = (allState, props) => {
   const state = allState.timeslips;
   return {
     activeDate: state.get('view').get('activeDate'),
-    timeslips: state.get('items'),
-    projects: getProjectsWithTimeslips(allState)
+    timeslips: selectors.getTimeslips(allState),
+    projects: selectors.getProjectsWithTimeslips(allState)
   };
 };
 

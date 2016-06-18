@@ -1,3 +1,5 @@
+'use strict';
+
 import React from 'react';
 import ReacDOM from 'react-dom';
 import {Router, Route, browserHistory} from 'react-router';
@@ -7,8 +9,8 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 
-import reducer from './reducer';
 import timeslips from './timeslips/timeslipreducer';
+import projects from './projects/reducer';
 import constants from './constants';
 import { App } from './app';
 import { LoginContainer } from './login/logincontainer';
@@ -21,7 +23,6 @@ import { Iterable } from 'immutable';
 
 const logger = createLogger({
   stateTransformer: (state) => {
-    'use strict';
     let newState = {};
 
     for (var i of Object.keys(state)) {
@@ -36,8 +37,8 @@ const logger = createLogger({
 });
 
 const store = createStore(combineReducers({
-  reducer,
   timeslips,
+  projects,
   routing: routerReducer
 }), applyMiddleware(thunk, routerMiddleware(browserHistory), logger));
 

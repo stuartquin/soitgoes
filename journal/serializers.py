@@ -15,6 +15,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 class TimeSlipSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlip
+        depth = 1
 
 
 class InvoiceItemSerializer(serializers.ModelSerializer):
@@ -33,3 +34,4 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Invoice
+        depth = 2

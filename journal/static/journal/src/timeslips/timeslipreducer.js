@@ -1,15 +1,14 @@
+'use strict';
 import Immutable from 'immutable';
 import moment from 'moment';
 
 import constants from '../constants';
 
 const setTimeslips = (state, timeslips) => {
-  'use strict';
-  return state.set('items', Immutable.fromJS(timeslips));
+  return state.set('items', Immutable.fromJS(timeslips).toList());
 };
 
 const updateProjectTimeslip = (state, action) => {
-  'use strict';
   const project = action.project;
   const date = action.date;
   const index = state.get('items').findIndex((t) => {
@@ -37,12 +36,10 @@ const updateProjectTimeslip = (state, action) => {
 };
 
 const setActiveDate = (state, date) => {
-  'use strict';
   return state.setIn(['view', 'activeDate'], date);
 };
 
 const initialState = () => {
-  'use strict';
   return Immutable.Map({
     items: Immutable.List([]),
     view: Immutable.Map({
@@ -52,7 +49,6 @@ const initialState = () => {
 };
 
 export default function(state, action) {
-  'use strict';
   switch(action.type) {
     case constants.GET_TIMESLIPS_SUCCESS:
       return setTimeslips(state, action.timeslips);

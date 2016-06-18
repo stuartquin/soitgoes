@@ -1,9 +1,9 @@
+'use strict';
 import { getUserAuth } from './user';
 
 const baseUrl = 'http://localhost:8000/api/';
 
 export const getOptions = (auth, method) => {
-  'use strict';
   return {
       method: method,
       headers: {
@@ -14,7 +14,6 @@ export const getOptions = (auth, method) => {
 };
 
 export const fetchTimeslips = () => {
-  'use strict';
   const auth = getUserAuth();
   const url = baseUrl + `timeslips/?format=json`;
 
@@ -23,17 +22,7 @@ export const fetchTimeslips = () => {
   );
 };
 
-export const fetchProjects = () => {
-  'use strict';
-  const auth = getUserAuth();
-  const url = baseUrl + `projects/`;
-  return fetch(url, getOptions(auth, 'GET')).then(
-    res => res.json()
-  );
-};
-
 export const createTimeslips = (timeslips) => {
-  'use strict';
   const auth = getUserAuth();
   const url = baseUrl + `timeslips/`;
   let options = getOptions(auth, 'POST');
@@ -42,7 +31,6 @@ export const createTimeslips = (timeslips) => {
 };
 
 export const updateTmeslips = (timeslips) => {
-  'use strict';
   const auth = getUserAuth();
   const url = baseUrl + `timeslips/`;
   return timeslips.map((t) => {

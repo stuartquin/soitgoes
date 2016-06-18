@@ -1,18 +1,9 @@
 'use strict';
+import { normalize } from 'normalizr';
+
 import constants from '../constants';
 import * as api from '../services/api';
-
-const baseUrl = 'http://localhost:8000/api/';
-
-const getProjectsSuccess = (res, dispatch) => {
-};
-
-const getProjectsError = (error, dispatch) => {
-    return {
-        type: constants.GET_PROJECTS_ERROR,
-        error
-    };
-};
+import * as schema from '../actions/schema';
 
 export const setActiveDate = (date) => {
   return {
@@ -53,16 +44,13 @@ export const updateTimeslipValue = (project, date, hours) => ({
 
 export const fetchTimeslips = () => (dispatch) =>
   api.fetchTimeslips().then(timeslips => {
+    const result = normalize(timeslips, schema.timeslips);
     dispatch({
       type: constants.GET_TIMESLIPS_SUCCESS,
-      timeslips
+      timeslips: result.entities.timeslips
     });
-  });
-
-export const fetchProjects = () => (dispatch) =>
-  api.fetchProjects().then(res => {
     dispatch({
       type: constants.GET_PROJECTS_SUCCESS,
-      projects: res.results
+      projects: result.entities.projects
     });
   });

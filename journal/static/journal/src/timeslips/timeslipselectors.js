@@ -1,7 +1,8 @@
-import { createSelector } from 'reselect'
+'use strict';
+import { createSelector } from 'reselect';
 
-const getTimeslips = (state) => state.timeslips.get('items');
-const getProjects = (state) => state.reducer.get('projects');
+export const getProjects = (state) => state.projects.get('items');
+export const getTimeslips = (state) => state.timeslips.get('items');
 
 export const getProjectsWithTimeslips = createSelector(
   [getTimeslips, getProjects],
