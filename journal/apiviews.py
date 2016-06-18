@@ -64,24 +64,23 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 
 class TimeSlipDetail(generics.UpdateAPIView):
     queryset = models.TimeSlip.objects.all()
-    serializer_class = serializers.TimeSlipSerializer
+    serializer_class = serializers.TimeSlipReadSerializer
     permission_classes = (HasTimeslipAccess,)
 
 
 class TimeSlipList(generics.ListCreateAPIView):
     queryset = models.TimeSlip.objects.all()
-    serializer_class = serializers.TimeSlipSerializer
     permission_classes = (HasTimeslipAccess,)
 
     def get_serializer(self, *args, **kwargs):
-        serializer_class = self.get_serializer_class()
         kwargs['context'] = self.get_serializer_context()
         if 'data' in kwargs:
             kwargs['many'] = True
-        return serializer_class(*args, **kwargs)
 
-    def perform_create(self, serializer):
-        serializer.save()
+        if self.request.method == 'GET':
+            return serializers.TimeSlipReadSerializer(*args, **kwargs)
+        else:
+            return serializers.TimeSlipWriteSerializer(*args, **kwargs)
 
     def list(self, request, project=None):
         filters = {}
@@ -99,5 +98,5 @@ class TimeSlipList(generics.ListCreateAPIView):
             filters['user'] = request.user
 
         timeslips = models.TimeSlip.objects.filter(**filters)
-        serializer = serializers.TimeSlipSerializer(timeslips, many=True)
+        serializer = serializers.TimeSlipReadSerializer(timeslips, many=True)
         return Response(serializer.data)

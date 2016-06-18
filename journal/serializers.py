@@ -12,10 +12,15 @@ class ProjectSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class TimeSlipSerializer(serializers.ModelSerializer):
+class TimeSlipReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlip
         depth = 1
+
+
+class TimeSlipWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeSlip
 
 
 class InvoiceItemSerializer(serializers.ModelSerializer):
