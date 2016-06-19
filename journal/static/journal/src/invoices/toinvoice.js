@@ -7,9 +7,13 @@ const ToInvoice = (props) => {
     <div>
       <h3>To Be Invoiced</h3>
       <table>
-      {props.projectSummary.map(project => (
-        <ToInvoiceRow project={project} />
-      ))}
+        <tbody>
+        {props.projectSummary.valueSeq().map(project => (
+          <ToInvoiceRow
+            key={project.get('id')}
+            project={project} />
+        ))}
+        </tbody>
       </table>
     </div>
   );
