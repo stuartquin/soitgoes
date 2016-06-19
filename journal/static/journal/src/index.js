@@ -9,7 +9,7 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 
-import timeslips from './timeslips/timeslipreducer';
+import timeslips from './timeslips/reducer';
 import projects from './projects/reducer';
 import invoices from './invoices/reducer';
 import constants from './constants';

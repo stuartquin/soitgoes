@@ -21,13 +21,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class TimeSlipReadSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TimeSlip
-        depth = 1
-
-
-class TimeSlipWriteSerializer(serializers.ModelSerializer):
+class TimeSlipSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlip
 

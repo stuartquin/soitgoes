@@ -1,7 +1,9 @@
+'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
 
-import * as actions from '../timeslips/timeslipactions';
+import * as timeslipActions from '../timeslips/timeslipactions';
+import * as projectActions from '../actions/projects';
 import * as selectors from './timeslipselectors';
 
 import { TimeslipGrid } from './timeslipgrid';
@@ -14,7 +16,7 @@ class Timeslips extends React.Component {
   }
 
   fetchData() {
-    this.props.fetchTimeslips();
+    this.props.fetchProjects().then(() => this.props.fetchTimeslips());
   }
 
   render() {
@@ -48,6 +50,11 @@ const mapStateToProps = (allState, props) => {
     timeslips: selectors.getTimeslips(allState),
     projects: selectors.getProjectsWithTimeslips(allState)
   };
+};
+
+const actions = {
+  ...projectActions,
+  ...timeslipActions
 };
 
 const TimeslipsContainer = connect(mapStateToProps, actions)(Timeslips);

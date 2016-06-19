@@ -49,8 +49,4 @@ export const fetchTimeslips = (invoice) => (dispatch) =>
       type: constants.GET_TIMESLIPS_SUCCESS,
       timeslips: result.entities.timeslips
     });
-    dispatch({
-      type: constants.GET_PROJECTS_SUCCESS,
-      projects: result.entities.projects
-    });
   });
