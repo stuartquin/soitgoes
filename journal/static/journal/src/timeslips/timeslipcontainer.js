@@ -2,7 +2,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import * as timeslipActions from '../timeslips/timeslipactions';
+import * as timeslipActions from '../actions/timeslips';
 import * as projectActions from '../actions/projects';
 import * as selectors from './timeslipselectors';
 
