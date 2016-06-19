@@ -12,3 +12,11 @@ export const createInvoice = (project) => (dispatch) =>
     });
     dispatch(push(`/invoice/${invoice.id}`));
   });
+
+export const fetchInvoice = (invoiceId) => (dispatch) =>
+  api.fetchInvoice(invoiceId).then(invoice => {
+    dispatch({
+      type: constants.GET_INVOICE_SUCCESS,
+      invoice
+    });
+  });

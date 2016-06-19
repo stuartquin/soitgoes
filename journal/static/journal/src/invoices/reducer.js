@@ -13,10 +13,11 @@ const projectSummary = (state = Immutable.Map(), action) => {
   }
 };
 
-const create = (state = Immutable.Map({invoice: {}}), action) => {
+const invoice = (state = Immutable.Map({}), action) => {
   switch (action.type) {
+  case constants.GET_INVOICE_SUCCESS:
   case constants.CREATE_INVOICE_SUCCESS:
-    return state.set('invoice', Immutable.fromJS(action.invoice));
+    return Immutable.fromJS(action.invoice);
   default:
     return state;
   }
@@ -24,7 +25,7 @@ const create = (state = Immutable.Map({invoice: {}}), action) => {
 
 const invoices = combineReducers({
   projectSummary,
-  create
+  invoice
 });
 
 export default invoices;

@@ -64,3 +64,12 @@ export const createInvoice = (project) => {
     res => res.json()
   );
 };
+
+export const fetchInvoice = (invoiceId) => {
+  const auth = getUserAuth();
+  const url = baseUrl + `invoices/${invoiceId}`;
+
+  return fetch(url, getOptions(auth, 'GET')).then(
+    res => res.json()
+  );
+};

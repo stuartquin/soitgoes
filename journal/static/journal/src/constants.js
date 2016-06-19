@@ -25,7 +25,9 @@ const values = [
   'SET_TIMESLIP_ACTIVE_DATE',
 
   'CREATE_INVOICE',
-  'CREATE_INVOICE_SUCCESS'
+  'CREATE_INVOICE_SUCCESS',
+
+  'GET_INVOICE_SUCCESS'
 ];
 
 const constants = {}
