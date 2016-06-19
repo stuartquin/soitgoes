@@ -25,7 +25,7 @@ class Invoice extends React.Component {
   }
 
   render() {
-    if (!this.props.invoice.get('project')) {
+    if (!this.props.project) {
       return (<strong>Loading...</strong>);
     }
 
@@ -33,7 +33,7 @@ class Invoice extends React.Component {
       <div>
         <h2>Invoice (Draft)</h2>
         <InvoiceInfo
-          project={this.props.invoice.get('project')}
+          project={this.props.project}
           created={this.props.invoice.get('created_at')}
           issued={this.props.invoice.get('issued_at')}
         />
@@ -42,9 +42,14 @@ class Invoice extends React.Component {
   }
 }
 
+const getInvoiceProject = (projects, invoice) => {
+  return projects.find((x) => x.get('id') === invoice.get('project'));
+};
+
 const mapStateToProps = ({ invoices }, { params }) => {
   return {
     invoice: invoices.invoice,
+    project: getInvoiceProject(invoices.projectSummary, invoices.invoice),
     invoiceId: params.invoiceId
   };
 };

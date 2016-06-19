@@ -17,14 +17,18 @@ class Invoices extends React.Component {
   }
 
   render() {
+    if (this.props.projects.isEmpty()) {
+      return (<strong>Loading...</strong>);
+    }
+
     return (
       <div>
         <ToInvoice
-          projectSummary={this.props.projectSummary}
+          projectSummary={this.props.projects}
           onCreateInvoice={this.props.createInvoice}
         />
         <InvoiceList
-          projectSummary={this.props.projectSummary}
+          projectSummary={this.props.projects}
         />
       </div>
     );
@@ -33,7 +37,7 @@ class Invoices extends React.Component {
 
 const mapStateToProps = ({ invoices }) => {
   return {
-    projectSummary: invoices.projectSummary
+    projects: invoices.projectSummary
   };
 };
 

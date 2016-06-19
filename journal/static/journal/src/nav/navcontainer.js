@@ -4,11 +4,13 @@ import { push } from 'react-router-redux';
 
 import {NavMenu} from './navmenu';
 import styles from './styles.css';
+import * as projectActions from '../actions/projects';
 
 class Nav extends React.Component {
-  constructor(props) {
-    super(props);
+  componentDidMount() {
+    this.props.fetchProjects();
   }
+
   render() {
     return (
       <div style={{ width: '100%' }}>
@@ -26,10 +28,9 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, props) => {
-  return {
-  }
+const actions = {
+  ...projectActions
 };
 
-const NavContainer = connect(mapStateToProps, mapDispatchToProps)(Nav);
+const NavContainer = connect(mapStateToProps, actions)(Nav);
 export {NavContainer};

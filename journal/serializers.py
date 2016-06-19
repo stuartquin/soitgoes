@@ -32,8 +32,10 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
 
 class InvoiceSerializer(serializers.ModelSerializer):
     def save(self, *args, **kwargs):
-        return super().save(project_id=self.context['request'].data['project'])
+        project = Project.objects.filter(
+            id=self.context['request'].data['project']
+        ).first()
+        return super().save(project=project)
 
     class Meta:
         model = Invoice
-        depth = 2
