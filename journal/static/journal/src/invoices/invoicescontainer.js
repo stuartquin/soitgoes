@@ -7,26 +7,33 @@ import { InvoiceList } from './invoicelist';
 import * as invoiceActions from '../actions/invoices';
 import * as projectActions from '../actions/projects';
 
-class Invoice extends React.Component {
+class Invoices extends React.Component {
   componentDidMount() {
     this.fetchData();
   }
 
   fetchData() {
+    this.props.fetchProjects();
   }
 
   render() {
     return (
       <div>
-        <h2>Invoice (Draft)</h2>
+        <ToInvoice
+          projectSummary={this.props.projectSummary}
+          onCreateInvoice={this.props.createInvoice}
+        />
+        <InvoiceList
+          projectSummary={this.props.projectSummary}
+        />
       </div>
     );
   }
 }
 
 const mapStateToProps = ({ invoices }) => {
-  debugger;
   return {
+    projectSummary: invoices.projectSummary
   };
 };
 
@@ -35,5 +42,5 @@ const actions = {
   ...invoiceActions
 };
 
-const InvoiceContainer = connect(mapStateToProps, actions)(Invoice);
-export {InvoiceContainer};
+const InvoicesContainer = connect(mapStateToProps, actions)(Invoices);
+export {InvoicesContainer};

@@ -14,7 +14,9 @@ const ToInvoiceRow = (props) => {
       <td>{project.get('name')}</td>
       <td>{getUninvoicedAmount(project)}</td>
       <td>
-        <button>Create Invoice</button>
+        <button onClick={() => props.onCreateInvoice(project)}>
+          Create Invoice
+        </button>
       </td>
     </tr>
   );

@@ -29,8 +29,8 @@ export const saveTimeslips = (projects, timeslips) => {
 
   return (dispatch) => {
     return Promise.all(calls).then(
-      result => dispatch(saveTimeslipsSuccess()),
-      error => dispatch(saveTimeslipsError(error))
+      () => dispatch(saveTimeslipsSuccess()),
+      error => console.error(error) // eslint-disable-line
     );
   };
 };

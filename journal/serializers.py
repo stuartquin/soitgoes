@@ -1,8 +1,6 @@
-from django.db.models import Max
 from rest_framework import serializers
 
 from .models import Project, TimeSlip, Invoice, InvoiceItem
-from libs import invoicepdf, vat
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -33,12 +31,8 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
-
-    def save(self,):
-        project = self.validated_data['project']
-        invoices = Invoice.objects.filter(project=project)
-        max = invoices.aggregate(Max('sequence_num')).get('sequence_num__max')
-        return super().save(sequence_num=(max or 0) + 1)
+    def save(self, *args, **kwargs):
+        return super().save(project_id=self.context['request'].data['project'])
 
     class Meta:
         model = Invoice

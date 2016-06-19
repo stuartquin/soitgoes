@@ -3,7 +3,7 @@
 import React from 'react';
 import ReacDOM from 'react-dom';
 import {Router, Route, browserHistory} from 'react-router';
-import { push, syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
+import { push, syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux';
 import {createStore, applyMiddleware, combineReducers } from 'redux';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
@@ -17,8 +17,8 @@ import { App } from './app';
 import { LoginContainer } from './login/logincontainer';
 import { TimeslipsContainer} from './timeslips/timeslipcontainer';
 import { NavContainer } from './nav/navcontainer';
-import { InvoicesContainer } from './invoices/invoicecontainer';
-import { getUserAuth } from './services/user';
+import { InvoicesContainer } from './invoices/invoicescontainer';
+import { InvoiceContainer } from './invoices/invoicecontainer';
 
 import { Iterable } from 'immutable';
 
@@ -54,6 +54,7 @@ const routes = (
   <Route component={App}>
     <Route component={NavContainer}>
       <Route path='invoices' component={InvoicesContainer} />
+      <Route path='/invoice/:invoiceId' component={InvoiceContainer} />
       <Route path='timeslips' component={TimeslipsContainer} />
     </Route>
     <Route path='login' component={LoginContainer} />

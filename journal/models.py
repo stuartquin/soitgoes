@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Max
 
 
 class Company(models.Model):
@@ -58,6 +59,13 @@ class Invoice(models.Model):
     sequence_num = models.IntegerField(default=0)
     project = models.ForeignKey(Project)
     created_at = models.DateTimeField(auto_now_add=True)
+    issued_at = models.DateTimeField(default=None, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        invoices = Invoice.objects.filter(project=self.project)
+        max = invoices.aggregate(Max('sequence_num')).get('sequence_num__max')
+        self.sequence_num = (max or 0) + 1
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return "[%s] %s" % (self.sequence_num, self.project.name)

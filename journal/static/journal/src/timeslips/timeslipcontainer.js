@@ -53,8 +53,8 @@ const mapStateToProps = (allState, props) => {
 };
 
 const actions = {
-  ...projectActions,
-  ...timeslipActions
+  ...projectActions,  // eslint-disable-line
+  ...timeslipActions  // eslint-disable-line
 };
 
 const TimeslipsContainer = connect(mapStateToProps, actions)(Timeslips);

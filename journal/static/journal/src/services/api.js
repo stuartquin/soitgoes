@@ -52,3 +52,15 @@ export const updateTmeslips = (timeslips) => {
     return fetch(url + t.get('id'), options);
   });
 };
+
+export const createInvoice = (project) => {
+  const auth = getUserAuth();
+  const url = baseUrl + `invoices/`;
+  let options = getOptions(auth, 'POST');
+  options.body = JSON.stringify({
+    project: project.get('id')
+  });
+  return fetch(url, options).then(
+    res => res.json()
+  );
+};

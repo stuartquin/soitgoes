@@ -10,6 +10,7 @@ const ToInvoice = (props) => {
         <tbody>
         {props.projectSummary.valueSeq().map(project => (
           <ToInvoiceRow
+            onCreateInvoice={props.onCreateInvoice}
             key={project.get('id')}
             project={project} />
         ))}

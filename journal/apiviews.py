@@ -55,12 +55,6 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     queryset = models.Invoice.objects.all()
     serializer_class = serializers.InvoiceSerializer
 
-    def perform_create(self, serializer):
-        ids = self.request.data['timeslips']
-        invoice = serializer.save()
-        timeslips = models.TimeSlip.objects.filter(id__in=ids)
-        timeslips.update(invoice=invoice.id)
-
 
 class TimeSlipDetail(generics.UpdateAPIView):
     queryset = models.TimeSlip.objects.all()
