@@ -13,9 +13,22 @@ export const getOptions = (auth, method) => {
   };
 };
 
-export const fetchTimeslips = () => {
+export const fetchTimeslips = (invoice=null) => {
   const auth = getUserAuth();
-  const url = baseUrl + `timeslips/?format=json`;
+  let url = baseUrl + `timeslips/?format=json`;
+
+  if (invoice !== null) {
+    url += `&invoice=${invoice}`;
+  }
+
+  return fetch(url, getOptions(auth, 'GET')).then(
+    res => res.json()
+  );
+};
+
+export const fetchProjects = () => {
+  const auth = getUserAuth();
+  const url = baseUrl + `projects/`;
 
   return fetch(url, getOptions(auth, 'GET')).then(
     res => res.json()

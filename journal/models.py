@@ -46,6 +46,10 @@ class Project(models.Model):
     hourly_rate = models.FloatField(default=0.0)
     hours_per_day = models.IntegerField(default=0)
 
+    def get_uninvoiced_hours(self, *args, **kwargs):
+        timeslips = TimeSlip.objects.filter(project=self, invoice=None)
+        return sum([t.hours for t in timeslips])
+
     def __str__(self):
         return "%s" % (self.name)
 

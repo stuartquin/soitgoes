@@ -42,8 +42,8 @@ export const updateTimeslipValue = (project, date, hours) => ({
   date
 });
 
-export const fetchTimeslips = () => (dispatch) =>
-  api.fetchTimeslips().then(timeslips => {
+export const fetchTimeslips = (invoice) => (dispatch) =>
+  api.fetchTimeslips(invoice).then(timeslips => {
     const result = normalize(timeslips, schema.timeslips);
     dispatch({
       type: constants.GET_TIMESLIPS_SUCCESS,

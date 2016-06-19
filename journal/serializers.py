@@ -6,9 +6,18 @@ from libs import invoicepdf, vat
 
 
 class ProjectSerializer(serializers.ModelSerializer):
+    uninvoiced_hours = serializers.IntegerField(source='get_uninvoiced_hours')
+
     class Meta:
         model = Project
-        fields = ['id', 'name', 'contact', 'created_at']
+        fields = [
+            'id',
+            'name',
+            'contact',
+            'created_at',
+            'uninvoiced_hours',
+            'hourly_rate'
+        ]
         depth = 1
 
 

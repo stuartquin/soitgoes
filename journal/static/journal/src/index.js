@@ -11,6 +11,7 @@ import createLogger from 'redux-logger';
 
 import timeslips from './timeslips/timeslipreducer';
 import projects from './projects/reducer';
+import invoices from './invoices/reducer';
 import constants from './constants';
 import { App } from './app';
 import { LoginContainer } from './login/logincontainer';
@@ -39,6 +40,7 @@ const logger = createLogger({
 const store = createStore(combineReducers({
   timeslips,
   projects,
+  invoices,
   routing: routerReducer
 }), applyMiddleware(thunk, routerMiddleware(browserHistory), logger));
 

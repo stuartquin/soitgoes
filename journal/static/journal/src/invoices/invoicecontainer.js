@@ -1,30 +1,33 @@
+'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
 
-import { InvoiceCreate } from './invoicecreate';
+import { ToInvoice } from './toinvoice';
+import * as actions from '../actions/projects';
 
 class Invoices extends React.Component {
-  constructor(props) {
-    super(props);
+  componentDidMount() {
+    this.fetchData();
   }
+
+  fetchData() {
+    this.props.fetchProjects();
+  }
+
   render() {
     return (
-      <InvoiceCreate />
+      <ToInvoice
+        projectSummary={this.props.projectSummary}
+      />
     );
   }
 }
 
-const mapStateToProps = (allState, props) => {
-  'use strict';
+const mapStateToProps = ({ invoices }, props) => {
   return {
+    projectSummary: invoices.projectSummary
   };
 };
 
-const mapDispatchToProps = (dispatch, props) => {
-  'use strict';
-  return {
-  };
-};
-
-const InvoicesContainer = connect(mapStateToProps, mapDispatchToProps)(Invoices);
+const InvoicesContainer = connect(mapStateToProps, actions)(Invoices);
 export {InvoicesContainer};

@@ -10,7 +10,7 @@ from . import serializers, models
 
 class HasProjectAccess(BasePermission):
     def has_permission(self, request, view):
-        project_id = request.parser_context['kwargs']['project']
+        project_id = request.parser_context['kwargs']['pk']
         project = models.Project.objects.filter(id=project_id).first()
         return len(project.account.users.filter(id=request.user.id)) > 0
 
@@ -89,7 +89,7 @@ class TimeSlipList(generics.ListCreateAPIView):
 
         if 'invoice' in request.query_params:
             invoice = request.query_params['invoice']
-            filters['invoice'] = invoice if invoice != 'null' else None
+            filters['invoice'] = invoice if invoice != 'none' else None
 
         if 'user' in request.query_params:
             # @TODO This doesn't work yet, should check permissions etc.
