@@ -50,7 +50,7 @@ const mapStateToProps = ({ invoices }, { params }) => {
   return {
     invoice: invoices.invoice,
     project: getInvoiceProject(invoices.projectSummary, invoices.invoice),
-    invoiceId: params.invoiceId
+    invoiceId: params.id
   };
 };
 

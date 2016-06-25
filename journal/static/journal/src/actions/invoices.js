@@ -10,7 +10,7 @@ export const createInvoice = (project) => (dispatch) =>
       type: constants.CREATE_INVOICE_SUCCESS,
       invoice
     });
-    dispatch(push(`/invoice/${invoice.id}`));
+    dispatch(push(`/invoices/${invoice.id}`));
   });
 
 export const fetchInvoice = (invoiceId) => (dispatch) =>

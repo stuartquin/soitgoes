@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReacDOM from 'react-dom';
-import {Router, Route, browserHistory} from 'react-router';
+import {Router, Route, browserHistory, IndexRoute} from 'react-router';
 import { push, syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux';
 import {createStore, applyMiddleware, combineReducers } from 'redux';
 import {Provider} from 'react-redux';
@@ -51,12 +51,15 @@ store.dispatch({
 const history = syncHistoryWithStore(browserHistory, store);
 
 const routes = (
-  <Route component={App}>
+  <Route path='/' component={App}>
     <Route component={NavContainer}>
-      <Route path='invoices' component={InvoicesContainer} />
-      <Route path='/invoice/:invoiceId' component={InvoiceContainer} />
+      <Route path="invoices">
+        <IndexRoute component={InvoicesContainer}/>
+        <Route path=":id" component={InvoiceContainer}/>
+      </Route>
       <Route path='timeslips' component={TimeslipsContainer} />
     </Route>
+    <IndexRoute component={LoginContainer}/>
     <Route path='login' component={LoginContainer} />
   </Route>
 );
