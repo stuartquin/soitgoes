@@ -74,10 +74,10 @@ class TimeSlipList(generics.ListCreateAPIView):
 
         return self.serializer_class(*args, **kwargs)
 
-    def list(self, request, project=None):
+    def list(self, request):
         filters = {}
-        if project:
-            filters['project'] = project
+        if 'project' in request.query_params:
+            filters['project'] = request.query_params['project']
 
         if 'invoice' in request.query_params:
             invoice = request.query_params['invoice']

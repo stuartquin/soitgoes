@@ -5,20 +5,24 @@ const baseUrl = 'http://localhost:8000/api/';
 
 export const getOptions = (auth, method) => {
   return {
-      method: method,
-      headers: {
-        Authorization: 'Basic ' + auth,
-        'Content-Type': 'application/json'
-      }
+    method: method,
+    headers: {
+      Authorization: 'Basic ' + auth,
+      'Content-Type': 'application/json'
+    }
   };
 };
 
-export const fetchTimeslips = (invoice=null) => {
+export const fetchTimeslips = (invoice=null, project=null) => {
   const auth = getUserAuth();
   let url = baseUrl + `timeslips/?format=json`;
 
   if (invoice !== null) {
-    url += `&invoice=${invoice}`;
+    url = url + `&invoice=${invoice}`;
+  }
+
+  if (project !== null) {
+    url = url + `&project=${project}`;
   }
 
   return fetch(url, getOptions(auth, 'GET')).then(

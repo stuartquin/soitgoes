@@ -27,7 +27,8 @@ const values = [
   'CREATE_INVOICE',
   'CREATE_INVOICE_SUCCESS',
 
-  'GET_INVOICE_SUCCESS'
+  'GET_INVOICE_SUCCESS',
+  'GET_INVOICE_TIMESLIPS_SUCCESS'
 ];
 
 const constants = {}

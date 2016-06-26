@@ -23,9 +23,19 @@ const invoice = (state = Immutable.Map({}), action) => {
   }
 };
 
+const timeslips = (state = Immutable.List([]), action) => {
+  switch (action.type) {
+  case constants.GET_INVOICE_TIMESLIPS_SUCCESS:
+    return state.merge(action.timeslips);
+  default:
+    return state;
+  }
+};
+
 const invoices = combineReducers({
   projectSummary,
-  invoice
+  invoice,
+  timeslips
 });
 
 export default invoices;

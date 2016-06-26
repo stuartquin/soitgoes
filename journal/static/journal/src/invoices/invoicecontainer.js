@@ -3,6 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import { InvoiceInfo } from './invoiceinfo';
+import { InvoiceTimeslips } from './invoicetimeslips';
 import * as invoiceActions from '../actions/invoices';
 import * as projectActions from '../actions/projects';
 
@@ -22,6 +23,11 @@ class Invoice extends React.Component {
   }
 
   fetchData() {
+    const project = this.props.invoice.get('project');
+    return Promise.all([
+      this.props.fetchProjectTimeslips(project),
+      this.props.fetchInvoiceTimeslips(this.props.invoiceId)
+    ]);
   }
 
   render() {
@@ -37,6 +43,10 @@ class Invoice extends React.Component {
           created={this.props.invoice.get('created_at')}
           issued={this.props.invoice.get('issued_at')}
         />
+        <InvoiceTimeslips
+          project={this.props.project}
+          timeslips={this.props.timeslips}
+        />
       </div>
     );
   }
@@ -49,6 +59,7 @@ const getInvoiceProject = (projects, invoice) => {
 const mapStateToProps = ({ invoices }, { params }) => {
   return {
     invoice: invoices.invoice,
+    timeslips: invoices.timeslips,
     project: getInvoiceProject(invoices.projectSummary, invoices.invoice),
     invoiceId: params.id
   };

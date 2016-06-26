@@ -5,6 +5,7 @@ import moment from 'moment';
 import constants from '../constants';
 
 const setTimeslips = (state, timeslips) => {
+  debugger;
   return state.set('items', Immutable.fromJS(timeslips).toList());
 };
 

@@ -14,9 +14,25 @@ export const createInvoice = (project) => (dispatch) =>
   });
 
 export const fetchInvoice = (invoiceId) => (dispatch) =>
-  api.fetchInvoice(invoiceId).then(invoice => {
+  api.fetchInvoice(invoiceId).then(invoice =>
     dispatch({
       type: constants.GET_INVOICE_SUCCESS,
       invoice
-    });
-  });
+    })
+  );
+
+export const fetchInvoiceTimeslips = (invoiceId) => (dispatch) =>
+  api.fetchTimeslips(invoiceId).then(timeslips =>
+    dispatch({
+      type: constants.GET_INVOICE_TIMESLIPS_SUCCESS,
+      timeslips
+    })
+  );
+
+export const fetchProjectTimeslips = (projectId) => (dispatch) =>
+  api.fetchTimeslips('none', projectId).then(timeslips =>
+    dispatch({
+      type: constants.GET_INVOICE_TIMESLIPS_SUCCESS,
+      timeslips
+    })
+  );
