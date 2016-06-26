@@ -12,10 +12,11 @@ export const getUninvoicedAmount = (project) => {
 
 const InvoiceInfo = (props) => {
   const project = props.project;
+  const invoice = props.invoice;
 
   let issued = 'Not issued yet';
-  if (props.issued) {
-    issued = moment(props.issued_at).format('YYYY-MM-DD');
+  if (invoice.get('issued_at')) {
+    issued = moment(invoice.get('issued_at')).format('YYYY-MM-DD HH:mm');
   }
 
   return (
@@ -30,13 +31,14 @@ const InvoiceInfo = (props) => {
       </div>
       <div>
         <h4>Created</h4>
-        { moment(props.created).format('YYYY-MM-DD') }
+        { moment(invoice.get('created_at')).format('YYYY-MM-DD') }
       </div>
       <div>
         <h4>Issued</h4>
         { issued }
       </div>
       <InvoiceActions
+        invoice={ invoice }
         onMarkAsIssued={props.onMarkAsIssued}
       />
     </div>

@@ -43,8 +43,7 @@ class Invoice extends React.Component {
       <div className={styles.invoiceContainer}>
         <InvoiceInfo
           project={project}
-          created={invoice.get('created_at')}
-          issued={invoice.get('issued_at')}
+          invoice={invoice}
           onMarkAsIssued={() =>
             this.props.markAsIssued(invoice.get('id'), project.get('id'))
           }
