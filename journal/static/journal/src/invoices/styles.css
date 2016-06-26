@@ -1,2 +1,12 @@
 .toInvoiceRow {
 }
+
+.invoiceTimeslips {
+
+}
+
+.invoiceContainer {
+  display: flex;
+}
+
+

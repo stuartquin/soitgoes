@@ -28,9 +28,10 @@ const values = [
   'CREATE_INVOICE_SUCCESS',
 
   'GET_INVOICE_SUCCESS',
-  'GET_INVOICE_TIMESLIPS_SUCCESS'
+  'GET_INVOICE_TIMESLIPS_SUCCESS',
+  'SAVE_INVOICE_SUCCESS'
 ];
 
-const constants = {}
+const constants = {};
 values.forEach(val => constants[val] = val);
 export default constants;

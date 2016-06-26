@@ -77,3 +77,15 @@ export const fetchInvoice = (invoiceId) => {
     res => res.json()
   );
 };
+
+export const issueInvoice = (invoiceId, projectId) => {
+  const auth = getUserAuth();
+  const url = baseUrl + `invoices/${invoiceId}`;
+  const options = getOptions(auth, 'PUT');
+  options.body = JSON.stringify({
+    project: projectId
+  });
+  return fetch(url, options).then(
+    res => res.json()
+  );
+};

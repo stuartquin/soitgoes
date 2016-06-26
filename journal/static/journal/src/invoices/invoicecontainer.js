@@ -7,6 +7,8 @@ import { InvoiceTimeslips } from './invoicetimeslips';
 import * as invoiceActions from '../actions/invoices';
 import * as projectActions from '../actions/projects';
 
+import styles from './styles.css';
+
 class Invoice extends React.Component {
   componentDidMount() {
     if (this.props.invoice.isEmpty()) {
@@ -34,14 +36,18 @@ class Invoice extends React.Component {
     if (!this.props.project) {
       return (<strong>Loading...</strong>);
     }
+    const invoice = this.props.invoice;
+    const project = this.props.project;
 
     return (
-      <div>
-        <h2>Invoice (Draft)</h2>
+      <div className={styles.invoiceContainer}>
         <InvoiceInfo
-          project={this.props.project}
-          created={this.props.invoice.get('created_at')}
-          issued={this.props.invoice.get('issued_at')}
+          project={project}
+          created={invoice.get('created_at')}
+          issued={invoice.get('issued_at')}
+          onMarkAsIssued={() =>
+            this.props.markAsIssued(invoice.get('id'), project.get('id'))
+          }
         />
         <InvoiceTimeslips
           project={this.props.project}

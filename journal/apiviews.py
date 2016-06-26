@@ -46,7 +46,7 @@ class ProjectDetail(APIView):
         return Response(serializer.data)
 
 
-class InvoiceDetail(generics.RetrieveAPIView):
+class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Invoice.objects.all()
     serializer_class = serializers.InvoiceSerializer
 

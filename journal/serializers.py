@@ -1,4 +1,5 @@
 from rest_framework import serializers
+import datetime
 
 from .models import Project, TimeSlip, Invoice, InvoiceItem
 
@@ -31,10 +32,16 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
+    def update(self, instance, validated_data):
+        instance.issued_at = datetime.datetime.now()
+        instance.save()
+        return instance
+
     def save(self, *args, **kwargs):
         project = Project.objects.filter(
             id=self.context['request'].data['project']
         ).first()
+
         return super().save(project=project)
 
     class Meta:

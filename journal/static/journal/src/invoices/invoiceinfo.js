@@ -2,6 +2,8 @@
 import React from 'react';
 import moment from 'moment';
 
+import { InvoiceActions } from './invoiceactions';
+
 import styles from './styles.css';
 
 export const getUninvoicedAmount = (project) => {
@@ -34,6 +36,9 @@ const InvoiceInfo = (props) => {
         <h4>Issued</h4>
         { issued }
       </div>
+      <InvoiceActions
+        onMarkAsIssued={props.onMarkAsIssued}
+      />
     </div>
   );
 };
