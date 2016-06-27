@@ -6,18 +6,24 @@ import {NavMenu} from './navmenu';
 import styles from './styles.css';
 import * as projectActions from '../actions/projects';
 
+
 class Nav extends React.Component {
   componentDidMount() {
     this.props.fetchProjects();
   }
 
   render() {
+    const navClasses = `navbar navbar-inverse ${styles.navbar}`;
     return (
-      <div style={{ width: '100%' }}>
-        <header className={styles.navHeader}>
-          <NavMenu />
-        </header>
-        {this.props.children}
+      <div>
+        <nav className={navClasses}>
+          <div className='container-fluid'>
+            <NavMenu />
+          </div>
+        </nav>
+        <div className='container-fluid'>
+          {this.props.children}
+        </div>
       </div>
     );
   }

@@ -40,18 +40,22 @@ class Invoice extends React.Component {
     const project = this.props.project;
 
     return (
-      <div className={styles.invoiceContainer}>
-        <InvoiceInfo
-          project={project}
-          invoice={invoice}
-          onMarkAsIssued={() =>
-            this.props.markAsIssued(invoice.get('id'), project.get('id'))
-          }
-        />
-        <InvoiceTimeslips
-          project={this.props.project}
-          timeslips={this.props.timeslips}
-        />
+      <div className='row'>
+        <div className='col-md-4'>
+          <InvoiceInfo
+            project={project}
+            invoice={invoice}
+            onMarkAsIssued={() =>
+              this.props.markAsIssued(invoice.get('id'), project.get('id'))
+            }
+          />
+        </div>
+        <div className='col-md-8'>
+          <InvoiceTimeslips
+            project={this.props.project}
+            timeslips={this.props.timeslips}
+          />
+        </div>
       </div>
     );
   }

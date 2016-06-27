@@ -13,8 +13,7 @@ const InvoiceTimeslips = (props) => {
   const project = props.project;
 
   return (
-    <div className={ styles.invoiceTimeslips }>
-    <table>
+    <table className='table table-striped'>
     <tbody>
       <tr><th>Details</th><th>Unit Price (&pound;)</th><th>Subtotal (&pound;)</th></tr>
 
@@ -28,7 +27,6 @@ const InvoiceTimeslips = (props) => {
       ))}
     </tbody>
     </table>
-    </div>
   );
 };
 

@@ -20,22 +20,30 @@ const InvoiceInfo = (props) => {
   }
 
   return (
-    <div>
-      <div>
-        <h4>Project</h4>
-        { project.get('name') }
+    <div className='card'>
+      <div className='card-block'>
+        <h4 className="card-title">Project</h4>
+        <span className="card-subtitle text-muted">
+          { project.get('name') }
+        </span>
       </div>
-      <div>
-        <h4>Contact</h4>
+      <div className='card-block'>
+        <h4 className="card-title">Contact</h4>
+        <span className="card-subtitle text-muted">
         { project.get('contact').get('name') }
+        </span>
       </div>
-      <div>
-        <h4>Created</h4>
+      <div className='card-block'>
+        <h4 className="card-title">Created</h4>
+        <span className="card-subtitle text-muted">
         { moment(invoice.get('created_at')).format('YYYY-MM-DD') }
+        </span>
       </div>
-      <div>
-        <h4>Issued</h4>
+      <div className='card-block'>
+        <h4 className="card-title">Issued</h4>
+        <span className="card-subtitle text-muted">
         { issued }
+        </span>
       </div>
       <InvoiceActions
         invoice={ invoice }
