@@ -90,3 +90,15 @@ export const issueInvoice = (invoiceId, projectId, timeslips) => {
     res => res.json()
   );
 };
+
+export const fetchInvoices = (project=null) => {
+  const auth = getUserAuth();
+  let url = baseUrl + `invoices/`;
+  if (project !== null) {
+    url = url + `&project=${project}`;
+  }
+
+  return fetch(url, getOptions(auth, 'GET')).then(
+    res => res.json()
+  );
+};

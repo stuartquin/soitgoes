@@ -35,10 +35,20 @@ const timeslips = (state = Immutable.List([]), action) => {
   }
 };
 
+const items = (state = Immutable.List([]), action) => {
+  switch (action.type) {
+  case constants.GET_INVOICES_SUCCESS:
+    return Immutable.List(action.invoices.results);
+  default:
+    return state;
+  }
+};
+
 const invoices = combineReducers({
   projectSummary,
   invoice,
-  timeslips
+  timeslips,
+  items
 });
 
 export default invoices;

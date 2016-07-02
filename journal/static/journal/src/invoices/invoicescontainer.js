@@ -10,10 +10,14 @@ import * as projectActions from '../actions/projects';
 class Invoices extends React.Component {
   componentDidMount() {
     this.fetchData();
+    console.log('did mount...');
   }
 
   fetchData() {
-    this.props.fetchProjects();
+    return Promise.all([
+      this.props.fetchProjects(),
+      this.props.fetchInvoices()
+    ]);
   }
 
   render() {
@@ -28,7 +32,8 @@ class Invoices extends React.Component {
           onCreateInvoice={this.props.createInvoice}
         />
         <InvoiceList
-          projectSummary={this.props.projects}
+          projects={this.props.projects}
+          invoices={this.props.invoices}
         />
       </div>
     );
@@ -37,7 +42,8 @@ class Invoices extends React.Component {
 
 const mapStateToProps = ({ invoices }) => {
   return {
-    projects: invoices.projectSummary
+    projects: invoices.projectSummary,
+    invoices: invoices.items
   };
 };
 

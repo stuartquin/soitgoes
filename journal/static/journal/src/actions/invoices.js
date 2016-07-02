@@ -25,13 +25,26 @@ export const createInvoice = (project) => (dispatch) => {
   });
 };
 
-export const fetchInvoice = (invoiceId) => (dispatch) =>
-  api.fetchInvoice(invoiceId).then(invoice =>
+export const fetchInvoice = (invoiceId) => (dispatch) => {
+  return api.fetchInvoice(invoiceId).then(invoice =>
     dispatch({
       type: constants.GET_INVOICE_SUCCESS,
       invoice
     })
   );
+};
+
+export const fetchInvoices = () => (dispatch) => {
+  dispatch({
+    type: constants.CLEAR_INVOICE_TIMESLIPS
+  });
+  api.fetchInvoices().then(invoices =>
+    dispatch({
+      type: constants.GET_INVOICES_SUCCESS,
+      invoices
+    })
+  );
+};
 
 export const fetchInvoiceTimeslips = (invoiceId) => (dispatch) =>
   api.fetchTimeslips(invoiceId).then(timeslips =>
