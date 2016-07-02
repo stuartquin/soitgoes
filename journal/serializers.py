@@ -34,14 +34,14 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
 class InvoiceSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.issued_at = datetime.datetime.now()
-        instance.save()
+        timeslips = self.context['request'].data['timeslips']
+        TimeSlip.set_invoice(timeslips, instance.id)
         return instance
 
     def save(self, *args, **kwargs):
         project = Project.objects.filter(
             id=self.context['request'].data['project']
         ).first()
-
         return super().save(project=project)
 
     class Meta:

@@ -78,12 +78,13 @@ export const fetchInvoice = (invoiceId) => {
   );
 };
 
-export const issueInvoice = (invoiceId, projectId) => {
+export const issueInvoice = (invoiceId, projectId, timeslips) => {
   const auth = getUserAuth();
   const url = baseUrl + `invoices/${invoiceId}`;
   const options = getOptions(auth, 'PUT');
   options.body = JSON.stringify({
-    project: projectId
+    project: projectId,
+    timeslips: timeslips.map(t => t.get('id')).toJS()
   });
   return fetch(url, options).then(
     res => res.json()

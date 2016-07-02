@@ -17,11 +17,11 @@ class Nav extends React.Component {
     return (
       <div>
         <nav className={navClasses}>
-          <div className='container-fluid'>
+          <div className='container'>
             <NavMenu />
           </div>
         </nav>
-        <div className='container-fluid'>
+        <div className='container'>
           {this.props.children}
         </div>
       </div>

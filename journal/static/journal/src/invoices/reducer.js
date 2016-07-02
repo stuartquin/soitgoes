@@ -28,6 +28,8 @@ const timeslips = (state = Immutable.List([]), action) => {
   switch (action.type) {
   case constants.GET_INVOICE_TIMESLIPS_SUCCESS:
     return state.concat(Immutable.fromJS(action.timeslips));
+  case constants.CLEAR_INVOICE_TIMESLIPS:
+    return Immutable.List([]);
   default:
     return state;
   }

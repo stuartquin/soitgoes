@@ -12,7 +12,9 @@ const InvoiceActions = (props) => {
 
   return (
     <div>
-      <button onClick={props.onMarkAsIssued}>{ buttonText }</button>
+      <button
+        className='btn btn-default'
+        onClick={props.onMarkAsIssued}>{ buttonText }</button>
     </div>
   );
 };

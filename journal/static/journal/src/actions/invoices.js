@@ -4,15 +4,18 @@ import { push } from 'react-router-redux';
 import * as api from '../services/api';
 import constants from '../constants';
 
-export const markAsIssued = (invoiceId, projectId) => (dispatch) =>
-  api.issueInvoice(invoiceId, projectId).then(invoice =>
+export const markAsIssued = (invoiceId, projectId, timeslips) => (dispatch) =>
+  api.issueInvoice(invoiceId, projectId, timeslips).then(invoice =>
     dispatch({
       type: constants.SAVE_INVOICE_SUCCESS,
       invoice
     })
   );
 
-export const createInvoice = (project) => (dispatch) =>
+export const createInvoice = (project) => (dispatch) => {
+  dispatch({
+    type: constants.CLEAR_INVOICE_TIMESLIPS
+  });
   api.createInvoice(project).then(invoice => {
     dispatch({
       type: constants.CREATE_INVOICE_SUCCESS,
@@ -20,6 +23,7 @@ export const createInvoice = (project) => (dispatch) =>
     });
     dispatch(push(`/invoices/${invoice.id}`));
   });
+};
 
 export const fetchInvoice = (invoiceId) => (dispatch) =>
   api.fetchInvoice(invoiceId).then(invoice =>

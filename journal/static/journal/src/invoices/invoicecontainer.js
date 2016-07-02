@@ -46,7 +46,11 @@ class Invoice extends React.Component {
             project={project}
             invoice={invoice}
             onMarkAsIssued={() =>
-              this.props.markAsIssued(invoice.get('id'), project.get('id'))
+              this.props.markAsIssued(
+                invoice.get('id'),
+                project.get('id'),
+                this.props.timeslips
+              )
             }
           />
         </div>

@@ -101,5 +101,16 @@ class TimeSlip(models.Model):
     def __str__(self):
         return "[%s] %s" % (self.project.name, self.comment)
 
+    @staticmethod
+    def set_invoice(timeslips_ids, invoice_id):
+        """
+        Takes a list of timeslips_ids and updates with the provided invoice_id
+        Also unsets all existing timeslips with this invoice_id
+        """
+        TimeSlip.objects.filter(invoice_id=invoice_id).update(invoice_id=None)
+        TimeSlip.objects.filter(
+            id__in=timeslips_ids
+        ).update(invoice_id=invoice_id)
+
     class Meta:
         unique_together = ('user', 'project', 'date')
