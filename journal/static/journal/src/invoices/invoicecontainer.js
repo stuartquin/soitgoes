@@ -11,13 +11,9 @@ import styles from './styles.css';
 
 class Invoice extends React.Component {
   componentDidMount() {
-    if (this.props.invoice.isEmpty()) {
-      this.fetchInvoice().then(() => {
-        this.fetchData();
-      });
-    } else {
+    this.fetchInvoice().then(() => {
       this.fetchData();
-    }
+    });
   }
 
   fetchInvoice() {
@@ -26,10 +22,11 @@ class Invoice extends React.Component {
 
   fetchData() {
     const project = this.props.invoice.get('project');
-    return Promise.all([
-      this.props.fetchProjectTimeslips(project),
-      this.props.fetchInvoiceTimeslips(this.props.invoiceId)
-    ]);
+    let promises = [this.props.fetchInvoiceTimeslips(this.props.invoiceId)];
+    if (this.props.invoice.get('issued_at') === null) {
+      this.props.fetchProjectTimeslips(project);
+    }
+    return Promise.all(promises);
   }
 
   render() {
