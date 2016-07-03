@@ -1,6 +1,10 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Max
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from libs import invoicepdf
 
 
 class Company(models.Model):
@@ -66,6 +70,19 @@ class Invoice(models.Model):
         max = invoices.aggregate(Max('sequence_num')).get('sequence_num__max')
         self.sequence_num = (max or 0) + 1
         return super().save(*args, **kwargs)
+
+    @property
+    def pdf_name(self):
+        account = self.project.account.company.name.replace(' ', '_')
+        project = self.project.name.replace(' ', '_')
+        return 'Invoice_%s_%s_%s.pdf' % (account, project, self.sequence_num)
+
+    def get_pdf_file(self):
+        pdf_file = invoicepdf.get_pdf_file(self)
+        if pdf_file is None:
+            invoicepdf.render(self)
+            return invoicepdf.get_pdf_file(self)
+        return pdf_file
 
     def __str__(self):
         return "[%s] %s" % (self.sequence_num, self.project.name)
