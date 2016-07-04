@@ -13,14 +13,19 @@ const InvoiceActions = (props) => {
     button = <a target='_blank' href={link}>Download PDF</a>;
   } else {
     // button = http://localhost:8000/api/invoices/74/pdf
-    button = (<button className='btn btn-default'
+    button = (<button className='btn btn-default btn-success'
                onClick={props.onMarkAsIssued}>Save and Issue
              </button>);
   }
 
+  const invoiceActionsStyle = `card-block ${styles.invoiceActions}`;
+
   return (
-    <div>
+    <div className={ invoiceActionsStyle }>
       {button}
+      <button className='btn btn-default btn-danger'
+        onClick={props.onDelete}>Delete
+      </button>
     </div>
   );
 };

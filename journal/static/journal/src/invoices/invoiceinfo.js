@@ -48,6 +48,7 @@ const InvoiceInfo = (props) => {
       <InvoiceActions
         invoice={ invoice }
         onMarkAsIssued={props.onMarkAsIssued}
+        onDelete={props.onDelete}
       />
     </div>
   );

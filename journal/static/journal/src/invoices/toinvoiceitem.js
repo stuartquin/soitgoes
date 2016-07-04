@@ -10,16 +10,19 @@ export const getUninvoicedAmount = (project) => {
 
 const ToInvoiceItem = (props) => {
   const project = props.project;
+  const invoiceAmount = getUninvoicedAmount(project);
   const invoiceItemStyle = `col-md-3 ${styles.toInvoiceItem}`;
+
 
   return (
     <div className={ invoiceItemStyle }>
       <h4 className={ styles.toInvoiceItemProject }>{project.get('name')}</h4>
-      <div className={ styles.toInvoiceItemRow }>&pound;{getUninvoicedAmount(project)}</div>
+      <div className={ styles.toInvoiceItemRow }>&pound;{invoiceAmount}</div>
       <div className={ styles.toInvoiceItemRow }>&pound;0</div>
       <div className={ styles.toInvoiceItemRow }>
         <button className='btn-sm btn btn-success'
-          onClick={() => props.onCreateInvoice(project)}>
+          onClick={() => props.onCreateInvoice(project)}
+          disabled={invoiceAmount === 0}>
           Create Invoice
         </button>
       </div>

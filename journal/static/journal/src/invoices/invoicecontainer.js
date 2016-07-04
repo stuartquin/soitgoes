@@ -42,6 +42,9 @@ class Invoice extends React.Component {
           <InvoiceInfo
             project={project}
             invoice={invoice}
+            onDelete={() =>
+              this.props.deleteInvoice(invoice.get('id'))
+            }
             onMarkAsIssued={() =>
               this.props.markAsIssued(
                 invoice.get('id'),

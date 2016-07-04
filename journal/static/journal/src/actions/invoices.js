@@ -5,12 +5,17 @@ import * as api from '../services/api';
 import constants from '../constants';
 
 export const markAsIssued = (invoiceId, projectId, timeslips) => (dispatch) =>
-  api.issueInvoice(invoiceId, projectId, timeslips).then(invoice =>
+  api.issueInvoice(invoiceId, projectId, timeslips).then(invoice => {
     dispatch({
       type: constants.SAVE_INVOICE_SUCCESS,
       invoice
-    })
-  );
+    });
+  });
+
+export const deleteInvoice = (invoiceId) => (dispatch) =>
+  api.deleteInvoice(invoiceId).then(() => {
+    dispatch(push(`/invoices`));
+  });
 
 export const createInvoice = (project) => (dispatch) => {
   dispatch({

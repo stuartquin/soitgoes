@@ -19,6 +19,8 @@ const invoice = (state = Immutable.Map({}), action) => {
   case constants.CREATE_INVOICE_SUCCESS:
   case constants.SAVE_INVOICE_SUCCESS:
     return Immutable.fromJS(action.invoice);
+  case constants.DELETE_INVOICE_SUCCESS:
+    return Immutable.Map({});
   default:
     return state;
   }

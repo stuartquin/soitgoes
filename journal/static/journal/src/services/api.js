@@ -91,6 +91,13 @@ export const issueInvoice = (invoiceId, projectId, timeslips) => {
   );
 };
 
+export const deleteInvoice = (invoiceId) => {
+  const auth = getUserAuth();
+  const url = baseUrl + `invoices/${invoiceId}`;
+  const options = getOptions(auth, 'DELETE');
+  return fetch(url, options);
+};
+
 export const fetchInvoices = (project=null) => {
   const auth = getUserAuth();
   let url = baseUrl + `invoices/`;
