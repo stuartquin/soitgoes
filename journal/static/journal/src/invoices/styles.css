@@ -1,4 +1,15 @@
-.toInvoiceRow {
+.toInvoice {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.toInvoiceItem {
+    text-align: center;
+}
+
+.toInvoiceLabels {
+    text-align: right;
+    font-size: 0.85em;
 }
 
 .invoiceTimeslips {
@@ -9,4 +20,19 @@
   display: flex;
 }
 
+.toInvoiceItemProject {
+  height: 50px;
+}
+
+.toInvoiceItemRow {
+  height: 50px;
+  line-height: 50px;
+  border-top: 1px solid #eceeef;
+}
+
+.toInvoiceLabelsRow {
+  height: 50px;
+  line-height: 50px;
+  color: #AAAAAA;
+}
 

@@ -1,21 +1,22 @@
 'use strict';
 import React from 'react';
-import { ToInvoiceRow } from './toinvoicerow';
+import { ToInvoiceItem } from './toinvoiceitem';
+import { ToInvoiceLabels } from './toinvoicelabels';
+
+import styles from './styles.css';
 
 const ToInvoice = (props) => {
+  const toInvoiceStyle = `row ${styles.toInvoice}`;
+
   return (
-    <div>
-      <h3>To Be Invoiced</h3>
-      <table>
-        <tbody>
+    <div className={ toInvoiceStyle }>
+        <ToInvoiceLabels />
         {props.projectSummary.valueSeq().map(project => (
-          <ToInvoiceRow
+          <ToInvoiceItem
             onCreateInvoice={props.onCreateInvoice}
             key={project.get('id')}
             project={project} />
         ))}
-        </tbody>
-      </table>
     </div>
   );
 };
