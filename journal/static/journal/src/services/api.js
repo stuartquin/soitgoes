@@ -109,3 +109,7 @@ export const fetchInvoices = (project=null) => {
     res => res.json()
   );
 };
+
+export const addInvoiceItem = (invoiceId, name, price) => {
+  console.log(invoiceId, name, price);
+}

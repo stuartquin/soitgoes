@@ -2,6 +2,7 @@
 import React from 'react';
 
 import { InvoiceItemRow } from './invoiceitemrow';
+import { AddInvoiceItem } from './addinvoiceitem';
 
 import styles from './styles.css';
 
@@ -25,6 +26,9 @@ const InvoiceTimeslips = (props) => {
           subTotal={project.get('hourly_rate') * timeslip.get('hours')}
         />
       ))}
+      <AddInvoiceItem
+        onAddItem={props.onAddItem}
+      />
     </tbody>
     </table>
   );

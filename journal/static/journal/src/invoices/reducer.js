@@ -21,6 +21,8 @@ const invoice = (state = Immutable.Map({}), action) => {
     return Immutable.fromJS(action.invoice);
   case constants.DELETE_INVOICE_SUCCESS:
     return Immutable.Map({});
+  case constants.ADD_INVOICE_ITEM_SUCCESS:
+    return state.set('invoiceItems', action.invoiceItems);
   default:
     return state;
   }

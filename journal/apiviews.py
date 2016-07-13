@@ -68,6 +68,11 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.InvoiceSerializer
 
 
+class InvoiceItem(generics.ListCreateAPIView):
+    queryset = models.InvoiceItem.objects.all().order_by('-created_at')
+    serializer_class = serializers.InvoiceItemSerializer
+
+
 class InvoicePDF(APIView):
     permission_classes = (HasInvoiceAccess,)
 

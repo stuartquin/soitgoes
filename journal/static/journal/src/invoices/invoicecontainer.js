@@ -58,6 +58,10 @@ class Invoice extends React.Component {
           <InvoiceTimeslips
             project={this.props.project}
             timeslips={this.props.timeslips}
+            items={this.props.invoiceItems}
+            onAddItem={(name, price) =>
+              this.props.addItem(invoice.get('id'), name, price)
+            }
           />
         </div>
       </div>
@@ -72,6 +76,7 @@ const getInvoiceProject = (projects, invoice) => {
 const mapStateToProps = ({ invoices }, { params }) => {
   return {
     invoice: invoices.invoice,
+    invoiceItems: [],
     timeslips: invoices.timeslips,
     project: getInvoiceProject(invoices.projectSummary, invoices.invoice),
     invoiceId: params.id

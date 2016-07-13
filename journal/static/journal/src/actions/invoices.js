@@ -4,6 +4,14 @@ import { push } from 'react-router-redux';
 import * as api from '../services/api';
 import constants from '../constants';
 
+export const addItem = (invoiceId, name, price) => (dispatch) =>
+  api.addInvoiceItem(invoiceId, name, price).then(item => {
+    dispatch({
+      type: constants.ADD_INVOICE_ITEM_SUCCESS,
+      item
+    });
+  });
+
 export const markAsIssued = (invoiceId, projectId, timeslips) => (dispatch) =>
   api.issueInvoice(invoiceId, projectId, timeslips).then(invoice => {
     dispatch({
