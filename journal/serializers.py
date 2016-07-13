@@ -34,8 +34,6 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
 class InvoiceSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.issued_at = datetime.datetime.now()
-        timeslips = self.context['request'].data['timeslips']
-        TimeSlip.set_invoice(timeslips, instance.id)
         return super().update(instance, validated_data)
 
     def save(self, *args, **kwargs):

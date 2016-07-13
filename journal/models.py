@@ -66,10 +66,20 @@ class Invoice(models.Model):
     issued_at = models.DateTimeField(default=None, blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        invoices = Invoice.objects.filter(project=self.project)
-        max = invoices.aggregate(Max('sequence_num')).get('sequence_num__max')
-        self.sequence_num = (max or 0) + 1
-        return super().save(*args, **kwargs)
+        pk = self.pk
+        if pk is None:
+            invoices = Invoice.objects.filter(project=self.project)
+            max = invoices.aggregate(Max('sequence_num')).get('sequence_num__max')
+            self.sequence_num = (max or 0) + 1
+
+        super().save(*args, **kwargs)
+
+        if self.issued_at is None:
+            timeslips = TimeSlip.objects.filter(
+                project=self.project,
+                invoice=None
+            )
+            TimeSlip.set_invoice(timeslips, self.pk)
 
     @property
     def pdf_name(self):
@@ -119,15 +129,13 @@ class TimeSlip(models.Model):
         return "[%s] %s" % (self.project.name, self.comment)
 
     @staticmethod
-    def set_invoice(timeslips_ids, invoice_id):
+    def set_invoice(timeslips, invoice_id):
         """
         Takes a list of timeslips_ids and updates with the provided invoice_id
         Also unsets all existing timeslips with this invoice_id
         """
         TimeSlip.objects.filter(invoice_id=invoice_id).update(invoice_id=None)
-        TimeSlip.objects.filter(
-            id__in=timeslips_ids
-        ).update(invoice_id=invoice_id)
+        timeslips.update(invoice_id=invoice_id)
 
     class Meta:
         unique_together = ('user', 'project', 'date')
