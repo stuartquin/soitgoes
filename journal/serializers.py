@@ -15,7 +15,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'contact',
             'created_at',
             'uninvoiced_hours',
-            'hourly_rate'
+            'hourly_rate',
+            'invoice_modifier'
         ]
         depth = 1
 

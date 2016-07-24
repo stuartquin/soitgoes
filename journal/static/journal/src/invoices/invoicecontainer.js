@@ -9,6 +9,16 @@ import * as projectActions from '../actions/projects';
 
 import styles from './styles.css';
 
+const getTimeslipTotal = (hourlyRate, timeslips) => {
+  return timeslips.reduce((prev, current) =>
+    prev + (current.get('hours') * hourlyRate),
+  0);
+};
+
+const getAdditionalTotal = () => {
+  return 0;
+};
+
 class Invoice extends React.Component {
   componentDidMount() {
     this.fetchInvoice().then(() => {
@@ -42,6 +52,10 @@ class Invoice extends React.Component {
           <InvoiceInfo
             project={project}
             invoice={invoice}
+            timeslipTotal={
+              getTimeslipTotal(project.get('hourly_rate'), this.props.timeslips)
+            }
+            additionalTotal={getAdditionalTotal()}
             onDelete={() =>
               this.props.deleteInvoice(invoice.get('id'))
             }

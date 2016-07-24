@@ -45,6 +45,7 @@ class HasTimeslipAccess(BasePermission):
 class ProjectList(generics.ListAPIView):
     queryset = models.Project.objects.all()
     serializer_class = serializers.ProjectSerializer
+    # permission_classes = (HasProjectAccess,)
 
 
 class ProjectDetail(APIView):

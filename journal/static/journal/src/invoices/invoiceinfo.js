@@ -3,6 +3,7 @@ import React from 'react';
 import moment from 'moment';
 
 import { InvoiceActions } from './invoiceactions';
+import { InvoiceSummary } from './invoicesummary';
 
 import styles from './styles.css';
 
@@ -45,6 +46,11 @@ const InvoiceInfo = (props) => {
         { issued }
         </span>
       </div>
+      <InvoiceSummary
+        project={project}
+        timeslipTotal={props.timeslipTotal}
+        additionalTotal={props.additionalTotal}
+      />
       <InvoiceActions
         invoice={ invoice }
         onMarkAsIssued={props.onMarkAsIssued}

@@ -34,6 +34,14 @@ class InvoiceAdmin(admin.ModelAdmin):
         return obj
 
 
+@admin.register(models.InvoiceModifier)
+class InvoiceModifierAdmin(admin.ModelAdmin):
+    list_display = ('obj', 'created_at')
+
+    def obj(self, obj):
+        return obj
+
+
 @admin.register(models.InvoiceItem)
 class InvoiceItem(admin.ModelAdmin):
     list_display = ('name', 'created_at')
