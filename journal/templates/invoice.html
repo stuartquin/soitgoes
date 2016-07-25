@@ -112,6 +112,13 @@ th {
             <td>{{ item.qty|multiply:item.cost_per_unit }}</td>
           </tr>
           {% endfor %}
+          {% for item in modifiers %}
+          <tr class='{% if forloop.counter|divisibleby:2 %}alt{% endif %}'>
+            <td>{{ item.name }}</td>
+            <td>{{ item.percent }}%</td>
+            <td>{{ item.impact }}</td>
+          </tr>
+          {% endfor %}
         </table>
       </section>
     </div>

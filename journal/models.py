@@ -98,6 +98,10 @@ class Invoice(models.Model):
         project = self.project.name.replace(' ', '_')
         return 'Invoice_%s_%s_%s.pdf' % (account, project, self.sequence_num)
 
+    @property
+    def total_hours(self):
+        return sum([t.hours for t in self.timeslips.all()])
+
     def get_pdf_file(self):
         pdf_file = invoicepdf.get_pdf_file(self)
         if pdf_file is None:

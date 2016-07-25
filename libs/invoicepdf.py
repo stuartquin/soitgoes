@@ -17,18 +17,29 @@ def get_pdf_file(invoice):
         return None
 
 
+def get_invoice_modifiers(modifiers, value):
+    for mod in modifiers:
+        mod.impact = (value / 100) * mod.percent
+    return modifiers
+
+
 def render(invoice):
     template = loader.get_template('invoice.html')
     temp_name = tempfile.NamedTemporaryFile().name
     html_name = temp_name + '.html'
     output_name = INVOICE_DIR + invoice.pdf_name
+    timeslips = invoice.timeslips.all()
+    project = invoice.project
+    timeslip_total = invoice.total_hours * project.hourly_rate
+    modifiers = get_invoice_modifiers(project.invoice_modifier.all(), timeslip_total)
 
     context = {
         'invoice': invoice,
-        'contact': invoice.project.contact,
-        'company': invoice.project.account.company,
+        'contact': project.contact,
+        'company': project.account.company,
         'items': [],
-        'timeslips': invoice.timeslips.all()
+        'timeslips': timeslips,
+        'modifiers': modifiers
     }
 
     with open(html_name, 'w') as output:

@@ -20,29 +20,31 @@ const InvoiceInfo = (props) => {
     issued = moment(invoice.get('issued_at')).format('YYYY-MM-DD HH:mm');
   }
 
+  const titleClass = `card-block`;
+
   return (
     <div className='card'>
-      <div className='card-block'>
-        <h4 className="card-title">Project</h4>
-        <span className="card-subtitle text-muted">
+      <div className={ titleClass }>
+        <span>Project</span>
+        <span className="text-muted">
           { project.get('name') }
         </span>
       </div>
-      <div className='card-block'>
-        <h4 className="card-title">Contact</h4>
-        <span className="card-subtitle text-muted">
+      <div className={ titleClass }>
+        <span>Contact</span>
+        <span className="text-muted">
         { project.get('contact').get('name') }
         </span>
       </div>
-      <div className='card-block'>
-        <h4 className="card-title">Created</h4>
-        <span className="card-subtitle text-muted">
+      <div className={ titleClass }>
+        <span>Created</span>
+        <span className="text-muted">
         { moment(invoice.get('created_at')).format('YYYY-MM-DD') }
         </span>
       </div>
-      <div className='card-block'>
-        <h4 className="card-title">Issued</h4>
-        <span className="card-subtitle text-muted">
+      <div className={ titleClass }>
+        <span>Issued</span>
+        <span className="text-muted">
         { issued }
         </span>
       </div>
