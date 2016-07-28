@@ -13,6 +13,22 @@ export const getOptions = (auth, method) => {
   };
 };
 
+export const createSession = (username, password) => {
+  const auth = getUserAuth();
+  const url = baseUrl + `session/`;
+  let options = getOptions(auth, 'POST');
+  options.body = JSON.stringify({
+    username,
+    password
+  });
+
+  debugger;
+
+  return fetch(url, options).then(
+    res => res.json()
+  );
+}
+
 export const fetchTimeslips = (invoice=null, project=null) => {
   const auth = getUserAuth();
   let url = baseUrl + `timeslips/?format=json`;

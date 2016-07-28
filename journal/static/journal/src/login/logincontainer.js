@@ -1,13 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { push } from 'react-router-redux'
 
 import { LoginForm } from './loginform';
-
-export const setUserAuth = (fields) => {
-  const auth = btoa(`${fields.username}:${fields.password}`);
-  document.cookie = `soitgoes_auth=${auth}`;
-};
+import * as actions from '../actions/session';
 
 class Login extends React.Component {
   constructor(props) {
@@ -16,25 +11,19 @@ class Login extends React.Component {
   render() {
     return (
       <LoginForm
-        onSubmit={this.props.onLoginSubmit}
+        onSubmit={
+          (fields) =>
+            this.props.createSession(fields.username, fields.password)
+        }
       />
     );
   }
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = () => {
   return {
   };
 };
 
-const mapDispatchToProps = (dispatch, props) => {
-  return {
-    onLoginSubmit: (fields) => {
-      setUserAuth(fields);
-      dispatch(push('/timeslips'));
-    }
-  }
-};
-
-const LoginContainer = connect(mapStateToProps, mapDispatchToProps)(Login);
+const LoginContainer = connect(mapStateToProps, actions)(Login);
 export {LoginContainer};

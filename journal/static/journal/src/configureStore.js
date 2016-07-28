@@ -8,6 +8,7 @@ import { Iterable } from 'immutable';
 import timeslips from './timeslips/reducer';
 import projects from './projects/reducer';
 import invoices from './invoices/reducer';
+import session from './session/reducer';
 
 
 const logger = createLogger({
@@ -30,6 +31,7 @@ const configureStore = () => {
     timeslips,
     projects,
     invoices,
+    session,
     routing: routerReducer
   }),
   compose(

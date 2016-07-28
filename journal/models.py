@@ -1,14 +1,13 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Max
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from libs import invoicepdf
 
 
+
 class Company(models.Model):
-    name = models.CharField(max_length=512)
+    name = models.CharField(max_length=512) 
     address1 = models.CharField(max_length=512, blank=True, null=True)
     address2 = models.CharField(max_length=512, blank=True, null=True)
     city = models.CharField(max_length=128, blank=True, null=True)
@@ -137,7 +136,8 @@ class TimeSlip(models.Model):
 
     comment = models.CharField(max_length=512, blank=True, null=True)
     invoice = models.ForeignKey(
-        Invoice, models.SET_NULL, blank=True, null=True, related_name='timeslips'
+        Invoice, models.SET_NULL,
+        blank=True, null=True, related_name='timeslips'
     )
 
     def __str__(self):

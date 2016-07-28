@@ -1,7 +1,9 @@
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+from django.contrib import auth
+from django.core.exceptions import PermissionDenied
 
-from rest_framework import generics, status, viewsets
+from rest_framework import generics, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
@@ -40,6 +42,22 @@ class HasTimeslipAccess(BasePermission):
         # list flatten
         users = set([u.id for p in projects for u in p.account.users.all()])
         return request.user.id in users
+
+
+class UserLoginview(APIView):
+    def post(self, request):
+        username = request.data['username']
+        password = request.data['password']
+        user = auth.authenticate(username=username, password=password)
+
+        if user == request.user:
+            auth.login(request, user)
+            return Response({
+                "id": user.id,
+                "username": username
+            })
+        else:
+            raise PermissionDenied()
 
 
 class ProjectList(generics.ListAPIView):

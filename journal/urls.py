@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from . import apiviews
+from . import apiviews, views
 
 invoices = apiviews.InvoiceViewSet.as_view({
     'get': 'list',
@@ -7,15 +7,19 @@ invoices = apiviews.InvoiceViewSet.as_view({
 })
 
 urlpatterns = [
-    url(r'projects/$', apiviews.ProjectList.as_view()),
-    url(r'projects/(?P<pk>[0-9]+)/$', apiviews.ProjectDetail.as_view()),
+    url(r'api/projects/$', apiviews.ProjectList.as_view()),
+    url(r'api/projects/(?P<pk>[0-9]+)/$', apiviews.ProjectDetail.as_view()),
 
-    url(r'invoices/$', invoices, name='project-invoices'),
+    url(r'api/invoices/$', invoices, name='project-invoices'),
 
-    url(r'timeslips/$', apiviews.TimeSlipList.as_view()),
-    url(r'timeslips/(?P<pk>[0-9]+)$', apiviews.TimeSlipDetail.as_view()),
+    url(r'api/timeslips/$', apiviews.TimeSlipList.as_view()),
+    url(r'api/timeslips/(?P<pk>[0-9]+)$', apiviews.TimeSlipDetail.as_view()),
 
-    url(r'invoices/(?P<pk>[0-9]+)$', apiviews.InvoiceDetail.as_view()),
-    url(r'invoices/(?P<pk>[0-9]+)/pdf$', apiviews.InvoicePDF.as_view()),
-    url(r'invoices/(?P<pk>[0-9]+)/item$', apiviews.InvoiceItem.as_view())
+    url(r'api/invoices/(?P<pk>[0-9]+)$', apiviews.InvoiceDetail.as_view()),
+    url(r'api/invoices/(?P<pk>[0-9]+)/pdf$', apiviews.InvoicePDF.as_view()),
+    url(r'api/invoices/(?P<pk>[0-9]+)/item$', apiviews.InvoiceItem.as_view()),
+
+    url(r'api/session/$', apiviews.UserLoginview.as_view()),
+
+    url(r'^$', views.landing)
 ]
