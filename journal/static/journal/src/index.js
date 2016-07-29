@@ -9,7 +9,6 @@ import {Provider} from 'react-redux';
 import constants from './constants';
 import configureStore from './configureStore';
 import { App } from './app';
-import { LoginContainer } from './login/logincontainer';
 import { TimeslipsContainer} from './timeslips/timeslipcontainer';
 import { NavContainer } from './nav/navcontainer';
 import { InvoicesContainer } from './invoices/invoicescontainer';
@@ -31,8 +30,6 @@ const routes = (
       </Route>
       <Route path='timeslips' component={TimeslipsContainer} />
     </Route>
-    <IndexRoute component={LoginContainer}/>
-    <Route path='login' component={LoginContainer} />
   </Route>
 );
 

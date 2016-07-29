@@ -21,5 +21,6 @@ urlpatterns = [
 
     url(r'api/session/$', apiviews.UserLoginview.as_view()),
 
-    url(r'^$', views.landing)
+    url(r'^$', views.landing),
+    url(r'login/$', views.login_user)
 ]
