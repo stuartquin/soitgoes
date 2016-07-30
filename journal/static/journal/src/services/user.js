@@ -11,3 +11,8 @@ export const getUserAuth = () => {
   const cookies = getCookies();
   return cookies.soitgoes_auth;
 };
+
+export const getCookie = (cookie) => {
+  const cookies = getCookies();
+  return cookies[cookie];
+};

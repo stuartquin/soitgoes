@@ -30,6 +30,7 @@ const routes = (
       </Route>
       <Route path='timeslips' component={TimeslipsContainer} />
     </Route>
+    <IndexRoute component={NavContainer}/>
   </Route>
 );
 

@@ -1,16 +1,32 @@
 'use strict';
-import { getUserAuth } from './user';
+import { getUserAuth, getCookie } from './user';
 
-const baseUrl = 'http://localhost:8000/api/';
+const baseUrl = '/api/';
 
 export const getOptions = (auth, method) => {
   return {
     method: method,
     headers: {
-      Authorization: 'Basic ' + auth,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     }
   };
+};
+
+export const buildRequest = (path, method='GET', data=null) => {
+  const params = {
+    method: method,
+    mode: 'cors',
+    credentials: 'same-origin',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken')
+    })
+  };
+  if (data) {
+    params.body = JSON.stringify(data);
+  }
+
+  return new Request(`/api/${path}`, params);
 };
 
 export const createSession = (username, password) => {
@@ -22,16 +38,13 @@ export const createSession = (username, password) => {
     password
   });
 
-  debugger;
-
   return fetch(url, options).then(
     res => res.json()
   );
-}
+};
 
 export const fetchTimeslips = (invoice=null, project=null) => {
-  const auth = getUserAuth();
-  let url = baseUrl + `timeslips/?format=json`;
+  let url = `timeslips/?format=json`;
 
   if (invoice !== null) {
     url = url + `&invoice=${invoice}`;
@@ -41,35 +54,25 @@ export const fetchTimeslips = (invoice=null, project=null) => {
     url = url + `&project=${project}`;
   }
 
-  return fetch(url, getOptions(auth, 'GET')).then(
+  return fetch(buildRequest(url)).then(
     res => res.json()
   );
 };
 
 export const fetchProjects = () => {
-  const auth = getUserAuth();
-  const url = baseUrl + `projects/`;
-
-  return fetch(url, getOptions(auth, 'GET')).then(
+  return fetch(buildRequest('projects/')).then(
     res => res.json()
   );
 };
 
 export const createTimeslips = (timeslips) => {
-  const auth = getUserAuth();
-  const url = baseUrl + `timeslips/`;
-  let options = getOptions(auth, 'POST');
-  options.body = JSON.stringify(timeslips.toJS());
-  return fetch(url, options);
+  const req = buildRequest('timeslips/', 'POST', timeslips.toJS());
+  return fetch(req);
 };
 
 export const updateTmeslips = (timeslips) => {
-  const auth = getUserAuth();
-  const url = baseUrl + `timeslips/`;
   return timeslips.map((t) => {
-    let options = getOptions(auth, 'PUT');
-    options.body = JSON.stringify(t.toJS());
-    return fetch(url + t.get('id'), options);
+    return fetch(buildRequest('timeslips/', 'PUT', t.toJS()));
   });
 };
 
