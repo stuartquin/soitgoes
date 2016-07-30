@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReacDOM from 'react-dom';
-import {Router, Route, browserHistory, IndexRoute} from 'react-router';
+import {Router, Route, browserHistory, IndexRoute, IndexRedirect} from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import {Provider} from 'react-redux';
 
@@ -31,6 +31,7 @@ const routes = (
       <Route path='timeslips' component={TimeslipsContainer} />
     </Route>
     <IndexRoute component={NavContainer}/>
+    <IndexRedirect to='/timeslips' />
   </Route>
 );
 

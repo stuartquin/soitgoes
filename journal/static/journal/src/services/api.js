@@ -1,46 +1,36 @@
 'use strict';
-import { getUserAuth, getCookie } from './user';
+import { getCookie } from './user';
 
-const baseUrl = '/api/';
-
-export const getOptions = (auth, method) => {
-  return {
-    method: method,
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  };
-};
-
+// TODO this has a lot of hacky stuff to support npm server.js
 export const buildRequest = (path, method='GET', data=null) => {
   const params = {
     method: method,
     mode: 'cors',
-    credentials: 'same-origin',
-    headers: new Headers({
-      'Content-Type': 'application/json',
-      'X-CSRFToken': getCookie('csrftoken')
-    })
+    credentials: 'same-origin'
   };
+  let headers = {
+    'Content-Type': 'application/json',
+    'X-CSRFToken': getCookie('csrftoken')
+  };
+
+  let url = `api/${path}`;
+
   if (data) {
     params.body = JSON.stringify(data);
   }
 
-  return new Request(`/api/${path}`, params);
+  if (__USERNAME__) {
+    const auth = btoa(__USERNAME__ + ':' + __PASSWORD__);
+    headers.Authorization = 'Basic ' + auth;
+    url = `http://localhost:8000/${url}`;
+  }
+
+  params.headers = new Headers(headers);
+  return new Request(url, params);
 };
 
-export const createSession = (username, password) => {
-  const auth = getUserAuth();
-  const url = baseUrl + `session/`;
-  let options = getOptions(auth, 'POST');
-  options.body = JSON.stringify({
-    username,
-    password
-  });
-
-  return fetch(url, options).then(
-    res => res.json()
-  );
+export const createSession = () => {
+  return fetch(buildRequest('session/', 'POST')).then(res => res.json());
 };
 
 export const fetchTimeslips = (invoice=null, project=null) => {
@@ -77,58 +67,41 @@ export const updateTmeslips = (timeslips) => {
 };
 
 export const createInvoice = (project) => {
-  const auth = getUserAuth();
-  const url = baseUrl + `invoices/`;
-  let options = getOptions(auth, 'POST');
-  options.body = JSON.stringify({
-    project: project.get('id')
-  });
-  return fetch(url, options).then(
+  const req = buildRequest('invoices/', 'POST', {project: project.get('id')});
+  return fetch(req).then(
     res => res.json()
   );
 };
 
 export const fetchInvoice = (invoiceId) => {
-  const auth = getUserAuth();
-  const url = baseUrl + `invoices/${invoiceId}`;
-
-  return fetch(url, getOptions(auth, 'GET')).then(
+  return fetch(buildRequest(`invoices/${invoiceId}`)).then(
     res => res.json()
   );
 };
 
 export const issueInvoice = (invoiceId, projectId, timeslips) => {
-  const auth = getUserAuth();
-  const url = baseUrl + `invoices/${invoiceId}`;
-  const options = getOptions(auth, 'PUT');
-  options.body = JSON.stringify({
+  const req = buildRequest(`invoices/${invoiceId}`, 'PUT', {
     project: projectId,
     timeslips: timeslips.map(t => t.get('id')).toJS()
   });
-  return fetch(url, options).then(
-    res => res.json()
-  );
+  return fetch(req).then(res => res.json());
 };
 
 export const deleteInvoice = (invoiceId) => {
-  const auth = getUserAuth();
-  const url = baseUrl + `invoices/${invoiceId}`;
-  const options = getOptions(auth, 'DELETE');
-  return fetch(url, options);
+  return fetch(buildRequest(`invoices/${invoiceId}`, 'DELETE'));
 };
 
 export const fetchInvoices = (project=null) => {
-  const auth = getUserAuth();
-  let url = baseUrl + `invoices/`;
+  let url = 'invoices/';
   if (project !== null) {
     url = url + `&project=${project}`;
   }
 
-  return fetch(url, getOptions(auth, 'GET')).then(
+  return fetch(buildRequest(url)).then(
     res => res.json()
   );
 };
 
 export const addInvoiceItem = (invoiceId, name, price) => {
   console.log(invoiceId, name, price);
-}
+};
