@@ -7,8 +7,8 @@
     width: 75px;
 }
 
-.today input {
-  background-color: lavender;
+.today {
+  border: solid 1px orange;
 }
 
 .cells {

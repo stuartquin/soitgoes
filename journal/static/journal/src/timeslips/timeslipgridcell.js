@@ -17,14 +17,14 @@ const TimeslipGridCell = (props) => {
   });
 
   return (
-    <div className={className}>
+    <td className={className}>
       <input
         value={hours}
         onFocus={(e) => {
           e.target.select();
         }}
         onChange={(e) => props.hourChanged(e.target.value)} />
-    </div>
+    </td>
   );
 };
 

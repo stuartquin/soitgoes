@@ -14,48 +14,28 @@ const groupByMonth = (dateRange) => {
 const TimeslipGridHeaderDate = (props) => {
   const date = props.date.format('ddd Do');
   return (
-    <div className={ styles.timeslipGridHeaderDate }>
+    <td className={ styles.timeslipGridHeaderDate }>
       {date}
-    </div>
+    </td>
   );
 };
 
 const TimeslipGridHeaderProjects = (props) => {
   return (
-    <div className={ styles.timeslipGridHeaderProjects }>
-    </div>
-  );
-};
-
-const TimeslipGridHeaderMonth = (props) => {
-  const month = props.range.get(0).format('MMMM');
-
-  return (
-    <div className={ styles.monthRow }>
-      <div className={ styles.monthName }>
-        {month}
-      </div>
-
-      <div className={ styles.dayRow }>
-        {props.range.map((date, index) => (
-          <TimeslipGridHeaderDate
-            key={index}
-            date={date} />
-        ))}
-      </div>
-    </div>
+    <td className={ styles.timeslipGridHeaderProjects }>
+    </td>
   );
 };
 
 const TimeslipGridHeader = (props) => {
-  const range = groupByMonth(props.range);
-
-  return (<div className={styles.timeslipGridHeader}>
-    <TimeslipGridHeaderProjects />
-    {range.map((month, index) => (
-      <TimeslipGridHeaderMonth key={index} range={month} />
-    ))}
-  </div>);
+  return (
+    <tr className={styles.timeslipGridHeader}>
+      <TimeslipGridHeaderProjects />
+      {props.range.map((date, index) => (
+        <TimeslipGridHeaderDate key={index} date={date} />
+      ))}
+    </tr>
+  );
 };
 
 export {TimeslipGridHeader};

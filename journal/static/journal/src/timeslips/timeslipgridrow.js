@@ -26,8 +26,8 @@ const TimeslipGridRow = (props) => {
   }, {});
 
   return (
-    <div className={styles.timeslipGridRow}>
-      <div className={styles.timeslipGridRowProject}>{props.project.get('name')}</div>
+    <tr className={styles.timeslipGridRow}>
+      <td className={styles.timeslipGridRowProject}>{props.project.get('name')}</td>
       {dates.map((date, index) => (
         <TimeslipGridCell
           key={date}
@@ -38,8 +38,8 @@ const TimeslipGridRow = (props) => {
           }}
           timeslip={filledTimeslips[date]} />
       ))}
-      <div>{getUninvoicedTotal(props.project.get('timeslips'))}</div>
-    </div>
+      <td>{getUninvoicedTotal(props.project.get('timeslips'))}</td>
+    </tr>
   );
 };
 

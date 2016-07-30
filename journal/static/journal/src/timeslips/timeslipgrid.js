@@ -27,20 +27,26 @@ const TimeslipGrid = (props) => {
         activeDate={props.activeDate}
         onSetActiveDate={props.onSetActiveDate}
       />
-      <TimeslipGridHeader today={today} range={range} />
-      {props.projects.map(project => (
-        <TimeslipGridRow
-          key={project.get('id')}
-          project={project}
-          today={today}
-          range={range}
-          onInvoice={() => {
-            props.onInvoice(project);
-          }}
-          hourChanged={(hours, date) => {
-            props.onHourChanged(project, date, hours);
-          }} />
-      ))}
+      <table>
+        <thead>
+          <TimeslipGridHeader today={today} range={range} />
+        </thead>
+        <tbody>
+          {props.projects.map(project => (
+            <TimeslipGridRow
+              key={project.get('id')}
+              project={project}
+              today={today}
+              range={range}
+              onInvoice={() => {
+                props.onInvoice(project);
+              }}
+              hourChanged={(hours, date) => {
+                props.onHourChanged(project, date, hours);
+              }} />
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
