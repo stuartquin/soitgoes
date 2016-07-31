@@ -4,11 +4,16 @@
 
 .timeslipGridHeaderDate {
     text-align: center;
-    width: 75px;
+    width: 35px;
+    font-size: 0.9em;
+}
+
+.weekend {
+  background-color: rgba(97,178,167,0.7);
 }
 
 .today {
-  border: solid 1px orange;
+  background-color:#7FDBFF;
 }
 
 .cells {
@@ -16,34 +21,21 @@
     overflow-x: scroll;
 }
 
-.monthName {
-}
-
-.monthRow {
-}
-
-.dayRow {
-    display: flex;
-}
-
 .timeslipGridHeaderProjects {
     width: 200px;
 }
 
-.timeslipGridHeader {
-  display: flex;
-}
-
-.timeslipGridRow {
-  display: flex;
-}
-
 .timeslipGridCell {
-    width: 75px;
+    width: 45px;
+    padding: 0;
+    border: 1px solid #eceeef;
 }
 
 .timeslipGridCell input {
     width: 100%;
+    text-align: center;
+    background: transparent;
+    border: none;
 }
 
 .timeslipGridRowProject {

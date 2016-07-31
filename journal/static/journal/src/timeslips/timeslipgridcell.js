@@ -6,14 +6,13 @@ import styles from './styles.css';
 const cx = classNames.bind(styles);
 
 const TimeslipGridCell = (props) => {
-  let hours = 0;
+  let hours;
   if (props.timeslip) {
     hours = props.timeslip.get('hours');
   }
 
   const className = cx({
-    timeslipGridCell: true,
-    today: props.today === props.date
+    timeslipGridCell: true
   });
 
   return (
