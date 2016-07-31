@@ -73,6 +73,18 @@ tr.modifiers:first-child td {
   padding-top: 12px;
 }
 
+tr.total td {
+  padding-top: 12px;
+}
+
+.footer table {
+  width: 100%;
+}
+
+.company-details {
+  text-align: right;
+}
+
   </style>
   </head>
   <body>
@@ -86,7 +98,8 @@ tr.modifiers:first-child td {
           <strong>{{ company.name }}</strong><br />
           {{ company.address1 }}<br />
           {{ company.city }} <br />
-          {{ company.post_code }}
+          {{ company.post_code }}<br />
+         <strong>Company Number:</strong> {{company.reg_number}} <br />
         </div>
       </section>
 
@@ -95,7 +108,10 @@ tr.modifiers:first-child td {
       <section class='client'>
         <div class='client-details'>
           {{ contact.name }} <br />
-          {{ contact.company.name }}
+          {{ contact.company.name }} <br />
+          {{ contact.company.address1 }} <br />
+          {{ contact.company.city }} <br />
+          {{ contact.company.post_code }}<br />
         </div>
 
         <div class='invoice-details'>
@@ -131,7 +147,24 @@ tr.modifiers:first-child td {
             <td>{{ item.impact }}</td>
           </tr>
           {% endfor %}
+          <tr class='total'>
+            <td></td>
+            <td><strong>Total</strong></td>
+            <td><strong>{{ total }}</strong></td>
+          </tr>
         </table>
+      </section>
+
+      <hr />
+
+      <section class='footer'>
+        <div>
+          <h3>Payment Details</h3>
+          {{company.billing.bank_name}} <br />
+          <strong>Bank/Sort Code:</strong> {{company.billing.sort_code}} <br />
+          <strong>Account Number:</strong> {{company.billing.account_no}} <br />
+          <strong>Reference:</strong> {{project.name}} #{{invoice.sequence_num}} <br />
+        </div>
       </section>
     </div>
   </body>

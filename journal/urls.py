@@ -19,7 +19,7 @@ urlpatterns = [
     url(r'api/invoices/(?P<pk>[0-9]+)/pdf$', apiviews.InvoicePDF.as_view()),
     url(r'api/invoices/(?P<pk>[0-9]+)/item$', apiviews.InvoiceItem.as_view()),
 
-    url(r'api/session/$', apiviews.UserLoginview.as_view()),
+    url(r'api/accounts/$', apiviews.AccountList.as_view()),
 
     # App Routing
     url(r'login/$', views.login_user),

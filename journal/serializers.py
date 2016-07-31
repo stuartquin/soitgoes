@@ -1,7 +1,7 @@
 from rest_framework import serializers
 import datetime
 
-from .models import Project, TimeSlip, Invoice, InvoiceItem
+from .models import Project, TimeSlip, Invoice, InvoiceItem, Account, Company
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -30,6 +30,22 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvoiceItem
         fields = ('id', 'name', )
+
+
+class CompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        depth = 1
+        fields = ('id', 'name', 'billing')
+
+
+class AccountSerializer(serializers.ModelSerializer):
+    company = CompanySerializer()
+
+    class Meta:
+        model = Account
+        fields = ('id', 'company', )
+        depth = 1
 
 
 class InvoiceSerializer(serializers.ModelSerializer):

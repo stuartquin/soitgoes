@@ -44,20 +44,12 @@ class HasTimeslipAccess(BasePermission):
         return request.user.id in users
 
 
-class UserLoginview(APIView):
-    def post(self, request):
-        username = request.data['username']
-        password = request.data['password']
-        user = auth.authenticate(username=username, password=password)
+class AccountList(generics.ListAPIView):
+    serializer_class = serializers.AccountSerializer
 
-        if user == request.user:
-            auth.login(request, user)
-            return Response({
-                "id": user.id,
-                "username": username
-            })
-        else:
-            raise PermissionDenied()
+    def get_queryset(self):
+        account = self.request.user.account_set.all()
+        return account
 
 
 class ProjectList(generics.ListAPIView):

@@ -8,6 +8,11 @@ class ContactAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'created_at')
 
 
+@admin.register(models.Billing)
+class BillingAdmin(admin.ModelAdmin):
+    list_display = ('bank_name', 'created_at')
+
+
 @admin.register(models.Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('name', 'created_at')

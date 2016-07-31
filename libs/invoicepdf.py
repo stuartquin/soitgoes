@@ -38,14 +38,20 @@ def render(invoice):
         timeslip_total
     )
 
+    total = timeslip_total
+    for mod in modifiers:
+        total += mod.impact
+
     context = {
         'invoice': invoice,
         'contact': project.contact,
+        'project': project,
         'company': project.account.company,
         'items': [],
         'timeslips': timeslips,
         'modifiers': modifiers,
-        'sent_date': datetime.datetime.now().strftime('%d %B %Y')
+        'sent_date': datetime.datetime.now().strftime('%d %B %Y'),
+        'total': total
     }
 
     with open(html_name, 'w') as output:

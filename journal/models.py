@@ -5,9 +5,18 @@ from django.db.models import Max
 from libs import invoicepdf
 
 
+class Billing(models.Model):
+    bank_name = models.CharField(max_length=512)
+    account_no = models.CharField(max_length=512)
+    sort_code = models.CharField(max_length=512)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "%s, %s" % (self.bank_name, self.sort_code)
+
 
 class Company(models.Model):
-    name = models.CharField(max_length=512) 
+    name = models.CharField(max_length=512)
     address1 = models.CharField(max_length=512, blank=True, null=True)
     address2 = models.CharField(max_length=512, blank=True, null=True)
     city = models.CharField(max_length=128, blank=True, null=True)
@@ -15,6 +24,11 @@ class Company(models.Model):
     reg_number = models.CharField(max_length=128, blank=True, null=True)
     logo_image = models.TextField(blank=True, null=True)
     vat_number = models.CharField(max_length=128, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    billing = models.ForeignKey(
+        Billing, models.SET_NULL, blank=True, null=True
+    )
 
     def __str__(self):
         return "%s, %s" % (self.name, self.city)
