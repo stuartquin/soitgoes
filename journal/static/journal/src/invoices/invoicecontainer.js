@@ -33,9 +33,9 @@ class Invoice extends React.Component {
   fetchData() {
     const project = this.props.invoice.get('project');
     let promises = [this.props.fetchInvoiceTimeslips(this.props.invoiceId)];
-    if (this.props.invoice.get('issued_at') === null) {
-      this.props.fetchProjectTimeslips(project);
-    }
+    // if (this.props.invoice.get('issued_at') === null) {
+    //   this.props.fetchProjectTimeslips(project);
+    // }
     return Promise.all(promises);
   }
 

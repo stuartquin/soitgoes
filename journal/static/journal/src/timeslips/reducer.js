@@ -43,7 +43,7 @@ const initialState = () => {
   return Immutable.Map({
     items: Immutable.List([]),
     view: Immutable.Map({
-      activeDate: moment().startOf('isoweek').isoWeekday(1)
+      activeDate: moment().startOf('isoweek')
     })
   });
 };

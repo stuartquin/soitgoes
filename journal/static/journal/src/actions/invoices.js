@@ -1,8 +1,10 @@
 'use strict';
 import { push } from 'react-router-redux';
+import { normalize } from 'normalizr';
 
 import * as api from '../services/api';
 import constants from '../constants';
+import * as schema from '../actions/schema';
 
 export const addItem = (invoiceId, name, price) => (dispatch) =>
   api.addInvoiceItem(invoiceId, name, price).then(item => {
@@ -60,17 +62,17 @@ export const fetchInvoices = () => (dispatch) => {
 };
 
 export const fetchInvoiceTimeslips = (invoiceId) => (dispatch) =>
-  api.fetchTimeslips(invoiceId).then(timeslips =>
+  api.fetchTimeslips(invoiceId).then(res => {
     dispatch({
       type: constants.GET_INVOICE_TIMESLIPS_SUCCESS,
-      timeslips
-    })
-  );
+      timeslips: res.results
+    });
+  });
 
 export const fetchProjectTimeslips = (projectId) => (dispatch) =>
-  api.fetchTimeslips('none', projectId).then(timeslips =>
+  api.fetchTimeslips('none', projectId).then(res => {
     dispatch({
       type: constants.GET_INVOICE_TIMESLIPS_SUCCESS,
-      timeslips
-    })
-  );
+      timeslips: res.resuslts
+    });
+  });

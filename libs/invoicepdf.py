@@ -2,6 +2,7 @@ from django.template import loader
 import tempfile
 import subprocess
 import os
+import datetime
 
 INVOICE_DIR = '/tmp/invoices/'
 
@@ -25,13 +26,17 @@ def get_invoice_modifiers(modifiers, value):
 
 def render(invoice):
     template = loader.get_template('invoice.html')
-    temp_name = tempfile.NamedTemporaryFile().name
+    temp_name = tempfile.NamedTemporaryFile(delete=False).name
     html_name = temp_name + '.html'
     output_name = INVOICE_DIR + invoice.pdf_name
-    timeslips = invoice.timeslips.all()
+    timeslips = invoice.timeslips.order_by('date').all()
     project = invoice.project
     timeslip_total = invoice.total_hours * project.hourly_rate
-    modifiers = get_invoice_modifiers(project.invoice_modifier.all(), timeslip_total)
+
+    modifiers = get_invoice_modifiers(
+        project.invoice_modifier.all(),
+        timeslip_total
+    )
 
     context = {
         'invoice': invoice,
@@ -39,7 +44,8 @@ def render(invoice):
         'company': project.account.company,
         'items': [],
         'timeslips': timeslips,
-        'modifiers': modifiers
+        'modifiers': modifiers,
+        'sent_date': datetime.datetime.now().strftime('%d %B %Y')
     }
 
     with open(html_name, 'w') as output:

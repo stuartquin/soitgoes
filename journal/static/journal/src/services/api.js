@@ -62,7 +62,8 @@ export const createTimeslips = (timeslips) => {
 
 export const updateTmeslips = (timeslips) => {
   return timeslips.map((t) => {
-    return fetch(buildRequest('timeslips/', 'PUT', t.toJS()));
+    const path = `timeslips/${t.get('id')}`;
+    return fetch(buildRequest(path, 'PUT', t.toJS()));
   });
 };
 

@@ -63,6 +63,16 @@ th {
 .company-logo img {
     width: 100px;
 }
+
+tr.table-header th {
+  border-bottom: solid 1px black;
+  padding-bottom: 12px;
+}
+
+tr.modifiers:first-child td {
+  padding-top: 12px;
+}
+
   </style>
   </head>
   <body>
@@ -73,7 +83,7 @@ th {
             <img src="{{ company.logo_image }}" alt="Company Logo"/>
         </div>
         <div class='company-details'>
-          {{ company.name }}<br />
+          <strong>{{ company.name }}</strong><br />
           {{ company.address1 }}<br />
           {{ company.city }} <br />
           {{ company.post_code }}
@@ -97,7 +107,9 @@ th {
 
       <section class='price-list'>
         <table>
-          <tr><th>Details</th><th>Unit Price (&pound;)</th><th>Subtotal (&pound;)</th></tr>
+          <tr class='table-header'>
+            <th>Details</th><th>Unit Price</th><th>Subtotal (&pound;)</th>
+          </tr>
           {% for timeslip in timeslips %}
           <tr class='{% if forloop.counter|divisibleby:2 %}alt{% endif %}'>
             <td>{{ timeslip.hours }} Hours on {{ timeslip.date }}: {{ timeslip.project.name }}</td>
@@ -113,7 +125,7 @@ th {
           </tr>
           {% endfor %}
           {% for item in modifiers %}
-          <tr class='{% if forloop.counter|divisibleby:2 %}alt{% endif %}'>
+          <tr class='modifiers {% if forloop.counter|divisibleby:2 %}alt{% endif %}'>
             <td>{{ item.name }}</td>
             <td>{{ item.percent }}%</td>
             <td>{{ item.impact }}</td>

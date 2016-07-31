@@ -5,8 +5,8 @@ import {TimeslipGridHeader} from './timeslipgridheader';
 import {TimeslipGridRow} from './timeslipgridrow';
 import {TimeslipDateControls} from './timeslipdatecontrols';
 
-const PAST_DAYS = 5;
-const FUTURE_DAYS = 7;
+const PAST_DAYS = 1;
+const FUTURE_DAYS = 13;
 const getDateRange = (today) => {
   'use strict';
   let start = today.subtract(PAST_DAYS, 'days');
@@ -42,7 +42,7 @@ const TimeslipGrid = (props) => {
                 props.onInvoice(project);
               }}
               hourChanged={(hours, date) => {
-                props.onHourChanged(project, date, hours);
+                props.onHourChanged(project, date, hours || 0);
               }} />
           ))}
         </tbody>

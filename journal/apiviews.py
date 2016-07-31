@@ -122,21 +122,15 @@ class TimeSlipList(generics.ListCreateAPIView):
 
         return self.serializer_class(*args, **kwargs)
 
-    def list(self, request):
-        filters = {}
-        if 'project' in request.query_params:
-            filters['project'] = request.query_params['project']
+    def get_queryset(self):
+        filters = {
+            'user': self.request.user
+        }
+        if 'project' in self.request.query_params:
+            filters['project'] = self.request.query_params['project']
 
-        if 'invoice' in request.query_params:
-            invoice = request.query_params['invoice']
+        if 'invoice' in self.request.query_params:
+            invoice = self.request.query_params['invoice']
             filters['invoice'] = invoice if invoice != 'none' else None
 
-        if 'user' in request.query_params:
-            # @TODO This doesn't work yet, should check permissions etc.
-            filters['user'] = request.query_params['user']
-        else:
-            filters['user'] = request.user
-
-        timeslips = models.TimeSlip.objects.filter(**filters)
-        serializer = self.serializer_class(timeslips, many=True)
-        return Response(serializer.data)
+        return models.TimeSlip.objects.filter(**filters).order_by('date')
