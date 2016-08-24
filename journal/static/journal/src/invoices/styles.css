@@ -36,9 +36,12 @@
   color: #AAAAAA;
 }
 
+.invoiceInfoIssued {
+  display: flex;
+  justify-content: space-between;
+}
 
-.invoiceActions {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+.invoiceInfoPaid {
+  display: flex;
+  justify-content: space-between;
 }

@@ -7,6 +7,8 @@ import { InvoiceSummary } from './invoicesummary';
 
 import styles from './styles.css';
 
+const API_URL = 'http://localhost:8000/api/';
+
 export const getUninvoicedAmount = (project) => {
   return project.get('uninvoiced_hours') * project.get('hourly_rate');
 };
@@ -17,45 +19,42 @@ const InvoiceInfo = (props) => {
 
   let issued = 'Not issued yet';
   if (invoice.get('issued_at')) {
-    issued = moment(invoice.get('issued_at')).format('YYYY-MM-DD HH:mm');
+    const link = `${API_URL}invoices/${invoice.get('id')}/pdf`;
+    const invoiceIssued = `text-muted ${styles.invoiceInfoIssued}`
+    issued = (
+        <h6 className={ invoiceIssued }>
+          { moment(invoice.get('issued_at')).format('YYYY-MM-DD HH:mm') }
+          <a target='_blank'
+            className='card-link pull-right'
+            href={link}>Download PDF</a>
+        </h6>
+    );
+  } else {
+    issued = <h6 className='text-muted'>Not issued yet</h6>;
   }
-
-  const titleClass = `card-block`;
 
   return (
     <div className='card'>
-      <div className={ titleClass }>
-        <span>Project</span>
-        <span className="text-muted">
-          { project.get('name') }
-        </span>
-      </div>
-      <div className={ titleClass }>
-        <span>Contact</span>
-        <span className="text-muted">
-        { project.get('contact').get('name') }
-        </span>
-      </div>
-      <div className={ titleClass }>
-        <span>Created</span>
-        <span className="text-muted">
-        { moment(invoice.get('created_at')).format('YYYY-MM-DD') }
-        </span>
-      </div>
-      <div className={ titleClass }>
-        <span>Issued</span>
-        <span className="text-muted">
+      <div className='card-block'>
+        <h4>Invoice #{ invoice.get('sequence_num') }</h4>
         { issued }
-        </span>
       </div>
+
+      <div className='card-block'>
+        <h4>{ project.get('name') }</h4>
+        <h6 className='text-muted'>{ project.get('contact').get('name') }</h6>
+      </div>
+
       <InvoiceSummary
         project={project}
         timeslipTotal={props.timeslipTotal}
         additionalTotal={props.additionalTotal}
       />
+
       <InvoiceActions
         invoice={ invoice }
         onMarkAsIssued={props.onMarkAsIssued}
+        onMarkAsPaid={props.onMarkAsPaid}
         onDelete={props.onDelete}
       />
     </div>

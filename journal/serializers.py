@@ -50,7 +50,11 @@ class AccountSerializer(serializers.ModelSerializer):
 
 class InvoiceSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
-        instance.issued_at = datetime.datetime.now()
+        request_data = self.context['request'].data
+        if 'paid' in request_data and request_data['paid']:
+            instance.paid_at = datetime.datetime.now()
+        else:
+            instance.issued_at = datetime.datetime.now()
         return super().update(instance, validated_data)
 
     def save(self, *args, **kwargs):

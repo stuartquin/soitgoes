@@ -1,31 +1,41 @@
 'use strict';
 import React from 'react';
+import moment from 'moment';
 
 import styles from './styles.css';
 
-const API_URL = 'http://localhost:8000/api/';
-
 const InvoiceActions = (props) => {
   const invoice = props.invoice;
+  const invoiceInfoPaid = `alert alert-success ${styles.invoiceInfoPaid}`;
+
   let button;
   if (invoice.get('issued_at')) {
-    const link = `${API_URL}invoices/${invoice.get('id')}/pdf`;
-    button = <a target='_blank' href={link}>Download PDF</a>;
+    if (invoice.get('paid_at')) {
+      button = (
+        <p className={ invoiceInfoPaid }>
+          <strong>PAID</strong>
+          <span>
+            { moment(invoice.get('paid_at')).format('YYYY-MM-DD') }
+          </span>
+        </p>
+      );
+    } else {
+      button = (<button className='btn btn-lg btn-success btn-block'
+                  onClick={props.onMarkAsPaid}>Mark as Paid
+                </button>);
+    }
   } else {
-    // button = http://localhost:8000/api/invoices/74/pdf
-    button = (<button className='btn btn-default btn-success'
-               onClick={props.onMarkAsIssued}>Save and Issue
-             </button>);
+    button = (<button className='btn btn-lg btn-success btn-block'
+                onClick={props.onMarkAsIssued}>Save and Issue
+              </button>);
   }
 
-  const invoiceActionsStyle = `card-block ${styles.invoiceActions}`;
-
   return (
-    <div className={ invoiceActionsStyle }>
-      {button}
-      <button className='btn btn-default btn-danger'
-        onClick={props.onDelete}>Delete
-      </button>
+    <div className='card-block'>
+        {button}
+        <button className='btn btn-lg btn-danger btn-block'
+          onClick={props.onDelete}>Delete
+        </button>
     </div>
   );
 };

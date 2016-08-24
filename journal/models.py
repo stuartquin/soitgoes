@@ -88,6 +88,7 @@ class Invoice(models.Model):
     project = models.ForeignKey(Project)
     created_at = models.DateTimeField(auto_now_add=True)
     issued_at = models.DateTimeField(default=None, blank=True, null=True)
+    paid_at = models.DateTimeField(default=None, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         pk = self.pk

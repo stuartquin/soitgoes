@@ -66,6 +66,12 @@ class Invoice extends React.Component {
                 this.props.timeslips
               )
             }
+            onMarkAsPaid={() => {
+              this.props.markAsPaid(
+                invoice.get('id'),
+                project.get('id')
+              )
+            }}
           />
         </div>
         <div className='col-md-8'>

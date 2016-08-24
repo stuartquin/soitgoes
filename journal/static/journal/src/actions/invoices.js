@@ -22,6 +22,14 @@ export const markAsIssued = (invoiceId, projectId, timeslips) => (dispatch) =>
     });
   });
 
+export const markAsPaid = (invoiceId, projectId) => (dispatch) =>
+  api.paidInvoice(invoiceId, projectId).then(invoice => {
+    dispatch({
+      type: constants.SAVE_INVOICE_SUCCESS,
+      invoice
+    });
+  });
+
 export const deleteInvoice = (invoiceId) => (dispatch) =>
   api.deleteInvoice(invoiceId).then(() => {
     dispatch(push(`/invoices`));
