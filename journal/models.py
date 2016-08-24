@@ -97,7 +97,7 @@ class Invoice(models.Model):
 
     def save(self, *args, **kwargs):
         pk = self.pk
-        if pk is None:
+        if pk is None and self.sequence_num is None:
             invoices = Invoice.objects.filter(project=self.project)
             max = invoices.aggregate(Max('sequence_num')).get('sequence_num__max')
             self.sequence_num = (max or 0) + 1

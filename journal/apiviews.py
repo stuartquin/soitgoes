@@ -75,7 +75,7 @@ class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class InvoiceViewSet(viewsets.ModelViewSet):
-    queryset = models.Invoice.objects.all().order_by('-created_at')
+    queryset = models.Invoice.objects.all().order_by('-issued_at')
     serializer_class = serializers.InvoiceSerializer
 
 
