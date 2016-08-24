@@ -6,6 +6,7 @@ from .models import Project, TimeSlip, Invoice, InvoiceItem, Account, Company
 
 class ProjectSerializer(serializers.ModelSerializer):
     uninvoiced_hours = serializers.IntegerField(source='get_uninvoiced_hours')
+    total_paid = serializers.IntegerField(source='get_total_paid')
 
     class Meta:
         model = Project
@@ -15,6 +16,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'contact',
             'created_at',
             'uninvoiced_hours',
+            'total_paid',
             'hourly_rate',
             'invoice_modifier'
         ]
@@ -53,6 +55,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
         request_data = self.context['request'].data
         if 'paid' in request_data and request_data['paid']:
             instance.paid_at = datetime.datetime.now()
+            instance.total_paid = request_data['total_paid']
         else:
             instance.issued_at = datetime.datetime.now()
         return super().update(instance, validated_data)

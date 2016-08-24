@@ -79,6 +79,10 @@ class Project(models.Model):
         timeslips = TimeSlip.objects.filter(project=self, invoice=None)
         return sum([t.hours for t in timeslips])
 
+    def get_total_paid(self, *args, **kwargs):
+        invoices = Invoice.objects.filter(project=self).exclude(total_paid__isnull=True)
+        return sum([i.total_paid for i in invoices])
+
     def __str__(self):
         return "%s" % (self.name)
 
@@ -89,6 +93,7 @@ class Invoice(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     issued_at = models.DateTimeField(default=None, blank=True, null=True)
     paid_at = models.DateTimeField(default=None, blank=True, null=True)
+    total_paid = models.FloatField(default=0.0, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         pk = self.pk

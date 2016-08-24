@@ -22,12 +22,12 @@ const InvoiceInfo = (props) => {
     const link = `${API_URL}invoices/${invoice.get('id')}/pdf`;
     const invoiceIssued = `text-muted ${styles.invoiceInfoIssued}`
     issued = (
-        <h6 className={ invoiceIssued }>
-          { moment(invoice.get('issued_at')).format('YYYY-MM-DD HH:mm') }
-          <a target='_blank'
-            className='card-link pull-right'
-            href={link}>Download PDF</a>
-        </h6>
+      <h6 className={ invoiceIssued }>
+        { moment(invoice.get('issued_at')).format('YYYY-MM-DD HH:mm') }
+        <a target='_blank'
+          className='card-link pull-right'
+          href={link}>Download PDF</a>
+      </h6>
     );
   } else {
     issued = <h6 className='text-muted'>Not issued yet</h6>;
@@ -49,6 +49,7 @@ const InvoiceInfo = (props) => {
         project={project}
         timeslipTotal={props.timeslipTotal}
         additionalTotal={props.additionalTotal}
+        total={props.total}
       />
 
       <InvoiceActions

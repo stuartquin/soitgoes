@@ -88,10 +88,11 @@ export const issueInvoice = (invoiceId, projectId, timeslips) => {
   return fetch(req).then(res => res.json());
 };
 
-export const paidInvoice = (invoiceId, projectId) => {
+export const paidInvoice = (invoiceId, projectId, totalPaid) => {
   const req = buildRequest(`invoices/${invoiceId}`, 'PUT', {
     project: projectId,
-    paid: true
+    paid: true,
+    total_paid: totalPaid
   });
   return fetch(req).then(res => res.json());
 };

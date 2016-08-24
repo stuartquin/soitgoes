@@ -19,6 +19,12 @@ const getAdditionalTotal = () => {
   return 0;
 };
 
+const getTotal = (timeslipTotal, additionalTotal, modifiers) => {
+  return modifiers.reduce((runningTotal, modifier) =>
+    runningTotal + ((runningTotal / 100) * modifier.get('percent')),
+  timeslipTotal + additionalTotal);
+};
+
 class Invoice extends React.Component {
   componentDidMount() {
     this.fetchInvoice().then(() => {
@@ -46,16 +52,19 @@ class Invoice extends React.Component {
     const invoice = this.props.invoice;
     const project = this.props.project;
 
+    const timeslipTotal = getTimeslipTotal(project.get('hourly_rate'), this.props.timeslips);
+    const additionalTotal = getAdditionalTotal();
+    const total = getTotal(timeslipTotal, additionalTotal, project.get('invoice_modifier'));
+
     return (
       <div className='row'>
         <div className='col-md-4'>
           <InvoiceInfo
             project={project}
             invoice={invoice}
-            timeslipTotal={
-              getTimeslipTotal(project.get('hourly_rate'), this.props.timeslips)
-            }
-            additionalTotal={getAdditionalTotal()}
+            timeslipTotal={timeslipTotal}
+            additionalTotal={additionalTotal}
+            total={total}
             onDelete={() =>
               this.props.deleteInvoice(invoice.get('id'))
             }
@@ -69,7 +78,8 @@ class Invoice extends React.Component {
             onMarkAsPaid={() => {
               this.props.markAsPaid(
                 invoice.get('id'),
-                project.get('id')
+                project.get('id'),
+                total
               )
             }}
           />

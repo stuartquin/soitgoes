@@ -4,20 +4,8 @@ import React from 'react';
 import { InvoiceSummaryRow } from './invoicesummaryrow';
 
 
-const getTotal = (timeslipTotal, additionalTotal, modifiers) => {
-  return modifiers.reduce((runningTotal, modifier) =>
-    runningTotal + ((runningTotal / 100) * modifier.get('percent')),
-  timeslipTotal + additionalTotal);
-};
-
 const InvoiceSummary = (props) => {
   const project = props.project;
-
-  const total = getTotal(
-    props.timeslipTotal,
-    props.additionalTotal,
-    project.get('invoice_modifier')
-  );
 
   return (
     <table className='table table-striped'>
@@ -42,7 +30,7 @@ const InvoiceSummary = (props) => {
 
       <InvoiceSummaryRow
         name='Total'
-        value={'£' + total}
+        value={'£' + props.total}
       />
     </tbody>
     </table>
