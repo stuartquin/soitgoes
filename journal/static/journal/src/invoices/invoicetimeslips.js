@@ -26,6 +26,16 @@ const InvoiceTimeslips = (props) => {
           subTotal={project.get('hourly_rate') * timeslip.get('hours')}
         />
       ))}
+
+      {props.items.map((item) => (
+        <InvoiceItemRow
+          key={item.get('id')}
+          details={item.get('name')}
+          unitPrice={item.get('cost_per_unit')}
+          subTotal={item.get('cost_per_unit') * item.get('qty')}
+        />
+      ))}
+
       <AddInvoiceItem
         onAddItem={props.onAddItem}
       />

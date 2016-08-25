@@ -38,10 +38,10 @@ class Invoice extends React.Component {
 
   fetchData() {
     const project = this.props.invoice.get('project');
-    let promises = [this.props.fetchInvoiceTimeslips(this.props.invoiceId)];
-    // if (this.props.invoice.get('issued_at') === null) {
-    //   this.props.fetchProjectTimeslips(project);
-    // }
+    let promises = [
+      this.props.fetchInvoiceTimeslips(this.props.invoiceId),
+      this.props.fetchInvoiceItems(this.props.invoiceId)
+    ];
     return Promise.all(promises);
   }
 
@@ -90,7 +90,7 @@ class Invoice extends React.Component {
             timeslips={this.props.timeslips}
             items={this.props.invoiceItems}
             onAddItem={(name, price) =>
-              this.props.addItem(invoice.get('id'), name, price)
+              this.props.createItem(invoice.get('id'), name, price)
             }
           />
         </div>
@@ -106,7 +106,7 @@ const getInvoiceProject = (projects, invoice) => {
 const mapStateToProps = ({ invoices }, { params }) => {
   return {
     invoice: invoices.invoice,
-    invoiceItems: [],
+    invoiceItems: invoices.invoiceItems,
     timeslips: invoices.timeslips,
     project: getInvoiceProject(invoices.projectSummary, invoices.invoice),
     invoiceId: params.id

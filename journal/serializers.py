@@ -29,9 +29,14 @@ class TimeSlipSerializer(serializers.ModelSerializer):
 
 
 class InvoiceItemSerializer(serializers.ModelSerializer):
+    def save(self, *args, **kwargs):
+        invoice = Invoice.objects.filter(
+            id=self.context['request'].data['invoice']
+        ).first()
+        return super().save(invoice=invoice)
+
     class Meta:
         model = InvoiceItem
-        fields = ('id', 'name', )
 
 
 class CompanySerializer(serializers.ModelSerializer):

@@ -21,8 +21,6 @@ const invoice = (state = Immutable.Map({}), action) => {
     return Immutable.fromJS(action.invoice);
   case constants.DELETE_INVOICE_SUCCESS:
     return Immutable.Map({});
-  case constants.ADD_INVOICE_ITEM_SUCCESS:
-    return state.set('invoiceItems', action.invoiceItems);
   default:
     return state;
   }
@@ -43,6 +41,21 @@ const timeslips = (state = Immutable.List([]), action) => {
   }
 };
 
+const setInvoiceItems = (state, action) => {
+  return state.concat(Immutable.fromJS(action.items || []));
+};
+
+const invoiceItems = (state = Immutable.List([]), action) => {
+  switch (action.type) {
+  case constants.GET_INVOICE_ITEMS_SUCCESS:
+    return setInvoiceItems(state, action);
+  case constants.CREATE_INVOICE_ITEM_SUCCESS:
+    return setInvoiceItems(state, [action.item]);
+  default:
+    return state;
+  }
+};
+
 const items = (state = Immutable.List([]), action) => {
   switch (action.type) {
   case constants.GET_INVOICES_SUCCESS:
@@ -56,6 +69,7 @@ const invoices = combineReducers({
   projectSummary,
   invoice,
   timeslips,
+  invoiceItems,
   items
 });
 

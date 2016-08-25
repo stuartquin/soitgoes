@@ -139,9 +139,7 @@ class InvoiceItem(models.Model):
     cost_per_unit = models.FloatField(default=0.0)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    invoice = models.ForeignKey(
-        Invoice, models.SET_NULL, blank=True, null=True, related_name='items'
-    )
+    invoice = models.ForeignKey(Invoice, related_name='items')
 
     def __str__(self):
         return self.name

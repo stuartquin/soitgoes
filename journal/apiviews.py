@@ -20,8 +20,13 @@ class HasProjectAccess(BasePermission):
 
 class HasInvoiceAccess(BasePermission):
     def has_permission(self, request, view):
+        invoice_id = request.query_params.get('invoice', None) or request.data.get('invoice', None)
+
+        if invoice_id is None:
+            invoice_id = request.parser_context['kwargs']['pk']
+
         invoice = models.Invoice.objects.get(
-            id=request.parser_context['kwargs']['pk']
+            id=invoice_id
         )
         project = models.Project.objects.filter(id=invoice.project_id).first()
         return len(project.account.users.filter(id=request.user.id)) > 0
@@ -80,8 +85,14 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 
 
 class InvoiceItem(generics.ListCreateAPIView):
-    queryset = models.InvoiceItem.objects.all().order_by('-created_at')
     serializer_class = serializers.InvoiceItemSerializer
+    queryset = models.InvoiceItem.objects.all()
+    permission_classes = (HasInvoiceAccess,)
+
+    def get_queryset(self):
+        return models.InvoiceItem.objects.filter(
+            **self.request.query_params.dict()
+        )
 
 
 class InvoicePDF(APIView):

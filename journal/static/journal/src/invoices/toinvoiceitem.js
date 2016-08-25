@@ -20,8 +20,7 @@ const ToInvoiceItem = (props) => {
       <div className={ styles.toInvoiceItemRow }>&pound;{project.get('total_paid')}</div>
       <div className={ styles.toInvoiceItemRow }>
         <button className='btn-sm btn btn-success'
-          onClick={() => props.onCreateInvoice(project)}
-          disabled={uninvoiceAmount === 0}>
+          onClick={() => props.onCreateInvoice(project)}>
           Create Invoice
         </button>
       </div>

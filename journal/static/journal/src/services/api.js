@@ -13,7 +13,7 @@ export const buildRequest = (path, method='GET', data=null) => {
     'X-CSRFToken': getCookie('csrftoken')
   };
 
-  let url = `api/${path}`;
+  let url = `/api/${path}`;
 
   if (data) {
     params.body = JSON.stringify(data);
@@ -112,6 +112,28 @@ export const fetchInvoices = (project=null) => {
   );
 };
 
-export const addInvoiceItem = (invoiceId, name, price) => {
-  console.log(invoiceId, name, price);
+export const fetchInvoiceItems = (invoice=null) => {
+  let url = 'invoices/items/';
+
+  if (invoice !== null) {
+    url = url + `?invoice=${invoice}`;
+  }
+
+  return fetch(buildRequest(url)).then(
+    res => res.json()
+  );
+};
+
+export const createInvoiceItem = (invoiceId, name, price) => {
+  const req = buildRequest('invoices/items/', 'POST', {
+    invoice: invoiceId,
+    units: 'Services',
+    cost_per_unit: price,
+    name: name,
+    qty: 1
+  });
+
+  return fetch(req).then(
+    res => res.json()
+  );
 };

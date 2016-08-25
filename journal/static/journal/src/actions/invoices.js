@@ -6,10 +6,10 @@ import * as api from '../services/api';
 import constants from '../constants';
 import * as schema from '../actions/schema';
 
-export const addItem = (invoiceId, name, price) => (dispatch) =>
-  api.addInvoiceItem(invoiceId, name, price).then(item => {
+export const createItem = (invoiceId, name, price) => (dispatch) =>
+  api.createInvoiceItem(invoiceId, name, price).then(item => {
     dispatch({
-      type: constants.ADD_INVOICE_ITEM_SUCCESS,
+      type: constants.CREATE_INVOICE_ITEM_SUCCESS,
       item
     });
   });
@@ -74,6 +74,14 @@ export const fetchInvoiceTimeslips = (invoiceId) => (dispatch) =>
     dispatch({
       type: constants.GET_INVOICE_TIMESLIPS_SUCCESS,
       timeslips: res.results
+    });
+  });
+
+export const fetchInvoiceItems = (invoiceId) => (dispatch) =>
+  api.fetchInvoiceItems(invoiceId).then(res => {
+    dispatch({
+      type: constants.GET_INVOICE_ITEMS_SUCCESS,
+      items: res.results
     });
   });
 
