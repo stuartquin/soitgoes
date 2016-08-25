@@ -15,8 +15,10 @@ const getTimeslipTotal = (hourlyRate, timeslips) => {
   0);
 };
 
-const getAdditionalTotal = () => {
-  return 0;
+const getAdditionalTotal = (items) => {
+  return items.reduce((prev, current) =>
+    prev + current.get('cost_per_unit'),
+  0);
 };
 
 const getTotal = (timeslipTotal, additionalTotal, modifiers) => {
@@ -53,7 +55,7 @@ class Invoice extends React.Component {
     const project = this.props.project;
 
     const timeslipTotal = getTimeslipTotal(project.get('hourly_rate'), this.props.timeslips);
-    const additionalTotal = getAdditionalTotal();
+    const additionalTotal = getAdditionalTotal(this.props.invoiceItems);
     const total = getTotal(timeslipTotal, additionalTotal, project.get('invoice_modifier'));
 
     return (
