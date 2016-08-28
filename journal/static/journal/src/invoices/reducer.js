@@ -48,7 +48,7 @@ const setInvoiceItems = (state, action) => {
 const invoiceItems = (state = Immutable.List([]), action) => {
   switch (action.type) {
   case constants.GET_INVOICE_ITEMS_SUCCESS:
-    return setInvoiceItems(state, action);
+    return Immutable.fromJS(action.items || []);
   case constants.CREATE_INVOICE_ITEM_SUCCESS:
     return setInvoiceItems(state, [action.item]);
   default:

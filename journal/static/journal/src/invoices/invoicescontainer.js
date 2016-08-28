@@ -2,15 +2,14 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import { ToInvoice } from './toinvoice';
 import { InvoiceList } from './invoicelist';
+import { CreateInvoice } from './createinvoice';
 import * as invoiceActions from '../actions/invoices';
 import * as projectActions from '../actions/projects';
 
 class Invoices extends React.Component {
   componentDidMount() {
     this.fetchData();
-    console.log('did mount...');
   }
 
   fetchData() {
@@ -27,14 +26,19 @@ class Invoices extends React.Component {
 
     return (
       <div>
-        <ToInvoice
-          projectSummary={this.props.projects}
-          onCreateInvoice={this.props.createInvoice}
-        />
-        <InvoiceList
-          projects={this.props.projects}
-          invoices={this.props.invoices}
-        />
+        <div className='col-sm-3'> 
+          <CreateInvoice
+            projectSummary={this.props.projects}
+            onCreateInvoice={this.props.createInvoice}
+          />
+        </div>
+
+        <div className='col-sm-9'> 
+          <InvoiceList
+            projects={this.props.projects}
+            invoices={this.props.invoices}
+          />
+        </div>
       </div>
     );
   }

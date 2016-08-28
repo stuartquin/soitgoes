@@ -3,7 +3,7 @@ from django.core.management import BaseCommand
 import csv
 from datetime import datetime
 
-from journal.models import Invoice, Project, TimeSlip
+from journal.models import Invoice, Project, TimeSlip, InvoiceItem
 
 
 class Command(BaseCommand):
@@ -12,21 +12,20 @@ class Command(BaseCommand):
 
     # A command must define handle()
     def handle(self, *args, **options):
-        self.project = Project.objects.filter(name=options['project']).first()
-        self.importer('Arts Alliance Media')
+        self.importer(Project.objects.filter(name=options['project']).first())
 
     def add_arguments(self, parser):
         parser.add_argument('project', type=str)
 
-    def import_invoice(self, data):
+    def import_invoice(self, project, data):
         invoice = Invoice()
         invoice.sequence_num = int(data[2][-3:])
         invoice.issued_at = datetime.strptime(data[3], '%d %B %Y')
-        invoice.project = self.project
+        invoice.project = project
         invoice.save()
         return invoice
 
-    def import_timeslip(self, data, invoice):
+    def import_timeslip(self, project, data, invoice):
         if data[11] == 'Days':
             self.stdout.write('Timeslip')
             date_str = data[14].split(' on ')[1].split(':')[0]
@@ -34,11 +33,20 @@ class Command(BaseCommand):
             timeslip.hours = float(data[14][:1])
             timeslip.date = datetime.strptime(date_str, '%d %b %y')
             timeslip.invoice = invoice
-            timeslip.project = self.project
+            timeslip.project = project
             timeslip.user_id = 1
             timeslip.save()
 
-    def importer(self, contact_name):
+        if data[11] == 'Services':
+            item = InvoiceItem()
+            item.name = data[14].strip()
+            item.cost_per_unit = data[13]
+            item.units = data[11]
+            item.qty = 1
+            item.invoice = invoice
+            item.save()
+
+    def importer(self, project):
         invoice = None
 
         with open('/tmp/invoices.csv', 'r') as file:
@@ -47,10 +55,9 @@ class Command(BaseCommand):
 
         for line in lines:
             if line[0] == '' and invoice:
-                self.import_timeslip(line, invoice)
+                self.import_timeslip(project, line, invoice)
             else:
                 invoice = None
 
-            if line[1] == self.project.name:
-                self.stdout.write('Importing..')
-                invoice = self.import_invoice(line)
+            if line[1] == project.name:
+                invoice = self.import_invoice(project, line)
