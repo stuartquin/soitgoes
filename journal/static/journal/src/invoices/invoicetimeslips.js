@@ -24,6 +24,9 @@ const InvoiceTimeslips = (props) => {
           details={getTimeslipDetails(timeslip, project)}
           unitPrice={project.get('hourly_rate')}
           subTotal={project.get('hourly_rate') * timeslip.get('hours')}
+          onDelete={() => {
+            props.onDeleteInvoiceTimeslip(timeslip);
+          }}
         />
       ))}
 

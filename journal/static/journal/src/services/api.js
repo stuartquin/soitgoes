@@ -61,10 +61,10 @@ export const createTimeslips = (timeslips) => {
 };
 
 export const updateTmeslips = (timeslips) => {
-  return timeslips.map((t) => {
+  return Promise.all(timeslips.map((t) => {
     const path = `timeslips/${t.get('id')}`;
     return fetch(buildRequest(path, 'PUT', t.toJS()));
-  });
+  }));
 };
 
 export const createInvoice = (project) => {

@@ -94,6 +94,9 @@ class Invoice extends React.Component {
             onAddItem={(name, price) =>
               this.props.createItem(invoice.get('id'), name, price)
             }
+            onDeleteInvoiceTimeslip={(timeslipId) =>
+              this.props.deleteInvoiceTimeslip(invoice.get('id'), timeslipId)
+            }
           />
         </div>
       </div>
