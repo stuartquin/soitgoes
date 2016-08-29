@@ -20,12 +20,12 @@ const InvoiceActions = (props) => {
         </p>
       );
     } else {
-      button = (<button className='btn btn-lg btn-success btn-block'
+      button = (<button className='btn btn-success btn-block'
                   onClick={props.onMarkAsPaid}>Mark as Paid
                 </button>);
     }
   } else {
-    button = (<button className='btn btn-lg btn-success btn-block'
+    button = (<button className='btn btn-success btn-block'
                 onClick={props.onMarkAsIssued}>Save and Issue
               </button>);
   }
@@ -33,7 +33,7 @@ const InvoiceActions = (props) => {
   return (
     <div className='card-block'>
         {button}
-        <button className='btn btn-lg btn-danger btn-block'
+        <button className='btn btn-danger btn-block'
           onClick={props.onDelete}>Delete
         </button>
     </div>

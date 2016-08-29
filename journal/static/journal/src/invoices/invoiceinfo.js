@@ -18,9 +18,9 @@ const InvoiceInfo = (props) => {
   const invoice = props.invoice;
 
   let issued = 'Not issued yet';
-  if (invoice.get('issued_at')) {
+  if (props.isIssued) {
     const link = `${API_URL}invoices/${invoice.get('id')}/pdf`;
-    const invoiceIssued = `text-muted ${styles.invoiceInfoIssued}`
+    const invoiceIssued = `text-muted ${styles.invoiceInfoIssued}`;
     issued = (
       <h6 className={ invoiceIssued }>
         { moment(invoice.get('issued_at')).format('YYYY-MM-DD HH:mm') }

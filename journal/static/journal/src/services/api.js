@@ -137,3 +137,7 @@ export const createInvoiceItem = (invoiceId, name, price) => {
     res => res.json()
   );
 };
+
+export const deleteInvoiceItem = (itemId) => {
+  return fetch(buildRequest(`invoices/items/${itemId}`, 'DELETE'));
+};

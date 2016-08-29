@@ -58,10 +58,13 @@ class Invoice extends React.Component {
     const additionalTotal = getAdditionalTotal(this.props.invoiceItems);
     const total = getTotal(timeslipTotal, additionalTotal, project.get('invoice_modifier'));
 
+    const isIssued = !!invoice.get('issued_at');
+
     return (
       <div className='row'>
         <div className='col-md-4'>
           <InvoiceInfo
+            isIssued={isIssued}
             project={project}
             invoice={invoice}
             timeslipTotal={timeslipTotal}
@@ -88,6 +91,7 @@ class Invoice extends React.Component {
         </div>
         <div className='col-md-8'>
           <InvoiceTimeslips
+            isIssued={isIssued}
             project={this.props.project}
             timeslips={this.props.timeslips}
             items={this.props.invoiceItems}
@@ -96,6 +100,9 @@ class Invoice extends React.Component {
             }
             onDeleteInvoiceTimeslip={(timeslipId) =>
               this.props.deleteInvoiceTimeslip(invoice.get('id'), timeslipId)
+            }
+            onDeleteInvoiceItem={(itemId) =>
+              this.props.deleteInvoiceItem(invoice.get('id'), itemId)
             }
           />
         </div>

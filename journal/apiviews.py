@@ -18,6 +18,12 @@ class HasProjectAccess(BasePermission):
         return len(project.account.users.filter(id=request.user.id)) > 0
 
 
+# TODO Not yet implemented
+class HasInvoiceItemAccess(BasePermission):
+    def has_permission(self, request, view):
+        return True
+
+
 class HasInvoiceAccess(BasePermission):
     def has_permission(self, request, view):
         invoice_id = request.query_params.get('invoice', None) or request.data.get('invoice', None)
@@ -80,11 +86,17 @@ class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class InvoiceViewSet(viewsets.ModelViewSet):
-    queryset = models.Invoice.objects.all().order_by('-issued_at')
+    queryset = models.Invoice.objects.all().order_by('-created_at')
     serializer_class = serializers.InvoiceSerializer
 
 
-class InvoiceItem(generics.ListCreateAPIView):
+class InvoiceItem(generics.DestroyAPIView):
+    serializer_class = serializers.InvoiceItemSerializer
+    queryset = models.InvoiceItem.objects.all()
+    permission_classes = (HasInvoiceItemAccess,)
+
+
+class InvoiceItems(generics.ListCreateAPIView):
     serializer_class = serializers.InvoiceItemSerializer
     queryset = models.InvoiceItem.objects.all()
     permission_classes = (HasInvoiceAccess,)

@@ -101,3 +101,9 @@ export const deleteInvoiceTimeslip = (invoiceId, timeslip) => (dispatch) => {
     dispatch(fetchInvoiceTimeslips(invoiceId));
   });
 };
+
+export const deleteInvoiceItem = (invoiceId, itemId) => (dispatch) => {
+  api.deleteInvoiceItem(itemId).then(() => {
+    dispatch(fetchInvoiceItems(invoiceId));
+  });
+};
