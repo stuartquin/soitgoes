@@ -28,7 +28,7 @@ const InvoiceList = (props) => {
           <td>#{invoice.sequence_num}</td>
           <td>
             <Link to={`/invoices/${invoice.id}`}>
-              {getProjectName(props.projects, invoice.project)}
+              {invoice.project.name}
             </Link>
           </td>
           <td>{invoice.issued_at ? moment(invoice.issued_at).format('YYYY-MM-DD') : '-'}</td>

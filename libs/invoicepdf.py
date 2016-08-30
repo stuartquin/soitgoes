@@ -34,7 +34,7 @@ def render(invoice):
     timeslip_total = invoice.total_hours * project.hourly_rate
 
     modifiers = get_invoice_modifiers(
-        project.invoice_modifier.all(),
+        invoice.modifier.all(),
         timeslip_total
     )
 

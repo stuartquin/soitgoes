@@ -56,7 +56,7 @@ class Invoice extends React.Component {
 
     const timeslipTotal = getTimeslipTotal(project.get('hourly_rate'), this.props.timeslips);
     const additionalTotal = getAdditionalTotal(this.props.invoiceItems);
-    const total = getTotal(timeslipTotal, additionalTotal, project.get('invoice_modifier'));
+    const total = getTotal(timeslipTotal, additionalTotal, invoice.get('modifier'));
 
     const isIssued = !!invoice.get('issued_at');
 
@@ -112,7 +112,7 @@ class Invoice extends React.Component {
 }
 
 const getInvoiceProject = (projects, invoice) => {
-  return projects.find((x) => x.get('id') === invoice.get('project'));
+  return projects.find((x) => x.get('id') === invoice.get('project').get('id'));
 };
 
 const mapStateToProps = ({ invoices }, { params }) => {

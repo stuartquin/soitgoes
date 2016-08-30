@@ -17,8 +17,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'created_at',
             'uninvoiced_hours',
             'total_paid',
-            'hourly_rate',
-            'invoice_modifier'
+            'hourly_rate'
         ]
         depth = 1
 
@@ -73,3 +72,4 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Invoice
+        depth = 1

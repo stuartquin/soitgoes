@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.contrib import auth
 from django.core.exceptions import PermissionDenied
 
+from itertools import chain
+
 from rest_framework import generics, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -86,8 +88,12 @@ class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class InvoiceViewSet(viewsets.ModelViewSet):
-    queryset = models.Invoice.objects.all().order_by('-created_at')
     serializer_class = serializers.InvoiceSerializer
+
+    def get_queryset(self):
+        null = models.Invoice.objects.filter(issued_at__isnull=True)
+        not_null = models.Invoice.objects.filter(issued_at__isnull=False).order_by('-issued_at')
+        return [item for item in null] + [item for item in not_null]
 
 
 class InvoiceItem(generics.DestroyAPIView):

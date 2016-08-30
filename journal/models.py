@@ -73,8 +73,6 @@ class Project(models.Model):
     hourly_rate = models.FloatField(default=0.0)
     hours_per_day = models.IntegerField(default=0)
 
-    invoice_modifier = models.ManyToManyField(InvoiceModifier)
-
     def get_uninvoiced_hours(self, *args, **kwargs):
         timeslips = TimeSlip.objects.filter(project=self, invoice=None)
         return sum([t.hours for t in timeslips])
@@ -94,6 +92,8 @@ class Invoice(models.Model):
     issued_at = models.DateTimeField(default=None, blank=True, null=True)
     paid_at = models.DateTimeField(default=None, blank=True, null=True)
     total_paid = models.FloatField(default=0.0, blank=True, null=True)
+
+    modifier = models.ManyToManyField(InvoiceModifier)
 
     def save(self, *args, **kwargs):
         pk = self.pk

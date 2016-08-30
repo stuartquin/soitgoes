@@ -20,7 +20,7 @@ const InvoiceSummary = (props) => {
         name='Additional'
         value={'£' + props.additionalTotal}
       />
-      {project.get('invoice_modifier').map((modifier) => (
+      {props.invoice.get('modifier').map((modifier) => (
         <InvoiceSummaryRow
           key={2 + modifier.get('id')}
           name={modifier.get('name')}

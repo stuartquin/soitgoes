@@ -47,6 +47,7 @@ const InvoiceInfo = (props) => {
 
       <InvoiceSummary
         project={project}
+        invoice={invoice}
         timeslipTotal={props.timeslipTotal}
         additionalTotal={props.additionalTotal}
         total={props.total}
