@@ -91,9 +91,15 @@ class Invoice(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     issued_at = models.DateTimeField(default=None, blank=True, null=True)
     paid_at = models.DateTimeField(default=None, blank=True, null=True)
-    total_paid = models.FloatField(default=0.0, blank=True, null=True)
+    total_paid = models.FloatField(default=None, blank=True, null=True)
+    total_due = models.FloatField(default=None, blank=True, null=True)
 
     modifier = models.ManyToManyField(InvoiceModifier)
+
+    def set_total_due(self):
+        timeslip_total = self.total_hours * self.project.hourly_rate
+        modifier_impact = self.get_modifier_value(timeslip_total)
+        self.total_due = timeslip_total + modifier_impact
 
     def save(self, *args, **kwargs):
         pk = self.pk
@@ -110,6 +116,15 @@ class Invoice(models.Model):
                 invoice=None
             )
             TimeSlip.set_invoice(timeslips, self.pk)
+        else:
+            self.set_total_due()
+            super().save(*args, **kwargs)
+
+    def get_modifier_value(self, value):
+        impact = 0
+        for mod in self.modifier.all():
+            impact += (value / 100) * mod.percent
+        return impact
 
     @property
     def pdf_name(self):

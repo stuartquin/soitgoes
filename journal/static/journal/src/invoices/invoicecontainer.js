@@ -39,7 +39,6 @@ class Invoice extends React.Component {
   }
 
   fetchData() {
-    const project = this.props.invoice.get('project');
     let promises = [
       this.props.fetchInvoiceTimeslips(this.props.invoiceId),
       this.props.fetchInvoiceItems(this.props.invoiceId)
@@ -48,11 +47,13 @@ class Invoice extends React.Component {
   }
 
   render() {
-    if (!this.props.project) {
+    const invoice = this.props.invoice;
+    if (this.props.projects.isEmpty() || invoice.isEmpty()) {
       return (<strong>Loading...</strong>);
     }
-    const invoice = this.props.invoice;
-    const project = this.props.project;
+    const project = this.props.projects.find(proj =>
+      proj.get('id') === invoice.get('project').get('id')
+    );
 
     const timeslipTotal = getTimeslipTotal(project.get('hourly_rate'), this.props.timeslips);
     const additionalTotal = getAdditionalTotal(this.props.invoiceItems);
@@ -92,7 +93,7 @@ class Invoice extends React.Component {
         <div className='col-md-8'>
           <InvoiceTimeslips
             isIssued={isIssued}
-            project={this.props.project}
+            project={project}
             timeslips={this.props.timeslips}
             items={this.props.invoiceItems}
             onAddItem={(name, price) =>
@@ -120,7 +121,7 @@ const mapStateToProps = ({ invoices }, { params }) => {
     invoice: invoices.invoice,
     invoiceItems: invoices.invoiceItems,
     timeslips: invoices.timeslips,
-    project: getInvoiceProject(invoices.projectSummary, invoices.invoice),
+    projects: invoices.projects,
     invoiceId: params.id
   };
 };

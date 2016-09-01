@@ -4,7 +4,7 @@ import Immutable from 'immutable';
 
 import constants from '../constants';
 
-const projectSummary = (state = Immutable.Map(), action) => {
+const projects = (state = Immutable.Map(), action) => {
   switch (action.type) {
   case constants.GET_PROJECTS_SUCCESS:
     return Immutable.fromJS(action.projects);
@@ -66,7 +66,7 @@ const items = (state = Immutable.List([]), action) => {
 };
 
 const invoices = combineReducers({
-  projectSummary,
+  projects,
   invoice,
   timeslips,
   invoiceItems,

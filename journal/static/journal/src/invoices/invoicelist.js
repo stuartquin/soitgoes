@@ -19,6 +19,7 @@ const InvoiceList = (props) => {
           <th>#</th>
           <th>Project</th>
           <th>Issued</th>
+          <th>Due</th>
           <th>Paid</th>
         </tr>
       </thead>
@@ -27,11 +28,10 @@ const InvoiceList = (props) => {
         <tr>
           <td>#{invoice.sequence_num}</td>
           <td>
-            <Link to={`/invoices/${invoice.id}`}>
-              {invoice.project.name}
-            </Link>
+            <Link to={`/invoices/${invoice.id}`}>{invoice.project.name}</Link>
           </td>
           <td>{invoice.issued_at ? moment(invoice.issued_at).format('YYYY-MM-DD') : '-'}</td>
+          <td>&pound;{invoice.total_due}</td>
           <td>&pound;{invoice.total_paid}</td>
         </tr>
       ))}
