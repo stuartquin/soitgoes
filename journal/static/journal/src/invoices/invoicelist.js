@@ -4,13 +4,6 @@ import moment from 'moment';
 
 import styles from './styles.css';
 
-const getProjectName = (projects, id) => {
-  const project = projects.find(p => p.get('id') === id);
-  if (project) {
-    return project.get('name');
-  }
-};
-
 const InvoiceList = (props) => {
   return (
     <table className='table'>

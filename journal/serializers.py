@@ -62,6 +62,11 @@ class InvoiceSerializer(serializers.ModelSerializer):
             instance.total_paid = request_data['total_paid']
         else:
             instance.issued_at = datetime.datetime.now()
+
+        if 'modifiers' in request_data and request_data['modifiers']:
+            import ipdb; ipdb.set_trace()
+            instance.modifier.add(None)
+
         return super().update(instance, validated_data)
 
     def save(self, *args, **kwargs):

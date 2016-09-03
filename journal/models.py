@@ -93,20 +93,26 @@ class Invoice(models.Model):
     paid_at = models.DateTimeField(default=None, blank=True, null=True)
     total_paid = models.FloatField(default=None, blank=True, null=True)
     total_due = models.FloatField(default=None, blank=True, null=True)
+    subtotal_due = models.FloatField(default=None, blank=True, null=True)
 
-    modifier = models.ManyToManyField(InvoiceModifier)
+    modifier = models.ManyToManyField(InvoiceModifier, blank=True)
 
     def set_total_due(self):
-        timeslip_total = self.total_hours * self.project.hourly_rate
-        modifier_impact = self.get_modifier_value(timeslip_total)
-        self.total_due = timeslip_total + modifier_impact
+        item_total = sum(
+            float(item.cost_per_unit) * int(item.qty) for item in self.items.all()
+        )
+        total = (self.total_hours * self.project.hourly_rate) + item_total
+        modifier_impact = self.get_modifier_value(total)
+        self.subtotal_due = total
+        self.total_due = total + modifier_impact
 
     def save(self, *args, **kwargs):
         pk = self.pk
-        if pk is None and self.sequence_num == 0:
-            invoices = Invoice.objects.filter(project=self.project)
-            max = invoices.aggregate(Max('sequence_num')).get('sequence_num__max')
-            self.sequence_num = (max or 0) + 1
+        if pk is None:
+            if self.sequence_num == 0:
+                invoices = Invoice.objects.filter(project=self.project)
+                max = invoices.aggregate(Max('sequence_num')).get('sequence_num__max')
+                self.sequence_num = (max or 0) + 1
 
         super().save(*args, **kwargs)
 

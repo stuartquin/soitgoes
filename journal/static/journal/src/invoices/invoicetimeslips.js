@@ -13,6 +13,13 @@ const getTimeslipDetails = (timeslip, project) => {
 const InvoiceTimeslips = (props) => {
   const project = props.project;
 
+  let addRow = (<tr />);
+  if (!props.isIssued) {
+    addRow = (<AddInvoiceItem
+      onAddItem={props.onAddItem}
+    />);
+  }
+
   return (
     <table className='table table-striped'>
     <tbody>
@@ -46,9 +53,8 @@ const InvoiceTimeslips = (props) => {
         />
       ))}
 
-      <AddInvoiceItem
-        onAddItem={props.onAddItem}
-      />
+      {addRow}
+
     </tbody>
     </table>
   );
