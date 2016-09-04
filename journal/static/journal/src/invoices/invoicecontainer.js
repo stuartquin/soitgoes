@@ -9,24 +9,6 @@ import * as projectActions from '../actions/projects';
 
 import styles from './styles.css';
 
-const getTimeslipTotal = (hourlyRate, timeslips) => {
-  return timeslips.reduce((prev, current) =>
-    prev + (current.get('hours') * hourlyRate),
-  0);
-};
-
-const getAdditionalTotal = (items) => {
-  return items.reduce((prev, current) =>
-    prev + current.get('cost_per_unit'),
-  0);
-};
-
-const getTotal = (timeslipTotal, additionalTotal, modifiers) => {
-  return modifiers.reduce((runningTotal, modifier) =>
-    runningTotal + ((runningTotal / 100) * modifier.get('percent')),
-  timeslipTotal + additionalTotal);
-};
-
 class Invoice extends React.Component {
   componentDidMount() {
     this.fetchInvoice().then(() => {
@@ -55,10 +37,6 @@ class Invoice extends React.Component {
       proj.get('id') === invoice.get('project').get('id')
     );
 
-    const timeslipTotal = getTimeslipTotal(project.get('hourly_rate'), this.props.timeslips);
-    const additionalTotal = getAdditionalTotal(this.props.invoiceItems);
-    const total = getTotal(timeslipTotal, additionalTotal, invoice.get('modifier'));
-
     const isIssued = !!invoice.get('issued_at');
 
     return (
@@ -68,9 +46,8 @@ class Invoice extends React.Component {
             isIssued={isIssued}
             project={project}
             invoice={invoice}
-            timeslipTotal={timeslipTotal}
-            additionalTotal={additionalTotal}
-            total={total}
+            timeslips={this.props.timeslips}
+            invoiceItems={this.props.invoiceItems}
             onDelete={() =>
               this.props.deleteInvoice(invoice.get('id'))
             }
@@ -85,7 +62,7 @@ class Invoice extends React.Component {
               this.props.markAsPaid(
                 invoice.get('id'),
                 project.get('id'),
-                total
+                1000000
               )
             }}
           />

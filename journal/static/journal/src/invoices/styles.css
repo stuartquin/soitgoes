@@ -45,3 +45,36 @@
   display: flex;
   justify-content: space-between;
 }
+
+.invoiceSummaryRow {
+  display: flex;
+}
+
+.invoiceSummaryTitle {
+  flex: 1;
+}
+
+.invoiceSummaryValue {
+  font-size: 1.3em;
+  width: 20%;
+  text-align: right;
+}
+
+.invoiceSummaryAction {
+  width: 10%;
+}
+
+.invoiceSummaryTotal {
+  display: flex;
+}
+
+.invoiceSummaryTotalTitle {
+  width: 70%;
+  padding-right: 12px;
+  flex: 1;
+  text-align: right;
+}
+
+.invoiceActions {
+  margin-bottom: 24px;
+}

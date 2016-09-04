@@ -7,6 +7,7 @@ import styles from './styles.css';
 const InvoiceActions = (props) => {
   const invoice = props.invoice;
   const invoiceInfoPaid = `alert alert-success ${styles.invoiceInfoPaid}`;
+  const className = `${styles.invoiceActions} card-block`;
 
   let button;
   if (invoice.get('issued_at')) {
@@ -31,11 +32,11 @@ const InvoiceActions = (props) => {
   }
 
   return (
-    <div className='card-block'>
-        {button}
-        <button className='btn btn-danger btn-block'
-          onClick={props.onDelete}>Delete
-        </button>
+    <div className={className}>
+      {button}
+      <button className='btn btn-danger btn-block'
+        onClick={props.onDelete}>Delete
+      </button>
     </div>
   );
 };

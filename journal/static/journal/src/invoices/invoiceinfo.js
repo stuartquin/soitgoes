@@ -45,13 +45,17 @@ const InvoiceInfo = (props) => {
         <h6 className='text-muted'>{ project.get('contact').get('name') }</h6>
       </div>
 
+      <hr />
+
       <InvoiceSummary
         project={project}
         invoice={invoice}
-        timeslipTotal={props.timeslipTotal}
-        additionalTotal={props.additionalTotal}
+        timeslips={props.timeslips}
+        invoiceItems={props.invoiceItems}
         total={props.total}
       />
+
+      <hr />
 
       <InvoiceActions
         invoice={ invoice }
