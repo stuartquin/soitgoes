@@ -24,7 +24,7 @@ const getModifierImpact = (subTotal, modifier) => {
 const InvoiceSummaryTotal = (props) => {
   return (
     <div className={styles.invoiceSummaryTotal}>
-      <h4 className={styles.invoiceSummaryTotalTitle}>{props.title}</h4>
+      <h6 className={styles.invoiceSummaryTotalTitle}>{props.title}</h6>
       <h4 className={ styles.invoiceSummaryValue }>
         {`£${props.value.toFixed(2)}`}
       </h4>
@@ -75,7 +75,6 @@ const InvoiceSummary = (props) => {
           onToggle={true}
         />
       ))}
-      <hr />
       <InvoiceSummaryTotal
         title='Total'
         value={total}

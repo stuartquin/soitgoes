@@ -48,6 +48,7 @@
 
 .invoiceSummaryRow {
   display: flex;
+  justify-content: space-between;
 }
 
 .invoiceSummaryTitle {
@@ -55,8 +56,6 @@
 }
 
 .invoiceSummaryValue {
-  font-size: 1.3em;
-  width: 20%;
   text-align: right;
 }
 
@@ -69,10 +68,11 @@
 }
 
 .invoiceSummaryTotalTitle {
-  width: 70%;
   padding-right: 12px;
   flex: 1;
-  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .invoiceActions {
