@@ -13,11 +13,14 @@ class Nav extends React.Component {
   }
 
   render() {
-    const navClasses = `navbar navbar-inverse ${styles.navbar}`;
+    const navClasses = `navbar-inner ${styles.navbar}`;
     return (
-      <div>
+      <div className='navbar'>
         <nav className={navClasses}>
           <div className='container'>
+            <div className='navbar-header'>
+              <a className='navbar-brand' href='#'>SoItGoes</a>
+            </div>
             <NavMenu />
           </div>
         </nav>

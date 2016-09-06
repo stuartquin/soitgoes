@@ -5,7 +5,7 @@ import styles from './styles.css';
 
 const NavMenu = (props) => {
   'use strict';
-  const navClasses = `nav navbar-nav ${styles.navbarNav}`;
+  const navClasses = `nav navbar-nav navbar-right ${styles.navbarNav}`;
 
   return (
     <ul className={ navClasses }>

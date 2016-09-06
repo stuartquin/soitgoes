@@ -13,7 +13,7 @@
 }
 
 .navActive {
-  text-decoration: none;
+  text-decoration: underline;
   font-weight: bold;
   color: #FFFFFF;
 }
@@ -24,18 +24,17 @@
 }
 
 .navbar {
-  background-color: royalblue;
+  background-color: #002545;
   margin-bottom: 20px;
+  border-radius: 0;
 }
 
 .navbarNav {
-  display: flex;
   height: 50px;
 }
 
 .navItem {
   color: #FFFFFF;
   margin-right: 20px;
-  width: 200px;
 }
 
