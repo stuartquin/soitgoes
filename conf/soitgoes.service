@@ -1,0 +1,12 @@
+[Unit]
+Description=uWSGI Soitgoes Service
+
+[Service]
+ExecStart=/usr/bin/uwsgi --ini /var/app/soitgoes/soitgoes.ini
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
