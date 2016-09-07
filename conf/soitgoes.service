@@ -2,7 +2,7 @@
 Description=uWSGI Soitgoes Service
 
 [Service]
-ExecStart=/usr/bin/uwsgi --ini /var/app/soitgoes/soitgoes.ini
+ExecStart=/usr/bin/uwsgi --ini /var/app/soitgoes/conf/soitgoes.ini
 Restart=always
 KillSignal=SIGQUIT
 Type=notify
