@@ -17,17 +17,22 @@ const InvoiceInfo = (props) => {
   const project = props.project;
   const invoice = props.invoice;
 
-  let issued = 'Not issued yet';
+  let issued;
+  let downloadBtn;
   if (props.isIssued) {
     const link = `${API_URL}invoices/${invoice.get('id')}/pdf`;
     const invoiceIssued = `text-muted ${styles.invoiceInfoIssued}`;
     issued = (
       <h6 className={ invoiceIssued }>
         { moment(invoice.get('issued_at')).format('YYYY-MM-DD HH:mm') }
-        <a target='_blank'
-          className='card-link pull-right'
-          href={link}>Download PDF</a>
       </h6>
+    );
+    downloadBtn = (
+      <a target='_blank'
+        className='pull-right btn btn-sm btn-default'
+        href={link}>
+        <span className='glyphicon glyphicon-download-alt'></span> PDF
+      </a>
     );
   } else {
     issued = <h6 className='text-muted'>Not issued yet</h6>;
@@ -36,7 +41,7 @@ const InvoiceInfo = (props) => {
   return (
     <div className='card'>
       <div className='card-block'>
-        <h4>Invoice #{ invoice.get('sequence_num') }</h4>
+        <h4>Invoice #{ invoice.get('sequence_num') } {downloadBtn} </h4>
         { issued }
       </div>
 

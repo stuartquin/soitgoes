@@ -3,6 +3,8 @@ import React from 'react';
 import moment from 'moment';
 
 import styles from './styles.css';
+import { ConfirmButton } from '../components/confirmbutton';
+
 
 const InvoiceActions = (props) => {
   const invoice = props.invoice;
@@ -34,9 +36,11 @@ const InvoiceActions = (props) => {
   return (
     <div className={className}>
       {button}
-      <button className='btn btn-danger btn-block'
-        onClick={props.onDelete}>Delete
-      </button>
+      <ConfirmButton
+        className='btn btn-danger btn-block'
+        onConfirmClick={props.onDelete}
+        confirmText='Confirm Delete!'
+        text='Delete' />
     </div>
   );
 };
