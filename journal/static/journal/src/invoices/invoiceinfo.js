@@ -7,7 +7,7 @@ import { InvoiceSummary } from './invoicesummary';
 
 import styles from './styles.css';
 
-const API_URL = 'http://localhost:8000/api/';
+const API_URL = '/api/';
 
 export const getUninvoicedAmount = (project) => {
   return project.get('uninvoiced_hours') * project.get('hourly_rate');
