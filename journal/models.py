@@ -156,7 +156,7 @@ class Invoice(models.Model):
 class InvoiceItem(models.Model):
     name = models.CharField(max_length=128)
     units = models.CharField(max_length=128)
-    qty = models.CharField(max_length=128)
+    qty = models.IntegerField(default=0)
     cost_per_unit = models.FloatField(default=0.0)
     created_at = models.DateTimeField(auto_now_add=True)
 

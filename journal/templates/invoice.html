@@ -131,27 +131,28 @@ tr.total td {
           <tr class='{% if forloop.counter|divisibleby:2 %}alt{% endif %}'>
             <td>{{ timeslip.hours }} Hours on {{ timeslip.date }}: {{ timeslip.project.name }}</td>
             <td>{{ timeslip.project.hourly_rate }}</td>
-            <td>{{ timeslip.project.hourly_rate|multiply:timeslip.hours }}</td>
+            <td>{{ timeslip.project.hourly_rate|multiply:timeslip.hours|floatformat:2 }}</td>
           </tr>
           {% endfor %}
           {% for item in items %}
           <tr class='{% if forloop.counter|divisibleby:2 %}alt{% endif %}'>
-            <td>{{ item.qty }} {{ item.unit }}: {{ item.name }}</td>
+            <td>
+              {{ item.name }} ({{ item.qty }}{%if item.unit %} x {{item.unit}}{% endif %}) </td>
             <td>{{ item.cost_per_unit }}</td>
-            <td>{{ item.qty|multiply:item.cost_per_unit }}</td>
+            <td>{{ item.qty|multiply:item.cost_per_unit|floatformat:2}}</td>
           </tr>
           {% endfor %}
           {% for item in modifiers %}
           <tr class='modifiers {% if forloop.counter|divisibleby:2 %}alt{% endif %}'>
             <td>{{ item.name }}</td>
             <td>{{ item.percent }}%</td>
-            <td>{{ item.impact }}</td>
+            <td>{{ item.impact|floatformat:2  }}</td>
           </tr>
           {% endfor %}
           <tr class='total'>
             <td></td>
             <td><strong>Total</strong></td>
-            <td><strong>{{ total }}</strong></td>
+            <td><strong>{{ total|floatformat:2}}</strong></td>
           </tr>
         </table>
       </section>

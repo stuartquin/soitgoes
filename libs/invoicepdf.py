@@ -31,11 +31,10 @@ def render(invoice):
     output_name = INVOICE_DIR + invoice.pdf_name
     timeslips = invoice.timeslips.order_by('date').all()
     project = invoice.project
-    timeslip_total = invoice.total_hours * project.hourly_rate
 
     modifiers = get_invoice_modifiers(
         invoice.modifier.all(),
-        timeslip_total
+        invoice.subtotal_due
     )
 
     context = {
@@ -43,8 +42,8 @@ def render(invoice):
         'contact': project.contact,
         'project': project,
         'company': project.account.company,
-        'items': [],
         'timeslips': timeslips,
+        'items': invoice.items.all(),
         'modifiers': modifiers,
         'sent_date': datetime.datetime.now().strftime('%d %B %Y'),
         'total': invoice.total_due
