@@ -78,3 +78,7 @@
 .invoiceActions {
   margin-bottom: 24px;
 }
+
+.invoiceItemNumber, .invoiceItemText {
+  width: 100%;
+}

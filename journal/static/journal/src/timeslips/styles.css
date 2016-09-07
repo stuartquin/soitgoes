@@ -1,15 +1,11 @@
-.timeslipContainer {
-  margin: 25px;
-}
-
 .timeslipGridHeaderDate {
     text-align: center;
-    width: 35px;
+    min-width: 45px;
     font-size: 0.9em;
 }
 
 .weekend {
-  background-color: rgba(97,178,167,0.7);
+  background-color: #EAEEF4;
 }
 
 .today {
@@ -40,4 +36,13 @@
 
 .timeslipGridRowProject {
     width: 200px;
+}
+
+.timeslipGrid {
+    font-size: 1.2em;
+    margin-top: 20px;
+}
+
+.table-responsive {
+    border: none;
 }

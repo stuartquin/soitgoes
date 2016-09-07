@@ -1,17 +1,8 @@
 'use strict';
 import { push } from 'react-router-redux';
-import Immutable from 'immutable';
 
 import * as api from '../services/api';
 import constants from '../constants';
-
-export const createItem = (invoiceId, name, price) => (dispatch) =>
-  api.createInvoiceItem(invoiceId, name, price).then(item => {
-    dispatch({
-      type: constants.CREATE_INVOICE_ITEM_SUCCESS,
-      item
-    });
-  });
 
 export const markAsIssued = (invoiceId, projectId, timeslips) => (dispatch) =>
   api.issueInvoice(invoiceId, projectId, timeslips).then(invoice => {
@@ -107,3 +98,13 @@ export const deleteInvoiceItem = (invoiceId, itemId) => (dispatch) => {
     dispatch(fetchInvoiceItems(invoiceId));
   });
 };
+
+export const createItem = (invoiceId, name, price, qty) => (dispatch) =>
+  api.createInvoiceItem(invoiceId, name, price, qty).then(item => {
+    dispatch({
+      type: constants.CREATE_INVOICE_ITEM_SUCCESS,
+      item
+    });
+    dispatch(fetchInvoiceItems(invoiceId));
+  });
+

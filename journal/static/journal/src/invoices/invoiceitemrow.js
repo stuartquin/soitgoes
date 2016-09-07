@@ -1,17 +1,15 @@
 'use strict';
 import React from 'react';
-import moment from 'moment';
 
 import styles from './styles.css';
 
 const InvoiceItemRow = (props) => {
-
   let btn = (<div />);
   if (!props.isIssued) {
     btn = (
       <button className='btn btn-sm btn-default'
         onClick={props.onDelete}>
-        <span className='glyphicon glyphicon-remove'></span>
+        <span className='glyphicon glyphicon-minus-sign'></span>
       </button>
     );
   }

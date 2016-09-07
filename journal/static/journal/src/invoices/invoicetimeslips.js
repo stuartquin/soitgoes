@@ -10,6 +10,10 @@ const getTimeslipDetails = (timeslip, project) => {
   return `${timeslip.get('hours')} Hours on ${timeslip.get('date')}: ${project.get('name')}`;
 };
 
+const getItemDetails = (item) => {
+  return `${item.get('qty')} x ${item.get('name')}`;
+};
+
 const InvoiceTimeslips = (props) => {
   const project = props.project;
 
@@ -44,7 +48,7 @@ const InvoiceTimeslips = (props) => {
         <InvoiceItemRow
           key={item.get('id')}
           isIssued={props.isIssued}
-          details={item.get('name')}
+          details={getItemDetails(item)}
           unitPrice={item.get('cost_per_unit')}
           subTotal={item.get('cost_per_unit') * item.get('qty')}
           onDelete={() => {

@@ -124,13 +124,13 @@ export const fetchInvoiceItems = (invoice=null) => {
   );
 };
 
-export const createInvoiceItem = (invoiceId, name, price) => {
+export const createInvoiceItem = (invoiceId, name, price, qty=1) => {
   const req = buildRequest('invoices/items/', 'POST', {
     invoice: invoiceId,
     units: 'Services',
     cost_per_unit: price,
     name: name,
-    qty: 1
+    qty: qty
   });
 
   return fetch(req).then(
