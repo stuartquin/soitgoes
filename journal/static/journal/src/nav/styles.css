@@ -20,7 +20,6 @@
 
 .navHeader {
   width: 100%;
-  height: 60px;
 }
 
 .navbar {
@@ -29,12 +28,13 @@
   border-radius: 0;
 }
 
-.navbarNav {
-  height: 50px;
-}
-
 .navItem {
   color: #FFFFFF;
-  margin-right: 20px;
 }
 
+@media (max-width: 600px) {
+    .navItem {
+      color: #FFFFFF;
+      display: inline-block !important;
+    }
+}
