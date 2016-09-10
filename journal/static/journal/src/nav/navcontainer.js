@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import { push } from 'react-router-redux';
 
 import {NavMenu} from './navmenu';
+import {HeaderLogo} from './headerlogo';
 import styles from './styles.css';
 import * as projectActions from '../actions/projects';
 
@@ -18,9 +19,7 @@ class Nav extends React.Component {
       <div className='navbar'>
         <nav className={navClasses}>
           <div className='container'>
-            <div className='navbar-header'>
-              <a className='navbar-brand' href='#'>SoItGoes</a>
-            </div>
+            <HeaderLogo />
             <NavMenu />
           </div>
         </nav>

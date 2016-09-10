@@ -38,3 +38,13 @@
       display: inline-block !important;
     }
 }
+
+.headerLogo img {
+  width: 120px;
+}
+
+.navLink:hover {
+  background-color: #002545 !important;
+  color: white !important;
+  text-decoration: underline !important;
+}

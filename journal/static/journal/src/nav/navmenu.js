@@ -10,13 +10,17 @@ const NavMenu = (props) => {
   return (
     <ul className={ navClasses }>
       <li className={styles.navItem}>
-        <Link to={'/timeslips'} activeClassName={styles.navActive}>
-          Tracking
+        <Link to={'/invoices'}
+          activeClassName={styles.navActive}
+          className={styles.navLink}>
+          Invoice
         </Link>
       </li>
       <li className={styles.navItem}>
-        <Link to={'/invoices'} activeClassName={styles.navActive}>
-          Invoices
+        <Link to={'/timeslips'}
+          activeClassName={styles.navActive}
+          className={styles.navLink}>
+          Time
         </Link>
       </li>
     </ul>
