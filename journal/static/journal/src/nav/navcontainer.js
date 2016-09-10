@@ -14,9 +14,10 @@ class Nav extends React.Component {
   }
 
   render() {
-    const navClasses = `navbar-inner ${styles.navbar}`;
+    const className = `navbar ${styles.navOuter}`;
+    const navClasses = `navbar-inner ${styles.navInner}`;
     return (
-      <div className='navbar'>
+      <div className={className}>
         <nav className={navClasses}>
           <div className='container'>
             <HeaderLogo />

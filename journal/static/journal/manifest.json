@@ -1,0 +1,13 @@
+{
+  "name": "InvoiceTime",
+  "short_name": "InvoiceTime",
+  "start_url": "/timeslips",
+  "display": "standalone",
+  "background_color": "#002545",
+  "description": "Simple invoice and time tracking app",
+  "icons": [{
+    "src": "assets/logo-highres.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }]
+}
