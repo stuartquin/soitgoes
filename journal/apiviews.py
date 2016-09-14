@@ -66,9 +66,11 @@ class AccountList(generics.ListAPIView):
 
 
 class ProjectList(generics.ListAPIView):
-    queryset = models.Project.objects.all()
     serializer_class = serializers.ProjectSerializer
     # permission_classes = (HasProjectAccess,)
+
+    def get_queryset(self):
+        return models.Project.objects.all().order_by('-created_at')
 
 
 class ProjectDetail(APIView):
