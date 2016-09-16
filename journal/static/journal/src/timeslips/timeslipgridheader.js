@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 
-
 import styles from './styles.css';
 
 const cx = classNames.bind(styles);
@@ -26,9 +25,11 @@ const TimeslipGridHeaderDate = (props) => {
   );
 };
 
-const TimeslipGridHeaderProjects = () => {
+const TimeslipGridHeaderProjects = (props) => {
+  const date = props.date.format('MMMM Y');
   return (
     <td className={ styles.timeslipGridHeaderProjects }>
+      <span className='text-muted'>{date}</span>
     </td>
   );
 };
@@ -37,7 +38,7 @@ const TimeslipGridHeader = (props) => {
   const today = props.today.format('D');
   return (
     <tr className={styles.timeslipGridHeader}>
-      <TimeslipGridHeaderProjects />
+      <TimeslipGridHeaderProjects date={props.range[0]}/>
       {props.range.map((date, index) => (
         <TimeslipGridHeaderDate
           key={index}

@@ -16,6 +16,11 @@ const getDateRange = (today) => {
   });
 };
 
+const getTimeslipsForProject = (project, timeslips) => {
+  const projectId = project.get('id');
+  return timeslips.filter((t) => t.get('project') === projectId);
+};
+
 const TimeslipGrid = (props) => {
   'use strict';
   const range = getDateRange(moment(props.activeDate));
@@ -37,6 +42,7 @@ const TimeslipGrid = (props) => {
                 project={project}
                 today={today}
                 range={range}
+                timeslips={getTimeslipsForProject(project, props.timeslips)}
                 onInvoice={() => {
                   props.onInvoice(project);
                 }}

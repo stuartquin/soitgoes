@@ -18,13 +18,13 @@ class Timeslips extends React.Component {
   }
 
   fetchData() {
-    this.props.fetchProjects().then(() => this.props.fetchTimeslips());
+    this.props.fetchTimeslips().then(() => this.props.fetchProjects());
   }
 
   render() {
     const today = moment();
 
-    if (this.props.projects.count()) {
+    if (this.props.projects && this.props.activeDate) {
       return (
         <div className='row'>
           <div className='col-sm-3'>
@@ -38,6 +38,7 @@ class Timeslips extends React.Component {
           <TimeslipGrid
             today={today}
             activeDate={this.props.activeDate}
+            timeslips={this.props.timeslips}
             projects={this.props.projects}
             onHourChanged={this.props.updateTimeslipValue}
             onInvoice={this.props.onInvoice}
@@ -61,12 +62,11 @@ class Timeslips extends React.Component {
   }
 }
 
-const mapStateToProps = (allState, props) => {
-  const state = allState.timeslips;
+const mapStateToProps = (state, props) => {
   return {
-    activeDate: state.get('view').get('activeDate'),
-    timeslips: selectors.getTimeslips(allState),
-    projects: selectors.getProjectsWithTimeslips(allState)
+    activeDate: state.timeslips.view.get('activeDate'),
+    timeslips: state.timeslips.items,
+    projects: state.projects.get('items')
   };
 };
 

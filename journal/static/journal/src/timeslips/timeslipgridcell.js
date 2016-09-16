@@ -19,6 +19,7 @@ const TimeslipGridCell = (props) => {
     <td className={className}>
       <input
         value={hours}
+        type='number'
         onFocus={(e) => {
           e.target.select();
         }}

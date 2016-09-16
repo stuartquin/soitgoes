@@ -4,10 +4,6 @@ import {TimeslipGridCell} from './timeslipgridcell';
 
 import styles from './styles.css';
 
-const getKey = (date, project) => {
-  return project.get('id') + '|' + date;
-};
-
 const getUninvoicedTotal = (timeslips) => {
   return timeslips.reduce((previous, current) => {
     if (!current.get('invoice')) {
@@ -20,7 +16,7 @@ const getUninvoicedTotal = (timeslips) => {
 
 const TimeslipGridRow = (props) => {
   const dates = props.range.map((m) => m.format('YYYY-MM-DD'));
-  const filledTimeslips = props.project.get('timeslips').reduce( (result, item) => {
+  const filledTimeslips = props.timeslips.reduce( (result, item) => {
     result[item.get('date')] = item;
     return result;
   }, {});
@@ -38,7 +34,7 @@ const TimeslipGridRow = (props) => {
           }}
           timeslip={filledTimeslips[date]} />
       ))}
-      <td>{getUninvoicedTotal(props.project.get('timeslips'))}</td>
+      <td>{getUninvoicedTotal(props.timeslips)}</td>
     </tr>
   );
 };

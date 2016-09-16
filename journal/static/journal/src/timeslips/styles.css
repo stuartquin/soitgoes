@@ -19,16 +19,22 @@
 
 .timeslipGridHeaderProjects {
     width: 200px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 58px;
 }
 
 .timeslipGridCell {
     width: 45px;
-    padding: 0;
+    padding: 0 !important;
     border: 1px solid #eceeef;
 }
 
 .timeslipGridCell input {
-    width: 100%;
+    width: 45px;
+    height: 45px;
     text-align: center;
     background: transparent;
     border: none;
