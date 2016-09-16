@@ -49,13 +49,18 @@ const items = (state = Immutable.List([]), action) => {
 const view = (state, action) => {
   if (!state) {
     return Immutable.Map({
-      activeDate: moment().startOf('isoweek')
+      activeDate: moment().startOf('isoweek'),
+      isSaving: false
     });
   }
 
   switch (action.type) {
   case constants.SET_TIMESLIP_ACTIVE_DATE:
-    return setActiveDate(state, action.date);
+    return setActiveDate(state, action);
+  case constants.SAVE_TIMESLIPS_START:
+    return state.set('isSaving', true);
+  case constants.SAVE_TIMESLIPS_SUCCESS:
+    return state.set('isSaving', false);
   default:
     return state;
   }

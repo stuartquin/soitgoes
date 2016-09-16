@@ -45,7 +45,9 @@ const TimeslipGridHeader = (props) => {
           today={today}
           date={date} />
       ))}
-      <td>Total</td>
+      <td className={ styles.timeslipGridHeaderProjects }>
+        <span>Uninvoiced Hours</span>
+      </td>
     </tr>
   );
 };

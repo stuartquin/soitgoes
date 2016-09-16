@@ -5,10 +5,10 @@ import moment from 'moment';
 
 import * as timeslipActions from '../actions/timeslips';
 import * as projectActions from '../actions/projects';
-import * as selectors from './timeslipselectors';
 
 import { TimeslipGrid } from './timeslipgrid';
 import { TimeslipDateControls } from './timeslipdatecontrols';
+import { LoadingButton } from '../components/loadingbutton';
 
 import styles from './styles.css';
 
@@ -45,14 +45,14 @@ class Timeslips extends React.Component {
           />
 
           <div className='col-md-3'>
-            <button
+            <LoadingButton
               onClick={() => {
                 this.props.saveTimeslips(this.props.projects, this.props.timeslips)
               }}
               className='btn btn-success btn-block'
-            >
-              Save
-            </button>
+              text='Save'
+              isLoading={this.props.isSaving}
+            />
           </div>
         </div>
       );
@@ -65,6 +65,7 @@ class Timeslips extends React.Component {
 const mapStateToProps = (state, props) => {
   return {
     activeDate: state.timeslips.view.get('activeDate'),
+    isSaving: state.timeslips.view.get('isSaving'),
     timeslips: state.timeslips.items,
     projects: state.projects.get('items')
   };
