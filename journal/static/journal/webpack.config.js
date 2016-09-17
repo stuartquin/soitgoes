@@ -17,9 +17,6 @@ var entry = [
 if (IS_DEV) {
   plugins.push(new webpack.HotModuleReplacementPlugin());
 }
-//   entry.push('webpack-dev-server/client?http://localhost:3000');
-//   entry.push('webpack/hot/only-dev-server');
-// }
 
 module.exports = {
   devtool: 'eval',
@@ -33,12 +30,11 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['react-hot', 'babel'],
+      loaders: ['babel'],
       include: path.join(__dirname, 'src')
     }, {
       test: /\.css$/,
       loader: 'style!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
     }]
-  },
-  watch: true
+  }
 };
