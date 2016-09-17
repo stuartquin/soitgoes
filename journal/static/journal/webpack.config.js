@@ -16,10 +16,10 @@ var entry = [
 ];
 if (IS_DEV) {
   plugins.push(new webpack.HotModuleReplacementPlugin());
-
-  entry.push('webpack-dev-server/client?http://localhost:3000');
-  entry.push('webpack/hot/only-dev-server');
 }
+//   entry.push('webpack-dev-server/client?http://localhost:3000');
+//   entry.push('webpack/hot/only-dev-server');
+// }
 
 module.exports = {
   devtool: 'eval',
@@ -36,11 +36,9 @@ module.exports = {
       loaders: ['react-hot', 'babel'],
       include: path.join(__dirname, 'src')
     }, {
-      test: /\.scss$/,
-      loaders: ['style', 'css', 'sass']
-    }, {
       test: /\.css$/,
       loader: 'style!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
     }]
-  }
+  },
+  watch: true
 };

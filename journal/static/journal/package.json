@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Time management",
   "scripts": {
-    "start": "node server.js",
+    "start": "webpack --watch --progress",
     "lint": "eslint src"
   },
   "repository": {
