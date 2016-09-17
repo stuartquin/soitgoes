@@ -35,4 +35,5 @@ def deploy():
         with context_managers.prefix('source ~/venvs/soitgoes/bin/activate'):
             run('python manage.py collectstatic --no-input -i node_modules')
 
+        run('git rev-parse HEAD > version.txt')
         run('service soitgoes restart')
