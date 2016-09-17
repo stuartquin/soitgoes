@@ -1,16 +1,18 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { push } from 'react-router-redux';
 
 import {NavMenu} from './navmenu';
 import {HeaderLogo} from './headerlogo';
 import styles from './styles.css';
 import * as projectActions from '../actions/projects';
+import * as userActions from '../actions/user';
 
 
 class Nav extends React.Component {
   componentDidMount() {
-    this.props.fetchProjects();
+    this.props.fetchUser().then(() =>
+      this.props.fetchProjects()
+    );
   }
 
   render() {
@@ -38,8 +40,10 @@ const mapStateToProps = (state, props) => {
 };
 
 const actions = {
-  ...projectActions
+  ...projectActions,
+  ...userActions
 };
+
 
 const NavContainer = connect(mapStateToProps, actions)(Nav);
 export {NavContainer};

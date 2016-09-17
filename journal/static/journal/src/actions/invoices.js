@@ -18,7 +18,7 @@ export const markAsPaid = (invoiceId, projectId, totalPaid) => (dispatch) =>
       type: constants.SAVE_INVOICE_SUCCESS,
       invoice
     });
-  });
+  });;
 
 export const deleteInvoice = (invoiceId) => (dispatch) =>
   api.deleteInvoice(invoiceId).then(() => {

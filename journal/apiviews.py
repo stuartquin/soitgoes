@@ -58,11 +58,20 @@ class HasTimeslipAccess(BasePermission):
 
 
 class AccountList(generics.ListAPIView):
+    # TODO Needs permissions
     serializer_class = serializers.AccountSerializer
 
     def get_queryset(self):
         account = self.request.user.account_set.all()
         return account
+
+
+class UserDetail(APIView):
+    serializer_class = serializers.UserSerializer
+
+    def get(self, request, pk=None):
+        user = serializers.UserSerializer(self.request.user)
+        return Response(user.data)
 
 
 class ProjectList(generics.ListAPIView):
