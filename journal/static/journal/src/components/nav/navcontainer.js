@@ -1,8 +1,10 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {NavMenu} from './navmenu';
-import {HeaderLogo} from './headerlogo';
+import { NavMenu } from './navmenu';
+import { HeaderLogo } from './headerlogo';
+import { UserMenu } from './usermenu';
+
 import styles from './styles.css';
 import * as projectActions from '../../actions/projects';
 import * as userActions from '../../actions/user';
@@ -24,6 +26,10 @@ class Nav extends React.Component {
           <div className='container'>
             <HeaderLogo />
             <NavMenu />
+            <UserMenu
+              user={this.props.user}
+              isLoading={this.props.isUserLoading}
+            />
           </div>
         </nav>
         <div className='container'>
@@ -36,6 +42,8 @@ class Nav extends React.Component {
 
 const mapStateToProps = (state, props) => {
   return {
+    user: state.user.user,
+    isUserLoading: state.user.isLoading
   };
 };
 
