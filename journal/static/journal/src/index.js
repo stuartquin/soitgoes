@@ -9,10 +9,10 @@ import {Provider} from 'react-redux';
 import constants from './constants';
 import configureStore from './configureStore';
 import { App } from './app';
-import { TimeslipsContainer} from './timeslips/timeslipcontainer';
-import { NavContainer } from './nav/navcontainer';
-import { InvoicesContainer } from './invoices/invoicescontainer';
-import { InvoiceContainer } from './invoices/invoicecontainer';
+import { TimeslipsContainer} from './components/timeslips/timeslipcontainer';
+import { NavContainer } from './components/nav/navcontainer';
+import { InvoicesContainer } from './components/invoices/invoicescontainer';
+import { InvoiceContainer } from './components/invoices/invoicecontainer';
 
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);

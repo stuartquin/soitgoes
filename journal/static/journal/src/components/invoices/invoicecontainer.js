@@ -4,8 +4,8 @@ import {connect} from 'react-redux';
 
 import { InvoiceInfo } from './invoiceinfo';
 import { InvoiceTimeslips } from './invoicetimeslips';
-import * as invoiceActions from '../actions/invoices';
-import * as projectActions from '../actions/projects';
+import * as invoiceActions from '../../actions/invoices';
+import * as projectActions from '../../actions/projects';
 
 import styles from './styles.css';
 

@@ -5,9 +5,9 @@ import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 import { Iterable } from 'immutable';
 
-import timeslips from './timeslips/reducer';
-import projects from './projects/reducer';
-import invoices from './invoices/reducer';
+import timeslips from './reducers/timeslips';
+import projects from './reducers/projects';
+import invoices from './reducers/invoices';
 
 
 const logger = createLogger({

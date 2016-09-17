@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment';
 
 import styles from './styles.css';
-import { ConfirmButton } from '../components/confirmbutton';
+import { ConfirmButton } from '../../components/confirmbutton';
 
 
 const InvoiceActions = (props) => {
@@ -23,14 +23,17 @@ const InvoiceActions = (props) => {
         </p>
       );
     } else {
-      button = (<button className='btn btn-success btn-block'
-                  onClick={props.onMarkAsPaid}>Mark as Paid
-                </button>);
+      button = (
+        <button className='btn btn-success btn-block'
+          onClick={props.onMarkAsPaid}>Mark as Paid
+        </button>
+      );
     }
   } else {
-    button = (<button className='btn btn-success btn-block'
-                onClick={props.onMarkAsIssued}>Save and Issue
-              </button>);
+    button = (
+      <button className='btn btn-success btn-block'
+        onClick={props.onMarkAsIssued}>Save and Issue
+      </button>);
   }
 
   return (

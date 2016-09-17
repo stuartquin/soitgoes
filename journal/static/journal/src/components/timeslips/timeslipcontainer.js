@@ -3,12 +3,12 @@ import React from 'react';
 import {connect} from 'react-redux';
 import moment from 'moment';
 
-import * as timeslipActions from '../actions/timeslips';
-import * as projectActions from '../actions/projects';
+import * as timeslipActions from '../../actions/timeslips';
+import * as projectActions from '../../actions/projects';
 
 import { TimeslipGrid } from './timeslipgrid';
 import { TimeslipDateControls } from './timeslipdatecontrols';
-import { LoadingButton } from '../components/loadingbutton';
+import { LoadingButton } from '../../components/loadingbutton';
 
 import styles from './styles.css';
 

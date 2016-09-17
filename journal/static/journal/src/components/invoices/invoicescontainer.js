@@ -4,8 +4,8 @@ import {connect} from 'react-redux';
 
 import { InvoiceList } from './invoicelist';
 import { CreateInvoice } from './createinvoice';
-import * as invoiceActions from '../actions/invoices';
-import * as projectActions from '../actions/projects';
+import * as invoiceActions from '../../actions/invoices';
+import * as projectActions from '../../actions/projects';
 
 class Invoices extends React.Component {
   componentDidMount() {

@@ -4,8 +4,8 @@ import {connect} from 'react-redux';
 import {NavMenu} from './navmenu';
 import {HeaderLogo} from './headerlogo';
 import styles from './styles.css';
-import * as projectActions from '../actions/projects';
-import * as userActions from '../actions/user';
+import * as projectActions from '../../actions/projects';
+import * as userActions from '../../actions/user';
 
 
 class Nav extends React.Component {
