@@ -30,7 +30,7 @@ const updateProjectTimeslip = (state, action) => {
 };
 
 const setActiveDate = (state, action) => {
-  return state.set('activeDate', action.date);
+  return state.set('weekStart', action.date);
 };
 
 const items = (state = Immutable.List([]), action) => {
@@ -49,8 +49,9 @@ const items = (state = Immutable.List([]), action) => {
 const view = (state, action) => {
   if (!state) {
     return Immutable.Map({
-      activeDate: moment().startOf('isoweek'),
-      isSaving: false
+      weekStart: moment().startOf('isoweek'),
+      isSaving: false,
+      isLoading: false
     });
   }
 
@@ -61,6 +62,10 @@ const view = (state, action) => {
     return state.set('isSaving', true);
   case constants.SAVE_TIMESLIPS_SUCCESS:
     return state.set('isSaving', false);
+  case constants.GET_TIMESLIPS_START:
+    return state.set('isLoading', true);
+  case constants.GET_TIMESLIPS_SUCCESS:
+    return state.set('isLoading', false);
   default:
     return state;
   }

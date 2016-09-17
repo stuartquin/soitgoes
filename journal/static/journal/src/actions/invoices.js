@@ -60,7 +60,7 @@ export const fetchInvoices = () => (dispatch) => {
 };
 
 export const fetchInvoiceTimeslips = (invoiceId) => (dispatch) => {
-  api.fetchTimeslips(invoiceId).then(res => {
+  api.fetchTimeslips(invoiceId, null, null).then(res => {
     dispatch({
       type: constants.GET_INVOICE_TIMESLIPS_SUCCESS,
       timeslips: res.results
@@ -73,14 +73,6 @@ export const fetchInvoiceItems = (invoiceId) => (dispatch) =>
     dispatch({
       type: constants.GET_INVOICE_ITEMS_SUCCESS,
       items: res.results
-    });
-  });
-
-export const fetchProjectTimeslips = (projectId) => (dispatch) =>
-  api.fetchTimeslips('none', projectId).then(res => {
-    dispatch({
-      type: constants.GET_INVOICE_TIMESLIPS_SUCCESS,
-      timeslips: res.resuslts
     });
   });
 

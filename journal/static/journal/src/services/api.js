@@ -33,15 +33,19 @@ export const createSession = () => {
   return fetch(buildRequest('session/', 'POST')).then(res => res.json());
 };
 
-export const fetchTimeslips = (invoice=null, project=null) => {
+export const fetchTimeslips = (invoice=null, start, end) => {
   let url = `timeslips/?format=json`;
 
   if (invoice !== null) {
     url = url + `&invoice=${invoice}`;
   }
 
-  if (project !== null) {
-    url = url + `&project=${project}`;
+  if (start !== null) {
+    url = url + `&start=${start}`;
+  }
+
+  if (end !== null) {
+    url = url + `&end=${end}`;
   }
 
   return fetch(buildRequest(url)).then(

@@ -1,16 +1,6 @@
 'use strict';
-import { normalize } from 'normalizr';
-
 import constants from '../constants';
 import * as api from '../services/api';
-import * as schema from '../actions/schema';
-
-export const setActiveDate = (date) => {
-  return {
-    type: constants.SET_TIMESLIP_ACTIVE_DATE,
-    date
-  };
-};
 
 const saveTimeslipsSuccess = () => {
   return {
@@ -50,12 +40,26 @@ export const updateTimeslipValue = (project, date, hours) => ({
   date
 });
 
-export const fetchTimeslips = (invoice) => (dispatch) =>
-  api.fetchTimeslips(invoice).then(res => {
-    const timeslips = res.results;
-    const result = normalize(timeslips, schema.timeslips);
+export const fetchTimeslips = (invoice, start, end) => (dispatch) => {
+  const startDate = start.format('YYYY-MM-DD');
+  const endDate = end.format('YYYY-MM-DD');
+
+  return api.fetchTimeslips(invoice, startDate, endDate).then(res => {
     dispatch({
       type: constants.GET_TIMESLIPS_SUCCESS,
-      timeslips: result.entities.timeslips
+      timeslips: res.results
     });
   });
+};
+
+export const setActiveDate = (start, end) => (dispatch) => {
+  dispatch({
+    type: constants.GET_TIMESLIPS_START
+  });
+  dispatch({
+    type: constants.SET_TIMESLIP_ACTIVE_DATE,
+    date: start
+  });
+
+  return dispatch(fetchTimeslips(null, start, end));
+};

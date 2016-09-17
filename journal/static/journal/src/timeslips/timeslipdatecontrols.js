@@ -1,10 +1,9 @@
 import React from 'react';
 import moment from 'moment';
-import classNames from 'classnames/bind';
 
-import styles from './styles.css';
+// How many days to jump
+const DAY_OFFSET = 7;
 
-const cx = classNames.bind(styles);
 
 const TimeslipDateControls = (props) => {
   const disabled = props.activeDate.isSame(props.today, 'isoweek') ? 'disabled' : '';
@@ -15,17 +14,23 @@ const TimeslipDateControls = (props) => {
         className='btn btn-default'
         disabled={disabled}
         onClick={() => {
-          props.onSetActiveDate(moment().startOf('isoweek').isoWeekday(1));
+          const start = moment().startOf('isoweek').isoWeekday(1);
+          const end = moment(start).add(DAY_OFFSET, 'days');
+          props.onSetActiveDate(start, end);
         }}>Today</button>
       <button 
         className='btn btn-default'
         onClick={() => {
-          props.onSetActiveDate(moment(props.activeDate).subtract(7, 'days'));
+          const start = moment(props.activeDate).subtract(DAY_OFFSET, 'days');
+          const end = moment(start).add(DAY_OFFSET, 'days');
+          props.onSetActiveDate(start, end);
         }}>&lt;</button>
       <button
         className='btn btn-default'
         onClick={() => {
-          props.onSetActiveDate(moment(props.activeDate).add(7, 'days'));
+          const start = moment(props.activeDate).add(DAY_OFFSET, 'days');
+          const end = moment(start).add(DAY_OFFSET, 'days');
+          props.onSetActiveDate(start, end);
         }}>&gt;</button>
     </div>
   );

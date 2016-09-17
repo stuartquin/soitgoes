@@ -18,26 +18,33 @@ class Timeslips extends React.Component {
   }
 
   fetchData() {
-    this.props.fetchTimeslips().then(() => this.props.fetchProjects());
+    const start = this.props.weekStart;
+    const end = moment(start).add(7, 'days');
+
+    this.props.fetchTimeslips(null, start, end).then(() =>
+      this.props.fetchProjects()
+    );
   }
 
   render() {
     const today = moment();
 
-    if (this.props.projects && this.props.activeDate) {
+    if (this.props.projects) {
       return (
         <div className='row'>
           <div className='col-sm-3'>
             <TimeslipDateControls
               today={today}
-              activeDate={this.props.activeDate}
+              activeDate={this.props.weekStart}
+              isLoading={this.props.isLoading}
               onSetActiveDate={this.props.setActiveDate}
             />
           </div>
 
           <TimeslipGrid
             today={today}
-            activeDate={this.props.activeDate}
+            isLoading={this.props.isLoading}
+            weekStart={this.props.weekStart}
             timeslips={this.props.timeslips}
             projects={this.props.projects}
             onHourChanged={this.props.updateTimeslipValue}
@@ -64,8 +71,9 @@ class Timeslips extends React.Component {
 
 const mapStateToProps = (state, props) => {
   return {
-    activeDate: state.timeslips.view.get('activeDate'),
+    weekStart: state.timeslips.view.get('weekStart'),
     isSaving: state.timeslips.view.get('isSaving'),
+    isLoading: state.timeslips.view.get('isLoading'),
     timeslips: state.timeslips.items,
     projects: state.projects.get('items')
   };

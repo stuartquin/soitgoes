@@ -6,12 +6,11 @@ import {TimeslipGridRow} from './timeslipgridrow';
 
 import styles from './styles.css';
 
-const PAST_DAYS = 1;
-const FUTURE_DAYS = 6;
+const FUTURE_DAYS = 7;
 const getDateRange = (today) => {
   'use strict';
-  let start = today.subtract(PAST_DAYS, 'days');
-  return Array.from(Array(PAST_DAYS + FUTURE_DAYS).keys()).map(() => {
+  const start = moment(today).subtract(1, 'days');
+  return Array.from(Array(FUTURE_DAYS).keys()).map(() => {
     return moment(start.add(1, 'days'));
   });
 };
@@ -23,7 +22,7 @@ const getTimeslipsForProject = (project, timeslips) => {
 
 const TimeslipGrid = (props) => {
   'use strict';
-  const range = getDateRange(moment(props.activeDate));
+  const range = getDateRange(props.weekStart);
   const today = props.today;
   const className = `${styles.timeslipGrid} col-md-12`;
 
@@ -42,6 +41,7 @@ const TimeslipGrid = (props) => {
                 project={project}
                 today={today}
                 range={range}
+                isLoading={props.isLoading}
                 timeslips={getTimeslipsForProject(project, props.timeslips)}
                 onInvoice={() => {
                   props.onInvoice(project);

@@ -23,6 +23,7 @@ const TimeslipGridCell = (props) => {
         onFocus={(e) => {
           e.target.select();
         }}
+        disabled={props.isLoading}
         onChange={(e) => props.hourChanged(e.target.value)} />
     </td>
   );

@@ -152,6 +152,12 @@ class TimeSlipList(generics.ListCreateAPIView):
         if 'project' in self.request.query_params:
             filters['project'] = self.request.query_params['project']
 
+        if 'start' in self.request.query_params:
+            filters['date__gte'] = self.request.query_params['start']
+
+        if 'end' in self.request.query_params:
+            filters['date__lte'] = self.request.query_params['end']
+
         if 'invoice' in self.request.query_params:
             invoice = self.request.query_params['invoice']
             filters['invoice'] = invoice if invoice != 'none' else None
