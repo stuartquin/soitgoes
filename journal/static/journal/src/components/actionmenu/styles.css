@@ -1,0 +1,17 @@
+.actionMenu {
+  width: 160px;
+  background-color: white;
+  z-index: 100;
+  position: absolute;
+
+  border: solid 1px darkgrey;
+  box-shadow: 2px 1px 1px 1px darkgrey;
+
+  right: 0;
+}
+
+.actionMenu a {
+  display: inline-block;
+  padding: 10px;
+  color: darkgrey;
+}

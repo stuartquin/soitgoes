@@ -24,3 +24,8 @@ def login_user(request):
             return HttpResponseRedirect('/')
 
         raise PermissionDenied()
+
+
+def logout_user(request):
+    auth.logout(request)
+    return HttpResponseRedirect('/')

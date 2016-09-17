@@ -37,6 +37,21 @@
 }
 
 @media (max-width: 600px) {
+    .headerLogo {
+        width: 40px;
+        float: left;
+        overflow: hidden;
+    }
+
+    .navbarNav {
+        float: left;
+        margin-left: 12px;
+    }
+
+    .navbarNavRight {
+        float: right;
+    }
+
     .navItem {
       color: #FFFFFF;
       display: inline-block !important;

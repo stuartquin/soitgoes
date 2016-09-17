@@ -24,9 +24,9 @@ store.dispatch({
 const routes = (
   <Route path='/' component={App}>
     <Route component={NavContainer}>
-      <Route path="invoices">
+      <Route path='invoices'>
         <IndexRoute component={InvoicesContainer}/>
-        <Route path=":id" component={InvoiceContainer}/>
+        <Route path=':id' component={InvoiceContainer}/>
       </Route>
       <Route path='timeslips' component={TimeslipsContainer} />
     </Route>

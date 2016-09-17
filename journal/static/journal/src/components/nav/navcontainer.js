@@ -17,6 +17,10 @@ class Nav extends React.Component {
     );
   }
 
+  onLogout() {
+    location.href = '/logout/';
+  }
+
   render() {
     const className = `navbar ${styles.navOuter}`;
     const navClasses = `navbar-inner ${styles.navInner}`;
@@ -29,6 +33,7 @@ class Nav extends React.Component {
             <UserMenu
               user={this.props.user}
               isLoading={this.props.isUserLoading}
+              onLogout={() => this.onLogout()}
             />
           </div>
         </nav>
