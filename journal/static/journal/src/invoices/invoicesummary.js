@@ -5,18 +5,6 @@ import styles from './styles.css';
 
 import { InvoiceSummaryRow } from './invoicesummaryrow';
 
-const getAdditionalTotal = (items) => {
-  return items.reduce((prev, current) =>
-    prev + current.get('cost_per_unit'),
-  0);
-};
-
-const getTotal = (timeslipTotal, additionalTotal, modifiers) => {
-  return modifiers.reduce((runningTotal, modifier) =>
-    runningTotal + ((runningTotal / 100) * modifier.get('percent')),
-  timeslipTotal + additionalTotal);
-};
-
 const getModifierImpact = (subTotal, modifier) => {
   return (subTotal / 100 * modifier.get('percent'));
 };
@@ -38,7 +26,7 @@ const InvoiceSummary = (props) => {
   , 0);
 
   const itemTotal = props.invoiceItems.reduce((prev, current) =>
-    prev + current.get('cost_per_unit'),
+    prev + (current.get('cost_per_unit') * current.get('qty')),
   0);
 
   const subTotal = itemTotal + (props.project.get('hourly_rate') * totalHours);
