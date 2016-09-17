@@ -1,13 +1,15 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <title>InvoiceTime</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/journal/css/bootstrap/css/bootstrap.min.css">
-    <link rel="shortcut icon" href="/static/journal/assets/favicon.ico" />
+    <link rel="stylesheet" href="{% static "journal/css/bootstrap/css/bootstrap.min.css" %}">
+    <link rel="shortcut icon" href="{% static "journal/assets/favicon.ico" %}" />
 
-    <link rel="icon" sizes="192x192" href="/static/journal/assets/icon-highres.png">
-    <link rel="manifest" href="/static/journal/manifest.json">
+    <link rel="icon" sizes="192x192" href="{% static "journal/assets/icon-highres.png" %}">
+    <link rel="manifest" href="{% static "journal/manifest.json" %}">
   </head>
   <body>
 
@@ -15,7 +17,7 @@
     {% if is_authenticated %}
       <div id='root'>
       </div>
-      <script src="/static/journal/dist/bundle.js"></script>
+      <script src="{% static "journal/dist/bundle.js" %}"></script>
     {% else %}
       <div id="login">
           <form class="form-horizontal" name="LoginForm" action="/login/" method="post">

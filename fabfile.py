@@ -33,6 +33,6 @@ def deploy():
         run('git pull --rebase')
 
         with context_managers.prefix('source ~/venvs/soitgoes/bin/activate'):
-            run('python manage.py collectstatic --no-input')
+            run('python manage.py collectstatic --no-input -i node_modules')
 
         run('service soitgoes restart')

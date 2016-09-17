@@ -23,9 +23,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '!+#^o6)aofo(rux+bs6m4lpq^^4nzs&n670b5ka6bj@67_2%s_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'DEV' in os.environ
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'books.stuartquin.com',
+    'local.books.stuartquin.com'
+]
 
 
 # Application definition
@@ -126,6 +129,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
