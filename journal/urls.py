@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'api/accounts/$', apiviews.AccountList.as_view()),
     url(r'api/user/$', apiviews.UserDetail.as_view()),
 
+    url(r'api/version/$', apiviews.Version.as_view()),
+
     # App Routing
     url(r'login/$', views.login_user),
     url(r'logout/$', views.logout_user),

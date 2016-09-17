@@ -172,3 +172,16 @@ class TimeSlipList(generics.ListCreateAPIView):
             filters['invoice'] = invoice if invoice != 'none' else None
 
         return models.TimeSlip.objects.filter(**filters).order_by('date')
+
+
+class Version(APIView):
+    current_version = None
+
+    def get(self, request, pk=None):
+        if self.current_version is None:
+            with open('version.txt', 'r') as version_file:
+                self.current_version = version_file.read()
+
+        return Response({
+            'version': self.current_version
+        })
