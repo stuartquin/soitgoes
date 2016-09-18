@@ -56,7 +56,7 @@ class Timeslips extends React.Component {
               onClick={() => {
                 this.props.saveTimeslips(this.props.projects, this.props.timeslips)
               }}
-              className='btn btn-success btn-block'
+              className='btn btn-success btn-block btn-raised'
               text='Save'
               isLoading={this.props.isSaving}
             />

@@ -8,22 +8,26 @@
   float: right;
 
   border: solid 1px darkgrey;
-  box-shadow: 1px 1px 1px 1px darkgrey;
+  box-shadow: 2px 2px 20px 1px #888888;
 }
 
-.actionMenu a, .actionMenu span {
+.actionMenu span {
   display: inline-block;
   padding: 10px;
   color: darkgrey;
+  font-size: 0.9em;
+}
+
+.actionMenu button {
+  margin-bottom: 0;
 }
 
 .actionMenu ul {
   list-style: none;
   padding-left: 0;
-  text-align: right;
+  text-align: center;
 }
 
 .actionMenu ul hr {
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin: 0
 }

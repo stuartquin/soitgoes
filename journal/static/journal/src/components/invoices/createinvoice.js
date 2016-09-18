@@ -28,7 +28,7 @@ class CreateInvoice extends React.Component {
           </select>
         </div>
 
-        <button className='btn btn-block btn-success'
+        <button className='btn btn-block btn-success btn-raised'
           onClick={() => this.props.onCreateInvoice(this.state.project)}>
           Create Invoice
         </button>

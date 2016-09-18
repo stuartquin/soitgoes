@@ -55,6 +55,10 @@
   flex: 1;
 }
 
+.invoiceSummaryTitle strong {
+  display: block;
+}
+
 .invoiceSummaryValue {
   text-align: right;
 }

@@ -7,14 +7,14 @@ const InvoiceSummaryRow = (props) => {
   return (
     <div className={ styles.invoiceSummaryRow }>
       <div className={ styles.invoiceSummaryTitle }>
-        <h4>{props.title}</h4>
-        <h6 className='text-muted'>{props.subTitle}</h6>
+        <strong>{props.title}</strong>
+        <span className='text-muted'>{props.subTitle}</span>
       </div>
       <div className={ styles.invoiceSummaryAction }>
       </div>
-      <h4 className={ styles.invoiceSummaryValue }>
+      <strong className={ styles.invoiceSummaryValue }>
         {`£${props.value.toFixed(2)}`}
-      </h4>
+      </strong>
     </div>
   );
 };

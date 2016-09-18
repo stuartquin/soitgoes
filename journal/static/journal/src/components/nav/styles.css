@@ -33,6 +33,7 @@
 }
 
 .navContainer {
+  height: 52px;
   display: flex;
   align-items: center;
 }
@@ -41,15 +42,21 @@
   color: #FFFFFF;
   display: inline-block;
   margin-left: 15px;
+  padding-top: 4px;
+}
+
+.navItem a {
+  color: #FFFFFF;
 }
 
 .navbarNav {
-  display: inline-block;
+  display: flex;
+  flex: 1;
+
   list-style: none;
   padding-left: 0;
-  flex: 1;
-  align-items: flex-end;
   margin-bottom: 0;
+  font-size: 0.9em;
 }
 
 .navbarNavRight {
@@ -62,24 +69,19 @@
 
 @media (max-width: 600px) {
     .headerLogo {
-        width: 40px;
+        width: 24px;
         float: left;
         overflow: hidden;
     }
-
-    .navbarNav {
-        float: left;
-        margin-left: 12px;
-    }
-
-    .navItem {
-      color: #FFFFFF;
-      display: inline-block !important;
-    }
 }
 
-.headerLogo img {
-  width: 120px;
+.headerBrand {
+  display: flex;
+  align-items: center;
+}
+
+.headerBrand img {
+  height: 24px;
 }
 
 .navLink:hover {

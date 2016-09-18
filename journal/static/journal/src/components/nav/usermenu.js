@@ -24,11 +24,13 @@ class UserMenu extends React.Component {
       <ul className={ className }>
         <li className={styles.navItem}>
           <a onClick={() => this.toggleMenu() }>
-            {this.props.user.get('username')}
+            <span className='glyphicon glyphicon-option-vertical'></span>
             <Menu isVisible={ this.state.isMenuVisible }>
-              <a onClick={this.props.onLogout}>
+              <button
+                className='btn btn-default btn-block'
+                onClick={this.props.onLogout}>
                 Logout
-              </a>
+              </button>
               <hr />
               <span>
                 { hash }

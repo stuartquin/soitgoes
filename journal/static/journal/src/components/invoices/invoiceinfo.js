@@ -39,18 +39,16 @@ const InvoiceInfo = (props) => {
   }
 
   return (
-    <div className='card'>
-      <div className='card-block'>
+    <div className='panel panel-default'>
+      <div className='panel-body'>
         <h4>Invoice #{ invoice.get('sequence_num') } {downloadBtn} </h4>
         { issued }
       </div>
 
-      <div className='card-block'>
+      <div className='panel-body'>
         <h4>{ project.get('name') }</h4>
         <h6 className='text-muted'>{ project.get('contact').get('name') }</h6>
       </div>
-
-      <hr />
 
       <InvoiceSummary
         project={project}
@@ -59,8 +57,6 @@ const InvoiceInfo = (props) => {
         invoiceItems={props.invoiceItems}
         total={props.total}
       />
-
-      <hr />
 
       <InvoiceActions
         invoice={ invoice }

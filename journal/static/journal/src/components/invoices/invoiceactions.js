@@ -24,14 +24,14 @@ const InvoiceActions = (props) => {
       );
     } else {
       button = (
-        <button className='btn btn-success btn-block'
+        <button className='btn btn-success btn-block btn-raised'
           onClick={props.onMarkAsPaid}>Mark as Paid
         </button>
       );
     }
   } else {
     button = (
-      <button className='btn btn-success btn-block'
+      <button className='btn btn-success btn-block btn-raised'
         onClick={props.onMarkAsIssued}>Save and Issue
       </button>);
   }
@@ -40,9 +40,8 @@ const InvoiceActions = (props) => {
     <div className={className}>
       {button}
       <ConfirmButton
-        className='btn btn-danger btn-block'
         onConfirmClick={props.onDelete}
-        confirmText='Confirm Delete!'
+        confirmText='Confirm Delete'
         text='Delete' />
     </div>
   );

@@ -47,14 +47,14 @@ class Nav extends React.Component {
           </div>
         </nav>
 
+        <div className='container'>
+          {this.props.children}
+        </div>
+
         <Version
           isNew={this.props.version.get('isNew')}
           onReload={() => this.onReload()}
         />
-
-        <div className='container'>
-          {this.props.children}
-        </div>
       </div>
     );
   }

@@ -5,13 +5,11 @@ import styles from './styles.css';
 
 const HeaderLogo = (props) => {
   'use strict';
-  const className = `navbar-header ${styles.headerLogo}`;
-
   return (
-    <div className={className}>
-      <div className='navbar-brand'>
+    <div className={styles.headerLogo}>
+      <div className={styles.headerBrand}>
         <Link to={'/'}>
-          <img src='static/journal/assets/logo.png' />
+          <img src='/static/journal/assets/logo.png' />
         </Link>
       </div>
     </div>

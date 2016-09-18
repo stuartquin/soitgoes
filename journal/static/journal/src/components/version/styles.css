@@ -1,3 +1,29 @@
 .version {
-    z-index: 200;
+  z-index: 200;
+
+  position: fixed;
+  left: 20px;
+  bottom: 0;
+  z-index: 99999;
+
+  background-color: #2A2A2A;
+  color: #D2D2D2;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+
+  min-width: 400px;
+}
+
+.version a {
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  .version {
+      min-width: 100%;
+      left: 0;
+  }
 }

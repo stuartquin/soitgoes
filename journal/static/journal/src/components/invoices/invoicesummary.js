@@ -12,10 +12,10 @@ const getModifierImpact = (subTotal, modifier) => {
 const InvoiceSummaryTotal = (props) => {
   return (
     <div className={styles.invoiceSummaryTotal}>
-      <h6 className={styles.invoiceSummaryTotalTitle}>{props.title}</h6>
-      <h4 className={ styles.invoiceSummaryValue }>
+      <strong className={styles.invoiceSummaryTotalTitle}>{props.title}</strong>
+      <h6 className={ styles.invoiceSummaryValue }>
         {`£${props.value.toFixed(2)}`}
-      </h4>
+      </h6>
     </div>
   );
 };
@@ -36,7 +36,7 @@ const InvoiceSummary = (props) => {
   , subTotal);
 
   return (
-    <div>
+    <div className='panel-body'>
       <InvoiceSummaryRow
         key={0}
         title='Time'

@@ -11,7 +11,7 @@ const TimeslipDateControls = (props) => {
   return (
     <div>
       <button
-        className='btn btn-default'
+        className='btn btn-default btn-raised'
         disabled={disabled}
         onClick={() => {
           const start = moment().startOf('isoweek').isoWeekday(1);
@@ -19,14 +19,14 @@ const TimeslipDateControls = (props) => {
           props.onSetActiveDate(start, end);
         }}>Today</button>
       <button 
-        className='btn btn-default'
+        className='btn btn-default btn-raised'
         onClick={() => {
           const start = moment(props.activeDate).subtract(DAY_OFFSET, 'days');
           const end = moment(start).add(DAY_OFFSET, 'days');
           props.onSetActiveDate(start, end);
         }}>&lt;</button>
       <button
-        className='btn btn-default'
+        className='btn btn-default btn-raised'
         onClick={() => {
           const start = moment(props.activeDate).add(DAY_OFFSET, 'days');
           const end = moment(start).add(DAY_OFFSET, 'days');

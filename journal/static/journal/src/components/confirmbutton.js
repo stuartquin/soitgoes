@@ -22,14 +22,17 @@ class ConfirmButton extends React.Component {
     let button;
     if (this.state.confirmMode) {
       button = (
-        <button className='btn btn-danger btn-block'
+        <button className='btn btn-danger btn-block btn-raised'
           onClick={() => this.props.onConfirmClick()}>
-          {this.props.confirmText}
+          {this.props.confirmText} 
+          <span className='glyphicon glyphicon-question-sign pull-right'
+            aria-hidden='true'>
+          </span>
         </button>
       );
     } else {
       button = (
-        <button className='btn btn-warning btn-block'
+        <button className='btn btn-warning btn-block btn-raised'
           onClick={() => this.onInitialClick()}>
           {this.props.text}
         </button>
