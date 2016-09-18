@@ -16,6 +16,10 @@ class UserMenu extends React.Component {
     this.setState({isMenuVisible: !this.state.isMenuVisible});
   }
 
+  hideMenu() {
+    this.setState({isMenuVisible: false});
+  }
+
   render() {
     const className = `${styles.navbarNav} ${styles.navbarNavRight}`;
     const hash = this.props.version.get('hash', '').substr(0, 8);
@@ -25,7 +29,8 @@ class UserMenu extends React.Component {
         <li className={styles.navItem}>
           <a onClick={() => this.toggleMenu() }>
             <span className='glyphicon glyphicon-option-vertical'></span>
-            <Menu isVisible={ this.state.isMenuVisible }>
+            <Menu isVisible={ this.state.isMenuVisible }
+              onHideMenu={ this.hideMenu }>
               <button
                 className='btn btn-default btn-block'
                 onClick={this.props.onLogout}>

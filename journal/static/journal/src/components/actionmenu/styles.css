@@ -6,6 +6,7 @@
   z-index: 100;
   position: relative;
   float: right;
+  top: -24px;
 
   border: solid 1px darkgrey;
   box-shadow: 2px 2px 20px 1px #888888;
@@ -30,4 +31,9 @@
 
 .actionMenu ul hr {
   margin: 0
+}
+
+.actionMenuClose {
+  color: black;
+  text-align: right;
 }
