@@ -10,8 +10,19 @@
   right: 0;
 }
 
-.actionMenu a {
+.actionMenu a, .actionMenu span {
   display: inline-block;
   padding: 10px;
   color: darkgrey;
+}
+
+.actionMenu ul {
+  list-style: none;
+  padding-left: 0;
+  text-align: right;
+}
+
+.actionMenu ul hr {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }

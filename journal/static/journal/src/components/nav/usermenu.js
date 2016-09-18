@@ -18,6 +18,7 @@ class UserMenu extends React.Component {
 
   render() {
     const className = `nav navbar-nav navbar-right ${styles.navbarNavRight}`;
+    const hash = this.props.version.get('hash', '').substr(0, 8);
 
     return (
       <ul className={ className }>
@@ -29,6 +30,10 @@ class UserMenu extends React.Component {
             <a onClick={this.props.onLogout}>
               Logout
             </a>
+            <hr />
+            <span>
+              { hash }
+            </span>
           </Menu>
         </li>
       </ul>

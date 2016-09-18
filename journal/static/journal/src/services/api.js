@@ -157,3 +157,10 @@ export const fetchUser = () => {
     res => res.json()
   );
 };
+
+export const fetchVersion = () => {
+  return fetch(buildRequest('version/')).then(
+    res => res.json()
+  );
+};
+

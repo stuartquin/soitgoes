@@ -8,7 +8,11 @@ class Menu extends React.Component {
     if (this.props.isVisible) {
       return (
         <div className={ styles.actionMenu }>
-          {this.props.children}
+          <ul>
+            {this.props.children.map((child) => {
+              return (<li>{child}</li>);
+            })}
+          </ul>
         </div>
       );
     }

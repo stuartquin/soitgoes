@@ -2,6 +2,7 @@
 import constants from '../constants';
 import * as api from '../services/api';
 
+const VERSION_INTERVAL = 60 * 1000;
 
 export const fetchUser = () => (dispatch) => {
   dispatch({
@@ -14,4 +15,22 @@ export const fetchUser = () => (dispatch) => {
       user
     });
   });
+};
+
+
+const _fetchVersion = (dispatch) => {
+  api.fetchVersion().then(version => {
+    dispatch({
+      type: constants.GET_VERSION_SUCCESS,
+      version
+    });
+  });
+};
+
+// TODO probably doesn't belong here...
+export const fetchVersion = () => (dispatch) => {
+  _fetchVersion(dispatch);
+  setInterval(() => {
+    _fetchVersion(dispatch);
+  }, VERSION_INTERVAL);
 };

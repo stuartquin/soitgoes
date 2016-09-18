@@ -24,8 +24,24 @@ const user = (state = Immutable.Map(), action) => {
   }
 };
 
+const setVersion = (state, action) => {
+  const version = Immutable.fromJS(action.version);
+  const isNew = state.get('hash') && state.get('hash') !== version.get('hash');
+  return version.set('isNew', !state.get('isNew') && isNew);
+};
+
+const version = (state = Immutable.Map(), action) => {
+  switch(action.type) {
+  case constants.GET_VERSION_SUCCESS:
+    return setVersion(state, action);
+  default:
+    return state;
+  }
+};
+
 const users = combineReducers({
   user,
+  version,
   view
 });
 

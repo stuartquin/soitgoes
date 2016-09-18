@@ -183,5 +183,5 @@ class Version(APIView):
                 self.current_version = version_file.read()
 
         return Response({
-            'version': self.current_version
+            'hash': self.current_version
         })
