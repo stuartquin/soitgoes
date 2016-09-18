@@ -17,24 +17,24 @@ class UserMenu extends React.Component {
   }
 
   render() {
-    const className = `nav navbar-nav navbar-right ${styles.navbarNavRight}`;
+    const className = `${styles.navbarNav} ${styles.navbarNavRight}`;
     const hash = this.props.version.get('hash', '').substr(0, 8);
 
     return (
       <ul className={ className }>
-        <li>
+        <li className={styles.navItem}>
           <a onClick={() => this.toggleMenu() }>
             {this.props.user.get('username')}
+            <Menu isVisible={ this.state.isMenuVisible }>
+              <a onClick={this.props.onLogout}>
+                Logout
+              </a>
+              <hr />
+              <span>
+                { hash }
+              </span>
+            </Menu>
           </a>
-          <Menu isVisible={ this.state.isMenuVisible }>
-            <a onClick={this.props.onLogout}>
-              Logout
-            </a>
-            <hr />
-            <span>
-              { hash }
-            </span>
-          </Menu>
         </li>
       </ul>
     );

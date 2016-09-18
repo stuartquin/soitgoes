@@ -1,13 +1,14 @@
 .actionMenu {
   width: 160px;
+  margin-left: -160px;
+
   background-color: white;
   z-index: 100;
-  position: absolute;
+  position: relative;
+  float: right;
 
   border: solid 1px darkgrey;
-  box-shadow: 2px 1px 1px 1px darkgrey;
-
-  right: 0;
+  box-shadow: 1px 1px 1px 1px darkgrey;
 }
 
 .actionMenu a, .actionMenu span {

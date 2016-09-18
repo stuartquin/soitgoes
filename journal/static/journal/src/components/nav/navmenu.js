@@ -1,11 +1,11 @@
+'use strict';
 import React from 'react';
 import {Link} from 'react-router';
 
 import styles from './styles.css';
 
 const NavMenu = (props) => {
-  'use strict';
-  const navClasses = `nav navbar-nav ${styles.navbarNav}`;
+  const navClasses = `${styles.navbarNav}`;
 
   return (
     <ul className={ navClasses }>

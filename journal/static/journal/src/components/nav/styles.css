@@ -32,8 +32,32 @@
   border-radius: 0;
 }
 
+.navContainer {
+  display: flex;
+  align-items: center;
+}
+
 .navItem {
   color: #FFFFFF;
+  display: inline-block;
+  margin-left: 15px;
+}
+
+.navbarNav {
+  display: inline-block;
+  list-style: none;
+  padding-left: 0;
+  flex: 1;
+  align-items: flex-end;
+  margin-bottom: 0;
+}
+
+.navbarNavRight {
+  flex: 0;
+  height: 20px;
+}
+
+.navbarNavRight .navItem {
 }
 
 @media (max-width: 600px) {
@@ -46,10 +70,6 @@
     .navbarNav {
         float: left;
         margin-left: 12px;
-    }
-
-    .navbarNavRight {
-        float: right;
     }
 
     .navItem {
