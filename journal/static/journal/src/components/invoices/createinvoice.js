@@ -1,12 +1,26 @@
 'use strict';
 import React from 'react';
 
-import styles from './styles.css';
+const getTotalOwed = (project) => {
+  const total = (project.get('hourly_rate') * project.get('uninvoiced_hours'));
+  return total.toFixed(2);
+};
 
 const NewInvoiceProjectSelector = (props) => {
   return (
-    <div className={ styles.newInvoiceProjectSelector }>
-      <h5>Select Project</h5>
+    <div className='new-invoice-project-selector'>
+
+      <div className='close-action'>
+        <h5>Select Project</h5>
+        <a className='btn btn-default btn-xs'
+          onClick={props.onCancel}>
+          <i className='material-icons'>close</i>
+          <div className='ripple-container'></div>
+        </a>
+      </div>
+
+      <hr />
+
       <ul>
       {props.projects.map((project) => {
         return (
@@ -18,10 +32,24 @@ const NewInvoiceProjectSelector = (props) => {
                 onChange={() => props.onSelectProject(project)} />
               {project.get('name')}
             </label>
+            <span>£{getTotalOwed(project)}</span>
           </li>
         );
       })}
       </ul>
+
+      <hr />
+
+      <div className='vat-added'>
+        <label>
+           <input
+             type='checkbox'
+             checked={true}
+             onChange={() => props.onSetVAT()} />
+          Add VAT
+        </label>
+      </div>
+
       <button key={1}
         className='btn btn-block btn-success btn-raised'
         onClick={() => props.onCreateInvoice(props.selected)}>
@@ -52,6 +80,12 @@ class CreateInvoice extends React.Component {
     });
   }
 
+  cancel() {
+    this.setState({
+      isCreating: false
+    });
+  }
+
   render() {
     let item;
     if (this.state.isCreating) {
@@ -61,6 +95,7 @@ class CreateInvoice extends React.Component {
           selected={ this.state.selectedProject }
           onSelectProject={ (project) => this.selectProject(project) }
           onCreateInvoice={ this.props.onCreateInvoice }
+          onCancel={ () => this.cancel() }
         />
       );
     } else {
@@ -74,7 +109,7 @@ class CreateInvoice extends React.Component {
     }
 
     return (
-      <div className='panel panel-default'>
+      <div className='create-invoice panel panel-default'>
         <div className='panel-body'>
           {item}
         </div>
