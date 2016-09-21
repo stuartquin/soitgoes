@@ -1,16 +1,14 @@
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-from django.contrib import auth
-from django.core.exceptions import PermissionDenied
-
-from itertools import chain
 
 from rest_framework import generics, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
 
+
 from . import serializers, models
+from soitgoes.context_processors.cachebust import VERSION
 
 
 class HasProjectAccess(BasePermission):
@@ -175,13 +173,7 @@ class TimeSlipList(generics.ListCreateAPIView):
 
 
 class Version(APIView):
-    current_version = None
-
     def get(self, request, pk=None):
-        if self.current_version is None:
-            with open('version.txt', 'r') as version_file:
-                self.current_version = version_file.read()
-
         return Response({
-            'hash': self.current_version
+            'hash': VERSION
         })
