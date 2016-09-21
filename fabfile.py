@@ -11,10 +11,17 @@ def host_type():
 def deploy_js():
     with context_managers.lcd('journal/static/journal/'):
         operations.local('webpack -p')
+        operations.local("""
+        ./node_modules/node-sass/bin/node-sass scss -r -o dist/css
+        """)
 
     operations.put(
         'journal/static/journal/dist/bundle.js',
         '/var/app/soitgoes/journal/static/journal/dist/bundle.js'
+    )
+    operations.put(
+        'journal/static/journal/dist/main.css',
+        '/var/app/soitgoes/journal/static/journal/dist/main.css'
     )
 
 
