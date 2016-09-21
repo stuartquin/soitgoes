@@ -29,19 +29,19 @@ class UserMenu extends React.Component {
         <li className={styles.navItem}>
           <a onClick={() => this.toggleMenu() }>
             <span className='glyphicon glyphicon-option-vertical'></span>
-            <Menu isVisible={ this.state.isMenuVisible }
-              onHideMenu={ this.hideMenu }>
-              <button
-                className='btn btn-default btn-block'
-                onClick={this.props.onLogout}>
-                Logout
-              </button>
-              <hr />
-              <span>
-                { hash }
-              </span>
-            </Menu>
           </a>
+          <Menu isVisible={ this.state.isMenuVisible }
+            onHideMenu={ () => this.hideMenu() }>
+            <button
+              className='btn btn-default btn-block'
+              onClick={this.props.onLogout}>
+              Logout
+            </button>
+            <hr />
+            <span>
+              { hash }
+            </span>
+          </Menu>
         </li>
       </ul>
     );

@@ -9,8 +9,7 @@ const InvoiceList = (props) => {
     <table className='table'>
       <thead>
         <tr>
-          <th>#</th>
-          <th>Project</th>
+          <th>Invoice</th>
           <th>Issued</th>
           <th>Due</th>
           <th>Paid</th>
@@ -19,9 +18,10 @@ const InvoiceList = (props) => {
       <tbody>
       {props.invoices.map(invoice => (
         <tr>
-          <td>#{invoice.sequence_num}</td>
           <td>
-            <Link to={`/invoices/${invoice.id}`}>{invoice.project.name}</Link>
+            <Link to={`/invoices/${invoice.id}`}>
+            {invoice.project.name} #{invoice.sequence_num}
+            </Link>
           </td>
           <td>{invoice.issued_at ? moment(invoice.issued_at).format('YYYY-MM-DD') : '-'}</td>
           <td>&pound;{invoice.total_due}</td>
