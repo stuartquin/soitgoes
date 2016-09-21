@@ -1,0 +1,11 @@
+exports[`test isLoading toggles disabled state 1`] = `
+<button
+  className={undefined}
+  disabled={true} />
+`;
+
+exports[`test isLoading toggles disabled state 2`] = `
+<button
+  className={undefined}
+  disabled={true} />
+`;
