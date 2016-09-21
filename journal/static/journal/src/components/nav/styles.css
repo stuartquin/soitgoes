@@ -27,7 +27,8 @@
 }
 
 .navInner {
-  background-color: #002545;
+  /* background-color: #002545; */
+  background-color: #009688;
   margin-bottom: 20px;
   border-radius: 0;
 }
@@ -85,7 +86,6 @@
 }
 
 .navLink:hover {
-  background-color: #002545 !important;
   color: white !important;
   text-decoration: underline !important;
 }
