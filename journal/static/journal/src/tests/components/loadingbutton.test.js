@@ -1,6 +1,6 @@
 // Link.react-test.js
 import React from 'react';
-import { LoadingButton } from '../../src/components/loadingbutton';
+import { LoadingButton } from '../../components/loadingbutton';
 import renderer from 'react-test-renderer';
 
 it('isLoading toggles disabled state', () => {

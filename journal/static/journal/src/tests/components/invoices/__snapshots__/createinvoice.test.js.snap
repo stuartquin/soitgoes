@@ -1,0 +1,13 @@
+exports[`test Defaults to showing create button 1`] = `
+<div
+  className="panel panel-default">
+  <div
+    className="panel-body">
+    <button
+      className="btn btn-block btn-success btn-raised"
+      onClick={[Function onClick]}>
+      New Invoice
+    </button>
+  </div>
+</div>
+`;

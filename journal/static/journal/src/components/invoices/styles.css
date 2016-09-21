@@ -86,3 +86,30 @@
 .invoiceItemNumber, .invoiceItemText {
   width: 100%;
 }
+
+.newInvoiceEnter {
+}
+
+.newInvoiceEnterActive {
+  min-height: 300px;
+  transition: min-height 1000ms ease-in;
+}
+
+.newInvoiceLeave {
+  opacity: 1;
+}
+
+.newInvoiceLeaveActive {
+  opacity: 0.1;
+  transition: opacity 300ms ease-in;
+}
+
+.newInvoiceProjectSelector ul {
+  list-style: none;
+  padding: 0;
+}
+
+.newInvoiceProjectSelector label input {
+  display: inline-block;
+  margin-right: 10px;
+}

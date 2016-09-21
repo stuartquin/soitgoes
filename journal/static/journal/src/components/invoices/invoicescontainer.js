@@ -23,15 +23,15 @@ class Invoices extends React.Component {
     }
 
     return (
-      <div>
-        <div className='col-sm-3'>
+      <div className='row'>
+        <div className='col-sm-4'>
           <CreateInvoice
-            projectSummary={this.props.projects}
+            projects={this.props.projects}
             onCreateInvoice={this.props.createInvoice}
           />
         </div>
 
-        <div className='col-sm-9'>
+        <div className='col-sm-8'>
           <InvoiceList
             projects={this.props.projects}
             invoices={this.props.invoices}
