@@ -31,7 +31,7 @@ const routes = (
       <Route path='timeslips' component={TimeslipsContainer} />
     </Route>
     <IndexRoute component={NavContainer}/>
-    <IndexRedirect to='/invoicestimeslips' />
+    <IndexRedirect to='/invoices' />
   </Route>
 );
 
