@@ -62,7 +62,7 @@ class Invoice extends React.Component {
               this.props.markAsPaid(
                 invoice.get('id'),
                 project.get('id'),
-                1000000
+                invoice.get('total_due')
               )
             }}
           />
