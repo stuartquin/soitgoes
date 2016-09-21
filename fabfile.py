@@ -12,7 +12,7 @@ def deploy_js():
     with context_managers.lcd('journal/static/journal/'):
         operations.local('webpack -p')
         operations.local("""
-        ./node_modules/node-sass/bin/node-sass scss -r -o dist/css
+        ./node_modules/node-sass/bin/node-sass scss -r -o dist/
         """)
 
     operations.put(
