@@ -27,7 +27,7 @@ const user = (state = Immutable.Map(), action) => {
 const setVersion = (state, action) => {
   const version = Immutable.fromJS(action.version);
   const isNew = state.get('hash') && state.get('hash') !== version.get('hash');
-  return version.set('isNew', !state.get('isNew') && isNew);
+  return version.set('isNew', Boolean(!state.get('isNew') && isNew));
 };
 
 const version = (state = Immutable.Map(), action) => {

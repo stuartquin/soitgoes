@@ -2,7 +2,7 @@
 import constants from '../constants';
 import * as api from '../services/api';
 
-const VERSION_INTERVAL = 60 * 1000;
+const VERSION_INTERVAL = 30 * 1000;
 
 export const fetchUser = () => (dispatch) => {
   dispatch({
