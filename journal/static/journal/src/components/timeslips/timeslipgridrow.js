@@ -14,7 +14,7 @@ const TimeslipGridRow = (props) => {
   return (
     <tr className={styles.timeslipGridRow}>
       <td className={styles.timeslipGridRowProject}>{props.project.get('name')}</td>
-      {dates.map((date, index) => (
+      {dates.map((date) => (
         <TimeslipGridCell
           isLoading={props.isLoading}
           key={date}

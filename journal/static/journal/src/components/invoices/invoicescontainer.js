@@ -44,10 +44,10 @@ class Invoices extends React.Component {
   }
 }
 
-const mapStateToProps = ({ invoices }) => {
+const mapStateToProps = (state) => {
   return {
-    projects: invoices.projects,
-    invoices: invoices.items
+    projects: state.projects.get('items'),
+    invoices: state.invoices.items
   };
 };
 

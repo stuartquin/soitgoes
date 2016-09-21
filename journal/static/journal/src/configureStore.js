@@ -7,6 +7,7 @@ import { Iterable } from 'immutable';
 
 import timeslips from './reducers/timeslips';
 import projects from './reducers/projects';
+import invoice from './reducers/invoice';
 import invoices from './reducers/invoices';
 import user from './reducers/user';
 
@@ -30,6 +31,7 @@ const configureStore = () => {
   return createStore(combineReducers({
     timeslips,
     projects,
+    invoice,
     invoices,
     user,
     routing: routerReducer

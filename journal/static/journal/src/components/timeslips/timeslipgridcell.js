@@ -6,10 +6,15 @@ import styles from './styles.css';
 const cx = classNames.bind(styles);
 
 const TimeslipGridCell = (props) => {
+  const timeslip = props.timeslip;
   let hours;
-  if (props.timeslip) {
-    hours = props.timeslip.get('hours');
+  let isDisabled = props.isLoading;
+
+  if (timeslip) {
+    hours = timeslip.get('hours');
+    isDisabled = isDisabled || Boolean(timeslip.get('invoice'));
   }
+
 
   const className = cx({
     timeslipGridCell: true
@@ -23,7 +28,7 @@ const TimeslipGridCell = (props) => {
         onFocus={(e) => {
           e.target.select();
         }}
-        disabled={props.isLoading}
+        disabled={ isDisabled }
         onChange={(e) => props.hourChanged(e.target.value)} />
     </td>
   );
