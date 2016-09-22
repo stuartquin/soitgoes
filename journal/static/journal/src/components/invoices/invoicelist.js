@@ -14,7 +14,9 @@ const InvoiceList = (props) => {
       </thead>
       <tbody>
       {props.invoices.map(invoice => (
-        <InvoiceListRow invoice={invoice} />
+        <InvoiceListRow
+          key={invoice.id}
+          invoice={invoice} />
       ))}
       </tbody>
     </table>

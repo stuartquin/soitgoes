@@ -1,10 +1,6 @@
 'use strict';
 import React from 'react';
 
-const getTotalOwed = (project) => {
-  const total = (project.get('hourly_rate') * project.get('uninvoiced_hours'));
-  return total.toFixed(2);
-};
 
 const NewInvoiceProjectSelector = (props) => {
   return (
@@ -32,7 +28,7 @@ const NewInvoiceProjectSelector = (props) => {
                 onChange={() => props.onSelectProject(project)} />
               {project.get('name')}
             </label>
-            <span>£{getTotalOwed(project)}</span>
+            <span>{ project.get('uninvoiced_hours') } hrs</span>
           </li>
         );
       })}
@@ -44,7 +40,7 @@ const NewInvoiceProjectSelector = (props) => {
         <label>
            <input
              type='checkbox'
-             checked={true}
+             checked={props.isVAT}
              onChange={() => props.onSetVAT()} />
           Add VAT
         </label>
@@ -55,6 +51,7 @@ const NewInvoiceProjectSelector = (props) => {
         onClick={() => props.onCreateInvoice(props.selected)}>
         Create Invoice
       </button>
+
     </div>
   );
 };
@@ -64,6 +61,7 @@ class CreateInvoice extends React.Component {
     super(props);
     this.state = {
       isCreating: false,
+      isVAT: true,
       selectedProject: props.projects.first()
     };
   }
@@ -80,6 +78,12 @@ class CreateInvoice extends React.Component {
     });
   }
 
+  setVAT(vat) {
+    this.setState({
+      isVAT: vat
+    });
+  }
+
   cancel() {
     this.setState({
       isCreating: false
@@ -93,8 +97,10 @@ class CreateInvoice extends React.Component {
         <NewInvoiceProjectSelector
           projects={ this.props.projects }
           selected={ this.state.selectedProject }
+          isVAT={ this.state.isVAT }
           onSelectProject={ (project) => this.selectProject(project) }
           onCreateInvoice={ this.props.onCreateInvoice }
+          onSetVAT={(vat) => this.setVAT(vat)}
           onCancel={ () => this.cancel() }
         />
       );
@@ -118,4 +124,4 @@ class CreateInvoice extends React.Component {
   }
 }
 
-export {CreateInvoice};
+export {CreateInvoice, NewInvoiceProjectSelector};
