@@ -28,6 +28,7 @@ class Timeslips extends React.Component {
 
   render() {
     const today = moment();
+    const user = this.props.user;
 
     if (this.props.projects) {
       return (
@@ -47,7 +48,9 @@ class Timeslips extends React.Component {
             weekStart={this.props.weekStart}
             timeslips={this.props.timeslips}
             projects={this.props.projects}
-            onHourChanged={this.props.updateTimeslipValue}
+            onHourChanged={(project, date, hours) => {
+              this.props.updateTimeslipValue(project, date, hours, user.get('id'));
+            }}
             onInvoice={this.props.onInvoice}
           />
 
@@ -75,7 +78,8 @@ const mapStateToProps = (state, props) => {
     isSaving: state.timeslips.view.get('isSaving'),
     isLoading: state.timeslips.view.get('isLoading'),
     timeslips: state.timeslips.items,
-    projects: state.projects.get('items')
+    projects: state.projects.get('items'),
+    user: state.user.user
   };
 };
 

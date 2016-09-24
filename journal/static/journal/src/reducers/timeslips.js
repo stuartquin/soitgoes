@@ -19,7 +19,7 @@ const updateProjectTimeslip = (state, action) => {
       hours: action.hours,
       date: action.date,
       isNew: true,
-      user: 1 // @TODO this should be the real user
+      user: action.userId
     }));
   } else {
     updated = state.update(index, (timeslip) => {
