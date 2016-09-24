@@ -15,7 +15,6 @@ const TimeslipGridCell = (props) => {
     isDisabled = isDisabled || Boolean(timeslip.get('invoice'));
   }
 
-
   const className = cx({
     timeslipGridCell: true
   });
@@ -23,7 +22,7 @@ const TimeslipGridCell = (props) => {
   return (
     <td className={className}>
       <input
-        value={hours}
+        value={hours || ''}
         type='number'
         onFocus={(e) => {
           e.target.select();
