@@ -49,7 +49,7 @@ class Timeslips extends React.Component {
             timeslips={this.props.timeslips}
             projects={this.props.projects}
             onHourChanged={(project, date, hours) => {
-              this.props.updateTimeslipValue(project, date, hours, user.get('id'));
+              this.props.updateTimeslipValue(project, date, hours, user);
             }}
             onInvoice={this.props.onInvoice}
           />

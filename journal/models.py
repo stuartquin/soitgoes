@@ -179,6 +179,9 @@ class TimeSlip(models.Model):
         blank=True, null=True, related_name='timeslips'
     )
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return "[%s] %s" % (self.project.name, self.comment)
 
@@ -193,3 +196,45 @@ class TimeSlip(models.Model):
 
     class Meta:
         unique_together = ('user', 'project', 'date')
+
+
+class Activity(models.Model):
+    """ Activity feed of some sort """
+    user = models.ForeignKey(User)
+    created_at = models.DateTimeField(auto_now_add=True)
+    item_id = models.IntegerField()
+    status = models.CharField(max_length=255, blank=True, null=True)
+    type = models.CharField(
+        choices=(
+            ('TIM', 'TimeSlip'),
+            ('INV', 'Invoice'),
+            ('PRO', 'Project')
+        ),
+        max_length=3
+    )
+    action = models.CharField(
+        choices=(
+            ('CRE', 'Create'),
+            ('UPD', 'Update'),
+            ('DEL', 'Delete')
+        ),
+        max_length=3
+    )
+
+    @staticmethod
+    def _insert(user, id, type, action, status=None):
+        activity = Activity()
+        activity.user = user
+        activity.item_id = id
+        activity.type = type
+        activity.action = action
+        activity.status = status
+        activity.save()
+
+    @staticmethod
+    def create(user, id, type):
+        Activity._insert(user, id, type, 'CRE')
+
+    @staticmethod
+    def update(user, id, type, status=None):
+        Activity._insert(user, id, type, 'UPD', status)

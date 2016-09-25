@@ -1,15 +1,31 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
+
 import datetime
 
-from .models import Project, TimeSlip, Invoice, InvoiceItem, Account, Company, User
+import journal.models as models
 
 
-class ProjectSerializer(serializers.ModelSerializer):
+class LogActivity(serializers.ModelSerializer):
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        user = self.context['request'].user
+        models.Activity.create(user, instance.pk, self.ACTIVITY_CODE)
+        return instance
+
+    def update(self, instance, validated_data, status=None):
+        user = self.context['request'].user
+        models.Activity.update(user, instance.pk, self.ACTIVITY_CODE, status)
+        return super().update(instance, validated_data)
+
+
+class ProjectSerializer(LogActivity):
+    ACTIVITY_CODE = 'PRO'
     uninvoiced_hours = serializers.IntegerField(source='get_uninvoiced_hours')
     total_paid = serializers.IntegerField(source='get_total_paid')
 
     class Meta:
-        model = Project
+        model = models.Project
         fields = [
             'id',
             'name',
@@ -22,9 +38,11 @@ class ProjectSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class TimeSlipSerializer(serializers.ModelSerializer):
+class TimeSlipSerializer(LogActivity):
+    ACTIVITY_CODE = 'TIM'
+
     class Meta:
-        model = TimeSlip
+        model = models.TimeSlip
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -40,18 +58,18 @@ class UserSerializer(serializers.ModelSerializer):
 
 class InvoiceItemSerializer(serializers.ModelSerializer):
     def save(self, *args, **kwargs):
-        invoice = Invoice.objects.filter(
+        invoice = models.Invoice.objects.filter(
             id=self.context['request'].data['invoice']
         ).first()
         return super().save(invoice=invoice)
 
     class Meta:
-        model = InvoiceItem
+        model = models.InvoiceItem
 
 
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Company
+        model = models.Company
         fields = ('id', 'name', 'billing')
 
 
@@ -60,32 +78,35 @@ class AccountSerializer(serializers.ModelSerializer):
     users = UserSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Account
+        model = models.Account
         fields = ('id', 'company', 'users')
         depth = 1
 
 
-class InvoiceSerializer(serializers.ModelSerializer):
+class InvoiceSerializer(LogActivity):
+    ACTIVITY_CODE = 'INV'
+
     def update(self, instance, validated_data):
         request_data = self.context['request'].data
         if 'paid' in request_data and request_data['paid']:
             instance.paid_at = datetime.datetime.now()
             instance.total_paid = request_data['total_paid']
+            status = 'PAID'
         else:
+            status = 'ISSUED'
             instance.issued_at = datetime.datetime.now()
 
         if 'modifiers' in request_data and request_data['modifiers']:
-            import ipdb; ipdb.set_trace()
             instance.modifier.add(None)
 
-        return super().update(instance, validated_data)
+        return super().update(instance, validated_data, status)
 
     def save(self, *args, **kwargs):
-        project = Project.objects.filter(
+        project = models.Project.objects.filter(
             id=self.context['request'].data['project']
         ).first()
         return super().save(project=project)
 
     class Meta:
-        model = Invoice
+        model = models.Invoice
         depth = 1

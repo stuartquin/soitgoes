@@ -33,12 +33,12 @@ export const saveTimeslips = (projects, timeslips) => {
   };
 };
 
-export const updateTimeslipValue = (project, date, hours, userId) => ({
+export const updateTimeslipValue = (project, date, hours, user) => ({
   type: constants.UPDATE_PROJECT_TIMESLIPS,
   project,
   hours,
   date,
-  userId
+  user
 });
 
 export const fetchTimeslips = (invoice, start, end) => (dispatch) => {
