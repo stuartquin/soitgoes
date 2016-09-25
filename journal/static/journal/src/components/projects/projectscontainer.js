@@ -2,6 +2,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
+import {ActivityFeedContainer} from '../activityfeed/activityfeedcontainer';
 import * as projectActions from '../../actions/projects';
 
 class Projects extends React.Component {
@@ -14,6 +15,7 @@ class Projects extends React.Component {
         <div className='col-md-4'>
         </div>
         <div className='col-md-8'>
+          <ActivityFeedContainer />
         </div>
       </div>
     );

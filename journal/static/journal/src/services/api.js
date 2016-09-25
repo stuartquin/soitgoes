@@ -164,3 +164,9 @@ export const fetchVersion = () => {
   );
 };
 
+export const fetchActivityFeed = () => {
+  return fetch(buildRequest('activity/')).then(
+    res => res.json()
+  );
+};
+

@@ -83,6 +83,11 @@ class AccountSerializer(serializers.ModelSerializer):
         depth = 1
 
 
+class ActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Activity
+
+
 class InvoiceSerializer(LogActivity):
     ACTIVITY_CODE = 'INV'
 

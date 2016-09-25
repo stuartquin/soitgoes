@@ -23,6 +23,7 @@ urlpatterns = [
 
     url(r'api/accounts/$', apiviews.AccountList.as_view()),
     url(r'api/user/$', apiviews.UserDetail.as_view()),
+    url(r'api/activity/$', apiviews.ActivityFeedList.as_view()),
 
     url(r'api/version/$', apiviews.Version.as_view()),
 
