@@ -53,6 +53,13 @@ export const fetchTimeslips = (invoice=null, start, end) => {
   );
 };
 
+export const fetchByIds = (type, ids) => {
+  let url = `${type}/?ids=${ids.join(',')}`;
+  return fetch(buildRequest(url)).then(
+    res => res.json()
+  );
+};
+
 export const fetchProjects = () => {
   return fetch(buildRequest('projects/')).then(
     res => res.json()

@@ -15,13 +15,6 @@ const savingTimeslips = () => {
   };
 };
 
-const getTimeslipsById = (timeslips) => {
-  return timeslips.reduce((prev, current) => {
-    prev[current.id] = current;
-    return prev;
-  }, {});
-};
-
 export const saveTimeslips = (existingTimeslips, newTimeslips) => {
   const updates = existingTimeslips.filter(t => t.get('isUpdated'));
   let calls = [api.updateTmeslips(updates)];
@@ -63,7 +56,7 @@ export const fetchTimeslips = (invoice, start, end) => (dispatch) => {
   return api.fetchTimeslips(invoice, startDate, endDate).then(res => {
     dispatch({
       type: constants.GET_TIMESLIPS_SUCCESS,
-      timeslips: getTimeslipsById(res.results)
+      timeslips: res.results
     });
   });
 };

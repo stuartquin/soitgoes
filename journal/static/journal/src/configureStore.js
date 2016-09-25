@@ -6,6 +6,7 @@ import thunk from 'redux-thunk';
 import { Iterable } from 'immutable';
 
 import timeslips from './reducers/timeslips';
+import activityFeed from './reducers/activityfeed';
 import projects from './reducers/projects';
 import invoice from './reducers/invoice';
 import invoices from './reducers/invoices';
@@ -29,6 +30,7 @@ const logger = createLogger({
 
 const configureStore = () => {
   return createStore(combineReducers({
+    activityFeed,
     timeslips,
     projects,
     invoice,

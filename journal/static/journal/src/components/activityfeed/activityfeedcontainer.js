@@ -2,8 +2,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
+import * as activityActions from '../../actions/activityfeed';
+
 class ActivityFeed extends React.Component {
   componentDidMount() {
+    this.props.fetchActivityFeed();
   }
 
   render() {
@@ -21,6 +24,7 @@ const mapStateToProps = (state, { params }) => {
 };
 
 const actions = {
+  ...activityActions
 };
 
 const ActivityFeedContainer = connect(mapStateToProps, actions)(ActivityFeed);

@@ -5,6 +5,13 @@ import { combineReducers } from 'redux';
 
 import constants from '../constants';
 
+const getTimeslipsById = (timeslips) => {
+  return timeslips.reduce((prev, current) => {
+    prev[current.id] = current;
+    return prev;
+  }, {});
+};
+
 const updateProjectTimeslip = (state, action) => {
   const timeslip = action.timeslip;
   return state.set(timeslip.get('id'), timeslip.merge({
@@ -33,7 +40,8 @@ const setActiveDate = (state, action) => {
 const items = (state = Immutable.Map(), action) => {
   switch(action.type) {
   case constants.GET_TIMESLIPS_SUCCESS:
-    return state.merge(Immutable.fromJS(action.timeslips));
+    const timeslips = getTimeslipsById(action.timeslips);
+    return state.merge(Immutable.fromJS(timeslips));
 
   case constants.UPDATE_PROJECT_TIMESLIP:
     return updateProjectTimeslip(state, action);
