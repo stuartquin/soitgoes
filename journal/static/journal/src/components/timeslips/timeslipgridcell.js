@@ -28,7 +28,7 @@ const TimeslipGridCell = (props) => {
           e.target.select();
         }}
         disabled={ isDisabled }
-        onChange={(e) => props.hourChanged(e.target.value)} />
+        onChange={(e) => props.onHourChanged(e.target.value, timeslip)} />
     </td>
   );
 };

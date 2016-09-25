@@ -2,6 +2,7 @@
 import constants from '../constants';
 import * as api from '../services/api';
 
+
 const saveTimeslipsSuccess = () => {
   return {
     type: constants.SAVE_TIMESLIPS_SUCCESS
@@ -14,13 +15,19 @@ const savingTimeslips = () => {
   };
 };
 
-export const saveTimeslips = (projects, timeslips) => {
-  const updates = timeslips.filter(t => t.get('isUpdated') && !t.get('isNew'));
-  const creates = timeslips.filter(t => t.get('isNew'));
+const getTimeslipsById = (timeslips) => {
+  return timeslips.reduce((prev, current) => {
+    prev[current.id] = current;
+    return prev;
+  }, {});
+};
+
+export const saveTimeslips = (existingTimeslips, newTimeslips) => {
+  const updates = existingTimeslips.filter(t => t.get('isUpdated'));
   let calls = [api.updateTmeslips(updates)];
 
-  if (creates.size) {
-    calls = calls.concat(api.createTimeslips(creates));
+  if (newTimeslips.size) {
+    calls = calls.concat(api.createTimeslips(newTimeslips));
   }
 
   return (dispatch) => {
@@ -33,13 +40,21 @@ export const saveTimeslips = (projects, timeslips) => {
   };
 };
 
-export const updateTimeslipValue = (project, date, hours, user) => ({
-  type: constants.UPDATE_PROJECT_TIMESLIPS,
-  project,
-  hours,
-  date,
-  user
-});
+export const hourChanged = (project, date, hours, user, timeslip) => {
+  let action = {
+    project,
+    hours,
+    date,
+    user,
+    timeslip
+  };
+  if (timeslip) {
+    action.type = constants.UPDATE_PROJECT_TIMESLIP;
+  } else {
+    action.type = constants.ADD_PROJECT_TIMESLIP;
+  }
+  return action;
+};
 
 export const fetchTimeslips = (invoice, start, end) => (dispatch) => {
   const startDate = start.format('YYYY-MM-DD');
@@ -48,7 +63,7 @@ export const fetchTimeslips = (invoice, start, end) => (dispatch) => {
   return api.fetchTimeslips(invoice, startDate, endDate).then(res => {
     dispatch({
       type: constants.GET_TIMESLIPS_SUCCESS,
-      timeslips: res.results
+      timeslips: getTimeslipsById(res.results)
     });
   });
 };

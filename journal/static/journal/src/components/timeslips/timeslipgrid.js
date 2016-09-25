@@ -46,8 +46,8 @@ const TimeslipGrid = (props) => {
                 onInvoice={() => {
                   props.onInvoice(project);
                 }}
-                hourChanged={(hours, date) => {
-                  props.onHourChanged(project, date, hours || 0);
+                onHourChanged={(hours, date, timeslip) => {
+                  props.onHourChanged(project, date, hours || 0, timeslip);
                 }} />
             ))}
           </tbody>

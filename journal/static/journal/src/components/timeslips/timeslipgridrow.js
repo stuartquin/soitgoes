@@ -20,8 +20,8 @@ const TimeslipGridRow = (props) => {
           key={date}
           date={date}
           today={props.today.format('YYYY-MM-DD')}
-          hourChanged={(value) => {
-            props.hourChanged(value, date);
+          onHourChanged={(value, timeslip) => {
+            props.onHourChanged(value, date, timeslip);
           }}
           timeslip={filledTimeslips[date]} />
       ))}

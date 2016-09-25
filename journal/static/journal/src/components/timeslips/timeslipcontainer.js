@@ -29,6 +29,9 @@ class Timeslips extends React.Component {
   render() {
     const today = moment();
     const user = this.props.user;
+    const existingTimeslips = this.props.timeslips.toList();
+    const newTimeslips = this.props.newTimeslips.toList();
+    const timeslips = existingTimeslips.concat(newTimeslips);
 
     if (this.props.projects) {
       return (
@@ -46,10 +49,10 @@ class Timeslips extends React.Component {
             today={today}
             isLoading={this.props.isLoading}
             weekStart={this.props.weekStart}
-            timeslips={this.props.timeslips}
+            timeslips={timeslips}
             projects={this.props.projects}
-            onHourChanged={(project, date, hours) => {
-              this.props.updateTimeslipValue(project, date, hours, user);
+            onHourChanged={(project, date, hours, timeslip) => {
+              this.props.hourChanged(project, date, hours, user, timeslip);
             }}
             onInvoice={this.props.onInvoice}
           />
@@ -57,7 +60,7 @@ class Timeslips extends React.Component {
           <div className='col-md-3'>
             <LoadingButton
               onClick={() => {
-                this.props.saveTimeslips(this.props.projects, this.props.timeslips)
+                this.props.saveTimeslips(existingTimeslips, newTimeslips)
               }}
               className='btn btn-success btn-block btn-raised'
               text='Save'
@@ -77,6 +80,7 @@ const mapStateToProps = (state, props) => {
     weekStart: state.timeslips.view.get('weekStart'),
     isSaving: state.timeslips.view.get('isSaving'),
     isLoading: state.timeslips.view.get('isLoading'),
+    newTimeslips: state.timeslips.view.get('toAdd'),
     timeslips: state.timeslips.items,
     projects: state.projects.get('items'),
     user: state.user.user

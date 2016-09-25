@@ -6,39 +6,36 @@ import { combineReducers } from 'redux';
 import constants from '../constants';
 
 const updateProjectTimeslip = (state, action) => {
-  const project = action.project;
-  const date = action.date;
-  const index = state.findIndex((t) => {
-    return t.get('project') === project.get('id') && t.get('date') === date;
-  });
+  const timeslip = action.timeslip;
+  return state.set(timeslip.get('id'), timeslip.merge({
+    hours: action.hours,
+    isUpdated: true
+  }));
+};
 
-  let updated;
-  if (index === -1) {
-    updated = state.push(Immutable.Map({
-      project: action.project.get('id'),
-      hours: action.hours,
-      date: action.date,
-      isNew: true,
-      user: action.user.get('id')
-    }));
-  } else {
-    updated = state.update(index, (timeslip) => {
-      return timeslip.set('hours', action.hours).set('isUpdated', true);
-    });
-  }
-  return updated;
+const addProjectTimeslip = (state, action) => {
+  const project = action.project;
+  const key = `${project.get('id')}|${action.date}`;
+
+  return state.setIn(['toAdd', key], Immutable.Map({
+    project: action.project.get('id'),
+    hours: action.hours,
+    date: action.date,
+    isNew: true,
+    user: action.user.get('id')
+  }));
 };
 
 const setActiveDate = (state, action) => {
   return state.set('weekStart', action.date);
 };
 
-const items = (state = Immutable.List([]), action) => {
+const items = (state = Immutable.Map(), action) => {
   switch(action.type) {
   case constants.GET_TIMESLIPS_SUCCESS:
-    return Immutable.fromJS(action.timeslips).toList();
+    return state.merge(Immutable.fromJS(action.timeslips));
 
-  case constants.UPDATE_PROJECT_TIMESLIPS:
+  case constants.UPDATE_PROJECT_TIMESLIP:
     return updateProjectTimeslip(state, action);
 
   default:
@@ -51,11 +48,14 @@ const view = (state, action) => {
     return Immutable.Map({
       weekStart: moment().startOf('isoweek'),
       isSaving: false,
-      isLoading: false
+      isLoading: false,
+      toAdd: Immutable.Map()
     });
   }
 
   switch (action.type) {
+  case constants.ADD_PROJECT_TIMESLIP:
+    return addProjectTimeslip(state, action);
   case constants.SET_TIMESLIP_ACTIVE_DATE:
     return setActiveDate(state, action);
   case constants.SAVE_TIMESLIPS_START:
