@@ -29,9 +29,10 @@ class Invoice extends React.Component {
 
   render() {
     const invoice = this.props.invoice;
-    if (this.props.projects.isEmpty() || invoice.isEmpty()) {
+    if (this.props.projects.isEmpty() || this.props.isLoading) {
       return (<strong>Loading...</strong>);
     }
+
     const project = this.props.projects.find(proj =>
       proj.get('id') === invoice.get('project').get('id')
     );
@@ -95,6 +96,7 @@ const getInvoiceProject = (projects, invoice) => {
 const mapStateToProps = (state, { params }) => {
   const invoice = state.invoice;
   return {
+    isLoading: invoice.view.get('isLoading'),
     invoice: invoice.details,
     invoiceItems: invoice.additionalItems,
     timeslips: invoice.timeslips,
