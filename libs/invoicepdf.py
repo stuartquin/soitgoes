@@ -18,6 +18,15 @@ def get_pdf_file(invoice):
         return None
 
 
+def remove_pdf_file(invoice):
+    """
+    Removes the file, should be called on update
+    """
+    file_name = INVOICE_DIR + invoice.pdf_name
+    if os.path.isfile(file_name):
+        os.remove(file_name)
+
+
 def get_invoice_modifiers(modifiers, value):
     for mod in modifiers:
         mod.impact = (value / 100) * mod.percent
@@ -45,7 +54,7 @@ def render(invoice):
         'timeslips': timeslips,
         'items': invoice.items.all(),
         'modifiers': modifiers,
-        'sent_date': datetime.datetime.now().strftime('%d %B %Y'),
+        'sent_date': invoice.issued_at.strftime('%d %B %Y'),
         'total': invoice.total_due
     }
 

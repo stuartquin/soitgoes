@@ -126,6 +126,8 @@ class Invoice(models.Model):
             self.set_total_due()
             super().save(*args, **kwargs)
 
+        invoicepdf.remove_pdf_file(self)
+
     def get_modifier_value(self, value):
         impact = 0
         for mod in self.modifier.all():
