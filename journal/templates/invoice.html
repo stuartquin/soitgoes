@@ -52,6 +52,10 @@ table {
     width: 100%;
 }
 
+.spacer {
+  height: 30px;
+}
+
 th {
     text-align: left;
 }
@@ -128,22 +132,28 @@ tr.total td {
             <th>Details</th><th>Unit Price</th><th>Subtotal (&pound;)</th>
           </tr>
           {% for timeslip in timeslips %}
-          <tr class='{% if forloop.counter|divisibleby:2 %}alt{% endif %}'>
+          <tr>
             <td>{{ timeslip.hours }} Hours on {{ timeslip.date }}: {{ timeslip.project.name }}</td>
             <td>{{ timeslip.project.hourly_rate }}</td>
             <td>{{ timeslip.project.hourly_rate|multiply:timeslip.hours|floatformat:2 }}</td>
           </tr>
           {% endfor %}
           {% for item in items %}
-          <tr class='{% if forloop.counter|divisibleby:2 %}alt{% endif %}'>
+          <tr>
             <td>
               {{ item.name }} ({{ item.qty }}{%if item.unit %} x {{item.unit}}{% endif %}) </td>
             <td>{{ item.cost_per_unit }}</td>
             <td>{{ item.qty|multiply:item.cost_per_unit|floatformat:2}}</td>
           </tr>
           {% endfor %}
+          <tr class='total'>
+            <td></td>
+            <td><strong>Subtotal</strong></td>
+            <td><strong>{{ invoice.subtotal_due|floatformat:2 }}</strong></td>
+          </tr>
+          <tr class='spacer'></tr>
           {% for item in modifiers %}
-          <tr class='modifiers {% if forloop.counter|divisibleby:2 %}alt{% endif %}'>
+          <tr>
             <td>{{ item.name }}</td>
             <td>{{ item.percent }}%</td>
             <td>{{ item.impact|floatformat:2  }}</td>
@@ -152,7 +162,7 @@ tr.total td {
           <tr class='total'>
             <td></td>
             <td><strong>Total</strong></td>
-            <td><strong>{{ total|floatformat:2}}</strong></td>
+            <td><strong>{{ invoice.total_due|floatformat:2}}</strong></td>
           </tr>
         </table>
       </section>

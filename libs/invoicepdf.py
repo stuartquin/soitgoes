@@ -55,7 +55,6 @@ def render(invoice):
         'items': invoice.items.all(),
         'modifiers': modifiers,
         'sent_date': invoice.issued_at.strftime('%d %B %Y'),
-        'total': invoice.total_due
     }
 
     with open(html_name, 'w') as output:
