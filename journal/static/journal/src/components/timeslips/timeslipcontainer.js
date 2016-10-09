@@ -82,7 +82,7 @@ const mapStateToProps = (state, props) => {
     isLoading: state.timeslips.view.get('isLoading'),
     newTimeslips: state.timeslips.view.get('toAdd'),
     timeslips: state.timeslips.items,
-    projects: state.projects.get('items'),
+    projects: state.projects.items,
     user: state.user.user
   };
 };

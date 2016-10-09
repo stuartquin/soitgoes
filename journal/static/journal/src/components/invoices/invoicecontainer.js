@@ -100,7 +100,7 @@ const mapStateToProps = (state, { params }) => {
     invoice: invoice.details,
     invoiceItems: invoice.additionalItems,
     timeslips: invoice.timeslips,
-    projects: state.projects.get('items'),
+    projects: state.projects.items,
     invoiceId: params.id
   };
 };

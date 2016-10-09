@@ -1,28 +1,35 @@
 'use strict';
 import Immutable from 'immutable';
+import { combineReducers } from 'redux';
 
 import constants from '../constants';
 
-const initialState = () => {
-  return Immutable.Map({
-    items: Immutable.List([]),
-    view: Immutable.Map({})
-  });
+const getProjectsById = (items) => {
+  return items.reduce((prev, current) => {
+    prev[current.id] = current;
+    return prev;
+  }, {});
 };
 
-const setProjects = (state, projects) => {
-  return state.set('items', Immutable.fromJS(projects));
-};
-
-export default function(state, action) {
-  switch(action.type) {
-    case constants.GET_PROJECTS_SUCCESS:
-      return setProjects(state, action.projects);
-  }
-
-  if (state) {
+const view = (state = Immutable.Map({}), action) => {
+  switch (action.type) {
+  default:
     return state;
-  } else {
-    return initialState();
   }
-}
+};
+
+const items = (state = Immutable.Map({}), action) => {
+  switch(action.type) {
+  case constants.GET_PROJECTS_SUCCESS:
+    return state.merge(Immutable.fromJS(getProjectsById(action.projects)));
+  default:
+    return state;
+  }
+};
+
+const projects = combineReducers({
+  items,
+  view
+});
+
+export default projects;

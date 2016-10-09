@@ -44,7 +44,7 @@ class Invoices extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    projects: state.projects.get('items'),
+    projects: state.projects.items,
     invoices: state.invoices.items
   };
 };
