@@ -84,7 +84,7 @@ class ActivityFeedList(generics.ListAPIView):
     serializer_class = serializers.ActivitySerializer
 
     def get_queryset(self):
-        return models.Activity.objects.all().order_by('-created_at')
+        return models.Activity.objects.all().order_by('-created_at')[:10]
 
 
 class ProjectDetail(APIView):
@@ -107,8 +107,15 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.InvoiceSerializer
 
     def get_queryset(self):
+        if 'ids' in self.request.query_params:
+            ids = self.request.query_params['ids'].split(',')
+            return models.Invoice.objects.filter(id__in=ids)
+
         null = models.Invoice.objects.filter(issued_at__isnull=True)
-        not_null = models.Invoice.objects.filter(issued_at__isnull=False).order_by('-issued_at')
+        not_null = models.Invoice.objects.filter(
+            issued_at__isnull=False
+        ).order_by('-issued_at')
+
         return [item for item in null] + [item for item in not_null]
 
 

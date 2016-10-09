@@ -51,12 +51,13 @@ export const fetchInvoices = () => (dispatch) => {
   dispatch({
     type: constants.CLEAR_INVOICE_TIMESLIPS
   });
-  api.fetchInvoices().then(invoices =>
+  api.fetchInvoices().then(res => {
+    const invoices = res.results;
     dispatch({
       type: constants.GET_INVOICES_SUCCESS,
       invoices
     })
-  );
+  });
 };
 
 export const fetchInvoiceTimeslips = (invoiceId) => (dispatch) => {

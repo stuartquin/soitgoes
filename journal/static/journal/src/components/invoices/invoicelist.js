@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { InvoiceListRow } from './invoicelistrow';
 
 const InvoiceList = (props) => {
@@ -16,6 +15,7 @@ const InvoiceList = (props) => {
       {props.invoices.map(invoice => (
         <InvoiceListRow
           key={invoice.id}
+          project={props.projects.get(`${invoice.project}`)}
           invoice={invoice} />
       ))}
       </tbody>

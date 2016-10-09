@@ -1,8 +1,7 @@
 'use strict';
 import Immutable from 'immutable';
 import moment from 'moment';
-import { combineReducers } from 'redux';
-
+import { combineReducers } from 'redux'; 
 import constants from '../constants';
 
 const getTimeslipsById = (timeslips) => {

@@ -114,4 +114,3 @@ class InvoiceSerializer(LogActivity):
 
     class Meta:
         model = models.Invoice
-        depth = 1

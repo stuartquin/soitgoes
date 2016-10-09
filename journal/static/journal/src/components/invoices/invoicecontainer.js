@@ -33,10 +33,7 @@ class Invoice extends React.Component {
       return (<strong>Loading...</strong>);
     }
 
-    const project = this.props.projects.find(proj =>
-      proj.get('id') === invoice.get('project').get('id')
-    );
-
+    const project = this.props.projects.get(`${invoice.get('project')}`)
     const isIssued = !!invoice.get('issued_at');
 
     return (

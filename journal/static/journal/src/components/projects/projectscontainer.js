@@ -11,21 +11,21 @@ class Projects extends React.Component {
   }
 
   render() {
-    if (this.props.projects) {
-      return (
-        <div className='row'>
-          <div className='col-md-4'>
-          </div>
-          <div className='col-md-8'>
-            <ActivityFeedContainer
-              projects={this.props.projects}
-            />
-          </div>
-        </div>
-      );
-    } else {
+    if (this.props.projects.isEmpty()) {
       return (<div>Loading</div>);
     }
+
+    return (
+      <div className='row'>
+        <div className='col-md-4'>
+        </div>
+        <div className='col-md-8'>
+          <ActivityFeedContainer
+            projects={this.props.projects}
+          />
+        </div>
+      </div>
+    );
   }
 }
 

@@ -4,10 +4,17 @@ import Immutable from 'immutable';
 
 import constants from '../constants';
 
-const items = (state = Immutable.List([]), action) => {
+const getInvoicesById = (items) => {
+  return items.reduce((prev, current) => {
+    prev[current.id] = current;
+    return prev;
+  }, {});
+};
+
+const items = (state = Immutable.Map(), action) => {
   switch (action.type) {
   case constants.GET_INVOICES_SUCCESS:
-    return Immutable.List(action.invoices.results);
+    return Immutable.Map(getInvoicesById(action.invoices));
   default:
     return state;
   }

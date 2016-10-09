@@ -11,12 +11,24 @@ const fetchTimeslipsByIds = (ids) => (dispatch) => {
   });
 };
 
+const fetchInvoicesByIds = (ids) => (dispatch) => {
+  return api.fetchByIds('invoices', ids).then(res => {
+    dispatch({
+      type: constants.GET_INVOICES_SUCCESS,
+      invoices: res.results
+    });
+  });
+};
+
 export const fetchActivityFeed = () => (dispatch) =>
   api.fetchActivityFeed().then(res => {
     const feed = res.results;
     let promises = [];
     const timeslipIds = feed.filter((f) => f.type === 'TIM').map(f => f.item_id);
+    const invoiceIds = feed.filter((f) => f.type === 'INV').map(f => f.item_id);
+
     promises.push(dispatch(fetchTimeslipsByIds(timeslipIds)));
+    promises.push(dispatch(fetchInvoicesByIds(invoiceIds)));
 
     return Promise.all(promises).then(() => {
       dispatch({

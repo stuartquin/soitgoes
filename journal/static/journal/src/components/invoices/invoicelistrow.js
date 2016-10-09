@@ -19,7 +19,7 @@ const InvoiceListRow = (props) => {
     <tr className={ styles.invoiceListRow }>
       <td>
         <Link to={`/invoices/${invoice.id}`}>
-        {invoice.project.name} #{invoice.sequence_num}
+        {props.project.get('name')} #{invoice.sequence_num}
         </Link>
       </td>
       <td>
