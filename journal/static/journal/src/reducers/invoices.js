@@ -11,10 +11,10 @@ const getInvoicesById = (items) => {
   }, {});
 };
 
-const items = (state = Immutable.Map(), action) => {
+const items = (state = Immutable.OrderedMap(), action) => {
   switch (action.type) {
   case constants.GET_INVOICES_SUCCESS:
-    return Immutable.Map(getInvoicesById(action.invoices));
+    return Immutable.OrderedMap(getInvoicesById(action.invoices)).reverse();
   default:
     return state;
   }
