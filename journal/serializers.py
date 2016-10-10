@@ -88,6 +88,11 @@ class ActivitySerializer(serializers.ModelSerializer):
         model = models.Activity
 
 
+class InvoiceModifierSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.InvoiceModifier
+
+
 class InvoiceSerializer(LogActivity):
     ACTIVITY_CODE = 'INV'
 
@@ -102,6 +107,7 @@ class InvoiceSerializer(LogActivity):
             instance.issued_at = datetime.datetime.now()
 
         if 'modifiers' in request_data and request_data['modifiers']:
+            # TODO this looks weird...
             instance.modifier.add(None)
 
         return super().update(instance, validated_data, status)

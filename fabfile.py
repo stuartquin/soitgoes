@@ -41,7 +41,7 @@ def deploy():
 
         with context_managers.prefix('source ~/venvs/soitgoes/bin/activate'):
             run('python manage.py collectstatic --no-input -i node_modules')
-            run("python manage.py showmigrations | grep '\[ \]'")
+            run('python manage.py showmigrations')
 
         run('git rev-parse HEAD > version.txt')
         run('service soitgoes restart')

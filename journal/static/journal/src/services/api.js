@@ -91,6 +91,12 @@ export const fetchInvoice = (invoiceId) => {
   );
 };
 
+export const fetchInvoiceModifiers = (invoiceId) => {
+  return fetch(buildRequest(`invoices/${invoiceId}/modifiers`)).then(
+    res => res.json()
+  );
+};
+
 export const issueInvoice = (invoiceId, projectId, timeslips) => {
   const req = buildRequest(`invoices/${invoiceId}`, 'PUT', {
     project: projectId,

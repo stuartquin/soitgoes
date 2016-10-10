@@ -48,6 +48,15 @@ const additionalItems = (state = Immutable.List([]), action) => {
   }
 };
 
+const modifiers = (state = Immutable.List([]), action) => {
+  switch (action.type) {
+  case constants.GET_INVOICE_MODIFIERS_SUCCESS:
+    return Immutable.fromJS(action.modifiers || []);
+  default:
+    return state;
+  }
+};
+
 const view = (state, action) => {
   if (!state) {
     return Immutable.Map({
@@ -69,7 +78,8 @@ const invoice = combineReducers({
   view,
   details,
   timeslips,
-  additionalItems
+  additionalItems,
+  modifiers
 });
 
 export default invoice;

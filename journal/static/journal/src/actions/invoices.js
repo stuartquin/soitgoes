@@ -39,7 +39,18 @@ export const createInvoice = (project) => (dispatch) => {
 };
 
 export const fetchInvoice = (invoiceId) => (dispatch) => {
-  return api.fetchInvoice(invoiceId).then(invoice =>
+  dispatch({
+    type: constants.GET_INVOICE_START
+  });
+
+  return api.fetchInvoiceModifiers(invoiceId).then((res) => {
+    const modifiers = res.results;
+    dispatch({
+      type: constants.GET_INVOICE_MODIFIERS_SUCCESS,
+      modifiers
+    });
+    return api.fetchInvoice(invoiceId);
+  }).then(invoice =>
     dispatch({
       type: constants.GET_INVOICE_SUCCESS,
       invoice
@@ -56,7 +67,7 @@ export const fetchInvoices = () => (dispatch) => {
     dispatch({
       type: constants.GET_INVOICES_SUCCESS,
       invoices
-    })
+    });
   });
 };
 

@@ -54,6 +54,7 @@ const InvoiceInfo = (props) => {
         project={project}
         invoice={invoice}
         timeslips={props.timeslips}
+        modifiers={props.modifiers}
         invoiceItems={props.invoiceItems}
         total={props.total}
       />

@@ -44,6 +44,7 @@ class Invoice extends React.Component {
             project={project}
             invoice={invoice}
             timeslips={this.props.timeslips}
+            modifiers={this.props.modifiers}
             invoiceItems={this.props.invoiceItems}
             onDelete={() =>
               this.props.deleteInvoice(invoice.get('id'))
@@ -98,7 +99,8 @@ const mapStateToProps = (state, { params }) => {
     invoiceItems: invoice.additionalItems,
     timeslips: invoice.timeslips,
     projects: state.projects.items,
-    invoiceId: params.id
+    invoiceId: params.id,
+    modifiers: invoice.modifiers
   };
 };
 

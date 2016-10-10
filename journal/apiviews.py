@@ -119,6 +119,13 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         return [item for item in null] + [item for item in not_null]
 
 
+class InvoiceModifiers(generics.ListAPIView):
+    permission_classes = (HasInvoiceAccess,)
+    serializer_class = serializers.InvoiceModifierSerializer
+
+    def get_queryset(self):
+        return models.Invoice.objects.get(**self.kwargs).modifier.all()
+
 class InvoiceItem(generics.DestroyAPIView):
     serializer_class = serializers.InvoiceItemSerializer
     queryset = models.InvoiceItem.objects.all()

@@ -31,7 +31,7 @@ const InvoiceSummary = (props) => {
 
   const subTotal = itemTotal + (props.project.get('hourly_rate') * totalHours);
 
-  const total = props.invoice.get('modifier').reduce((prev, current) =>
+  const total = props.modifiers.reduce((prev, current) =>
     prev + getModifierImpact(subTotal, current)
   , subTotal);
 
@@ -54,7 +54,7 @@ const InvoiceSummary = (props) => {
         value={subTotal}
       />
       <hr />
-      {props.invoice.get('modifier').map((modifier) => (
+      {props.modifiers.map((modifier) => (
         <InvoiceSummaryRow
           key={2 + modifier.get('id')}
           title={modifier.get('name')}
