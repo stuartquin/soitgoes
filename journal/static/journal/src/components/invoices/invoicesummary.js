@@ -1,8 +1,6 @@
 'use strict';
 import React from 'react';
 
-import styles from './styles.css';
-
 import { InvoiceSummaryRow } from './invoicesummaryrow';
 
 const getModifierImpact = (subTotal, modifier) => {
@@ -11,11 +9,11 @@ const getModifierImpact = (subTotal, modifier) => {
 
 const InvoiceSummaryTotal = (props) => {
   return (
-    <div className={styles.invoiceSummaryTotal}>
-      <strong className={styles.invoiceSummaryTotalTitle}>{props.title}</strong>
-      <h6 className={ styles.invoiceSummaryValue }>
+    <div className='invoice-summary-total'>
+      <strong className='title'>{props.title}</strong>
+      <span className='value'>
         {`£${props.value.toFixed(2)}`}
-      </h6>
+      </span>
     </div>
   );
 };
