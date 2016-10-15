@@ -25,11 +25,11 @@ export const deleteInvoice = (invoiceId) => (dispatch) =>
     dispatch(push(`/invoices`));
   });
 
-export const createInvoice = (project) => (dispatch) => {
+export const createInvoice = (project, isVAT) => (dispatch) => {
   dispatch({
     type: constants.CLEAR_INVOICE_TIMESLIPS
   });
-  api.createInvoice(project).then(invoice => {
+  api.createInvoice(project, isVAT).then(invoice => {
     dispatch({
       type: constants.CREATE_INVOICE_SUCCESS,
       invoice

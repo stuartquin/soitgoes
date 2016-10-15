@@ -78,8 +78,11 @@ export const updateTmeslips = (timeslips) => {
   }));
 };
 
-export const createInvoice = (project) => {
-  const req = buildRequest('invoices/', 'POST', {project: project.get('id')});
+export const createInvoice = (project, isVAT) => {
+  const req = buildRequest('invoices/', 'POST', {
+    project: project.get('id'),
+    isVAT
+  });
   return fetch(req).then(
     res => res.json()
   );

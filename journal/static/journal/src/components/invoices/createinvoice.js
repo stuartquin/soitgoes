@@ -48,7 +48,7 @@ const NewInvoiceProjectSelector = (props) => {
 
       <button key={1}
         className='btn btn-block btn-success btn-raised'
-        onClick={() => props.onCreateInvoice(props.selected)}>
+        onClick={() => props.onCreateInvoice(props.selected, props.isVAT)}>
         Create Invoice
       </button>
 

@@ -5,6 +5,8 @@ import datetime
 
 import journal.models as models
 
+VAT_MODIFIER_ID = 1
+
 
 class LogActivity(serializers.ModelSerializer):
     def create(self, validated_data):
@@ -96,6 +98,11 @@ class InvoiceModifierSerializer(serializers.ModelSerializer):
 class InvoiceSerializer(LogActivity):
     ACTIVITY_CODE = 'INV'
 
+    def _add_vat_modifier(self, invoice):
+        modifier = models.InvoiceModifier.objects.get(pk=VAT_MODIFIER_ID)
+        invoice.modifier.add(modifier)
+        invoice.save()
+
     def update(self, instance, validated_data):
         request_data = self.context['request'].data
         if 'paid' in request_data and request_data['paid']:
@@ -116,7 +123,12 @@ class InvoiceSerializer(LogActivity):
         project = models.Project.objects.filter(
             id=self.context['request'].data['project']
         ).first()
-        return super().save(project=project)
+        invoice = super().save(project=project,)
+
+        if 'isVAT' in self.context['request'].data:
+            self._add_vat_modifier(invoice)
+
+        return invoice
 
     class Meta:
         model = models.Invoice
