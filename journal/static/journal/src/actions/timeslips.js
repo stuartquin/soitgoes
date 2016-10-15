@@ -1,6 +1,7 @@
 'use strict';
 import constants from '../constants';
 import * as api from '../services/api';
+import { fetchProjects } from './projects';
 
 
 const saveTimeslipsSuccess = () => {
@@ -27,7 +28,10 @@ export const saveTimeslips = (existingTimeslips, newTimeslips) => {
     dispatch(savingTimeslips());
 
     return Promise.all(calls).then(
-      () => dispatch(saveTimeslipsSuccess()),
+      () => {
+        dispatch(fetchProjects());
+        return dispatch(saveTimeslipsSuccess());
+      },
       error => console.error(error) // eslint-disable-line
     );
   };
@@ -41,7 +45,7 @@ export const hourChanged = (project, date, hours, user, timeslip) => {
     user,
     timeslip
   };
-  if (timeslip) {
+  if (timeslip && timeslip.get('id')) {
     action.type = constants.UPDATE_PROJECT_TIMESLIP;
   } else {
     action.type = constants.ADD_PROJECT_TIMESLIP;
