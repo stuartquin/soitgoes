@@ -91,13 +91,18 @@ const getInvoiceProject = (projects, invoice) => {
   return projects.find((x) => x.get('id') === invoice.get('project').get('id'));
 };
 
+const getInvoiceTimeslips = (invoice, timeslips) => {
+  const invoiceId = invoice.get('id');
+  return timeslips.filter((t) => t.get('invoice') === invoiceId);
+}
+
 const mapStateToProps = (state, { params }) => {
   const invoice = state.invoice;
   return {
     isLoading: invoice.view.get('isLoading'),
     invoice: invoice.details,
     invoiceItems: invoice.additionalItems,
-    timeslips: invoice.timeslips,
+    timeslips: getInvoiceTimeslips(invoice.details, state.timeslips.items),
     projects: state.projects.items,
     invoiceId: params.id,
     modifiers: invoice.modifiers

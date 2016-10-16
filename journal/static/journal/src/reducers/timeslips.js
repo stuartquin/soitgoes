@@ -6,17 +6,17 @@ import constants from '../constants';
 
 const getTimeslipsById = (timeslips) => {
   return timeslips.reduce((prev, current) => {
-    prev[current.id] = current;
+    prev[parseInt(current.id, 10)] = current;
     return prev;
   }, {});
 };
 
 const updateProjectTimeslip = (state, action) => {
   const timeslip = action.timeslip;
-  return state.set(timeslip.get('id'), timeslip.merge({
+  return state.mergeIn(['' + timeslip.get('id')], {
     hours: action.hours,
     isUpdated: true
-  }));
+  });
 };
 
 const addProjectTimeslip = (state, action) => {

@@ -74,7 +74,7 @@ export const fetchInvoices = () => (dispatch) => {
 export const fetchInvoiceTimeslips = (invoiceId) => (dispatch) => {
   api.fetchTimeslips(invoiceId, null, null).then(res => {
     dispatch({
-      type: constants.GET_INVOICE_TIMESLIPS_SUCCESS,
+      type: constants.GET_TIMESLIPS_SUCCESS,
       timeslips: res.results
     });
   });
@@ -89,10 +89,11 @@ export const fetchInvoiceItems = (invoiceId) => (dispatch) =>
   });
 
 export const deleteInvoiceTimeslip = (invoiceId, timeslip) => (dispatch) => {
-  dispatch({
-    type: constants.CLEAR_INVOICE_TIMESLIPS
-  });
-  api.updateTmeslips([timeslip.set('invoice', null)]).then(() => {
+  api.updateTmeslips([timeslip.set('invoice', null)]).then((timeslips) => {
+    dispatch({
+      type: constants.GET_TIMESLIPS_SUCCESS,
+      timeslips
+    });
     dispatch(fetchInvoiceTimeslips(invoiceId));
   });
 };

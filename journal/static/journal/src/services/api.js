@@ -74,7 +74,7 @@ export const createTimeslips = (timeslips) => {
 export const updateTmeslips = (timeslips) => {
   return Promise.all(timeslips.map((t) => {
     const path = `timeslips/${t.get('id')}`;
-    return fetch(buildRequest(path, 'PUT', t.toJS()));
+    return fetch(buildRequest(path, 'PUT', t.toJS())).then(res => res.json());
   }));
 };
 
