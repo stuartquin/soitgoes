@@ -1,4 +1,5 @@
 import json
+import sys
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
@@ -39,17 +40,23 @@ def logout_user(request):
 @csrf_exempt
 def monzo_webhook(request):
     if request.method == 'POST':
-        content = request.body.decode('utf-8')
-        data = json.loads(content)
+        raw = request.read()
+
+        try:
+            data = json.loads(raw.decode())
+        except:
+            print(sys.exc_info())
+            return HttpResponse('ERROR', status=500)
 
         if data['type'] == 'transaction.created':
             with open('/tmp/monzo.log', 'a') as log:
-                log.write(content.replace('\n', '') + '\n')
+                log.write(json.dumps(data) + '\n')
 
             transaction = data['data']
             existing = monzo.get_existing_expense(transaction['id'])
             if not existing:
                 expense = monzo.import_transaction(transaction)
-                expense.save()
+                if expense:
+                    expense.save()
 
     return HttpResponse('OK')

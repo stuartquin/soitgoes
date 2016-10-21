@@ -31,6 +31,7 @@ def migrate():
 
         with context_managers.prefix('source ~/venvs/soitgoes/bin/activate'):
             run('python manage.py migrate --no-input')
+        run('service soitgoes restart')
 
 
 def deploy():

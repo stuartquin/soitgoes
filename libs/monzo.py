@@ -1,7 +1,10 @@
+import os
 from django.core.exceptions import ObjectDoesNotExist
 
 from journal.models import Expense
 from datetime import datetime
+
+MONZO_ACC = os.getenv('MONZO_ACC')
 
 
 def get_existing_expense(monzo_id):
@@ -12,9 +15,13 @@ def get_existing_expense(monzo_id):
 
 
 def import_transaction(transaction):
+    if MONZO_ACC != transaction['account_id']:
+        return None
+
     amount = transaction['amount']
     if amount >= 0:
-        return
+        return None
+
     expense = Expense()
     # @TODO need to work out the user-id here
     expense.user_id = 1

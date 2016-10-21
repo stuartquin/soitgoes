@@ -31,6 +31,11 @@ class CompanyAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(models.Expense)
+class ExpenseAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(models.Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
     list_display = ('name', 'created_at')
