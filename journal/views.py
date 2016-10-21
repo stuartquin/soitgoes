@@ -1,7 +1,12 @@
+import json
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.contrib import auth
 from django.core.exceptions import PermissionDenied
+from django.views.decorators.csrf import csrf_exempt
+
+from libs import monzo
 
 
 def landing(request):
@@ -31,6 +36,20 @@ def logout_user(request):
     return HttpResponseRedirect('/')
 
 
-def auth_monzo(request):
-    import ipdb; ipdb.set_trace()
-    return HttpResponseRedirect('/')
+@csrf_exempt
+def monzo_webhook(request):
+    if request.method == 'POST':
+        content = request.body.decode('utf-8')
+        data = json.loads(content)
+
+        if data['type'] == 'transaction.created':
+            with open('/tmp/monzo.log', 'a') as log:
+                log.write(content.replace('\n', '') + '\n')
+
+            transaction = data['data']
+            existing = monzo.get_existing_expense(transaction['id'])
+            if not existing:
+                expense = monzo.import_transaction(transaction)
+                expense.save()
+
+    return HttpResponse('OK')

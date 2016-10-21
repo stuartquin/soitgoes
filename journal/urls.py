@@ -35,7 +35,7 @@ urlpatterns = [
     url(r'api/version/$', apiviews.Version.as_view()),
 
     # App Routing
-    url(r'auth/monzo/$', views.auth_monzo),
+    url(r'monzo/$', views.monzo_webhook),
     url(r'login/$', views.login_user),
     url(r'logout/$', views.logout_user),
     url(r'^$', views.landing),
