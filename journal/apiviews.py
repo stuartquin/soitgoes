@@ -161,6 +161,11 @@ class TimeSlipDetail(generics.UpdateAPIView):
     permission_classes = (HasTimeslipAccess,)
 
 
+class ExpenseList(generics.ListCreateAPIView):
+    queryset = models.Expense.objects.all()
+    serializer_class = serializers.ExpenseSerializer
+
+
 class TimeSlipList(generics.ListCreateAPIView):
     queryset = models.TimeSlip.objects.all()
     permission_classes = (HasTimeslipAccess,)

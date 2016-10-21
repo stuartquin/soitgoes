@@ -26,6 +26,8 @@ urlpatterns = [
     url(r'api/invoices/items/$', apiviews.InvoiceItems.as_view()),
     url(r'api/invoices/items/(?P<pk>[0-9]+)$', apiviews.InvoiceItem.as_view()),
 
+    url(r'api/expenses/$', apiviews.ExpenseList.as_view()),
+
     url(r'api/accounts/$', apiviews.AccountList.as_view()),
     url(r'api/user/$', apiviews.UserDetail.as_view()),
     url(r'api/activity/$', apiviews.ActivityFeedList.as_view()),
@@ -33,6 +35,7 @@ urlpatterns = [
     url(r'api/version/$', apiviews.Version.as_view()),
 
     # App Routing
+    url(r'auth/monzo/$', views.auth_monzo),
     url(r'login/$', views.login_user),
     url(r'logout/$', views.logout_user),
     url(r'^$', views.landing),

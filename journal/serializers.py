@@ -90,6 +90,11 @@ class ActivitySerializer(serializers.ModelSerializer):
         model = models.Activity
 
 
+class ExpenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Expense
+
+
 class InvoiceModifierSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.InvoiceModifier

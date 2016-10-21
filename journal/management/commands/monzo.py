@@ -33,7 +33,8 @@ class Command(BaseCommand):
 
     def importer(self):
         client = Monzo(self.access_token)
-        response = client.get_transactions(self.acc_no)
+        params = {'since': 'tx_00009DPIXSQUPUgJh5j7yL'}
+        response = client.get_transactions(self.acc_no, params)
         self.import_transactions(response['transactions'])
 
     def get_existing_expense(self, monzo_id):

@@ -29,3 +29,8 @@ def login_user(request):
 def logout_user(request):
     auth.logout(request)
     return HttpResponseRedirect('/')
+
+
+def auth_monzo(request):
+    import ipdb; ipdb.set_trace()
+    return HttpResponseRedirect('/')
