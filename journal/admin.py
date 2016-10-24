@@ -33,7 +33,7 @@ class CompanyAdmin(admin.ModelAdmin):
 
 @admin.register(models.Expense)
 class ExpenseAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('reference', 'date', 'created_at', 'monzo_id', 'paid_at')
 
 
 @admin.register(models.Invoice)
