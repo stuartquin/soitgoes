@@ -36,7 +36,7 @@ def import_transaction(transaction):
     except ValueError:
         logger.error('Unrecognised date format: %s' % created)
 
-    expense.value = transaction['amount'] / 100.0
+    expense.value = abs(transaction['amount'] / 100.0)
     expense.monzo_id = transaction['id']
     expense.reference = transaction['description']
     if 'merchant' in transaction and transaction['merchant']:
