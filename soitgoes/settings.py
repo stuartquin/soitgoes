@@ -34,6 +34,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'jet',
     'journal.apps.JournalConfig',
     'corsheaders',
     'rest_framework',
@@ -140,3 +141,5 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'PAGE_SIZE': 150
 }
+
+JET_DEFAULT_THEME = 'light-gray'
