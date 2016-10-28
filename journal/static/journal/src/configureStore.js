@@ -28,6 +28,18 @@ const logger = createLogger({
   }
 });
 
+let middlewares = [
+  applyMiddleware(
+    thunk,
+    routerMiddleware(browserHistory),
+    logger
+  )
+];
+
+if (window.__REDUX_DEVTOOLS_EXTENSION__) {
+  middlewares.push(window.__REDUX_DEVTOOLS_EXTENSION__());
+}
+
 const configureStore = () => {
   return createStore(combineReducers({
     activityFeed,
@@ -38,14 +50,8 @@ const configureStore = () => {
     user,
     routing: routerReducer
   }),
-  compose(
-    applyMiddleware(
-      thunk,
-      routerMiddleware(browserHistory),
-      logger
-    ),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  ));
+  compose( ...middlewares )
+  );
 };
 
 export default configureStore;
