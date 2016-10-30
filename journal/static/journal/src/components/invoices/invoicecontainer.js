@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 
 import { InvoiceInfo } from './invoiceinfo';
 import { InvoiceTimeslips } from './invoicetimeslips';
+import { InvoiceAdvanced } from './invoiceadvanced';
 import * as invoiceActions from '../../actions/invoices';
 
 import styles from './styles.css';
@@ -66,6 +67,18 @@ class Invoice extends React.Component {
           />
         </div>
         <div className='col-md-8'>
+          <InvoiceAdvanced
+            isIssued={isIssued}
+            project={project}
+            invoice={invoice}
+            onUpdate={(updates) =>
+              this.props.updateInvoice(
+                invoice.get('id'),
+                project.get('id'),
+                updates
+              )
+            }
+          />
           <InvoiceTimeslips
             isIssued={isIssued}
             project={project}

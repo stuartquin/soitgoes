@@ -46,6 +46,11 @@ def render(invoice):
         invoice.subtotal_due
     )
 
+    if invoice.due_date:
+        due_date = invoice.due_date.strftime('%d %B %Y')
+    else:
+        due_date = None
+
     context = {
         'invoice': invoice,
         'contact': project.contact,
@@ -55,6 +60,7 @@ def render(invoice):
         'items': invoice.items.all(),
         'modifiers': modifiers,
         'sent_date': invoice.issued_at.strftime('%d %B %Y'),
+        'due_date': due_date
     }
 
     with open(html_name, 'w') as output:

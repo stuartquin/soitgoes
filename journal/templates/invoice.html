@@ -89,6 +89,21 @@ tr.total td {
   text-align: right;
 }
 
+.invoice-sent-date strong, .invoice-due-date strong {
+  display: inline-block;
+  width: 80px;
+}
+
+.invoice-sent-date span, .invoice-due-date span {
+  text-align: right;
+  width: 160px;
+  display: inline-block;
+}
+
+.number {
+  text-align: right;
+}
+
   </style>
   </head>
   <body>
@@ -121,48 +136,65 @@ tr.total td {
 
         <div class='invoice-details'>
           <h3>Invoice #{{invoice.sequence_num}}</h3>
-          <span class='invoice-sent-date'>{{ sent_date }}</span><br />
-          <span class='invoice-due-date'>Due on receipt</span>
+          <span class='invoice-sent-date'>
+            <strong>Issued:</strong>
+            <span>{{ sent_date }}</span>
+          </span>
+
+          <br />
+
+          <span class='invoice-due-date'>
+            <strong>Due:</strong>
+            <span>
+            {% if due_date %}
+              {{ due_date }}
+            {% else %}
+              on receipt
+            {% endif %}
+            </span>
+          </span>
         </div>
       </section>
 
       <section class='price-list'>
         <table>
           <tr class='table-header'>
-            <th>Details</th><th>Unit Price</th><th>Subtotal (&pound;)</th>
+            <th>Details</th>
+            <th class="number">Unit Price</th>
+            <th class="number">Subtotal (&pound;)</th>
           </tr>
           {% for timeslip in timeslips %}
           <tr>
             <td>{{ timeslip.hours }} Hours on {{ timeslip.date }}: {{ timeslip.project.name }}</td>
-            <td>{{ timeslip.project.hourly_rate }}</td>
-            <td>{{ timeslip.project.hourly_rate|multiply:timeslip.hours|floatformat:2 }}</td>
+            <td class="number">{{ timeslip.project.hourly_rate }}</td>
+            <td class="number">{{ timeslip.project.hourly_rate|multiply:timeslip.hours|floatformat:2 }}</td>
           </tr>
           {% endfor %}
           {% for item in items %}
           <tr>
             <td>
               {{ item.name }} ({{ item.qty }}{%if item.unit %} x {{item.unit}}{% endif %}) </td>
-            <td>{{ item.cost_per_unit }}</td>
-            <td>{{ item.qty|multiply:item.cost_per_unit|floatformat:2}}</td>
+            <td class="number">{{ item.cost_per_unit }}</td>
+            <td class="number">{{ item.qty|multiply:item.cost_per_unit|floatformat:2}}</td>
           </tr>
           {% endfor %}
           <tr class='total'>
             <td></td>
-            <td><strong>Subtotal</strong></td>
-            <td><strong>{{ invoice.subtotal_due|floatformat:2 }}</strong></td>
+            <td class="number"><strong>Subtotal</strong></td>
+            <td class="number"><strong>{{ invoice.subtotal_due|floatformat:2 }}</strong></td>
           </tr>
           <tr class='spacer'></tr>
           {% for item in modifiers %}
           <tr>
             <td>{{ item.name }}</td>
-            <td>{{ item.percent }}%</td>
-            <td>{{ item.impact|floatformat:2  }}</td>
+            <td class="number">{{ item.percent }}%</td>
+            <td class="number">{{ item.impact|floatformat:2  }}</td>
           </tr>
           {% endfor %}
           <tr class='total'>
             <td></td>
-            <td><strong>Total</strong></td>
-            <td><strong>{{ invoice.total_due|floatformat:2}}</strong></td>
+            <td class="number"><strong>Total</strong></td>
+            <td class="number"><strong>{{ invoice.total_due|floatformat:2}}</strong></td>
           </tr>
         </table>
       </section>

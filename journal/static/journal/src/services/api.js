@@ -100,6 +100,19 @@ export const fetchInvoiceModifiers = (invoiceId) => {
   );
 };
 
+export const updateInvoice = (invoiceId, projectId, updates) => {
+  if (updates.due_date === '') {
+    updates.due_date = null;
+  }
+
+  const body = {
+    project: projectId,
+    ...updates
+  };
+  const req = buildRequest(`invoices/${invoiceId}`, 'PUT', body);
+  return fetch(req).then(res => res.json());
+};
+
 export const issueInvoice = (invoiceId, projectId, timeslips) => {
   const req = buildRequest(`invoices/${invoiceId}`, 'PUT', {
     project: projectId,

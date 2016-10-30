@@ -1,8 +1,12 @@
+import datetime
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Max
 
 from libs import invoicepdf
+
+INVOICE_DUE_DAYS=14
 
 
 class Billing(models.Model):
@@ -91,6 +95,7 @@ class Invoice(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     issued_at = models.DateTimeField(default=None, blank=True, null=True)
     paid_at = models.DateTimeField(default=None, blank=True, null=True)
+    due_date = models.DateField(default=None, blank=True, null=True)
     total_paid = models.FloatField(default=None, blank=True, null=True)
     total_due = models.FloatField(default=None, blank=True, null=True)
     subtotal_due = models.FloatField(default=None, blank=True, null=True)
@@ -113,6 +118,10 @@ class Invoice(models.Model):
                 invoices = Invoice.objects.filter(project=self.project)
                 max = invoices.aggregate(Max('sequence_num')).get('sequence_num__max')
                 self.sequence_num = (max or 0) + 1
+            if self.due_date is None:
+                self.due_date = (datetime.datetime.now() + datetime.timedelta(
+                    days=INVOICE_DUE_DAYS
+                )).date()
 
         super().save(*args, **kwargs)
 
