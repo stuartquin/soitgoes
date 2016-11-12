@@ -33,7 +33,21 @@ class CompanyAdmin(admin.ModelAdmin):
 
 @admin.register(models.Expense)
 class ExpenseAdmin(admin.ModelAdmin):
-    list_display = ('reference', 'date', 'created_at', 'monzo_id', 'paid_at')
+    list_display = ('reference', 'value', 'date', 'paid_at', 'monzo_id')
+    actions = ['copy_paid_at']
+
+    def copy_paid_at(self, request, queryset):
+        items = list(queryset.reverse())
+        first = items.pop()
+
+        for item in items:
+            item.paid_at = first.paid_at
+            item.save()
+
+        self.message_user(
+            request,
+            'Set Paid to %s for %s items.' % (first.paid_at, len(items))
+        )
 
 
 @admin.register(models.Invoice)
