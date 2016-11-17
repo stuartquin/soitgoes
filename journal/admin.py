@@ -1,6 +1,9 @@
+import csv
 from django.contrib import admin
+from django.http import HttpResponse
 
 from . import models
+from .filters import ExpensePaidFilter
 
 
 @admin.register(models.Contact)
@@ -33,8 +36,25 @@ class CompanyAdmin(admin.ModelAdmin):
 
 @admin.register(models.Expense)
 class ExpenseAdmin(admin.ModelAdmin):
-    list_display = ('reference', 'value', 'date', 'paid_at', 'monzo_id')
-    actions = ['copy_paid_at']
+    list_display = ('date', 'type', 'reference', 'value', 'paid_at',)
+    list_filter = (ExpensePaidFilter, )
+    actions = ['copy_paid_at', 'export_as_csv']
+
+    def export_as_csv(self,  request, queryset):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=export.csv'
+
+        writer = csv.writer(response)
+        for obj in queryset:
+            row = []
+            for field in self.list_display:
+                if field == 'date':
+                    value = getattr(obj, field).strftime('%d/%m/%Y')
+                else:
+                    value = getattr(obj, field)
+                row.append(value)
+            writer.writerow(row)
+        return response
 
     def copy_paid_at(self, request, queryset):
         items = list(queryset.reverse())
