@@ -16,3 +16,4 @@ reportlab==3.3.0
 simplegeneric==0.8.1
 traitlets==4.0.0
 django-jet==1.0.2
+python-dateutil==2.6.0

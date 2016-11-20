@@ -1,13 +1,13 @@
+import json
+
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-
 from rest_framework import generics, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
 
-
-from . import serializers, models
+from . import serializers, models, summary
 from soitgoes.context_processors.cachebust import VERSION
 
 
@@ -125,6 +125,7 @@ class InvoiceModifiers(generics.ListAPIView):
     def get_queryset(self):
         return models.Invoice.objects.get(**self.kwargs).modifier.all()
 
+
 class InvoiceItem(generics.DestroyAPIView):
     serializer_class = serializers.InvoiceItemSerializer
     queryset = models.InvoiceItem.objects.all()
@@ -199,6 +200,22 @@ class TimeSlipList(generics.ListCreateAPIView):
             filters['id__in'] = ids
 
         return models.TimeSlip.objects.filter(**filters).order_by('date')
+
+
+class SummaryInvoices(APIView):
+    def get(self, request, pk=None):
+        if 'start' in request.query_params:
+            start = request.query_params['start']
+
+        if 'end' in request.query_params:
+            end = request.query_params['end']
+
+        dates = summary.invoice_summary_monthly(start, end)
+        response = HttpResponse(
+            json.dumps(dates),
+            content_type='application/json'
+        )
+        return response
 
 
 class Version(APIView):

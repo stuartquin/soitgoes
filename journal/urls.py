@@ -21,8 +21,6 @@ urlpatterns = [
         r'api/invoices/(?P<pk>[0-9]+)/modifiers$',
         apiviews.InvoiceModifiers.as_view()
     ),
-
-
     url(r'api/invoices/items/$', apiviews.InvoiceItems.as_view()),
     url(r'api/invoices/items/(?P<pk>[0-9]+)$', apiviews.InvoiceItem.as_view()),
 
@@ -33,6 +31,8 @@ urlpatterns = [
     url(r'api/activity/$', apiviews.ActivityFeedList.as_view()),
 
     url(r'api/version/$', apiviews.Version.as_view()),
+
+    url(r'api/summary/invoices/$', apiviews.SummaryInvoices.as_view()),
 
     # App Routing
     url(r'monzo/$', views.monzo_webhook),
