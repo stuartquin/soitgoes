@@ -76,6 +76,7 @@ class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     hourly_rate = models.FloatField(default=0.0)
     hours_per_day = models.IntegerField(default=0)
+    archived = models.BooleanField(default=False)
 
     def get_uninvoiced_hours(self, *args, **kwargs):
         timeslips = TimeSlip.objects.filter(project=self, invoice=None)

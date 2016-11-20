@@ -21,7 +21,11 @@ class Command(BaseCommand):
         invoice = Invoice()
         invoice.sequence_num = int(data[2][-3:])
         invoice.issued_at = datetime.strptime(data[3], '%d %B %Y')
+        invoice.paid_at = invoice.issued_at
         invoice.project = project
+        invoice.total_paid = data[8]
+        invoice.total_due = data[8]
+        invoice.subtotal_due = data[8]
         invoice.save()
         return invoice
 

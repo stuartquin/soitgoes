@@ -26,6 +26,8 @@ const TimeslipGrid = (props) => {
   const today = props.today;
   const className = `${styles.timeslipGrid} col-md-12`;
 
+  const projects = props.projects.filter(project => !project.get('archived'));
+
   return (
     <div className={className}>
 
@@ -35,7 +37,7 @@ const TimeslipGrid = (props) => {
             <TimeslipGridHeader today={today} range={range} />
           </thead>
           <tbody>
-            {props.projects.map(project => (
+            {projects.map(project => (
               <TimeslipGridRow
                 key={project.get('id')}
                 project={project}

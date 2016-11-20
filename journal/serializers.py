@@ -35,7 +35,8 @@ class ProjectSerializer(LogActivity):
             'created_at',
             'uninvoiced_hours',
             'total_paid',
-            'hourly_rate'
+            'hourly_rate',
+            'archived'
         ]
         depth = 1
 
