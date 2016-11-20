@@ -92,10 +92,11 @@ class CreateInvoice extends React.Component {
 
   render() {
     let item;
+    const projects = this.props.projects.filter(project => !project.get('archived'));
     if (this.state.isCreating) {
       item = (
         <NewInvoiceProjectSelector
-          projects={ this.props.projects }
+          projects={ projects }
           selected={ this.state.selectedProject }
           isVAT={ this.state.isVAT }
           onSelectProject={ (project) => this.selectProject(project) }

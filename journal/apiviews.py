@@ -74,7 +74,6 @@ class UserDetail(APIView):
 
 class ProjectList(generics.ListAPIView):
     serializer_class = serializers.ProjectSerializer
-    # permission_classes = (HasProjectAccess,)
 
     def get_queryset(self):
         return models.Project.objects.all().order_by('-created_at')
