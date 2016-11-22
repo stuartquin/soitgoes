@@ -10,20 +10,15 @@ import { InvoiceSummary } from './invoicesummary';
 
 class Dash extends React.Component {
   componentDidMount() {
-    this.props.fetchSummary('invoices', '2016-03-01', '2017-02-28');
+    this.props.fetchSummary('invoices', '2016-03-01', '2016-11-30');
   }
 
   render() {
     return (
       <div className='row'>
-        <div className='col-md-4'>
-          <h3>Dash</h3>
-        </div>
-        <div className='col-md-8'>
-          <InvoiceSummary
-            summary={ this.props.invoiceSummary }
-          />
-        </div>
+        <InvoiceSummary
+          summary={ this.props.invoiceSummary }
+        />
       </div>
     );
   }
