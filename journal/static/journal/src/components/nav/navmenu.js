@@ -10,10 +10,10 @@ const NavMenu = (props) => {
   return (
     <ul className={ navClasses }>
       <li className={styles.navItem}>
-        <Link to={'/projects'}
+        <Link to={'/dash'}
           activeClassName={styles.navActive}
           className={styles.navLink}>
-          Projects
+          Dashboard
         </Link>
       </li>
       <li className={styles.navItem}>

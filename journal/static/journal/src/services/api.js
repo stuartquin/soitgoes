@@ -199,3 +199,12 @@ export const fetchActivityFeed = () => {
   );
 };
 
+export const fetchSummary = (type, start, end) => {
+  let url = `summary/${type}/`;
+  url = url + `?start=${start}&end=${end}`;
+
+  return fetch(buildRequest(url)).then(
+    res => res.json()
+  );
+};
+

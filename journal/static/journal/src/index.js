@@ -14,6 +14,7 @@ import { NavContainer } from './components/nav/navcontainer';
 import { InvoicesContainer } from './components/invoices/invoicescontainer';
 import { InvoiceContainer } from './components/invoices/invoicecontainer';
 import { ProjectsContainer } from './components/projects/projectscontainer';
+import { DashContainer } from './components/dash/dash';
 
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);
@@ -30,7 +31,7 @@ const routes = (
         <Route path=':id' component={InvoiceContainer}/>
       </Route>
       <Route path='timeslips' component={TimeslipsContainer} />
-      <Route path='projects' component={ProjectsContainer} />
+      <Route path='dash' component={DashContainer} />
     </Route>
     <IndexRoute component={NavContainer}/>
     <IndexRedirect to='/invoices' />

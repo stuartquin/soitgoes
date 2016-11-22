@@ -11,6 +11,7 @@ import projects from './reducers/projects';
 import invoice from './reducers/invoice';
 import invoices from './reducers/invoices';
 import user from './reducers/user';
+import dash from './reducers/dash';
 
 
 const logger = createLogger({
@@ -48,6 +49,7 @@ const configureStore = () => {
     invoice,
     invoices,
     user,
+    dash,
     routing: routerReducer
   }),
   compose( ...middlewares )
