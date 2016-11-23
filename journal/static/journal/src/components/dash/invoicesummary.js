@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import { Bar } from 'react-chartjs';
+import moment from 'moment';
 
 
 const InvoiceSummary = (props) => {
@@ -12,11 +13,11 @@ const InvoiceSummary = (props) => {
     );
   }
 
-  let labels = props.summary.get('items').keySeq().sort().toJS();
+  let months = props.summary.get('items').keySeq().sort();
   let invoiced = [];
   let paid = [];
 
-  labels.map((month) => {
+  months.forEach((month) => {
     const summary = props.summary.get('items').get(month);
     if (summary.get('issued').count()) {
       const total = summary.get('issued').reduce((prev, cur) => {
@@ -37,7 +38,10 @@ const InvoiceSummary = (props) => {
     }
   });
 
+  const labels = months.map((month) => moment(month).format('MMM')).toJS();
+
   const chartOptions = {
+    responsive: true
   };
   const chartData = {
     labels,
@@ -45,23 +49,25 @@ const InvoiceSummary = (props) => {
       label: 'Invoiced',
       borderWidth: 1,
       data: invoiced,
-      fillColor: 'rgba(220,0,0,0.8)'
+      fillColor: '#f44336'
     }, {
       label: 'Paid',
       borderWidth: 1,
       data: paid,
-      fillColor: 'rgba(0,220,0,0.8)'
+      fillColor: '#4caf50'
     }]
   };
 
   return (
-    <div className='dash-invoice-summary'>
-      <h4>Invoice Summary</h4>
-      <Bar
-        data={chartData}
-        width='360'
-        height='300'
-        options={chartOptions} />
+    <div className='dash-invoice-summary panel panel-default'>
+      <div className='panel-body'>
+        <h5>Invoice Summary</h5>
+        <Bar
+          data={chartData}
+          width='300'
+          height='240'
+          options={chartOptions} />
+      </div>
     </div>
   );
 };

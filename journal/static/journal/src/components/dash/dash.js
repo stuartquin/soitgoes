@@ -1,24 +1,32 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
+import moment from 'moment';
 
 import * as dashActions from '../../actions/dash';
-
 import { InvoiceSummary } from './invoicesummary';
-
 
 
 class Dash extends React.Component {
   componentDidMount() {
-    this.props.fetchSummary('invoices', '2016-03-01', '2016-11-30');
+    const start = moment().subtract(5, 'month').startOf('month')
+    const end = moment().endOf('month');
+
+    this.props.fetchSummary(
+      'invoices',
+      start.format('Y-M-D'),
+      end.format('Y-M-D')
+    );
   }
 
   render() {
     return (
       <div className='row'>
-        <InvoiceSummary
-          summary={ this.props.invoiceSummary }
-        />
+        <div className='col-md-4'>
+          <InvoiceSummary
+            summary={ this.props.invoiceSummary }
+          />
+        </div>
       </div>
     );
   }
