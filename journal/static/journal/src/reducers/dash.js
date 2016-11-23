@@ -4,6 +4,14 @@ import Immutable from 'immutable';
 
 import constants from '../constants';
 
+const getById = (items) => {
+  let map = Immutable.OrderedMap();
+  items.forEach((item) => {
+    map = map.set(item.id, item);
+  });
+  return map;
+};
+
 const invoiceSummary = (state, action) => {
   if (!state) {
     return Immutable.Map({
@@ -21,8 +29,22 @@ const invoiceSummary = (state, action) => {
   }
 };
 
+const expenses = (state, action) => {
+  if (!state) {
+    return Immutable.OrderedMap();
+  }
+
+  switch (action.type) {
+  case constants.GET_EXPENSES_SUCCESS:
+    return getById(action.expenses.results);
+  default:
+    return state;
+  }
+};
+
 const dash = combineReducers({
-  invoiceSummary
+  invoiceSummary,
+  expenses
 });
 
 export default dash;

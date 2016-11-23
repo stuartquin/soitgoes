@@ -14,3 +14,16 @@ export const fetchSummary = (type, start, end) => (dispatch) => {
     })
   );
 };
+
+export const fetchExpenses = (start, end) => (dispatch) => {
+  dispatch({
+    type: constants.GET_EXPENSES_START
+  });
+
+  return api.fetchExpenses(start, end).then((res) =>
+    dispatch({
+      type: constants.GET_EXPENSES_SUCCESS,
+      expenses: res
+    })
+  );
+};

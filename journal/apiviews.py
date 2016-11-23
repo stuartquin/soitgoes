@@ -165,6 +165,15 @@ class ExpenseList(generics.ListCreateAPIView):
     queryset = models.Expense.objects.all()
     serializer_class = serializers.ExpenseSerializer
 
+    def get_queryset(self):
+        filters = {}
+        if 'start' in self.request.query_params:
+            filters['date__gte'] = self.request.query_params['start']
+
+        if 'end' in self.request.query_params:
+            filters['date__lte'] = self.request.query_params['end']
+        return models.Expense.objects.filter(**filters).order_by('date')
+
 
 class TimeSlipList(generics.ListCreateAPIView):
     queryset = models.TimeSlip.objects.all()

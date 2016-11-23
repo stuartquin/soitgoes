@@ -208,3 +208,11 @@ export const fetchSummary = (type, start, end) => {
   );
 };
 
+export const fetchExpenses = (start, end) => {
+  let url = `expenses/`;
+  url = url + `?start=${start}&end=${end}`;
+
+  return fetch(buildRequest(url)).then(
+    res => res.json()
+  );
+};

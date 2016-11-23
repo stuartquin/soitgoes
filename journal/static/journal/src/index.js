@@ -34,7 +34,7 @@ const routes = (
       <Route path='dash' component={DashContainer} />
     </Route>
     <IndexRoute component={NavContainer}/>
-    <IndexRedirect to='/invoices' />
+    <IndexRedirect to='/dash' />
   </Route>
 );
 
