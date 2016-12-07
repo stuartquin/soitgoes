@@ -3,6 +3,8 @@ import React from 'react';
 import { Bar } from 'react-chartjs';
 import moment from 'moment';
 
+const MONTHLY_LOW = 8350;
+const MONTHLY_HIGH = 10000;
 
 const InvoiceSummary = (props) => {
   if (props.summary.get('items').isEmpty()){
@@ -14,31 +16,27 @@ const InvoiceSummary = (props) => {
   }
 
   let months = props.summary.get('items').keySeq().sort();
-  let invoiced = [];
-  let paid = [];
-
-  months.forEach((month) => {
+  const paid = months.map((month) => {
     const summary = props.summary.get('items').get(month);
-    if (summary.get('issued').count()) {
-      const total = summary.get('issued').reduce((prev, cur) => {
-        return prev + cur.get('total_due');
-      }, 0);
-      invoiced.push(total);
-    } else {
-      invoiced.push(0);
-    }
-
     if (summary.get('paid').count()) {
       const total = summary.get('paid').reduce((prev, cur) => {
         return prev + cur.get('total_paid');
       }, 0);
-      paid.push(total);
-    } else {
-      paid.push(0);
+      return total;
     }
-  });
+    return 0;
+  }).toArray();
 
   const labels = months.map((month) => moment(month).format('MMM')).toJS();
+  const colors = paid.map((amount) => {
+    if (amount < MONTHLY_LOW) {
+      return 'rgba(244,67,54,0.4)';
+    }
+    if (amount > MONTHLY_HIGH) {
+      return 'rgba(76,175,80,0.4)';
+    }
+    return 'rgba(3,169,244,0.4)';
+  });
 
   const chartOptions = {
     responsive: true
@@ -46,22 +44,17 @@ const InvoiceSummary = (props) => {
   const chartData = {
     labels,
     datasets: [{
-      label: 'Invoiced',
-      borderWidth: 1,
-      data: invoiced,
-      fillColor: '#f44336'
-    }, {
       label: 'Paid',
       borderWidth: 1,
       data: paid,
-      fillColor: '#4caf50'
+      fillColor: colors
     }]
   };
 
   return (
     <div className='dash-invoice-summary panel panel-default'>
       <div className='panel-body'>
-        <h5>Invoice Summary</h5>
+        <h5>Invoices Paid</h5>
         <Bar
           data={chartData}
           width='300'

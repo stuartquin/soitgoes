@@ -11,7 +11,7 @@ import { ExpensesSummary } from './expensessummary';
 class Dash extends React.Component {
   componentDidMount() {
     const invoiceStart = moment().subtract(5, 'month').startOf('month');
-    const expenseStart = moment().subtract(2, 'month').startOf('month');
+    const expenseStart = moment().subtract(3, 'month').startOf('month');
     const end = moment().endOf('month');
 
     this.props.fetchSummary(
