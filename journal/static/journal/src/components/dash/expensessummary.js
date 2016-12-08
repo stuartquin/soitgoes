@@ -20,8 +20,6 @@ const ExpensesSummary = (props) => {
     moment().format('MMM'),
   ]
 
-  debugger;
-
   const chartData = {
     labels: months,
     datasets: [{

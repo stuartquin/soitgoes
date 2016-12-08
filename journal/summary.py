@@ -27,12 +27,15 @@ def invoice_summary_monthly(start_date, end_date):
     dates = get_empty_date_collection(from_date, to_date)
 
     issued = models.Invoice.objects.filter(
-        issued_at__gt=from_date,
-        issued_at__lt=to_date
+        issued_at__gte=from_date,
+        issued_at__lte=to_date,
+        paid_at__isnull=True
     )
+
     paid = models.Invoice.objects.filter(
-        paid_at__gt=from_date,
-        paid_at__lt=to_date
+        issued_at__gte=from_date,
+        issued_at__lte=to_date,
+        paid_at__isnull=False
     )
 
     for invoice in issued:
@@ -43,8 +46,8 @@ def invoice_summary_monthly(start_date, end_date):
         )
 
     for invoice in paid:
-        paid_at = invoice.paid_at
-        d = date(paid_at.year, paid_at.month, 1).strftime(format)
+        issued_at = invoice.issued_at
+        d = date(issued_at.year, issued_at.month, 1).strftime(format)
         dates[d]['paid'].append(
             serializers.InvoiceSerializer(invoice).data
         )

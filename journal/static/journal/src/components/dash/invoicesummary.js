@@ -35,7 +35,8 @@ const InvoiceSummary = (props) => {
     if (amount > MONTHLY_HIGH) {
       return 'rgba(76,175,80,0.4)';
     }
-    return 'rgba(3,169,244,0.4)';
+
+    return 'rgba(76,175,80,0.4)';
   });
 
   const chartOptions = {
