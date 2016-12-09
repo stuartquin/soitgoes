@@ -227,6 +227,22 @@ class SummaryInvoices(APIView):
         return response
 
 
+class SummaryExpenses(APIView):
+    def get(self, request, pk=None):
+        if 'start' in request.query_params:
+            start = request.query_params['start']
+
+        if 'end' in request.query_params:
+            end = request.query_params['end']
+
+        dates = summary.expense_summary_monthly(start, end)
+        response = HttpResponse(
+            json.dumps(dates),
+            content_type='application/json'
+        )
+        return response
+
+
 class Version(APIView):
     def get(self, request, pk=None):
         return Response({

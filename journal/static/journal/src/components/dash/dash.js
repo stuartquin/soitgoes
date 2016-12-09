@@ -4,8 +4,7 @@ import {connect} from 'react-redux';
 import moment from 'moment';
 
 import * as dashActions from '../../actions/dash';
-import { InvoiceSummary } from './invoicesummary';
-import { ExpensesSummary } from './expensessummary';
+import { SummaryBarChart } from './summarybarchart';
 
 
 class Dash extends React.Component {
@@ -20,7 +19,8 @@ class Dash extends React.Component {
       end.format('Y-M-D')
     );
 
-    this.props.fetchExpenses(
+    this.props.fetchSummary(
+      'expenses',
       expenseStart.format('Y-M-D'),
       end.format('Y-M-D')
     );
@@ -30,13 +30,19 @@ class Dash extends React.Component {
     return (
       <div className='row'>
         <div className='col-md-6'>
-          <InvoiceSummary
+          <SummaryBarChart
+            title='Invoices Paid'
             summary={ this.props.invoiceSummary }
+            totalField='total_paid'
+            threshold={8350}
           />
         </div>
         <div className='col-md-6'>
-          <ExpensesSummary
-            expenses={ this.props.expenses }
+          <SummaryBarChart
+            title='Expenses'
+            summary={ this.props.expensesSummary }
+            totalField='value'
+            threshold={0}
           />
         </div>
       </div>
@@ -46,8 +52,8 @@ class Dash extends React.Component {
 
 const mapStateToProps = (state, { params }) => {
   return {
-    invoiceSummary: state.dash.invoiceSummary,
-    expenses: state.dash.expenses
+    invoiceSummary: state.dash.summary.get('invoices'),
+    expensesSummary: state.dash.summary.get('expenses')
   };
 };
 

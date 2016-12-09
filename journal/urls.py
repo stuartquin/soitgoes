@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'api/version/$', apiviews.Version.as_view()),
 
     url(r'api/summary/invoices/$', apiviews.SummaryInvoices.as_view()),
+    url(r'api/summary/expenses/$', apiviews.SummaryExpenses.as_view()),
 
     # App Routing
     url(r'monzo/$', views.monzo_webhook),

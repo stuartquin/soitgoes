@@ -12,39 +12,26 @@ const getById = (items) => {
   return map;
 };
 
-const invoiceSummary = (state, action) => {
+const summary = (state, action) => {
   if (!state) {
     return Immutable.Map({
       isSaving: false,
       isLoading: false,
-      items: Immutable.Map()
+      expenses: Immutable.Map(),
+      invoices: Immutable.Map()
     });
   }
   switch (action.type) {
   case constants.GET_SUMMARY_SUCCESS:
     const items = Immutable.fromJS(action.summary);
-    return state.set('isLoading', false).set('items', items);
-  default:
-    return state;
-  }
-};
-
-const expenses = (state, action) => {
-  if (!state) {
-    return Immutable.OrderedMap();
-  }
-
-  switch (action.type) {
-  case constants.GET_EXPENSES_SUCCESS:
-    return getById(action.expenses.results);
+    return state.set('isLoading', false).set(action.summaryType, items);
   default:
     return state;
   }
 };
 
 const dash = combineReducers({
-  invoiceSummary,
-  expenses
+  summary
 });
 
 export default dash;

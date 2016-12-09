@@ -6,36 +6,32 @@ import moment from 'moment';
 const MONTHLY_LOW = 8350;
 const MONTHLY_HIGH = 10000;
 
-const InvoiceSummary = (props) => {
-  if (props.summary.get('items').isEmpty()){
+const SummaryBarChart = (props) => {
+  if (props.summary.isEmpty()){
     return (
-      <div className='dash-invoice-summary'>
+      <div className='dash-summary-chart'>
         Loading
       </div>
     );
   }
 
-  let months = props.summary.get('items').keySeq().sort();
-  const paid = months.map((month) => {
-    const summary = props.summary.get('items').get(month);
-    if (summary.get('paid').count()) {
-      const total = summary.get('paid').reduce((prev, cur) => {
-        return prev + cur.get('total_paid');
+  let months = props.summary.keySeq().sort();
+  const values = months.map((month) => {
+    const summary = props.summary.get(month);
+    if (summary.count()) {
+      const total = summary.get('items').reduce((prev, cur) => {
+        return prev + cur.get(props.totalField);
       }, 0);
-      return total;
+      return total.toFixed(2);
     }
     return 0;
   }).toArray();
 
   const labels = months.map((month) => moment(month).format('MMM')).toJS();
-  const colors = paid.map((amount) => {
-    if (amount < MONTHLY_LOW) {
+  const colors = values.map((amount) => {
+    if (amount < props.threshold) {
       return 'rgba(244,67,54,0.4)';
     }
-    if (amount > MONTHLY_HIGH) {
-      return 'rgba(76,175,80,0.4)';
-    }
-
     return 'rgba(76,175,80,0.4)';
   });
 
@@ -45,17 +41,16 @@ const InvoiceSummary = (props) => {
   const chartData = {
     labels,
     datasets: [{
-      label: 'Paid',
       borderWidth: 1,
-      data: paid,
+      data: values,
       fillColor: colors
     }]
   };
 
   return (
-    <div className='dash-invoice-summary panel panel-default'>
+    <div className='dash-summary-chart panel panel-default'>
       <div className='panel-body'>
-        <h5>Invoices Paid</h5>
+        <h5>{props.title}</h5>
         <Bar
           data={chartData}
           width='300'
@@ -66,4 +61,4 @@ const InvoiceSummary = (props) => {
   );
 };
 
-export { InvoiceSummary };
+export { SummaryBarChart };

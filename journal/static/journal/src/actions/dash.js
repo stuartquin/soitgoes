@@ -2,13 +2,14 @@
 import * as api from '../services/api';
 import constants from '../constants';
 
-export const fetchSummary = (type, start, end) => (dispatch) => {
+export const fetchSummary = (summaryType, start, end) => (dispatch) => {
   dispatch({
     type: constants.GET_SUMMARY_START
   });
 
-  return api.fetchSummary(type, start, end).then((res) =>
+  return api.fetchSummary(summaryType, start, end).then((res) =>
     dispatch({
+      summaryType,
       type: constants.GET_SUMMARY_SUCCESS,
       summary: res
     })
