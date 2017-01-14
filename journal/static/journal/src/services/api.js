@@ -216,3 +216,14 @@ export const fetchExpenses = (start, end) => {
     res => res.json()
   );
 };
+
+export const fetchTasks = (project=null) => {
+  let url = 'tasks/';
+  if (project !== null) {
+    url = url + `&project=${project}`;
+  }
+
+  return fetch(buildRequest(url)).then(
+    res => res.json()
+  );
+};

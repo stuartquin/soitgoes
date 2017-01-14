@@ -100,3 +100,13 @@ class TimeSlipAdmin(admin.ModelAdmin):
 
     def name(self, obj):
         return obj
+
+
+class TaskNote(admin.StackedInline):
+    model = models.TaskNote
+
+
+@admin.register(models.Task)
+class Task(admin.ModelAdmin):
+    list_display = ('project', 'name', 'invoice', 'due_date')
+    inlines = [TaskNote]

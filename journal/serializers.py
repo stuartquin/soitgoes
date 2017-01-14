@@ -101,6 +101,18 @@ class InvoiceModifierSerializer(serializers.ModelSerializer):
         model = models.InvoiceModifier
 
 
+class TaskNoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.TaskNote
+
+
+class TaskSerializer(serializers.ModelSerializer):
+    notes = TaskNoteSerializer(many=True)
+
+    class Meta:
+        model = models.Task
+
+
 class InvoiceSerializer(LogActivity):
     ACTIVITY_CODE = 'INV'
 

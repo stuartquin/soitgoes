@@ -178,6 +178,43 @@ class InvoiceItem(models.Model):
         return self.name
 
 
+class Task(models.Model):
+    user = models.ForeignKey(User)
+    project = models.ForeignKey(Project)
+    name = models.CharField(max_length=256)
+    cost = models.FloatField(default=0.0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(default=None, blank=True, null=True)
+    due_date = models.DateField(default=None, blank=True, null=True)
+    hours_spent = models.FloatField(default=0.0)
+    hours_predicted = models.FloatField(default=0.0)
+
+    invoice = models.ForeignKey(
+        Invoice, models.SET_NULL,
+        blank=True, null=True, related_name='tasks'
+    )
+
+    def __str__(self):
+        return self.name
+
+
+class TaskNote(models.Model):
+    user = models.ForeignKey(User)
+    task = models.ForeignKey(Task, related_name='notes')
+    content = models.TextField(blank=True, null=True)
+    content_type = models.CharField(
+        choices=(
+            ('TEXT', 'Text'),
+        ),
+        max_length=4,
+        default='TEXT'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.content[:100] + '...'
+
+
 class TimeSlip(models.Model):
     user = models.ForeignKey(User)
     project = models.ForeignKey(Project)

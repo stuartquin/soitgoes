@@ -248,3 +248,8 @@ class Version(APIView):
         return Response({
             'hash': VERSION
         })
+
+
+class TaskList(generics.ListCreateAPIView):
+    queryset = models.Task.objects.all()
+    serializer_class = serializers.TaskSerializer

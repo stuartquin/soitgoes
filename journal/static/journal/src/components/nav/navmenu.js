@@ -30,6 +30,13 @@ const NavMenu = (props) => {
           Time
         </Link>
       </li>
+      <li className={styles.navItem}>
+        <Link to={'/tasks'}
+          activeClassName={styles.navActive}
+          className={styles.navLink}>
+          Tasks
+        </Link>
+      </li>
     </ul>
   );
 };
