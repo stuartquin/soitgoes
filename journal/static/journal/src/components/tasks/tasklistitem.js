@@ -52,13 +52,13 @@ const TaskListItem = (props) => {
         <div className='task-item-content'>
           <div className='task-item-name'>
             <Link to={`/tasks/${task.get('id')}`}>
-              <strong>{project.get('name')}: </strong>
-              <span>{task.get('name')}</span>
+              <strong>{task.get('name')}</strong>
+              <span>{project.get('name')}</span>
             </Link>
           </div>
           <TaskItemActions
             task={task}
-            onComplete={() => props.onCompleteTask(task.get('id'))} />
+            onComplete={() => props.onComplete(task.get('id'))} />
         </div>
       </div>
       <div className='task-item-stats panel-footer'>

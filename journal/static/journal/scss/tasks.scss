@@ -6,6 +6,13 @@
 
 .task-item-name {
   width: 70%;
+  a {
+    display:flex;
+    flex-direction: column;
+    span {
+      font-size: 0.9em;
+    }
+  }
 }
 
 .task-item-stats {
@@ -22,4 +29,20 @@
     font-size: 16px;
     padding-right: 5px;
   }
+}
+
+// TODO move to forms.scss
+.form-field {
+  flex: 1 0 260px;
+  padding: 10px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+input.form-control, select.form-control, {
+  line-height: 1;
+  height: 2.375rem;
 }

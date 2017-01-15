@@ -2,6 +2,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
+import { TaskFormContainer } from './taskform';
 import * as taskActions from '../../actions/tasks';
 
 
@@ -22,7 +23,11 @@ class Task extends React.Component {
 
     return (
       <div className='row'>
-        <h2>{task.get('name')}</h2>
+        <div className='col-md-12'>
+          <TaskFormContainer
+            isEdit={true}
+            task={task} />
+        </div>
       </div>
     );
   }
