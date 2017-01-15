@@ -16,6 +16,7 @@ import { InvoiceContainer } from './components/invoices/invoicecontainer';
 import { ProjectsContainer } from './components/projects/projectscontainer';
 import { DashContainer } from './components/dash/dash';
 import { TasksContainer } from './components/tasks/taskscontainer';
+import { TaskContainer } from './components/tasks/taskcontainer';
 
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);
@@ -33,7 +34,10 @@ const routes = (
       </Route>
       <Route path='timeslips' component={TimeslipsContainer} />
       <Route path='dash' component={DashContainer} />
-      <Route path='tasks' component={TasksContainer} />
+      <Route path='tasks'>
+        <IndexRoute component={TasksContainer}/>
+        <Route path=':id' component={TaskContainer}/>
+      </Route>
     </Route>
     <IndexRoute component={NavContainer}/>
     <IndexRedirect to='/dash' />

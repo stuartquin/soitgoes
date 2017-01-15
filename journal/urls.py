@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'api/activity/$', apiviews.ActivityFeedList.as_view()),
 
     url(r'api/tasks/$', apiviews.TaskList.as_view()),
+    url(r'api/tasks/(?P<pk>[0-9]+)$', apiviews.TaskDetail.as_view()),
 
     url(r'api/version/$', apiviews.Version.as_view()),
 

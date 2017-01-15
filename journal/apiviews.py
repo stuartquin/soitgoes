@@ -251,5 +251,19 @@ class Version(APIView):
 
 
 class TaskList(generics.ListCreateAPIView):
+    serializer_class = serializers.TaskSerializer
+
+    def get_queryset(self):
+        return models.Task.objects.all().order_by('completed_at')
+
+
+class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Task.objects.all()
     serializer_class = serializers.TaskSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
+        if 'data' in kwargs:
+            kwargs['partial'] = True
+
+        return self.serializer_class(*args, **kwargs)

@@ -71,10 +71,10 @@ export const createTimeslips = (timeslips) => {
   return fetch(req);
 };
 
-export const updateTmeslips = (timeslips) => {
-  return Promise.all(timeslips.map((t) => {
+export const updatetmeslips = (timeslips) => {
+  return promise.all(timeslips.map((t) => {
     const path = `timeslips/${t.get('id')}`;
-    return fetch(buildRequest(path, 'PUT', t.toJS())).then(res => res.json());
+    return fetch(buildrequest(path, 'put', t.tojs())).then(res => res.json());
   }));
 };
 
@@ -217,13 +217,23 @@ export const fetchExpenses = (start, end) => {
   );
 };
 
-export const fetchTasks = (project=null) => {
+export const fetchTasks = (id=null, project=null) => {
   let url = 'tasks/';
+  if (id) {
+    url += id;
+  }
+
   if (project !== null) {
     url = url + `&project=${project}`;
   }
 
-  return fetch(buildRequest(url)).then(
-    res => res.json()
-  );
+  return fetch(buildRequest(url)).then((res) => {
+    const json = res.json();
+    return json;
+  });
+};
+
+export const updateTask = (taskId, updates) => {
+  const req = buildRequest(`tasks/${taskId}`, 'PUT', updates);
+  return fetch(req).then(res => res.json());
 };

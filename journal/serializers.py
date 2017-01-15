@@ -109,8 +109,12 @@ class TaskNoteSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     notes = TaskNoteSerializer(many=True)
 
+    def get_validation_exclusions(self):
+        import ipdb; ipdb.set_trace()
+
     class Meta:
         model = models.Task
+        partial = True
 
 
 class InvoiceSerializer(LogActivity):

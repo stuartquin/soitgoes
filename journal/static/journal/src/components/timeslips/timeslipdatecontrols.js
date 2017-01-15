@@ -18,7 +18,7 @@ const TimeslipDateControls = (props) => {
           const end = moment(start).add(DAY_OFFSET, 'days');
           props.onSetActiveDate(start, end);
         }}>Today</button>
-      <button 
+      <button
         className='btn btn-default btn-raised'
         onClick={() => {
           const start = moment(props.activeDate).subtract(DAY_OFFSET, 'days');
