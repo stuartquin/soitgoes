@@ -38,3 +38,16 @@ export const completeTask = (id) => (dispatch) => {
     });
   });
 };
+
+export const updateTask = (id, updates) => (dispatch) => {
+  dispatch({
+    type: constants.UPDATE_TASK_START
+  });
+
+  api.updateTask(id, updates).then(res => {
+    dispatch({
+      type: constants.GET_TASKS_SUCCESS,
+      tasks: [res]
+    });
+  });
+};

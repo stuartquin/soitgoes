@@ -2,7 +2,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import { TaskFormContainer } from './taskform';
+import { TaskForm } from './taskform';
 import * as taskActions from '../../actions/tasks';
 
 
@@ -15,18 +15,26 @@ class Task extends React.Component {
 
   render() {
     const task = this.props.task;
-    const loading = (!task || task.isEmpty());
+    const projects = this.props.projects;
+    const loading = (!task || task.isEmpty() || projects.isEmpty());
 
     if (loading) {
       return (<div>Loading</div>);
     }
 
+    let saveTask = (form) => {
+      // TODO if add, call different function
+      this.props.updateTask(task.get('id'), form);
+    };
+
     return (
       <div className='row'>
         <div className='col-md-12'>
-          <TaskFormContainer
+          <TaskForm
             isEdit={true}
-            task={task} />
+            task={task}
+            projects={projects}
+            onSave={(form) => saveTask(form)} />
         </div>
       </div>
     );
@@ -36,6 +44,7 @@ class Task extends React.Component {
 const mapStateToProps = (state, { params }) => {
   return {
     task: state.tasks.items.get(parseInt(params.id, 10)),
+    projects: state.projects.items,
     id: params.id
   };
 };

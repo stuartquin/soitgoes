@@ -1,8 +1,5 @@
 'use strict';
 import React from 'react';
-import {connect} from 'react-redux';
-
-import * as taskActions from '../../actions/tasks';
 
 const TextField = (props) => {
   const label = props.label;
@@ -29,19 +26,21 @@ const SelectField = (props) => {
   const label = props.label;
   const value = props.value;
   const options = props.options || [];
-  const type = props.type || 'text';
-  const placeholder = props.placeholder || label;
 
   return (
     <div className='form-field'>
       <label>{label}</label>
       <div>
         <select
-          className='form-control'>
-          value={value}
+          className='form-control'
+          value={props.value}
           onChange={(evt) => props.onChange(evt.target.value)}>
           {options.map(opt =>
-            <option value={opt.value}>{opt.label}</option>
+            <option
+              key={opt.value}
+              value={opt.value}>
+              {opt.label}
+            </option>
           )}
         </select>
       </div>
@@ -52,6 +51,7 @@ const SelectField = (props) => {
 class TaskForm extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       isEdit: !!props.isEdit,
       form: {}
@@ -62,32 +62,62 @@ class TaskForm extends React.Component {
       this.state.form = {
         name: task.get('name'),
         project: task.get('project'),
-        cost: task.get('cost')
+        cost: task.get('cost'),
+        due_date: task.get('due_date')
       };
-      this.state.isEdit = true;
     };
   }
 
   handleChange(field, val) {
-    this.setState({[field]: val});
+    let form = this.state.form;
+    form[field] = val;
+    this.setState({form: form});
+  }
+
+  onSave() {
+    this.props.onSave(this.state.form);
   }
 
   render() {
-    const projects = [
-      {value: 1, label: 'UMS'},
-      {value: 2, label: 'IndustryHub'},
-    ];
+    const projects = this.props.projects.toList().toJS().map(p => {
+      return {value: p['id'], label: p['name']};
+    });
+
+    const saveButtonText = 'Save';
     return (
-      <div className='panel'>
+      <div className='panel panel-default'>
         <div className='panel-body'>
           <div className='form-row'>
             <TextField
+              value={this.state.form.name}
               onChange={(val) => this.handleChange('name', val)}
               label='Task Name' />
+          </div>
+          <div className='form-row'>
             <SelectField
+              value={this.state.form.project}
               onChange={(val) => this.handleChange('project', val)}
               options={projects}
               label='Project' />
+            <TextField
+              type='number'
+              value={this.state.form.cost}
+              onChange={(val) => this.handleChange('cost', val)}
+              label='Cost' />
+            <TextField
+              type='date'
+              value={this.state.form.due_date}
+              onChange={(val) => this.handleChange('due_date', val)}
+              label='Due' />
+          </div>
+        </div>
+        <div className='panel-footer'>
+          <div className='form-row'>
+            <button
+              className='btn btn-success btn-block btn-raised'
+              onClick={() => this.onSave()}>
+              {saveButtonText}
+            </button>
           </div>
         </div>
       </div>
@@ -95,15 +125,4 @@ class TaskForm extends React.Component {
   }
 }
 
-
-const mapStateToProps = (state, { params }) => {
-  return {
-  };
-};
-
-const actions = {
-  ...taskActions
-};
-
-const TaskFormContainer = connect(mapStateToProps, actions)(TaskForm);
-export {TaskFormContainer};
+export {TaskForm};
