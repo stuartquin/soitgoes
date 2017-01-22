@@ -8,7 +8,7 @@ import * as taskActions from '../../actions/tasks';
 
 class Task extends React.Component {
   componentDidMount() {
-    if (!this.props.task) {
+    if (!this.props.task && this.props.id !== 'add') {
       this.props.fetchTasks(this.props.id);
     }
   }
@@ -16,22 +16,26 @@ class Task extends React.Component {
   render() {
     const task = this.props.task;
     const projects = this.props.projects;
-    const loading = (!task || task.isEmpty() || projects.isEmpty());
+    const loading = (!projects || projects.isEmpty());
+    const isEdit = this.props.id !== 'add';
 
     if (loading) {
       return (<div>Loading</div>);
     }
 
     let saveTask = (form) => {
-      // TODO if add, call different function
-      this.props.updateTask(task.get('id'), form);
+      if (isEdit) {
+        this.props.updateTask(task.get('id'), form);
+      } else {
+        this.props.addTask(form);
+      }
     };
 
     return (
       <div className='row'>
         <div className='col-md-12'>
           <TaskForm
-            isEdit={true}
+            isEdit={isEdit}
             task={task}
             projects={projects}
             onSave={(form) => saveTask(form)} />

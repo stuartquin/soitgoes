@@ -44,9 +44,22 @@ const InvoiceTimeslips = (props) => {
         />
       ))}
 
+      {props.tasks.map((task) => (
+        <InvoiceItemRow
+          key={task.get('id') * 200}
+          isIssued={props.isIssued}
+          details={task.get('name')}
+          unitPrice={task.get('cost')}
+          subTotal={task.get('cost')}
+          onDelete={() => {
+            props.onDeleteTask(task.get('id'));
+          }}
+        />
+      ))}
+
       {props.items.map((item) => (
         <InvoiceItemRow
-          key={item.get('id')}
+          key={item.get('id') * 300}
           isIssued={props.isIssued}
           details={getItemDetails(item)}
           unitPrice={item.get('cost_per_unit')}

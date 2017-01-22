@@ -23,7 +23,8 @@ class Invoice extends React.Component {
   fetchData() {
     let promises = [
       this.props.fetchInvoiceTimeslips(this.props.invoiceId),
-      this.props.fetchInvoiceItems(this.props.invoiceId)
+      this.props.fetchInvoiceItems(this.props.invoiceId),
+      this.props.fetchInvoiceTasks(this.props.invoiceId)
     ];
     return Promise.all(promises);
   }
@@ -45,6 +46,7 @@ class Invoice extends React.Component {
             project={project}
             invoice={invoice}
             timeslips={this.props.timeslips}
+            tasks={this.props.tasks}
             modifiers={this.props.modifiers}
             invoiceItems={this.props.invoiceItems}
             onDelete={() =>
@@ -84,6 +86,7 @@ class Invoice extends React.Component {
             project={project}
             timeslips={this.props.timeslips}
             items={this.props.invoiceItems}
+            tasks={this.props.tasks}
             onAddItem={(name, price, qty) =>
               this.props.createItem(invoice.get('id'), name, price, qty)
             }
@@ -92,6 +95,9 @@ class Invoice extends React.Component {
             }
             onDeleteInvoiceItem={(itemId) =>
               this.props.deleteInvoiceItem(invoice.get('id'), itemId)
+            }
+            onDeleteTask={(taskId) =>
+              console.log('Delete Task:', taskId)
             }
           />
         </div>
@@ -111,12 +117,17 @@ const getInvoiceTimeslips = (invoice, timeslips) => {
 
 const mapStateToProps = (state, { params }) => {
   const invoice = state.invoice;
+  const invoiceId = parseInt(params.id, 10);
+  const tasks = state.tasks.items.filter((task) =>
+    task.get('invoice') === invoiceId
+  );
   return {
     isLoading: invoice.view.get('isLoading'),
     invoice: invoice.details,
     invoiceItems: invoice.additionalItems,
     timeslips: getInvoiceTimeslips(invoice.details, state.timeslips.items),
     projects: state.projects.items,
+    tasks: tasks,
     invoiceId: params.id,
     modifiers: invoice.modifiers
   };

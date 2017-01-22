@@ -9,10 +9,6 @@ import styles from './styles.css';
 
 const API_URL = '/api/';
 
-export const getUninvoicedAmount = (project) => {
-  return project.get('uninvoiced_hours') * project.get('hourly_rate');
-};
-
 const InvoiceInfo = (props) => {
   const project = props.project;
   const invoice = props.invoice;
@@ -54,6 +50,7 @@ const InvoiceInfo = (props) => {
         project={project}
         invoice={invoice}
         timeslips={props.timeslips}
+        tasks={props.tasks}
         modifiers={props.modifiers}
         invoiceItems={props.invoiceItems}
         total={props.total}

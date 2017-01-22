@@ -6,7 +6,7 @@ from django.db.models import Max
 
 from libs import invoicepdf
 
-INVOICE_DUE_DAYS=14
+INVOICE_DUE_DAYS = 14
 
 
 class Billing(models.Model):
@@ -83,7 +83,9 @@ class Project(models.Model):
         return sum([t.hours for t in timeslips])
 
     def get_total_paid(self, *args, **kwargs):
-        invoices = Invoice.objects.filter(project=self).exclude(total_paid__isnull=True)
+        invoices = Invoice.objects.filter(
+            project=self
+        ).exclude(total_paid__isnull=True)
         return sum([i.total_paid for i in invoices])
 
     def __str__(self):
@@ -127,11 +129,21 @@ class Invoice(models.Model):
         super().save(*args, **kwargs)
 
         if self.issued_at is None:
-            timeslips = TimeSlip.objects.filter(
-                project=self.project,
-                invoice=None
+            TimeSlip.set_invoice(
+                TimeSlip.objects.filter(
+                    project=self.project,
+                    invoice=None
+                ),
+                self.pk
             )
-            TimeSlip.set_invoice(timeslips, self.pk)
+
+            Task.set_invoice(
+                Task.objects.filter(
+                    project=self.project,
+                    invoice=None
+                ),
+                self.pk
+            )
         else:
             self.set_total_due()
             super().save(*args, **kwargs)
@@ -196,6 +208,15 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def set_invoice(tasks, invoice_id):
+        """
+        Takes a list of tasks and updates with the provided invoice_id
+        Also unsets all existing tasks with this invoice_id
+        """
+        Task.objects.filter(invoice_id=invoice_id).update(invoice_id=None)
+        tasks.update(invoice_id=invoice_id)
 
 
 class TaskNote(models.Model):
@@ -299,4 +320,9 @@ class Expense(models.Model):
     type = models.CharField(max_length=255, blank=True, null=True)
     reference = models.CharField(max_length=512, blank=True, null=True)
     notes = models.CharField(max_length=1024, blank=True, null=True)
-    project = models.ForeignKey(Project, models.SET_NULL, blank=True, null=True)
+    project = models.ForeignKey(
+        Project,
+        models.SET_NULL,
+        blank=True,
+        null=True
+    )

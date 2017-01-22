@@ -65,6 +65,10 @@ class TaskForm extends React.Component {
         cost: task.get('cost'),
         due_date: task.get('due_date')
       };
+    } else {
+      this.state.form = {
+        project: this.props.projects.first().get('id')
+      };
     };
   }
 

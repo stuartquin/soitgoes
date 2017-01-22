@@ -254,7 +254,17 @@ class TaskList(generics.ListCreateAPIView):
     serializer_class = serializers.TaskSerializer
 
     def get_queryset(self):
-        return models.Task.objects.all().order_by('completed_at')
+        filters = {
+            'user': self.request.user
+        }
+        if 'project' in self.request.query_params:
+            filters['project'] = self.request.query_params['project']
+
+        if 'invoice' in self.request.query_params:
+            invoice = self.request.query_params['invoice']
+            filters['invoice'] = invoice if invoice != 'none' else None
+
+        return models.Task.objects.filter(**filters).order_by('completed_at')
 
 
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):

@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Link } from 'react-router';
 import {connect} from 'react-redux';
 
 import { TaskList } from './tasklist';
@@ -23,13 +24,22 @@ class Tasks extends React.Component {
     }
 
     return (
-      <div className='row'>
-        <div className='col-md-12'>
-          <TaskList
-            tasks={this.props.tasks}
-            projects={this.props.projects}
-            onCompleteTask={(id) => this.props.completeTask(id)}
-          />
+      <div>
+        <div className='row'>
+          <div className='col-md-12'>
+            <Link to={`/tasks/add`}>
+              New Task
+            </Link>
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-md-12'>
+            <TaskList
+              tasks={this.props.tasks}
+              projects={this.props.projects}
+              onCompleteTask={(id) => this.props.completeTask(id)}
+            />
+          </div>
         </div>
       </div>
     );

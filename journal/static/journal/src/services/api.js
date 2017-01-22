@@ -71,10 +71,10 @@ export const createTimeslips = (timeslips) => {
   return fetch(req);
 };
 
-export const updatetmeslips = (timeslips) => {
-  return promise.all(timeslips.map((t) => {
+export const updateTimeslips = (timeslips) => {
+  return Promise.all(timeslips.map((t) => {
     const path = `timeslips/${t.get('id')}`;
-    return fetch(buildrequest(path, 'put', t.tojs())).then(res => res.json());
+    return fetch(buildRequest(path, 'PUT', t.toJS())).then(res => res.json());
   }));
 };
 
@@ -217,15 +217,20 @@ export const fetchExpenses = (start, end) => {
   );
 };
 
-export const fetchTasks = (id=null, project=null) => {
+export const fetchTasks = (id=null, project=null, invoice=null) => {
   let url = 'tasks/';
+  let query = [];
   if (id) {
     url += id;
   }
-
   if (project !== null) {
-    url = url + `&project=${project}`;
+    query.push(`project=${project}`);
   }
+
+  if (invoice !== null) {
+    query.push(`invoice=${invoice}`);
+  }
+  url = `${url}?${query.join('&')}`;
 
   return fetch(buildRequest(url)).then((res) => {
     const json = res.json();
@@ -235,5 +240,10 @@ export const fetchTasks = (id=null, project=null) => {
 
 export const updateTask = (taskId, updates) => {
   const req = buildRequest(`tasks/${taskId}`, 'PUT', updates);
+  return fetch(req).then(res => res.json());
+};
+
+export const addTask = (form) => {
+  const req = buildRequest(`tasks/`, 'POST', form);
   return fetch(req).then(res => res.json());
 };

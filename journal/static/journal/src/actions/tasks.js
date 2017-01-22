@@ -51,3 +51,16 @@ export const updateTask = (id, updates) => (dispatch) => {
     });
   });
 };
+
+export const addTask = (form) => (dispatch) => {
+  dispatch({
+    type: constants.UPDATE_TASK_START
+  });
+
+  api.addTask(form).then(res => {
+    dispatch({
+      type: constants.GET_TASKS_SUCCESS,
+      tasks: [res]
+    });
+  });
+};

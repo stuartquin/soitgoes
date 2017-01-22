@@ -96,8 +96,16 @@ export const fetchInvoiceItems = (invoiceId) => (dispatch) =>
     });
   });
 
+export const fetchInvoiceTasks = (invoiceId) => (dispatch) =>
+  api.fetchTasks(null, null, invoiceId).then(res => {
+    dispatch({
+      type: constants.GET_TASKS_SUCCESS,
+      tasks: res.results
+    });
+  });
+
 export const deleteInvoiceTimeslip = (invoiceId, timeslip) => (dispatch) => {
-  api.updateTmeslips([timeslip.set('invoice', null)]).then((timeslips) => {
+  api.updateTimeslips([timeslip.set('invoice', null)]).then((timeslips) => {
     dispatch({
       type: constants.GET_TIMESLIPS_SUCCESS,
       timeslips
@@ -120,4 +128,3 @@ export const createItem = (invoiceId, name, price, qty) => (dispatch) =>
     });
     dispatch(fetchInvoiceItems(invoiceId));
   });
-

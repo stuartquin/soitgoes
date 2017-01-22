@@ -107,10 +107,10 @@ class TaskNoteSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    notes = TaskNoteSerializer(many=True)
-
-    def get_validation_exclusions(self):
-        import ipdb; ipdb.set_trace()
+    notes = TaskNoteSerializer(many=True, read_only=True)
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
 
     class Meta:
         model = models.Task

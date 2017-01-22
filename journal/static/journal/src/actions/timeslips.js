@@ -18,7 +18,7 @@ const savingTimeslips = () => {
 
 export const saveTimeslips = (existingTimeslips, newTimeslips) => {
   const updates = existingTimeslips.filter(t => t.get('isUpdated'));
-  let calls = [api.updateTmeslips(updates)];
+  let calls = [api.updateTimeslips(updates)];
 
   if (newTimeslips.size) {
     calls = calls.concat(api.createTimeslips(newTimeslips));
