@@ -120,6 +120,16 @@ export const deleteInvoiceItem = (invoiceId, itemId) => (dispatch) => {
   });
 };
 
+export const deleteInvoiceTask = (invoiceId, taskId) => (dispatch) => {
+  api.updateTask(taskId, {invoice: null}).then((res) => {
+    dispatch({
+      type: constants.GET_TASKS_SUCCESS,
+      tasks: [res]
+    });
+    dispatch(fetchInvoiceTasks(invoiceId));
+  });
+};
+
 export const createItem = (invoiceId, name, price, qty) => (dispatch) =>
   api.createInvoiceItem(invoiceId, name, price, qty).then(item => {
     dispatch({

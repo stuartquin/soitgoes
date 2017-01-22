@@ -97,7 +97,7 @@ class Invoice extends React.Component {
               this.props.deleteInvoiceItem(invoice.get('id'), itemId)
             }
             onDeleteTask={(taskId) =>
-              console.log('Delete Task:', taskId)
+              this.props.deleteInvoiceTask(invoice.get('id'), taskId)
             }
           />
         </div>
