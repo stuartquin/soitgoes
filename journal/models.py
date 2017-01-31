@@ -109,7 +109,11 @@ class Invoice(models.Model):
         item_total = sum(
             float(item.cost_per_unit) * int(item.qty) for item in self.items.all()
         )
-        total = (self.total_hours * self.project.hourly_rate) + item_total
+        task_total = sum(
+            float(task.cost) for task in self.tasks.all()
+        )
+        total = (self.total_hours * self.project.hourly_rate)
+        total = total + item_total + task_total
         modifier_impact = self.get_modifier_value(total)
         self.subtotal_due = total
         self.total_due = total + modifier_impact
@@ -140,8 +144,8 @@ class Invoice(models.Model):
             Task.set_invoice(
                 Task.objects.filter(
                     project=self.project,
-                    invoice=None
-                ),
+                    invoice=None,
+                ).exclude(completed_at=None),
                 self.pk
             )
         else:

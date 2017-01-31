@@ -8,7 +8,7 @@ const HeaderLogo = (props) => {
   return (
     <div className={styles.headerLogo}>
       <div className={styles.headerBrand}>
-        <Link to={'/'}>
+        <Link to={'/dash'}>
           <img src='/static/journal/assets/logo.png' />
         </Link>
       </div>

@@ -2,7 +2,6 @@ from django.template import loader
 import tempfile
 import subprocess
 import os
-import datetime
 
 INVOICE_DIR = '/tmp/invoices/'
 
@@ -60,7 +59,8 @@ def render(invoice):
         'items': invoice.items.all(),
         'modifiers': modifiers,
         'sent_date': invoice.issued_at.strftime('%d %B %Y'),
-        'due_date': due_date
+        'due_date': due_date,
+        'tasks': invoice.tasks.all()
     }
 
     with open(html_name, 'w') as output:
