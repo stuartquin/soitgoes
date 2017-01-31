@@ -15,7 +15,6 @@ class Tasks extends React.Component {
 
   render() {
     const loading = (
-      this.props.tasks.isEmpty() ||
       this.props.projects.isEmpty()
     );
 
