@@ -1,3 +1,14 @@
+$color-bg-light: #81C3D7;
+$color-bg-dark: #2D3349;
+$color-text-light: #D9DCD6;
+$color-text-dark: #222738;
+$color-brand: #0E79B2;
+
+$break-small: 400px;
+$break-large: 1200px;
+
+@import 'nav';
+
 @import 'create-invoice';
 @import 'invoice-summary';
 @import 'invoice-advanced';

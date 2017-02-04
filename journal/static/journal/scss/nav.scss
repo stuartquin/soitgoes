@@ -1,0 +1,40 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.nav-app-bar {
+  background-color: $color-brand !important;
+
+  button {
+    display: none !important;
+  }
+}
+
+.nav-item {
+    border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+    color: $color-text-light !important;
+    text-shadow: 1px 2px rgba(0,0,0,0.2);
+    text-transform: uppercase;
+    font-size: 0.9em !important;
+}
+
+.nav-container {
+  background-color: $color-bg-dark !important;
+
+  @media screen and (min-width: $break-small) {
+    transform: translate(0px, 0px) !important;
+  }
+}
+
+.main-app-bar {
+  background-color: $color-bg-light !important;
+}
+
+.container {
+  margin-left: 260px;
+  @media screen and (max-width: $break-small) {
+    margin-left: 0px;
+  }
+}
+

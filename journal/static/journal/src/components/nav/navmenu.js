@@ -1,36 +1,40 @@
 'use strict';
 import React from 'react';
-import {Link} from 'react-router';
+import { browserHistory } from 'react-router';
 
-import styles from './styles.css';
+import AppBar from 'material-ui/AppBar';
+import Drawer from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
+
 
 const NavMenu = (props) => {
-  const navClasses = `${styles.navbarNav}`;
+  const linkTo = (route) => () => {
+    browserHistory.push(route);
+  }
 
   return (
-    <ul className={ navClasses }>
-      <li className={styles.navItem}>
-        <Link to={'/invoices'}
-          activeClassName={styles.navActive}
-          className={styles.navLink}>
-          Invoice
-        </Link>
-      </li>
-      <li className={styles.navItem}>
-        <Link to={'/timeslips'}
-          activeClassName={styles.navActive}
-          className={styles.navLink}>
-          Time
-        </Link>
-      </li>
-      <li className={styles.navItem}>
-        <Link to={'/tasks'}
-          activeClassName={styles.navActive}
-          className={styles.navLink}>
-          Tasks
-        </Link>
-      </li>
-    </ul>
+    <Drawer containerClassName='nav-container' open={props.open}>
+      <AppBar
+        title='InvoiceTime'
+        className='nav-app-bar'
+        onTitleTouchTap={props.onToggle}
+      />
+      <MenuItem
+        className='nav-item'
+        primaryText='Invoice'
+        onTouchTap={linkTo('/invoices')}
+      />
+      <MenuItem
+        className='nav-item'
+        primaryText='Time'
+        onTouchTap={linkTo('/timeslips')}
+      />
+      <MenuItem
+        className='nav-item'
+        primaryText='Tasks'
+        onTouchTap={linkTo('/tasks')}
+      />
+    </Drawer>
   );
 };
 

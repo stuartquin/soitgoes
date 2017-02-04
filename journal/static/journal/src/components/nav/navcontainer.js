@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import AppBar from 'material-ui/AppBar';
+
 import { NavMenu } from './navmenu';
 import { HeaderLogo } from './headerlogo';
 import { UserMenu } from './usermenu';
@@ -12,6 +14,13 @@ import * as userActions from '../../actions/user';
 
 
 class Nav extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      navOpen: true
+    };
+  }
+
   componentDidMount() {
     // Starts a loop
     this.props.fetchVersion();
@@ -29,23 +38,26 @@ class Nav extends React.Component {
     location.reload();
   }
 
+  toggleMenu() {
+    this.setState({navOpen: !this.state.navOpen})
+  }
+
   render() {
     const className = `${styles.navContainer}`;
     const navClasses = `${styles.navInner}`;
     return (
-      <div>
-        <nav className={navClasses}>
-          <div className={`container ${ styles.navContainer }`}>
-            <HeaderLogo />
-            <NavMenu />
-            <UserMenu
-              user={this.props.user}
-              version={this.props.version}
-              isLoading={this.props.isUserLoading}
-              onLogout={() => this.onLogout()}
-            />
-          </div>
-        </nav>
+      <div className='wrapper'>
+        <NavMenu
+          open={this.state.navOpen}
+          onToggle={() => this.toggleMenu()}
+        />
+
+        <AppBar
+          title='InvoiceTime'
+          className='main-app-bar'
+          iconElementLeft={null}
+          onLeftIconButtonTouchTap={() => this.toggleMenu()}
+        />
 
         <div className='container'>
           {this.props.children}
