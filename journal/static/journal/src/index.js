@@ -16,6 +16,7 @@ import { NavContainer } from './components/nav/navcontainer';
 import { InvoicesContainer } from './components/invoices/invoicescontainer';
 import { InvoiceContainer } from './components/invoices/invoicecontainer';
 import { ProjectsContainer } from './components/projects/projectscontainer';
+import { ProjectContainer } from './components/projects/projectcontainer';
 import { DashContainer } from './components/dash/dash';
 import { TasksContainer } from './components/tasks/taskscontainer';
 import { TaskContainer } from './components/tasks/taskcontainer';
@@ -36,6 +37,10 @@ const routes = (
       <Route path='invoices'>
         <IndexRoute component={InvoicesContainer}/>
         <Route path=':id' component={InvoiceContainer}/>
+      </Route>
+      <Route path='projects'>
+        <IndexRoute component={ProjectsContainer}/>
+        <Route path=':id' component={ProjectContainer}/>
       </Route>
       <Route path='timeslips' component={TimeslipsContainer} />
       <Route path='dash' component={DashContainer} />

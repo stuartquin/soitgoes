@@ -4,7 +4,6 @@ import moment from 'moment';
 import {TimeslipGridHeader} from './timeslipgridheader';
 import {TimeslipGridRow} from './timeslipgridrow';
 
-import styles from './styles.css';
 
 const FUTURE_DAYS = 7;
 const getDateRange = (today) => {
@@ -24,37 +23,33 @@ const TimeslipGrid = (props) => {
   'use strict';
   const range = getDateRange(props.weekStart);
   const today = props.today;
-  const className = `${styles.timeslipGrid} col-md-12`;
 
   const projects = props.projects.filter(project => !project.get('archived'));
 
   return (
-    <div className={className}>
-
-      <div className='table-responsive'>
-        <table className='table table-striped'>
-          <thead>
-            <TimeslipGridHeader today={today} range={range} />
-          </thead>
-          <tbody>
-            {projects.map(project => (
-              <TimeslipGridRow
-                key={project.get('id')}
-                project={project}
-                today={today}
-                range={range}
-                isLoading={props.isLoading}
-                timeslips={getTimeslipsForProject(project, props.timeslips)}
-                onInvoice={() => {
-                  props.onInvoice(project);
-                }}
-                onHourChanged={(hours, date, timeslip) => {
-                  props.onHourChanged(project, date, hours || 0, timeslip);
-                }} />
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div className='timeslip-grid'>
+      <table>
+        <thead>
+          <TimeslipGridHeader today={today} range={range} />
+        </thead>
+        <tbody>
+          {projects.map(project => (
+            <TimeslipGridRow
+              key={project.get('id')}
+              project={project}
+              today={today}
+              range={range}
+              isLoading={props.isLoading}
+              timeslips={getTimeslipsForProject(project, props.timeslips)}
+              onInvoice={() => {
+                props.onInvoice(project);
+              }}
+              onHourChanged={(hours, date, timeslip) => {
+                props.onHourChanged(project, date, hours || 0, timeslip);
+              }} />
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

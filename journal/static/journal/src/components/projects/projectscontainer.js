@@ -2,7 +2,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {ActivityFeedContainer} from '../activityfeed/activityfeedcontainer';
+import {ProjectListRow} from './projectslistrow';
 import * as projectActions from '../../actions/projects';
 
 class Projects extends React.Component {
@@ -11,19 +11,13 @@ class Projects extends React.Component {
   }
 
   render() {
-    if (this.props.projects.isEmpty()) {
-      return (<div>Loading</div>);
-    }
-
     return (
-      <div className='row'>
-        <div className='col-md-4'>
-        </div>
-        <div className='col-md-8'>
-          <ActivityFeedContainer
-            projects={this.props.projects}
-          />
-        </div>
+      <div>
+      {this.props.projects.map(p => (
+        <ProjectListRow
+          project={p}
+        />
+      ))}
       </div>
     );
   }

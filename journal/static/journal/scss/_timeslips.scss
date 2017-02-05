@@ -1,0 +1,47 @@
+.timeslip-container {
+  width: 50%;
+
+  @media screen and (max-width: $break-small) {
+    width: 100%;
+  }
+}
+
+.timeslip-grid {
+  overflow-x: auto;
+
+  .timeslip-grid-cell {
+    width: 45px;
+    padding: 0 !important;
+    border: 1px solid #eceeef;
+    overflow-x: auto;
+
+    input {
+      width: 45px;
+      height: 45px;
+      text-align: center;
+      background: transparent;
+      border: none;
+    }
+  }
+
+  .timeslip-header-date {
+    &.weekend {
+      background-color: $color-text-light;
+    }
+
+    &.today {
+      background-color: $color-bg-light;
+    }
+  }
+}
+
+.timeslip-actions {
+  display: flex;
+  justify-content: space-between;
+
+  .timeslip-date-controls {
+    .date-control {
+      min-width: 50px !important;
+    }
+  }
+}

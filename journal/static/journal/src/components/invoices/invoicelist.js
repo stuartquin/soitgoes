@@ -15,7 +15,7 @@ const InvoiceList = (props) => {
       {props.invoices.map(invoice => (
         <InvoiceListRow
           key={invoice.id}
-          project={props.projects.get(`${invoice.project}`)}
+          project={props.projects.get(invoice.project)}
           invoice={invoice} />
       ))}
       </tbody>

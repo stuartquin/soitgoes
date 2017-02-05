@@ -32,8 +32,11 @@ body {
 }
 
 .container {
+  padding: 16px;
   margin-left: 260px;
+
   @media screen and (max-width: $break-small) {
+    padding: 0;
     margin-left: 0px;
   }
 }

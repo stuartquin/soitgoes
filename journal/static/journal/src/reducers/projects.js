@@ -4,11 +4,13 @@ import { combineReducers } from 'redux';
 
 import constants from '../constants';
 
-const getProjectsById = (items) => {
-  return items.reduce((prev, current) => {
-    prev[current.id] = current;
-    return prev;
-  }, {});
+const getById = (items) => {
+  let map = Immutable.OrderedMap();
+  items.forEach(item => map = map.set(
+    item.id,
+    Immutable.fromJS(item)
+  ))
+  return map;
 };
 
 const view = (state = Immutable.Map({}), action) => {
@@ -21,7 +23,7 @@ const view = (state = Immutable.Map({}), action) => {
 const items = (state = Immutable.Map({}), action) => {
   switch(action.type) {
   case constants.GET_PROJECTS_SUCCESS:
-    return state.merge(Immutable.fromJS(getProjectsById(action.projects)));
+    return state.merge(Immutable.fromJS(getById(action.projects)));
   default:
     return state;
   }
