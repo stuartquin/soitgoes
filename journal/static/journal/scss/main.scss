@@ -1,6 +1,7 @@
 $color-bg-light: #81C3D7;
 $color-bg-dark: #2D3349;
-$color-text-light: #D9DCD6;
+$color-text-light: #EBE9E9;
+$color-text-secondary: #878E88;
 $color-text-dark: #222738;
 $color-brand: #0E79B2;
 $color-success: #4CB944;
@@ -15,6 +16,7 @@ $break-large: 1200px;
 @import 'invoice-summary';
 @import 'invoice-advanced';
 @import 'buttons';
+@import 'header-bar';
 
 @import 'tasks';
 @import 'project';

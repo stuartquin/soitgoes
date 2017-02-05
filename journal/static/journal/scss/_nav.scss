@@ -1,6 +1,7 @@
 body {
   padding: 0;
   margin: 0;
+  font-family: Roboto, sans-serif;
 }
 
 .nav-app-bar {
@@ -32,8 +33,7 @@ body {
 }
 
 .container {
-  padding: 16px;
-  margin-left: 260px;
+  margin-left: 259px;
 
   @media screen and (max-width: $break-small) {
     padding: 0;
