@@ -2,8 +2,9 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import { InvoiceList } from './invoicelist';
-import { CreateInvoice } from './createinvoice';
+import {InvoiceList} from './invoicelist';
+import {CreateInvoice} from './createinvoice';
+import {HeaderBar} from '../nav/headerbar';
 import * as invoiceActions from '../../actions/invoices';
 
 class Invoices extends React.Component {
@@ -22,19 +23,39 @@ class Invoices extends React.Component {
       return (<strong>Loading...</strong>);
     }
 
+    if (this.props.invoices.isEmpty()) {
+      return (<strong>No invoices</strong>);
+    }
+
+    const openInvoices = this.props.invoices.filter((invoice) => {
+      return invoice.get('paid_at') === null;
+    });
+
+    const closedInvoices = this.props.invoices.filter((invoice) => {
+      return invoice.get('paid_at') !== null;
+    });
+
     return (
-      <div className='row'>
-        <div className='col-sm-4'>
+      <div className='invoices-container'>
+        <HeaderBar
+          title='Invoices'
+        />
+        <div className='content'>
           <CreateInvoice
             projects={this.props.projects}
             onCreateInvoice={this.props.createInvoice}
           />
-        </div>
 
-        <div className='col-sm-8'>
+          <h3>Open Invoices ({openInvoices.size})</h3>
           <InvoiceList
             projects={this.props.projects}
-            invoices={this.props.invoices}
+            invoices={openInvoices}
+          />
+
+          <h3>Closed Invoices ({closedInvoices.size})</h3>
+          <InvoiceList
+            projects={this.props.projects}
+            invoices={closedInvoices}
           />
         </div>
       </div>

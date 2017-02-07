@@ -4,13 +4,21 @@ $color-text-light: #EBE9E9;
 $color-text-secondary: #878E88;
 $color-text-dark: #222738;
 $color-brand: #0E79B2;
+
 $color-success: #4CB944;
-$color-error: #F06543;
+$color-bg-success: lighten($color-success, 40%);
+
+$color-error: #C11D15;
+$color-bg-error: lighten($color-error, 50%);
+
+$color-warn: #D69A2C;
+$color-bg-warn: lighten($color-warn, 35%);
 
 $break-small: 400px;
 $break-large: 1200px;
 
 @import 'nav';
+@import 'base';
 
 @import 'create-invoice';
 @import 'invoice-summary';
@@ -20,4 +28,5 @@ $break-large: 1200px;
 
 @import 'tasks';
 @import 'project';
+@import 'invoice';
 @import 'timeslips';

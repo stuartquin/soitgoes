@@ -3,6 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {ProjectListRow} from './projectslistrow';
+import {HeaderBar} from '../nav/headerbar';
 import * as projectActions from '../../actions/projects';
 
 class Projects extends React.Component {
@@ -12,7 +13,11 @@ class Projects extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='projects-container'>
+        <HeaderBar
+          title='Projects'
+        />
+
       {this.props.projects.map(p => (
         <ProjectListRow
           project={p}

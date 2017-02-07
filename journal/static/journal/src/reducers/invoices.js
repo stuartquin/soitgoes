@@ -4,18 +4,19 @@ import Immutable from 'immutable';
 
 import constants from '../constants';
 
-const getInvoicesById = (items) => {
-  let invoices = Immutable.OrderedMap();
-  items.forEach((item) => {
-    invoices = invoices.set(item.id, item);
-  });
-  return invoices;
+const getById = (items) => {
+  let map = Immutable.OrderedMap();
+  items.forEach(item => map = map.set(
+    item.id,
+    Immutable.fromJS(item)
+  ))
+  return map;
 };
 
 const items = (state = Immutable.OrderedMap(), action) => {
   switch (action.type) {
   case constants.GET_INVOICES_SUCCESS:
-    return getInvoicesById(action.invoices);
+    return state.merge(getById(action.invoices));
   default:
     return state;
   }

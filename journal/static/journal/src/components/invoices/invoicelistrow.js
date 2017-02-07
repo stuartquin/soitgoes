@@ -1,34 +1,76 @@
 import React from 'react';
 import { Link } from 'react-router';
 import moment from 'moment';
+import {TableRow, TableRowColumn} from 'material-ui/Table';
 
-import styles from './styles.css';
 
-const InvoiceListRow = (props) => {
+const InvoiceStateChip = (props) => {
   const invoice = props.invoice;
-  const issuedAt = invoice.issued_at ? moment(invoice.issued_at).format('YYYY-MM-DD') : '-';
+  const issued = invoice.get('issued_at');
+  const today = moment();
 
-  let totalClass = 'text-danger';
-  let total = invoice.total_due;
-  if (invoice.total_paid) {
-    totalClass = 'text-success';
-    total = invoice.total_paid;
+  let text = '';
+  let classNames = [
+    'state-label'
+  ];
+
+  if (!issued) {
+    classNames.push('state-label-default');
+    text = 'Draft';
+  } else {
+    if (invoice.get('paid_at')) {
+      classNames.push('state-label-success');
+      text = moment(invoice.get('paid_at')).format('YYYY-MM-DD');
+    } else {
+      const dueDate = moment(invoice.get('due_date'));
+      if (dueDate.isBefore(today)) {
+        classNames.push('state-label-error');
+        text = dueDate.fromNow(true)
+      } else {
+        classNames.push('state-label-warn');
+        text = dueDate.toNow(true)
+      }
+    }
   }
 
   return (
-    <tr className={ styles.invoiceListRow }>
-      <td>
-        <Link to={`/invoices/${invoice.id}`}>
-        {props.project.get('name')} #{invoice.sequence_num}
+    <span className={classNames.join(' ')}>
+      <span className='state-label-icon'>
+      </span>
+      <span className='state-label-text'>
+        {text}
+      </span>
+    </span>
+  );
+};
+
+const InvoiceListRow = (props) => {
+  const invoice = props.invoice;
+  const issuedAt = invoice.get('issued_at') ? moment(invoice.get('issued_at')).format('YYYY-MM-DD') : '-';
+
+  let totalClass = 'text-danger';
+  let total = invoice.get('total_due');
+  if (invoice.get('total_paid')) {
+    totalClass = 'text-success';
+    total = invoice.get('total_paid');
+  }
+
+  return (
+    <TableRow className='invoice-list-row'>
+      <TableRowColumn>
+        <Link to={`/invoices/${invoice.get('id')}`}>
+          #{invoice.get('sequence_num')} {props.project.get('name')}
         </Link>
-      </td>
-      <td>
-        {issuedAt}
-      </td>
-      <td>
+      </TableRowColumn>
+      <TableRowColumn className='invoice-column-total'>
         <span className={ totalClass }>&pound;{total}</span>
-      </td>
-    </tr>
+      </TableRowColumn>
+      <TableRowColumn>
+        <InvoiceStateChip
+          invoice={invoice}
+        />
+      </TableRowColumn>
+    </TableRow>
   );
 };
 
