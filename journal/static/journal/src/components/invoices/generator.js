@@ -64,7 +64,7 @@ class Generator extends React.Component {
             isIssued={isIssued}
             items={timeslipItems}
             onDeleteItem={(item) => {
-              debugger;
+              this.props.onDeleteInvoiceTimeslip(item.id);
             }}
           />
 

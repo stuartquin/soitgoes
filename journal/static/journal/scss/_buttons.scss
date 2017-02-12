@@ -3,3 +3,10 @@
     background-color: $color-success !important;
   }
 }
+
+.btn-error {
+  button {
+    background-color: $color-error !important;
+    color: white !important;
+  }
+}

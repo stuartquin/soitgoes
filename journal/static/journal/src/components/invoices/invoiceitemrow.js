@@ -1,15 +1,24 @@
 'use strict';
 import React from 'react';
+
+import ActionDelete from 'material-ui/svg-icons/action/delete';
+import IconButton from 'material-ui/IconButton';
 import {TableRow, TableRowColumn} from 'material-ui/Table';
+
+
 
 const InvoiceItemRow = (props) => {
   let btn = (<div />);
   if (!props.isIssued) {
     btn = (
-      <button className='btn btn-sm btn-default'
-        onClick={props.onDelete}>
-        <span className='glyphicon glyphicon-minus-sign'></span>
-      </button>
+      <IconButton
+        tooltip='Remove Item'
+        touch={true}
+        tooltipPosition='bottom-right'
+        className='btn-default'
+        onTouchTap={props.onDelete}>
+        <ActionDelete />
+      </IconButton>
     );
   }
 

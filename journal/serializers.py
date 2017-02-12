@@ -46,6 +46,7 @@ class TimeSlipSerializer(LogActivity):
 
     class Meta:
         model = models.TimeSlip
+        partial = True
 
 
 class UserSerializer(serializers.ModelSerializer):

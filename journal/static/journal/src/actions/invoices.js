@@ -104,8 +104,11 @@ export const fetchInvoiceTasks = (invoiceId) => (dispatch) =>
     });
   });
 
-export const deleteInvoiceTimeslip = (invoiceId, timeslip) => (dispatch) => {
-  api.updateTimeslips([timeslip.set('invoice', null)]).then((timeslips) => {
+export const deleteInvoiceTimeslip = (invoiceId, timeslipId) => (dispatch) => {
+  const updates = {
+    invoice: null
+  };
+  api.updateTimeslips([timeslipId], updates).then((timeslips) => {
     dispatch({
       type: constants.GET_TIMESLIPS_SUCCESS,
       timeslips

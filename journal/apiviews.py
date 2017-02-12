@@ -158,7 +158,13 @@ class InvoicePDF(APIView):
 class TimeSlipDetail(generics.UpdateAPIView):
     queryset = models.TimeSlip.objects.all()
     serializer_class = serializers.TimeSlipSerializer
-    permission_classes = (HasTimeslipAccess,)
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
+        if 'data' in kwargs:
+            kwargs['partial'] = True
+
+        return self.serializer_class(*args, **kwargs)
 
 
 class ExpenseList(generics.ListCreateAPIView):
