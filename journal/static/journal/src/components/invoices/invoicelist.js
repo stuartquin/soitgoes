@@ -8,7 +8,7 @@ const InvoiceList = (props) => {
   const projects = props.projects;
 
   return (
-    <Table className='invoice-list'>
+    <Table className='invoice-list table'>
       <TableBody>
       {props.invoices.map(invoice => (
         <InvoiceListRow

@@ -18,13 +18,13 @@ const InvoiceItemRow = (props) => {
       <TableRowColumn>
         {props.details}
       </TableRowColumn>
-      <TableRowColumn>
+      <TableRowColumn className='col-currency col-sm-hide'>
         {props.unitPrice}
       </TableRowColumn>
-      <TableRowColumn>
+      <TableRowColumn className='col-currency'>
         {props.subTotal}
       </TableRowColumn>
-      <TableRowColumn>
+      <TableRowColumn className='col-action'>
         {btn}
       </TableRowColumn>
     </TableRow>

@@ -1,12 +1,29 @@
+.table {
+  @media screen and (max-width: $break-small) {
+    td {
+        padding: 4px !important;
+    }
+
+    .col-sm-hide {
+      display: none;
+    }
+  }
+
+  .col-currency {
+    width: 40px !important;
+  }
+
+  .col-action {
+    width: 40px !important;
+  }
+}
+
+
 .invoices-container {
   width: 50%;
 
   @media screen and (max-width: $break-small) {
     width: 100%;
-
-    td {
-        padding: 4px !important;
-    }
   }
 
   .invoice-list-row {

@@ -3,7 +3,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import { Generator } from './generator';
-import { InvoiceTimeslips } from './invoicetimeslips';
 import { InvoiceAdvanced } from './invoiceadvanced';
 import {setHeaderBar} from '../../actions/nav';
 
