@@ -73,7 +73,7 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Company
-        fields = ('id', 'name', 'billing')
+        fields = ('id', 'name', 'billing', 'logo_image')
 
 
 class AccountSerializer(serializers.ModelSerializer):

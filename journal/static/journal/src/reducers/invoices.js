@@ -17,6 +17,8 @@ const items = (state = Immutable.OrderedMap(), action) => {
   switch (action.type) {
   case constants.GET_INVOICES_SUCCESS:
     return state.merge(getById(action.invoices));
+  case constants.GET_INVOICE_SUCCESS:
+    return state.merge(getById([action.invoice]));
   default:
     return state;
   }

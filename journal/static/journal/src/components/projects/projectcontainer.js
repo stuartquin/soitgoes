@@ -3,7 +3,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {TimeslipsContainer} from '../timeslips/timeslipcontainer';
-import {HeaderBar} from '../nav/headerbar';
 
 import * as projectActions from '../../actions/projects';
 
@@ -25,10 +24,6 @@ class Project extends React.Component {
 
     return (
       <div className='project-container'>
-        <HeaderBar
-          title={project.get('name')}
-          crumbs={crumbs}
-        />
         <TimeslipsContainer
           projects={[project]}
         />

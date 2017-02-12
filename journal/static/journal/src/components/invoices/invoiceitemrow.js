@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
-
-import styles from './styles.css';
+import {TableRow, TableRowColumn} from 'material-ui/Table';
 
 const InvoiceItemRow = (props) => {
   let btn = (<div />);
@@ -15,12 +14,20 @@ const InvoiceItemRow = (props) => {
   }
 
   return (
-    <tr>
-      <td>{props.details}</td>
-      <td>{props.unitPrice}</td>
-      <td>{props.subTotal}</td>
-      <td>{btn}</td>
-    </tr>
+    <TableRow className='invoice-list-row'>
+      <TableRowColumn>
+        {props.details}
+      </TableRowColumn>
+      <TableRowColumn>
+        {props.unitPrice}
+      </TableRowColumn>
+      <TableRowColumn>
+        {props.subTotal}
+      </TableRowColumn>
+      <TableRowColumn>
+        {btn}
+      </TableRowColumn>
+    </TableRow>
   );
 };
 

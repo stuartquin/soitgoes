@@ -4,6 +4,15 @@ import { combineReducers } from 'redux';
 
 import constants from '../constants';
 
+const getById = (items) => {
+  let map = Immutable.OrderedMap();
+  items.forEach(item => map = map.set(
+    item.id,
+    Immutable.fromJS(item)
+  ))
+  return map;
+};
+
 const view = (state = Immutable.Map(), action) => {
   switch(action.type) {
   case constants.GET_USER_START:
@@ -19,6 +28,15 @@ const user = (state = Immutable.Map(), action) => {
   switch(action.type) {
   case constants.GET_USER_SUCCESS:
     return Immutable.fromJS(action.user);
+  default:
+    return state;
+  }
+};
+
+const accounts = (state = Immutable.Map(), action) => {
+  switch(action.type) {
+  case constants.GET_ACCOUNTS_SUCCESS:
+    return state.merge(getById(action.accounts));
   default:
     return state;
   }
@@ -41,6 +59,7 @@ const version = (state = Immutable.Map(), action) => {
 
 const users = combineReducers({
   user,
+  accounts,
   version,
   view
 });

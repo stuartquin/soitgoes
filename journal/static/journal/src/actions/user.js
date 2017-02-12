@@ -17,6 +17,19 @@ export const fetchUser = () => (dispatch) => {
   });
 };
 
+export const fetchAccounts = () => (dispatch) => {
+  dispatch({
+    type: constants.GET_ACCOUNTS_START
+  });
+
+  return api.fetchAccounts().then(res => {
+    const accounts = res.results;
+    dispatch({
+      type: constants.GET_ACCOUNTS_SUCCESS,
+      accounts
+    });
+  });
+};
 
 const _fetchVersion = (dispatch) => {
   api.fetchVersion().then(version => {

@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'api/expenses/$', apiviews.ExpenseList.as_view()),
 
     url(r'api/accounts/$', apiviews.AccountList.as_view()),
+
     url(r'api/user/$', apiviews.UserDetail.as_view()),
     url(r'api/activity/$', apiviews.ActivityFeedList.as_view()),
 

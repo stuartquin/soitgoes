@@ -1,10 +1,8 @@
 'use strict';
 import React from 'react';
+import {Table, TableBody} from 'material-ui/Table';
 
 import { InvoiceItemRow } from './invoiceitemrow';
-import { AddInvoiceItem } from './addinvoiceitem';
-
-import styles from './styles.css';
 
 const getTimeslipDetails = (timeslip, project) => {
   return `${timeslip.get('hours')} Hours on ${timeslip.get('date')}: ${project.get('name')}`;
@@ -17,20 +15,9 @@ const getItemDetails = (item) => {
 const InvoiceTimeslips = (props) => {
   const project = props.project;
 
-  let addRow = (<tr />);
-  if (!props.isIssued) {
-    addRow = (<AddInvoiceItem
-      onAddItem={props.onAddItem}
-    />);
-  }
-
   return (
-    <table className='table table-striped'>
-    <tbody>
-      <tr>
-        <th>Details</th><th>Unit Price (&pound;)</th><th>Subtotal (&pound;)</th><th></th>
-      </tr>
-
+    <Table className='invoice-list'>
+      <TableBody>
       {props.timeslips.map((timeslip) => (
         <InvoiceItemRow
           key={timeslip.get('id')}
@@ -56,24 +43,8 @@ const InvoiceTimeslips = (props) => {
           }}
         />
       ))}
-
-      {props.items.map((item) => (
-        <InvoiceItemRow
-          key={item.get('id') * 300}
-          isIssued={props.isIssued}
-          details={getItemDetails(item)}
-          unitPrice={item.get('cost_per_unit')}
-          subTotal={item.get('cost_per_unit') * item.get('qty')}
-          onDelete={() => {
-            props.onDeleteInvoiceItem(item.get('id'));
-          }}
-        />
-      ))}
-
-      {addRow}
-
-    </tbody>
-    </table>
+    </TableBody>
+    </Table>
   );
 };
 

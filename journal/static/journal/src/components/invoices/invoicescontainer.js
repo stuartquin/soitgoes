@@ -7,9 +7,13 @@ import {CreateInvoice} from './createinvoice';
 import {HeaderBar} from '../nav/headerbar';
 import * as invoiceActions from '../../actions/invoices';
 
+import {setHeaderBar} from '../../actions/nav';
+
+
 class Invoices extends React.Component {
   componentDidMount() {
     this.fetchData();
+    this.props.setHeaderBar('Invoices');
   }
 
   fetchData() {
@@ -37,9 +41,6 @@ class Invoices extends React.Component {
 
     return (
       <div className='invoices-container'>
-        <HeaderBar
-          title='Invoices'
-        />
         <div className='content'>
           <CreateInvoice
             projects={this.props.projects}
@@ -71,7 +72,8 @@ const mapStateToProps = (state) => {
 };
 
 const actions = {
-  ...invoiceActions
+  ...invoiceActions,
+  setHeaderBar
 };
 
 const InvoicesContainer = connect(mapStateToProps, actions)(Invoices);

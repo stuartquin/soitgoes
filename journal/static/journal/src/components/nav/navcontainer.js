@@ -5,6 +5,7 @@ import AppBar from 'material-ui/AppBar';
 
 import { NavMenu } from './navmenu';
 import { HeaderLogo } from './headerlogo';
+import { HeaderBarContainer } from './headerbar';
 import { UserMenu } from './usermenu';
 import { Version } from '../version/version';
 
@@ -24,10 +25,11 @@ class Nav extends React.Component {
   componentDidMount() {
     // Starts a loop
     this.props.fetchVersion();
-
-    this.props.fetchUser().then(() =>
+    Promise.all([
+      this.props.fetchUser(),
+      this.props.fetchAccounts(),
       this.props.fetchProjects()
-    );
+    ]);
   }
 
   onLogout() {
@@ -45,6 +47,7 @@ class Nav extends React.Component {
   render() {
     const className = `${styles.navContainer}`;
     const navClasses = `${styles.navInner}`;
+
     return (
       <div className='wrapper'>
         <NavMenu

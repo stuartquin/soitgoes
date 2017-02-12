@@ -41,3 +41,12 @@ body {
   }
 }
 
+.header-bar {
+  margin-left: 259px;
+
+  @media screen and (max-width: $break-small) {
+    padding: 0;
+    margin-left: 0px;
+  }
+}
+
