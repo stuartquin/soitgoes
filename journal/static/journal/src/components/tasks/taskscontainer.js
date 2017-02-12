@@ -14,14 +14,6 @@ class Tasks extends React.Component {
   }
 
   render() {
-    const loading = (
-      this.props.projects.isEmpty()
-    );
-
-    if (loading) {
-      return (<div>Loading</div>);
-    }
-
     return (
       <div>
         <div className='row'>

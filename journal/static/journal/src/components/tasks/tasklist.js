@@ -7,7 +7,7 @@ const TaskList = (props) => {
       {props.tasks.map(task => (
         <TaskListItem
           key={task.get('id')}
-          project={props.projects.get(`${task.get('project')}`)}
+          project={props.projects.get(task.get('project'))}
           onComplete={props.onCompleteTask}
           task={task} />
       ))}

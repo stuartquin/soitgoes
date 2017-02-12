@@ -16,8 +16,21 @@ const headerBar = (state=Immutable.Map(), action) => {
   }
 };
 
+const view = (state=Immutable.Map(), action) => {
+  switch (action.type) {
+  case constants.SET_APP_LOAD_SUCCESS:
+    return Immutable.fromJS({
+      isLoaded: action.loaded
+    });
+  default:
+    return state;
+  }
+
+}
+
 const nav = combineReducers({
-  headerBar
+  headerBar,
+  view
 });
 
 export default nav;

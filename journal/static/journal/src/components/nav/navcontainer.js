@@ -12,6 +12,7 @@ import { Version } from '../version/version';
 import styles from './styles.css';
 import * as projectActions from '../../actions/projects';
 import * as userActions from '../../actions/user';
+import * as navActions from '../../actions/nav';
 
 
 class Nav extends React.Component {
@@ -29,7 +30,9 @@ class Nav extends React.Component {
       this.props.fetchUser(),
       this.props.fetchAccounts(),
       this.props.fetchProjects()
-    ]);
+    ]).then(() => {
+      this.props.setIsLoaded(true);
+    });
   }
 
   onLogout() {
@@ -47,6 +50,14 @@ class Nav extends React.Component {
   render() {
     const className = `${styles.navContainer}`;
     const navClasses = `${styles.navInner}`;
+
+    if (!this.props.isLoaded) {
+      return (
+        <div className='wrapper'>
+          <h3>Loading...</h3>
+        </div>
+      );
+    }
 
     return (
       <div className='wrapper'>
@@ -79,13 +90,14 @@ const mapStateToProps = (state, props) => {
   return {
     user: state.user.user,
     version: state.user.version,
-    isUserLoading: state.user.isLoading
+    isLoaded: state.nav.view.get('isLoaded')
   };
 };
 
 const actions = {
   ...projectActions,
-  ...userActions
+  ...userActions,
+  ...navActions
 };
 
 

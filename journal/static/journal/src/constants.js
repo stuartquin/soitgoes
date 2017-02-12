@@ -1,5 +1,6 @@
 const values = [
   'SET_STATE',
+  'SET_APP_LOAD_SUCCESS',
 
   'CREATE_SESSION_SUCCESS',
 

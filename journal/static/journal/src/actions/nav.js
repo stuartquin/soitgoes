@@ -12,3 +12,10 @@ export const setHeaderBar = (title, crumbs=[]) => {
     headerBar
   };
 };
+
+export const setIsLoaded = (loaded=true) => {
+  return {
+    type: constants.SET_APP_LOAD_SUCCESS,
+    loaded
+  };
+};
