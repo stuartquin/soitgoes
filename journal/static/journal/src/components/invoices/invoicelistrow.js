@@ -1,6 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router';
 import moment from 'moment';
+
+import ActionDelete from 'material-ui/svg-icons/action/delete';
+import AvFiberManualRecord from 'material-ui/svg-icons/av/fiber-manual-record';
+
+import IconButton from 'material-ui/IconButton';
 import {TableRow, TableRowColumn} from 'material-ui/Table';
 
 
@@ -65,10 +70,20 @@ const InvoiceListRow = (props) => {
       <TableRowColumn className='invoice-column-total'>
         <span className={ totalClass }>&pound;{total}</span>
       </TableRowColumn>
-      <TableRowColumn>
+      <TableRowColumn className='col-state'>
         <InvoiceStateChip
           invoice={invoice}
         />
+      </TableRowColumn>
+      <TableRowColumn className='col-action'>
+        <IconButton
+          tooltip='Delete Invoice'
+          touch={true}
+          tooltipPosition='bottom-right'
+          className='btn-default'
+          onTouchTap={props.onDelete}>
+          <ActionDelete />
+        </IconButton>
       </TableRowColumn>
     </TableRow>
   );

@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
+import {Card, CardText} from 'material-ui/Card';
 
 import {InvoiceList} from './invoicelist';
 import {CreateInvoice} from './createinvoice';
@@ -46,18 +47,23 @@ class Invoices extends React.Component {
             projects={this.props.projects}
             onCreateInvoice={this.props.createInvoice}
           />
+          <Card>
+            <CardText>
 
-          <h3>Open Invoices ({openInvoices.size})</h3>
-          <InvoiceList
-            projects={this.props.projects}
-            invoices={openInvoices}
-          />
+              <h3>Open Invoices ({openInvoices.size})</h3>
+              <InvoiceList
+                projects={this.props.projects}
+                invoices={openInvoices}
+                onDeleteInvoice={(id) => this.props.deleteInvoice(id)}
+              />
 
-          <h3>Closed Invoices ({closedInvoices.size})</h3>
-          <InvoiceList
-            projects={this.props.projects}
-            invoices={closedInvoices}
-          />
+              <h3>Closed Invoices ({closedInvoices.size})</h3>
+              <InvoiceList
+                projects={this.props.projects}
+                invoices={closedInvoices}
+              />
+            </CardText>
+          </Card>
         </div>
       </div>
     );

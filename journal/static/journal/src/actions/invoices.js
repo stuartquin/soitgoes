@@ -30,7 +30,10 @@ export const markAsPaid = (invoiceId, projectId, totalPaid) => (dispatch) =>
 
 export const deleteInvoice = (invoiceId) => (dispatch) =>
   api.deleteInvoice(invoiceId).then(() => {
-    dispatch(push(`/invoices`));
+    dispatch({
+      type: constants.DELETE_INVOICE_SUCCESS,
+      invoiceId
+    });
   });
 
 export const createInvoice = (project, isVAT) => (dispatch) => {

@@ -1,9 +1,11 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
+import Immutable from 'immutable';
 
-import { Generator } from './generator';
-import { InvoiceAdvanced } from './invoiceadvanced';
+import {Generator} from './generator';
+import {Settings} from './settings';
+import {InvoiceAdvanced} from './invoiceadvanced';
 import {setHeaderBar} from '../../actions/nav';
 
 import * as invoiceActions from '../../actions/invoices';
@@ -11,30 +13,27 @@ import * as invoiceActions from '../../actions/invoices';
 
 class Invoice extends React.Component {
   componentDidMount() {
-    this.fetchInvoice().then(() => this.fetchData())
+    if (this.props.id !== 'add') {
+      this.fetchInvoice().then(() => this.fetchData(this.props.id))
+    }
   }
 
   fetchInvoice() {
-    return this.props.fetchInvoice(this.props.invoiceId);
+    return this.props.fetchInvoice(this.props.id);
   }
 
-  fetchData() {
+  fetchData(id) {
     let promises = [
-      this.props.fetchInvoiceTimeslips(this.props.invoiceId),
-      this.props.fetchInvoiceItems(this.props.invoiceId),
-      this.props.fetchInvoiceTasks(this.props.invoiceId)
+      this.props.fetchInvoiceTimeslips(id),
+      this.props.fetchInvoiceItems(id),
+      this.props.fetchInvoiceTasks(id)
     ];
     return Promise.all(promises);
   }
 
   render() {
-    const invoice = this.props.invoice;
-    const project = this.props.project;
-
-    if (!project || project.isEmpty() || this.props.isLoading) {
-      return (<strong>Loading...</strong>);
-    }
-    const isIssued = !!invoice.get('issued_at');
+    const invoice = this.props.invoice || Immutable.Map();
+    const project = this.props.project || Immutable.Map();
 
     return (
       <div className='invoice-container'>
@@ -81,7 +80,7 @@ const mapStateToProps = (state, { params }) => {
     isLoading: view.view.get('isLoading'),
     invoiceItems: view.additionalItems,
     tasks: tasks,
-    invoiceId: params.id,
+    id: params.id,
     modifiers: view.modifiers
   };
 };

@@ -15,6 +15,8 @@ const getById = (items) => {
 
 const items = (state = Immutable.OrderedMap(), action) => {
   switch (action.type) {
+  case constants.DELETE_INVOICE_SUCCESS:
+    return state.delete(action.invoiceId);
   case constants.GET_INVOICES_SUCCESS:
     return state.merge(getById(action.invoices));
   case constants.GET_INVOICE_SUCCESS:

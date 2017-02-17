@@ -1,12 +1,17 @@
 .btn-success {
   button {
     background-color: $color-success !important;
+    span {
+        color: white !important;
+    }
   }
 }
 
 .btn-error {
   button {
     background-color: $color-error !important;
-    color: white !important;
+    span {
+        color: white !important;
+    }
   }
 }
