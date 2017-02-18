@@ -49,7 +49,6 @@ class Invoices extends React.Component {
           />
           <Card>
             <CardText>
-
               <h3>Open Invoices ({openInvoices.size})</h3>
               <InvoiceList
                 projects={this.props.projects}
