@@ -100,6 +100,15 @@ export const fetchInvoiceModifiers = (invoiceId) => {
   );
 };
 
+export const deleteInvoiceModifier = (invoiceId, invoiceModifierId) => {
+  return fetch(
+    buildRequest(
+      `invoices/${invoiceId}/modifiers/${invoiceModifierId}`,
+      'DELETE'
+    )
+  );
+};
+
 export const updateInvoice = (invoiceId, projectId, updates) => {
   if (updates.due_date === '') {
     updates.due_date = null;

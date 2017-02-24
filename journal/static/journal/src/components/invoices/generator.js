@@ -6,10 +6,6 @@ import TextField from 'material-ui/TextField';
 
 import { InvoiceItems } from './invoiceitems';
 
-const getDefaultName = (invoice, project) => {
-  return `${project.get('name')} #${invoice.get('sequence_num')}`;
-};
-
 const timeslipInvoiceItem = (timeslip, project) => {
   const subTotal = project.get('hourly_rate') * timeslip.get('hours');
   return {
@@ -46,7 +42,6 @@ class Generator extends React.Component {
   render() {
     const invoice = this.props.invoice;
     const project = this.props.project;
-    const name = getDefaultName(invoice, project);
     const isIssued = false;
 
     const timeslipItems = this.props.timeslips.map(t =>
@@ -57,8 +52,6 @@ class Generator extends React.Component {
     return (
       <Card className='invoice-generator'>
         <CardText>
-          <h3>{name}</h3>
-
           <h4>Tracked Time</h4>
           <InvoiceItems
             isIssued={isIssued}

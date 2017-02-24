@@ -32,12 +32,36 @@ class Invoice extends React.Component {
   }
 
   render() {
-    const invoice = this.props.invoice || Immutable.Map();
+    let invoice = this.props.invoice;
     const project = this.props.project || Immutable.Map();
+
+    if (invoice.isEmpty() && this.props.id !== 'add') {
+      return (
+        <div className='invoice-container'>
+          <div className='content'>Loading</div>
+        </div>
+      );
+    }
 
     return (
       <div className='invoice-container'>
         <div className='content'>
+          <Settings
+            invoice={invoice}
+            project={project}
+            timeslips={this.props.timeslips}
+            tasks={this.props.tasks}
+            modifiers={this.props.modifiers}
+            onDelete={() =>
+              this.props.deleteInvoice(invoice.get('id'))
+            }
+            onRemoveModifier={(modifier) =>
+              this.props.deleteInvoiceModifier(
+                invoice.get('id'),
+                modifier.get('id')
+              )
+            }
+          />
           <Generator
             invoice={invoice}
             project={project}

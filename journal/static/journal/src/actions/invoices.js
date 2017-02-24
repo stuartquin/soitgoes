@@ -36,6 +36,15 @@ export const deleteInvoice = (invoiceId) => (dispatch) =>
     });
   });
 
+export const deleteInvoiceModifier = (invoiceId, invoiceModifierId) => (dispatch) =>
+  api.deleteInvoiceModifier(invoiceId, invoiceModifierId).then(() => {
+    dispatch({
+      type: constants.DELETE_INVOICE_MODIFIER_SUCCESS,
+      invoiceId,
+      invoiceModifierId
+    });
+  });
+
 export const createInvoice = (project, isVAT) => (dispatch) => {
   dispatch({
     type: constants.CLEAR_INVOICE_TIMESLIPS

@@ -148,8 +148,8 @@ class InvoiceSerializer(LogActivity):
         ).first()
         invoice = super().save(project=project,)
 
-        if 'isVAT' in self.context['request'].data:
-            self._add_vat_modifier(invoice)
+        # TODO needs a setting for this
+        self._add_vat_modifier(invoice)
 
         return invoice
 

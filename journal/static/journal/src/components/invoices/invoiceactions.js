@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import styles from './styles.css';
 import { ConfirmButton } from '../../components/confirmbutton';
+import RaisedButton from 'material-ui/RaisedButton';
 
 
 const InvoiceActions = (props) => {
@@ -33,7 +34,8 @@ const InvoiceActions = (props) => {
     button = (
       <button className='btn btn-success btn-block btn-raised'
         onClick={props.onMarkAsIssued}>Save and Issue
-      </button>);
+      </button>
+    );
   }
 
   return (
