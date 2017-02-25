@@ -1,8 +1,7 @@
 'use strict';
 import React from 'react';
 
-import { InvoiceSummaryRow } from './invoicesummaryrow';
-import { InvoiceModifiers } from './invoicemodifiers';
+import {InvoiceModifiers} from './invoicemodifiers';
 import {List, ListItem} from 'material-ui/List';
 
 const getModifierImpact = (subTotal, modifier) => {
@@ -10,13 +9,21 @@ const getModifierImpact = (subTotal, modifier) => {
 };
 
 const InvoiceSummaryTotal = (props) => {
-  return (
+  const content = (
     <div className='invoice-summary-total'>
       <strong className='title'>{props.title}</strong>
-      <span className='value'>
-        {`£${props.value.toFixed(2)}`}
-      </span>
+      <span className='value'>{`£${props.value.toFixed(2)}`}</span>
     </div>
+  );
+
+  return (
+    <List>
+      <ListItem
+        className='invoice-summary-item'
+        primaryText={content}
+        disabled={true}
+      />
+    </List>
   );
 };
 

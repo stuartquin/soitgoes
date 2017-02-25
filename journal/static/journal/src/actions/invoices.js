@@ -34,6 +34,7 @@ export const deleteInvoice = (invoiceId) => (dispatch) =>
       type: constants.DELETE_INVOICE_SUCCESS,
       invoiceId
     });
+    dispatch(push(`/invoices`));
   });
 
 export const deleteInvoiceModifier = (invoiceId, invoiceModifierId) => (dispatch) =>

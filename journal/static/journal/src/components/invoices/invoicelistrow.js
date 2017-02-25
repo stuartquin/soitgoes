@@ -1,53 +1,14 @@
+'use strict';
 import React from 'react';
 import { Link } from 'react-router';
 import moment from 'moment';
 
 import ActionDelete from 'material-ui/svg-icons/action/delete';
-import AvFiberManualRecord from 'material-ui/svg-icons/av/fiber-manual-record';
-
 import IconButton from 'material-ui/IconButton';
 import {TableRow, TableRowColumn} from 'material-ui/Table';
 
+import {StateChip} from './state-chip';
 
-const InvoiceStateChip = (props) => {
-  const invoice = props.invoice;
-  const issued = invoice.get('issued_at');
-  const today = moment();
-
-  let text = '';
-  let classNames = [
-    'state-label'
-  ];
-
-  if (!issued) {
-    classNames.push('state-label-default');
-    text = 'Draft';
-  } else {
-    if (invoice.get('paid_at')) {
-      classNames.push('state-label-success');
-      text = moment(invoice.get('paid_at')).format('YYYY-MM-DD');
-    } else {
-      const dueDate = moment(invoice.get('due_date'));
-      if (dueDate.isBefore(today)) {
-        classNames.push('state-label-error');
-        text = dueDate.fromNow(true)
-      } else {
-        classNames.push('state-label-warn');
-        text = dueDate.toNow(true)
-      }
-    }
-  }
-
-  return (
-    <span className={classNames.join(' ')}>
-      <span className='state-label-icon'>
-      </span>
-      <span className='state-label-text'>
-        {text}
-      </span>
-    </span>
-  );
-};
 
 const InvoiceListRow = (props) => {
   const invoice = props.invoice;
@@ -71,9 +32,7 @@ const InvoiceListRow = (props) => {
         <span className={ totalClass }>&pound;{total}</span>
       </TableRowColumn>
       <TableRowColumn className='col-state'>
-        <InvoiceStateChip
-          invoice={invoice}
-        />
+        <StateChip invoice={invoice} />
       </TableRowColumn>
       <TableRowColumn className='col-action'>
         <IconButton

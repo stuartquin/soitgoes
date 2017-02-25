@@ -7,6 +7,17 @@
   }
 }
 
+.header {
+  padding-top: 25px;
+  padding-left: 25px;
+  padding-right: 25px;
+
+  @media screen and (max-width: $break-small) {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
 .text-muted {
   color: $color-text-secondary;
 }

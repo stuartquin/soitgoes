@@ -11,7 +11,7 @@ $color-bg-success: lighten($color-success, 40%);
 $color-error: #C11D15;
 $color-bg-error: lighten($color-error, 50%);
 
-$color-warn: #D69A2C;
+$color-warn: #F49E4C;
 $color-bg-warn: lighten($color-warn, 35%);
 
 $break-small: 500px;
@@ -24,6 +24,7 @@ $break-large: 1200px;
 @import 'invoice-summary';
 @import 'invoice-advanced';
 @import 'buttons';
+@import 'state-label';
 @import 'header-bar';
 
 @import 'tasks';

@@ -26,19 +26,51 @@
   }
 }
 
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    margin-top: 0;
+  }
+
+  .invoice-header-actions {
+    display: flex;
+    align-items: center;
+   }
+
+  .invoice-header-options {
+    justify-content: flex-end;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
+
 .invoice-container {
   .content {
     display: flex;
-    flex-wrap: wrap;
+    @media screen and (max-width: $break-small) {
+      flex-direction: column;
+    }
+  }
+
+  .invoice-generator {
+    flex: 2;
+    .invoice-generator-name {
+      font-size: 24px !important;
+      font-weight: 800;
+    }
   }
 
   .invoice-settings {
-    width: 330px;
+    width: 340px;
     margin-right: 15px;
 
     @media screen and (max-width: $break-small) {
-      width: 100%;
       margin-right: 0;
+      width: 90%;
     }
 
     .invoice-summary-item {
@@ -71,6 +103,12 @@
     .invoice-column-total {
         width: 45px !important;
     }
+
+    @media screen and (max-width: $break-small) {
+      .state-label {
+        width: 14px;
+      }
+    }
   }
 }
 
@@ -91,78 +129,6 @@
   margin-bottom: 25px;
 }
 
-.state-label {
-  display: flex;
-  align-items: center;
-  max-width: 120px;
-
-  @media screen and (max-width: $break-small) {
-    width: 14px;
-  }
-
-  border-radius: 5px;
-  padding: 6px;
-
-  .state-label-icon {
-    display: inline-block;
-    min-width: 14px;
-    height: 14px;
-    border-radius: 45px;
-  }
-
-  .state-label-text {
-    padding-left: 6px;
-    font-size: 0.9em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  &.state-label-default {
-    background-color: $color-text-light;
-
-    .state-label-icon {
-      background-color: $color-text-secondary;
-    }
-
-    .state-label-text {
-      color: $color-text-secondary;
-    }
-  }
-
-  &.state-label-success {
-    background-color: $color-bg-success;
-
-    .state-label-icon {
-      background-color: $color-success;
-    }
-
-    .state-label-text {
-      color: $color-success;
-    }
-  }
-
-  &.state-label-warn {
-    background-color: $color-bg-warn;
-
-    .state-label-icon {
-      background-color: $color-warn;
-    }
-
-    .state-label-text {
-      color: $color-warn;
-    }
-  }
-
-  &.state-label-error {
-    background-color: $color-bg-error;
-
-    .state-label-icon {
-      background-color: $color-error;
-    }
-
-    .state-label-text {
-      color: $color-error;
-    }
-  }
+.invoice-generator {
+  z-index: inherit !important;
 }

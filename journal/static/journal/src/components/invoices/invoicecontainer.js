@@ -5,8 +5,7 @@ import Immutable from 'immutable';
 
 import {Generator} from './generator';
 import {Settings} from './settings';
-import {InvoiceAdvanced} from './invoiceadvanced';
-import {setHeaderBar} from '../../actions/nav';
+import {InvoiceHeader} from './invoiceheader';
 
 import * as invoiceActions from '../../actions/invoices';
 
@@ -44,6 +43,29 @@ class Invoice extends React.Component {
 
     return (
       <div className='invoice-container'>
+        <div className='header'>
+          <InvoiceHeader
+            invoice={invoice}
+            project={project}
+            onDelete={() =>
+              this.props.deleteInvoice(invoice.get('id'))
+            }
+            onMarkAsIssued={() =>
+              this.props.markAsIssued(
+                invoice.get('id'),
+                project.get('id'),
+                this.props.timeslips
+              )
+            }
+            onMarkAsPaid={() => {
+              this.props.markAsPaid(
+                invoice.get('id'),
+                project.get('id'),
+                invoice.get('total_due')
+              )
+            }}
+          />
+        </div>
         <div className='content'>
           <Settings
             invoice={invoice}
@@ -51,9 +73,6 @@ class Invoice extends React.Component {
             timeslips={this.props.timeslips}
             tasks={this.props.tasks}
             modifiers={modifiers}
-            onDelete={() =>
-              this.props.deleteInvoice(invoice.get('id'))
-            }
             onRemoveModifier={(modifier) =>
               this.props.deleteInvoiceModifier(
                 invoice.get('id'),
@@ -111,69 +130,8 @@ const mapStateToProps = (state, { params }) => {
 };
 
 const actions = {
-  ...invoiceActions,
-  setHeaderBar
+  ...invoiceActions
 };
 
 const InvoiceContainer = connect(mapStateToProps, actions)(Invoice);
 export {InvoiceContainer};
-
-//           <InvoiceInfo
-//             isIssued={isIssued}
-//             project={project}
-//             invoice={invoice}
-//             timeslips={this.props.timeslips}
-//             tasks={this.props.tasks}
-//             modifiers={this.props.modifiers}
-//             invoiceItems={this.props.invoiceItems}
-//             onDelete={() =>
-//               this.props.deleteInvoice(invoice.get('id'))
-//             }
-//             onMarkAsIssued={() =>
-//               this.props.markAsIssued(
-//                 invoice.get('id'),
-//                 project.get('id'),
-//                 this.props.timeslips
-//               )
-//             }
-//             onMarkAsPaid={() => {
-//               this.props.markAsPaid(
-//                 invoice.get('id'),
-//                 project.get('id'),
-//                 invoice.get('total_due')
-//               )
-//             }}
-//           />
-//         </div>
-//         <div className='col-md-8'>
-//           <InvoiceAdvanced
-//             isIssued={isIssued}
-//             project={project}
-//             invoice={invoice}
-//             onUpdate={(updates) =>
-//               this.props.updateInvoice(
-//                 invoice.get('id'),
-//                 project.get('id'),
-//                 updates
-//               )
-//             }
-//           />
-//           <InvoiceTimeslips
-//             isIssued={isIssued}
-//             project={project}
-//             timeslips={this.props.timeslips}
-//             items={this.props.invoiceItems}
-//             tasks={this.props.tasks}
-//             onAddItem={(name, price, qty) =>
-//               this.props.createItem(invoice.get('id'), name, price, qty)
-//             }
-//             onDeleteInvoiceTimeslip={(timeslipId) =>
-//               this.props.deleteInvoiceTimeslip(invoice.get('id'), timeslipId)
-//             }
-//             onDeleteInvoiceItem={(itemId) =>
-//               this.props.deleteInvoiceItem(invoice.get('id'), itemId)
-//             }
-//             onDeleteTask={(taskId) =>
-//               this.props.deleteInvoiceTask(invoice.get('id'), taskId)
-//             }
-//           />
