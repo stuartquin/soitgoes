@@ -120,6 +120,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
 class InvoiceSerializer(LogActivity):
     ACTIVITY_CODE = 'INV'
+    modifiers = InvoiceModifierSerializer(many=True, read_only=True)
 
     def _add_vat_modifier(self, invoice):
         modifier = models.InvoiceModifier.objects.get(pk=VAT_MODIFIER_ID)
@@ -155,3 +156,4 @@ class InvoiceSerializer(LogActivity):
 
     class Meta:
         model = models.Invoice
+        depth = 1

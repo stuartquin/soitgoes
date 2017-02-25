@@ -38,11 +38,7 @@ export const deleteInvoice = (invoiceId) => (dispatch) =>
 
 export const deleteInvoiceModifier = (invoiceId, invoiceModifierId) => (dispatch) =>
   api.deleteInvoiceModifier(invoiceId, invoiceModifierId).then(() => {
-    dispatch({
-      type: constants.DELETE_INVOICE_MODIFIER_SUCCESS,
-      invoiceId,
-      invoiceModifierId
-    });
+    dispatch(fetchInvoice(invoiceId));
   });
 
 export const createInvoice = (project, isVAT) => (dispatch) => {
@@ -63,14 +59,7 @@ export const fetchInvoice = (invoiceId) => (dispatch) => {
     type: constants.GET_INVOICE_START
   });
 
-  return api.fetchInvoiceModifiers(invoiceId).then((res) => {
-    const modifiers = res.results;
-    dispatch({
-      type: constants.GET_INVOICE_MODIFIERS_SUCCESS,
-      modifiers
-    });
-    return api.fetchInvoice(invoiceId);
-  }).then(invoice =>
+  return api.fetchInvoice(invoiceId).then(invoice =>
     dispatch({
       type: constants.GET_INVOICE_SUCCESS,
       invoice
@@ -100,14 +89,6 @@ export const fetchInvoiceTimeslips = (invoiceId) => (dispatch) => {
   });
 };
 
-export const fetchInvoiceItems = (invoiceId) => (dispatch) =>
-  api.fetchInvoiceItems(invoiceId).then(res => {
-    dispatch({
-      type: constants.GET_INVOICE_ITEMS_SUCCESS,
-      items: res.results
-    });
-  });
-
 export const fetchInvoiceTasks = (invoiceId) => (dispatch) =>
   api.fetchTasks(null, null, invoiceId).then(res => {
     dispatch({
@@ -129,12 +110,6 @@ export const deleteInvoiceTimeslip = (invoiceId, timeslipId) => (dispatch) => {
   });
 };
 
-export const deleteInvoiceItem = (invoiceId, itemId) => (dispatch) => {
-  api.deleteInvoiceItem(itemId).then(() => {
-    dispatch(fetchInvoiceItems(invoiceId));
-  });
-};
-
 export const deleteInvoiceTask = (invoiceId, taskId) => (dispatch) => {
   api.updateTask(taskId, {invoice: null}).then((res) => {
     dispatch({
@@ -144,12 +119,3 @@ export const deleteInvoiceTask = (invoiceId, taskId) => (dispatch) => {
     dispatch(fetchInvoiceTasks(invoiceId));
   });
 };
-
-export const createItem = (invoiceId, name, price, qty) => (dispatch) =>
-  api.createInvoiceItem(invoiceId, name, price, qty).then(item => {
-    dispatch({
-      type: constants.CREATE_INVOICE_ITEM_SUCCESS,
-      item
-    });
-    dispatch(fetchInvoiceItems(invoiceId));
-  });

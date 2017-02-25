@@ -25,23 +25,22 @@ class Invoice extends React.Component {
   fetchData(id) {
     let promises = [
       this.props.fetchInvoiceTimeslips(id),
-      this.props.fetchInvoiceItems(id),
       this.props.fetchInvoiceTasks(id)
     ];
     return Promise.all(promises);
   }
 
   render() {
-    let invoice = this.props.invoice;
-    const project = this.props.project || Immutable.Map();
-
-    if (invoice.isEmpty() && this.props.id !== 'add') {
+    if (this.props.isLoading) {
       return (
         <div className='invoice-container'>
           <div className='content'>Loading</div>
         </div>
       );
     }
+    let invoice = this.props.invoice;
+    const modifiers = invoice.get('modifier');
+    const project = this.props.project || Immutable.Map();
 
     return (
       <div className='invoice-container'>
@@ -51,7 +50,7 @@ class Invoice extends React.Component {
             project={project}
             timeslips={this.props.timeslips}
             tasks={this.props.tasks}
-            modifiers={this.props.modifiers}
+            modifiers={modifiers}
             onDelete={() =>
               this.props.deleteInvoice(invoice.get('id'))
             }
@@ -67,7 +66,7 @@ class Invoice extends React.Component {
             project={project}
             timeslips={this.props.timeslips}
             tasks={this.props.tasks}
-            modifiers={this.props.modifiers}
+            modifiers={modifiers}
             onDeleteInvoiceTimeslip={(id) =>
               this.props.deleteInvoiceTimeslip(invoice.get('id'), id)
             }
@@ -78,35 +77,37 @@ class Invoice extends React.Component {
   }
 }
 
-const getInvoiceProject = (projects, invoice) => {
-  return projects.find((x) => x.get('id') === invoice.get('project'));
+const getInvoiceProject = (invoice, projects)  => {
+  const projectId = invoice.get('project').get('id');
+  return projects.find((x) => x.get('id') === projectId);
 };
 
 const getInvoiceTimeslips = (invoice, timeslips) => {
-  const invoiceId = invoice.get('id');
-  return timeslips.filter((t) => t.get('invoice') === invoiceId);
+  return timeslips.filter((t) => t.get('invoice') === invoice.get('id'));
+}
+
+const getInvoiceTasks = (invoice, tasks) => {
+  return tasks.filter((t) => t.get('invoice') === invoice.get('id'));
 }
 
 const mapStateToProps = (state, { params }) => {
-  const view = state.invoice;
-  const invoice = view.details;
-  const project = getInvoiceProject(state.projects.items, invoice);
-  const timeslips = getInvoiceTimeslips(invoice, state.timeslips.items);
-  const invoiceId = parseInt(params.id, 10);
-  const tasks = state.tasks.items.filter((task) =>
-    task.get('invoice') === invoiceId
-  );
+  const id = parseInt(params.id, 10);
+  let mapState = {
+    id,
+    isLoading: true
+  }
 
-  return {
-    invoice,
-    project,
-    timeslips,
-    isLoading: view.view.get('isLoading'),
-    invoiceItems: view.additionalItems,
-    tasks: tasks,
-    id: params.id,
-    modifiers: view.modifiers
-  };
+  const invoice = state.invoices.items.get(id);
+  if (!invoice) {
+    return mapState;
+  }
+
+  mapState.isLoading = false;
+  mapState.invoice = invoice;
+  mapState.project = getInvoiceProject(invoice, state.projects.items);
+  mapState.timeslips = getInvoiceTimeslips(invoice, state.timeslips.items);
+  mapState.tasks = getInvoiceTasks(invoice, state.tasks.items);
+  return mapState;
 };
 
 const actions = {

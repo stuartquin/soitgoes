@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-from rest_framework import generics, viewsets
+from rest_framework import generics, viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
@@ -124,6 +124,22 @@ class InvoiceModifiers(generics.ListAPIView):
 
     def get_queryset(self):
         return models.Invoice.objects.get(**self.kwargs).modifier.all()
+
+
+class InvoiceModifierDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (HasInvoiceAccess,)
+    serializer_class = serializers.InvoiceModifierSerializer
+
+    def get_queryset(self):
+        return models.Invoice.objects.get(**self.kwargs).modifier.all()
+
+    def destroy(self, request, pk=None, modifier=None):
+        invoice = models.Invoice.objects.get(id=pk)
+        invoice.modifier.remove(
+            models.InvoiceModifier.objects.get(id=modifier)
+        )
+        invoice.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class InvoiceItem(generics.DestroyAPIView):

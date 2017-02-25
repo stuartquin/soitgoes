@@ -14,7 +14,7 @@ const InvoiceList = (props) => {
         <InvoiceListRow
           key={invoice.get('id')}
           onDelete={() => props.onDeleteInvoice(invoice.get('id'))}
-          project={projects.get(invoice.get('project'))}
+          project={invoice.get('project')}
           invoice={invoice} />
       ))}
 
