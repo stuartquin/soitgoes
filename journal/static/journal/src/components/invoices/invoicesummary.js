@@ -31,6 +31,7 @@ const InvoiceSummary = (props) => {
   const invoice = props.invoice;
   const project = props.project;
   const modifiers = props.modifiers;
+  const isEditable = !Boolean(invoice.get('issued_at'));
 
   const totalHours = props.timeslips.reduce((prev, current) =>
     prev + current.get('hours')
@@ -73,6 +74,7 @@ const InvoiceSummary = (props) => {
       <InvoiceModifiers
         invoice={invoice}
         modifiers={props.modifiers}
+        isEditable={isEditable}
         onRemoveModifier={props.onRemoveModifier}
       />
       <InvoiceSummaryTotal

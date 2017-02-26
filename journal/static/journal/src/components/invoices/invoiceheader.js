@@ -3,6 +3,7 @@ import React from 'react';
 
 import IconButton from 'material-ui/IconButton';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
+import FileDownload from 'material-ui/svg-icons/file/file-download';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import {StateChip} from './state-chip';
@@ -12,33 +13,71 @@ const getDefaultName = (invoice, project) => {
   return `${project.get('name')} #${invoice.get('sequence_num')}`;
 };
 
-
-const getInvoiceAction = (invoice, onMarkAsIssued, onMarkAsPaid) => {
-  if (invoice.get('issued_at')) {
-    return (
-      <RaisedButton
-        className='btn-success'
-        label='Set Paid'
-        labelPosition='before'
-        onTouchTap={onMarkAsPaid}
-      />
-    );
-  } else {
-    return (
-      <RaisedButton
-        className='btn-warn'
-        label='Issue'
-        labelPosition='before'
-        onTouchTap={onMarkAsIssued}
-      />
-    );
+const getStateAction = (invoice, onMarkAsIssued, onMarkAsPaid) => {
+  if (!invoice.get('paid_at')) {
+    if (invoice.get('issued_at')) {
+      return (
+        <RaisedButton
+          className='btn btn-success'
+          label='Set Paid'
+          labelPosition='before'
+          onTouchTap={onMarkAsPaid}
+        />
+      );
+    } else {
+      return (
+        <RaisedButton
+          className='btn btn-warn'
+          label='Issue'
+          labelPosition='before'
+          onTouchTap={onMarkAsIssued}
+        />
+      );
+    }
   }
+};
+
+const getInvoiceActions = (invoice, onDelete) => {
+  let actions = [(
+    <IconButton
+      touch={true}
+      tooltipPosition='bottom-center'
+      className='btn-default icon-btn-right'
+      onTouchTap={onDelete}>
+      <ActionDelete />
+    </IconButton>
+  )];
+
+  if (invoice.get('issued_at')) {
+    actions = [(
+      <IconButton
+        touch={true}
+        tooltipPosition='bottom-center'
+        className='btn-default icon-btn-right'
+        onTouchTap={() => {
+          window.open(`/api/invoices/${invoice.get('id')}/pdf`);
+        }}>
+        <FileDownload />
+      </IconButton>
+    )].concat(actions);
+  }
+
+  return (
+    <div className='invoice-header-actions'>
+      {actions}
+    </div>
+  );
 };
 
 const InvoiceHeader = (props) => {
   const invoice = props.invoice;
   const project = props.project;
   const name = getDefaultName(invoice, project);
+
+  const onDownload = () => {
+    const link = `/api/invoices/${invoice.get('id')}/pdf`;
+    window.open(link, '_blank');
+  };
 
   return (
     <div className='invoice-header'>
@@ -49,18 +88,10 @@ const InvoiceHeader = (props) => {
         </span>
       </div>
       <div className='invoice-header-options'>
-        <StateChip invoice={invoice} />
+        {getInvoiceActions(invoice, props.onDelete)}
         <div className='invoice-header-actions'>
-          <IconButton
-            tooltip='Delete Invoice'
-            touch={true}
-            tooltipPosition='bottom-center'
-            className='btn-default icon-btn-right'
-            onTouchTap={props.onDelete}>
-            <ActionDelete />
-          </IconButton>
-
-          {getInvoiceAction(invoice, props.onMarkAsIssued, props.onMarkAsPaid)}
+          <StateChip invoice={invoice} />
+          {getStateAction(invoice, props.onMarkAsIssued, props.onMarkAsPaid)}
         </div>
       </div>
     </div>

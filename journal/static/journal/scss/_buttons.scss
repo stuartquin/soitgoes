@@ -24,3 +24,15 @@
     }
   }
 }
+
+.icon-btn-right {
+  text-align: right !important;
+  padding: 0 !important;
+  padding-left: 12px !important;
+  width: 38px !important;
+
+  &>div>div {
+    padding: 0 !important;
+    font-size: inherit !important;
+  }
+}

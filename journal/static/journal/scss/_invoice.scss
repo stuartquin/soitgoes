@@ -38,6 +38,10 @@
   .invoice-header-actions {
     display: flex;
     align-items: center;
+
+    .btn {
+        margin-left: 10px;
+    }
    }
 
   .invoice-header-options {
@@ -70,7 +74,7 @@
 
     @media screen and (max-width: $break-small) {
       margin-right: 0;
-      width: 90%;
+      width: 100%;
     }
 
     .invoice-summary-item {
