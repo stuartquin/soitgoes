@@ -28,13 +28,13 @@ const InvoiceListRow = (props) => {
           #{invoice.get('sequence_num')} {props.project.get('name')}
         </Link>
       </TableRowColumn>
-      <TableRowColumn className='invoice-column-total'>
+      <TableRowColumn className='col-number'>
         <span className={ totalClass }>&pound;{total}</span>
       </TableRowColumn>
       <TableRowColumn className='col-state'>
         <StateChip invoice={invoice} />
       </TableRowColumn>
-      <TableRowColumn className='col-action'>
+      <TableRowColumn className='col-actions'>
         <IconButton
           tooltip='Delete Invoice'
           touch={true}

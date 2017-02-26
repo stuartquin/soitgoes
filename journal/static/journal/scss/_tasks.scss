@@ -5,30 +5,19 @@
 }
 
 .task-item-name {
-  width: 70%;
-  a {
-    display:flex;
-    flex-direction: column;
-    span {
-      font-size: 0.9em;
-    }
+  padding-top: 12px;
+
+  a, span {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background-color: inherit;
   }
 }
 
 .task-item-stats {
   display: flex;
-}
-
-.task-item-stat {
-  display: flex;
-  align-items: center;
-  font-size: 0.8em;
-  padding-right: 10px;
-
-  .glyphicon {
-    font-size: 16px;
-    padding-right: 5px;
-  }
 }
 
 // TODO move to forms.scss

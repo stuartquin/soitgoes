@@ -1,9 +1,11 @@
 import React from 'react';
 import { TaskListItem } from './tasklistitem';
+import {Table, TableBody} from 'material-ui/Table';
 
 const TaskList = (props) => {
   return (
-    <div className='task-list'>
+    <Table className='task-list table'>
+      <TableBody>
       {props.tasks.map(task => (
         <TaskListItem
           key={task.get('id')}
@@ -11,7 +13,8 @@ const TaskList = (props) => {
           onComplete={props.onCompleteTask}
           task={task} />
       ))}
-    </div>
+      </TableBody>
+    </Table>
   );
 };
 

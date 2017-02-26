@@ -21,3 +21,16 @@
 .text-muted {
   color: $color-text-secondary;
 }
+
+.content-actions {
+  margin-bottom: 25px;
+}
+
+a {
+  color: $color-bg-dark;
+  text-decoration: none;
+
+  &:visited {
+    color: $color-bg-dark;
+  }
+}

@@ -74,11 +74,6 @@ const InvoiceHeader = (props) => {
   const project = props.project;
   const name = getDefaultName(invoice, project);
 
-  const onDownload = () => {
-    const link = `/api/invoices/${invoice.get('id')}/pdf`;
-    window.open(link, '_blank');
-  };
-
   return (
     <div className='invoice-header'>
       <div className='invoice-header-info'>

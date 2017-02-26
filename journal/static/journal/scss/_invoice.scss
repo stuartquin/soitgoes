@@ -1,38 +1,14 @@
-.table {
-  .col-state {
-    width: 140px;
-  }
-
-  .col-currency {
-    width: 40px;
-  }
-
-  .col-action {
-    width: 40px;
-  }
-
-  @media screen and (max-width: $break-small) {
-    td {
-        padding: 4px !important;
-    }
-
-    .col-state {
-        width: 28px;
-    }
-
-    .col-sm-hide {
-      display: none;
-    }
-  }
-}
-
 .invoice-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
 
   h3 {
-    margin-top: 0;
+    margin-top: 12px;
+    margin-bottom: 20px;
+  }
+
+  .text-muted {
+    font-size: 0.8em;
   }
 
   .invoice-header-actions {
@@ -81,20 +57,6 @@
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
-
-    .invoice-settings-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        h3 {
-            margin: 0;
-        }
-
-        .text-muted {
-            font-size: 0.8em;
-        }
-    }
   }
 }
 
@@ -106,12 +68,6 @@
   .invoice-list-row {
     .invoice-column-total {
         width: 45px !important;
-    }
-
-    @media screen and (max-width: $break-small) {
-      .state-label {
-        width: 14px;
-      }
     }
   }
 }
@@ -127,10 +83,6 @@
     display: flex;
     justify-content: space-between;
   }
-}
-
-.create-invoice {
-  margin-bottom: 25px;
 }
 
 .invoice-generator {
