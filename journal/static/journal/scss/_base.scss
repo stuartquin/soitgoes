@@ -34,3 +34,14 @@ a {
     color: $color-bg-dark;
   }
 }
+
+
+.settings {
+  width: 340px;
+  margin-right: 15px;
+
+  @media screen and (max-width: $break-small) {
+    margin-right: 0;
+    width: 100%;
+  }
+}

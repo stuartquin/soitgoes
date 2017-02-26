@@ -3,7 +3,6 @@ import React from 'react';
 import moment from 'moment';
 
 import DatePicker from 'material-ui/DatePicker';
-import TextField from 'material-ui/TextField';
 
 import { InvoiceSummary } from './invoicesummary';
 
@@ -33,9 +32,10 @@ class Settings extends React.Component {
     const project = this.props.project;
 
     return (
-      <div className='invoice-settings'>
+      <div className='settings'>
         <div>
           <DatePicker
+            textFieldStyle={{width: '100%'}}
             onChange={(e, date) => this.updateForm('issued_at', date)}
             autoOk={true}
             floatingLabelText='Due Date'

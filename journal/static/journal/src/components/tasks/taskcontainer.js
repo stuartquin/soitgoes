@@ -16,8 +16,8 @@ class Task extends React.Component {
   render() {
     const task = this.props.task;
     const projects = this.props.projects;
-    const loading = (!projects || projects.isEmpty());
     const isEdit = this.props.id !== 'add';
+    const loading = (isEdit && (!task || task.isEmpty()));
 
     if (loading) {
       return (<div>Loading</div>);
@@ -32,8 +32,10 @@ class Task extends React.Component {
     };
 
     return (
-      <div className='row'>
-        <div className='col-md-12'>
+      <div className='task-container'>
+        <div className='header'>
+        </div>
+        <div className='content'>
           <TaskForm
             isEdit={isEdit}
             task={task}
