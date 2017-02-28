@@ -57,7 +57,7 @@ const routes = (
 ReacDOM.render(
   <Provider store={store}>
     <MuiThemeProvider>
-      <Router history={history}>
+      <Router history={history} onUpdate={() => window.scrollTo(0, 0)}>
         {routes}
       </Router>
     </MuiThemeProvider>

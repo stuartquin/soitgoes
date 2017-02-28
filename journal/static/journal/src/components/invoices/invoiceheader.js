@@ -40,6 +40,7 @@ const getStateAction = (invoice, onMarkAsIssued, onMarkAsPaid) => {
 const getInvoiceActions = (invoice, onDelete) => {
   let actions = [(
     <IconButton
+      key={0}
       touch={true}
       tooltipPosition='bottom-center'
       className='btn-default icon-btn-right'
@@ -51,6 +52,7 @@ const getInvoiceActions = (invoice, onDelete) => {
   if (invoice.get('issued_at')) {
     actions = [(
       <IconButton
+        key={1}
         touch={true}
         tooltipPosition='bottom-center'
         className='btn-default icon-btn-right'
