@@ -4,11 +4,13 @@ import moment from 'moment';
 import { combineReducers } from 'redux'; 
 import constants from '../constants';
 
-const getTimeslipsById = (timeslips) => {
-  return timeslips.reduce((prev, current) => {
-    prev[parseInt(current.id, 10)] = current;
-    return prev;
-  }, {});
+const getById = (items) => {
+  let map = Immutable.OrderedMap();
+  items.forEach(item => map = map.set(
+    item.id,
+    Immutable.fromJS(item)
+  ))
+  return map;
 };
 
 const updateProjectTimeslip = (state, action) => {
@@ -36,11 +38,10 @@ const setActiveDate = (state, action) => {
   return state.set('weekStart', action.date);
 };
 
-const items = (state = Immutable.Map(), action) => {
+const items = (state = Immutable.OrderedMap(), action) => {
   switch(action.type) {
   case constants.GET_TIMESLIPS_SUCCESS:
-    const timeslips = getTimeslipsById(action.timeslips);
-    return state.merge(Immutable.fromJS(timeslips));
+    return state.merge(getById(action.timeslips));
 
   case constants.UPDATE_PROJECT_TIMESLIP:
     return updateProjectTimeslip(state, action);
