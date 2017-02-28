@@ -10,7 +10,7 @@ import MenuItem from 'material-ui/MenuItem';
 const NavMenu = (props) => {
   const linkTo = (route) => () => {
     browserHistory.push(route);
-    props.onToggle();
+    props.onClose();
   }
 
   return (

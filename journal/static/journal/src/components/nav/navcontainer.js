@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import AppBar from 'material-ui/AppBar';
+import Snackbar from 'material-ui/Snackbar';
 
 import { NavMenu } from './navmenu';
 import { HeaderLogo } from './headerlogo';
 import { HeaderBarContainer } from './headerbar';
 import { UserMenu } from './usermenu';
-import { Version } from '../version/version';
 import { Loading } from '../loading';
 
 import * as projectActions from '../../actions/projects';
@@ -47,6 +47,10 @@ class Nav extends React.Component {
     this.setState({navOpen: !this.state.navOpen})
   }
 
+  closeMenu() {
+    this.setState({navOpen: false})
+  }
+
   render() {
     if (!this.props.isLoaded) {
       return (
@@ -61,6 +65,7 @@ class Nav extends React.Component {
         <NavMenu
           open={this.state.navOpen}
           onToggle={() => this.toggleMenu()}
+          onClose={() => this.closeMenu()}
         />
 
         <AppBar
@@ -74,9 +79,12 @@ class Nav extends React.Component {
           {this.props.children}
         </div>
 
-        <Version
-          isNew={this.props.version.get('isNew')}
-          onReload={() => this.onReload()}
+        <Snackbar
+          open={this.props.version.get('isNew')}
+          message='A new version is available'
+          action='Update'
+          autoHideDuration={20000}
+          onActionTouchTap={() => this.onReload()}
         />
       </div>
     );
