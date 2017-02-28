@@ -38,41 +38,43 @@ class Timeslips extends React.Component {
 
     if (this.props.projects) {
       return (
-        <Card className='timeslip-container'>
-          <CardHeader
-            title='Time'
-            subtitle={month} />
-          <CardText>
-            <TimeslipGrid
-              today={today}
-              isLoading={this.props.isLoading}
-              weekStart={this.props.weekStart}
-              timeslips={timeslips}
-              projects={this.props.projects}
-              onHourChanged={(project, date, hours, timeslip) => {
-                this.props.hourChanged(project, date, hours, user, timeslip);
-              }}
-              onInvoice={this.props.onInvoice}
-            />
-          </CardText>
-          <CardActions className='timeslip-actions'>
-            <TimeslipDateControls
-              today={today}
-              month={month}
-              activeDate={this.props.weekStart}
-              isLoading={this.props.isLoading}
-              onSetActiveDate={this.props.setActiveDate}
-            />
-            <RaisedButton
-              onTouchTap={() => {
-                this.props.saveTimeslips(existingTimeslips, newTimeslips)
-              }}
-              label='Save'
-              className='btn-success'
-              disabled={this.props.isSaving}
-            />
-          </CardActions>
-        </Card>
+        <div className='content'>
+          <Card className='timeslip-container'>
+            <CardHeader
+              title='Time'
+              subtitle={month} />
+            <CardText>
+              <TimeslipGrid
+                today={today}
+                isLoading={this.props.isLoading}
+                weekStart={this.props.weekStart}
+                timeslips={timeslips}
+                projects={this.props.projects}
+                onHourChanged={(project, date, hours, timeslip) => {
+                  this.props.hourChanged(project, date, hours, user, timeslip);
+                }}
+                onInvoice={this.props.onInvoice}
+              />
+            </CardText>
+            <CardActions className='timeslip-actions'>
+              <TimeslipDateControls
+                today={today}
+                month={month}
+                activeDate={this.props.weekStart}
+                isLoading={this.props.isLoading}
+                onSetActiveDate={this.props.setActiveDate}
+              />
+              <RaisedButton
+                onTouchTap={() => {
+                  this.props.saveTimeslips(existingTimeslips, newTimeslips)
+                }}
+                label='Save'
+                className='btn-success'
+                disabled={this.props.isSaving}
+              />
+            </CardActions>
+          </Card>
+        </div>
       );
     } else {
       return (<p>No Timeslips</p>);

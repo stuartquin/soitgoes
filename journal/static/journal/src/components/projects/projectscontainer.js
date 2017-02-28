@@ -1,8 +1,9 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
+import {Card, CardText} from 'material-ui/Card';
 
-import {ProjectListRow} from './projectslistrow';
+import {ProjectsList} from './projectslist';
 import * as projectActions from '../../actions/projects';
 
 class Projects extends React.Component {
@@ -13,11 +14,14 @@ class Projects extends React.Component {
   render() {
     return (
       <div className='projects-container'>
-      {this.props.projects.map(p => (
-        <ProjectListRow
-          project={p}
-        />
-      ))}
+        <div className='content'>
+          <Card>
+            <CardText>
+              <ProjectsList
+                projects={this.props.projects} />
+            </CardText>
+          </Card>
+        </div>
       </div>
     );
   }
