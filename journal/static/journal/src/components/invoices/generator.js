@@ -25,6 +25,10 @@ const taskInvoiceItem = (task) => {
   }
 };
 
+const getItemList = (title, items, onDelete) => {
+
+};
+
 class Generator extends React.Component {
   constructor(props) {
     super(props);
@@ -43,32 +47,49 @@ class Generator extends React.Component {
     const invoice = this.props.invoice;
     const project = this.props.project;
     const isIssued = false;
+    const isEditable = !Boolean(invoice.get('issued_at'));
 
-    const timeslipItems = this.props.timeslips.map(t =>
+    const timeslipItems = this.props.timeslips.toList().map(t =>
       timeslipInvoiceItem(t, project)
     );
-    const timeslipTasks = this.props.tasks.map(taskInvoiceItem);
+    const taskItems = this.props.tasks.toList().map(taskInvoiceItem);
 
-    return (
-      <Card className='invoice-generator'>
-        <CardText>
+    let itemViews = [];
+
+    if (timeslipItems.count()) {
+      itemViews.push((
+        <div key={0}>
           <h4>Tracked Time</h4>
           <InvoiceItems
-            isIssued={isIssued}
+            isEditable={isEditable}
             items={timeslipItems}
             onDeleteItem={(item) => {
               this.props.onDeleteInvoiceTimeslip(item.id);
             }}
           />
+        </div>
+      ));
+    }
 
+    if (isEditable || taskItems.count()) {
+      itemViews.push((
+        <div key={1}>
           <h4>Completed Tasks</h4>
           <InvoiceItems
-            isIssued={isIssued}
-            items={timeslipTasks}
+            isEditable={isEditable}
+            items={taskItems}
             onDeleteItem={(item) => {
-              debugger;
+              this.props.onDeleteInvoiceTask(item.id);
             }}
           />
+        </div>
+      ));
+    }
+
+    return (
+      <Card className='invoice-generator'>
+        <CardText>
+          {itemViews}
         </CardText>
       </Card>
     );

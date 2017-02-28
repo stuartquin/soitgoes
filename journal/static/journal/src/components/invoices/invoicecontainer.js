@@ -89,6 +89,9 @@ class Invoice extends React.Component {
             onDeleteInvoiceTimeslip={(id) =>
               this.props.deleteInvoiceTimeslip(invoice.get('id'), id)
             }
+            onDeleteInvoiceTask={(id) =>
+              this.props.deleteInvoiceTask(invoice.get('id'), id)
+            }
           />
         </div>
       </div>

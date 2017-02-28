@@ -8,17 +8,19 @@ import {TableRow, TableRowColumn} from 'material-ui/Table';
 
 
 const InvoiceItemRow = (props) => {
-  let btn = (<div />);
-  if (!props.isIssued) {
-    btn = (
-      <IconButton
-        tooltip='Remove Item'
-        touch={true}
-        tooltipPosition='bottom-right'
-        className='btn-default'
-        onTouchTap={props.onDelete}>
-        <ActionDelete />
-      </IconButton>
+  let actions = null;
+  if (props.isEditable) {
+    actions = (
+      <TableRowColumn className='col-actions'>
+        <IconButton
+          tooltip='Remove Item'
+          touch={true}
+          tooltipPosition='bottom-right'
+          className='btn-default'
+          onTouchTap={props.onDelete}>
+          <ActionDelete />
+        </IconButton>
+      </TableRowColumn>
     );
   }
 
@@ -33,9 +35,7 @@ const InvoiceItemRow = (props) => {
       <TableRowColumn className='col-currency col-right'>
         {props.subTotal}
       </TableRowColumn>
-      <TableRowColumn className='col-actions'>
-        {btn}
-      </TableRowColumn>
+      {actions}
     </TableRow>
   );
 };

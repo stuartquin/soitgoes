@@ -180,7 +180,7 @@ export const createInvoiceItem = (invoiceId, name, price, qty=1) => {
   );
 };
 
-export const deleteInvoiceItem = (itemId) => {
+export const deleteInvoiceTask = (itemId) => {
   return fetch(buildRequest(`invoices/items/${itemId}`, 'DELETE'));
 };
 

@@ -12,7 +12,7 @@ const InvoiceItems = (props) => {
       {props.items.map((item) => (
         <InvoiceItemRow
           key={item.id}
-          isIssued={props.isIssued}
+          isEditable={props.isEditable}
           details={item.details}
           unitPrice={item.unitPrice}
           subTotal={item.subTotal}
