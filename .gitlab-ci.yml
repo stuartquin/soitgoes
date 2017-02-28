@@ -1,0 +1,18 @@
+stages:
+  - client
+
+
+client:
+  image: node:5.2
+  stage: client
+  script:
+    - cd journal/static/journal/
+    - npm install webpack
+    - npm install
+    - webpack -p
+
+build:
+  image: python:latest
+  stage: build
+  script:
+    - pip install -r requirements.txt
