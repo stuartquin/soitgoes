@@ -22,12 +22,17 @@ const NavMenu = (props) => {
       />
       <MenuItem
         className='nav-item'
+        primaryText='Dash'
+        onTouchTap={linkTo('/dash')}
+      />
+      <MenuItem
+        className='nav-item'
         primaryText='Projects'
         onTouchTap={linkTo('/projects')}
       />
       <MenuItem
         className='nav-item'
-        primaryText='Invoice'
+        primaryText='Invoices'
         onTouchTap={linkTo('/invoices')}
       />
       <MenuItem

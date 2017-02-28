@@ -23,19 +23,15 @@ class Invoices extends React.Component {
   }
 
   render() {
-    if (this.props.projects.isEmpty()) {
-      return (<strong>Loading...</strong>);
-    }
-
     if (this.props.view.get('isLoading')) {
       return (<Loading />);
     }
 
-    const openInvoices = this.props.invoices.filter((invoice) => {
+    const openInvoices = this.props.invoices.toList().filter((invoice) => {
       return invoice.get('paid_at') === null;
     });
 
-    const closedInvoices = this.props.invoices.filter((invoice) => {
+    const closedInvoices = this.props.invoices.toList().filter((invoice) => {
       return invoice.get('paid_at') !== null;
     });
 

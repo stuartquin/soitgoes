@@ -48,15 +48,11 @@ const SummaryBarChart = (props) => {
   };
 
   return (
-    <div className='dash-summary-chart panel panel-default'>
-      <div className='panel-body'>
-        <h5>{props.title}</h5>
-        <Bar
-          data={chartData}
-          width='300'
-          height='240'
-          options={chartOptions} />
-      </div>
+    <div className='summary-chart'>
+      <h5>{props.title}</h5>
+      <Bar
+        data={chartData}
+        options={chartOptions} />
     </div>
   );
 };

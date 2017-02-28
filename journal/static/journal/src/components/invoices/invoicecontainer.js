@@ -6,6 +6,7 @@ import Immutable from 'immutable';
 import {Generator} from './generator';
 import {Settings} from './settings';
 import {InvoiceHeader} from './invoiceheader';
+import {Loading} from '../loading';
 
 import * as invoiceActions from '../../actions/invoices';
 
@@ -31,13 +32,9 @@ class Invoice extends React.Component {
 
   render() {
     if (this.props.isLoading) {
-      return (
-        <div className='invoice-container'>
-          <div className='content'>Loading</div>
-        </div>
-      );
+      return (<Loading />);
     }
-    let invoice = this.props.invoice;
+    const invoice = this.props.invoice;
     const modifiers = invoice.get('modifier');
     const project = this.props.project || Immutable.Map();
 
