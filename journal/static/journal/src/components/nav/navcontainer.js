@@ -8,8 +8,8 @@ import { HeaderLogo } from './headerlogo';
 import { HeaderBarContainer } from './headerbar';
 import { UserMenu } from './usermenu';
 import { Version } from '../version/version';
+import { Loading } from '../loading';
 
-import styles from './styles.css';
 import * as projectActions from '../../actions/projects';
 import * as userActions from '../../actions/user';
 import * as navActions from '../../actions/nav';
@@ -19,7 +19,7 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      navOpen: true
+      navOpen: false
     };
   }
 
@@ -48,13 +48,10 @@ class Nav extends React.Component {
   }
 
   render() {
-    const className = `${styles.navContainer}`;
-    const navClasses = `${styles.navInner}`;
-
     if (!this.props.isLoaded) {
       return (
         <div className='wrapper'>
-          <h3>Loading...</h3>
+          <Loading />
         </div>
       );
     }

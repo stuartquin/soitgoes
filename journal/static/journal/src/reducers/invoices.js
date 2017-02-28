@@ -28,8 +28,29 @@ const items = (state = Immutable.OrderedMap(), action) => {
   }
 };
 
+const view = (state, action) => {
+  if (!state) {
+    return Immutable.Map({
+      isLoading: true
+    });
+  }
+  switch (action.type) {
+  case constants.SET_APP_LOAD_START:
+  case constants.GET_INVOICES_START:
+    return state.merge({isLoading: true});
+  case constants.SAVE_INVOICE_SUCCESS:
+  case constants.GET_INVOICES_SUCCESS:
+  case constants.GET_INVOICE_SUCCESS:
+    return state.merge({isLoading: false});
+  default:
+    return state;
+  }
+};
+
 const invoices = combineReducers({
-  items
+  items,
+  view
 });
+
 
 export default invoices;

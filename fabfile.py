@@ -44,10 +44,12 @@ def status():
     run('service soitgoes status')
 
 
-def deploy():
+def deploy(branch='master'):
     deploy_js()
 
     with context_managers.cd(APP_PATH):
+        run('git fetch')
+        run('git checkout %s' % branch)
         run('git pull --rebase')
 
         with context_managers.prefix('source ~/venvs/soitgoes/bin/activate'):

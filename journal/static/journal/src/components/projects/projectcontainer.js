@@ -3,6 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {TimeslipsContainer} from '../timeslips/timeslipcontainer';
+import { Loading } from '../loading';
 
 import * as projectActions from '../../actions/projects';
 
@@ -16,7 +17,7 @@ class Project extends React.Component {
   render() {
     const project = this.props.project;
     if (!project) {
-      return (<h3>Loading</h3>);
+      return (<Loading />);
     }
     const crumbs = [
       {route: '/projects', title: 'Projects'}

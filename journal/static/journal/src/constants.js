@@ -1,5 +1,6 @@
 const values = [
   'SET_STATE',
+  'SET_APP_LOAD_START',
   'SET_APP_LOAD_SUCCESS',
 
   'CREATE_SESSION_SUCCESS',
@@ -35,6 +36,7 @@ const values = [
 
   'SET_TIMESLIP_ACTIVE_DATE',
 
+  'GET_INVOICES_START',
   'GET_INVOICES_SUCCESS',
 
   'CREATE_INVOICE',

@@ -72,6 +72,10 @@ export const fetchInvoices = () => (dispatch) => {
   dispatch({
     type: constants.CLEAR_INVOICE_TIMESLIPS
   });
+  dispatch({
+    type: constants.GET_INVOICES_START
+  });
+
   api.fetchInvoices().then(res => {
     const invoices = res.results;
     dispatch({

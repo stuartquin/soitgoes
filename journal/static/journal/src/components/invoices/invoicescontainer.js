@@ -6,15 +6,14 @@ import {Card, CardText} from 'material-ui/Card';
 import {InvoiceList} from './invoicelist';
 import {CreateInvoice} from './createinvoice';
 import {HeaderBar} from '../nav/headerbar';
+import {Loading} from '../loading';
 import * as invoiceActions from '../../actions/invoices';
 
-import {setHeaderBar} from '../../actions/nav';
 
 
 class Invoices extends React.Component {
   componentDidMount() {
     this.fetchData();
-    this.props.setHeaderBar('Invoices');
   }
 
   fetchData() {
@@ -28,8 +27,8 @@ class Invoices extends React.Component {
       return (<strong>Loading...</strong>);
     }
 
-    if (this.props.invoices.isEmpty()) {
-      return (<strong>No invoices</strong>);
+    if (this.props.view.get('isLoading')) {
+      return (<Loading />);
     }
 
     const openInvoices = this.props.invoices.filter((invoice) => {
@@ -72,13 +71,13 @@ class Invoices extends React.Component {
 const mapStateToProps = (state) => {
   return {
     projects: state.projects.items,
-    invoices: state.invoices.items
+    invoices: state.invoices.items,
+    view: state.invoices.view
   };
 };
 
 const actions = {
   ...invoiceActions,
-  setHeaderBar
 };
 
 const InvoicesContainer = connect(mapStateToProps, actions)(Invoices);

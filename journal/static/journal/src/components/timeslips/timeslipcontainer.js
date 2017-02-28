@@ -11,6 +11,7 @@ import * as projectActions from '../../actions/projects';
 
 import { TimeslipGrid } from './timeslipgrid';
 import { TimeslipDateControls } from './timeslipdatecontrols';
+import { Loading } from '../loading';
 
 
 class Timeslips extends React.Component {
