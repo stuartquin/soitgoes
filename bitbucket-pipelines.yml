@@ -1,0 +1,9 @@
+image: node:5.2
+
+pipelines:
+  default:
+    - step:
+        - cd journal/static/journal/
+        - npm install webpack
+        - npm install
+        - webpack -p
