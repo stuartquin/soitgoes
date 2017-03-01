@@ -29,7 +29,20 @@ body {
 }
 
 .main-app-bar {
-  background-color: $color-brand !important;
+  margin-left: 210px;
+  background-color: $color-text-light !important;
+
+  h1 {
+    color: $color-text-dark !important;
+  }
+
+  @media screen and (max-width: $break-small) {
+    margin-left: 0;
+    background-color: $color-brand !important;
+    h1 {
+      color: white !important;
+    }
+  }
 }
 
 .container {

@@ -1,8 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 
 import AppBar from 'material-ui/AppBar';
 import Snackbar from 'material-ui/Snackbar';
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import IconButton from 'material-ui/IconButton';
 
 import { NavMenu } from './navmenu';
 import { HeaderLogo } from './headerlogo';
@@ -14,6 +17,14 @@ import * as projectActions from '../../actions/projects';
 import * as userActions from '../../actions/user';
 import * as navActions from '../../actions/nav';
 
+const PATH_TITLES = {
+  '': 'InvoiceTime',
+  'projects': 'Projects',
+  'invoices': 'Invoices',
+  'timeslips': 'Time',
+  'tasks': 'Tasks',
+  'dash': 'Dash'
+}
 
 class Nav extends React.Component {
   constructor(props) {
@@ -43,8 +54,12 @@ class Nav extends React.Component {
     location.reload();
   }
 
-  toggleMenu() {
-    this.setState({navOpen: !this.state.navOpen})
+  handleButton(isDeep) {
+    if (isDeep) {
+      browserHistory.goBack();
+    } else {
+      this.setState({navOpen: true});
+    }
   }
 
   closeMenu() {
@@ -59,6 +74,14 @@ class Nav extends React.Component {
         </div>
       );
     }
+    const basePath = this.props.path.get(0);
+    const title = PATH_TITLES[basePath];
+    const isDeep = this.props.path.count() > 1;
+
+    let icon = null;
+    if (isDeep) {
+      icon = (<IconButton><NavigationArrowBack /></IconButton>);
+    }
 
     return (
       <div className='wrapper'>
@@ -68,10 +91,10 @@ class Nav extends React.Component {
         />
 
         <AppBar
-          title='InvoiceTime'
+          title={title}
           className='main-app-bar'
-          iconElementLeft={null}
-          onLeftIconButtonTouchTap={() => this.toggleMenu()}
+          iconElementLeft={icon}
+          onLeftIconButtonTouchTap={() => this.handleButton(isDeep)}
         />
 
         <div className='container'>
@@ -94,6 +117,7 @@ const mapStateToProps = (state, props) => {
   return {
     user: state.user.user,
     version: state.user.version,
+    path: state.nav.headerBar.get('path'),
     isLoaded: state.nav.view.get('isLoaded')
   };
 };
