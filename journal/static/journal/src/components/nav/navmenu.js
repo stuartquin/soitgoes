@@ -10,15 +10,20 @@ import MenuItem from 'material-ui/MenuItem';
 const NavMenu = (props) => {
   const linkTo = (route) => () => {
     browserHistory.push(route);
-    props.onClose();
+    props.onSetOpen(false);
   }
 
   return (
-    <Drawer containerClassName='nav-container' open={props.open}>
+    <Drawer
+      containerClassName='nav-container'
+      docked={false}
+      open={props.open}
+      onRequestChange={(open) => props.onSetOpen(open)}>
+
       <AppBar
         title='InvoiceTime'
         className='nav-app-bar'
-        onTitleTouchTap={props.onToggle}
+        onTitleTouchTap={() => props.onSetOpen(!props.open)}
       />
       <MenuItem
         className='nav-item'

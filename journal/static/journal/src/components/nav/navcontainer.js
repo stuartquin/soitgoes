@@ -64,8 +64,7 @@ class Nav extends React.Component {
       <div className='wrapper'>
         <NavMenu
           open={this.state.navOpen}
-          onToggle={() => this.toggleMenu()}
-          onClose={() => this.closeMenu()}
+          onSetOpen={(navOpen) => this.setState({navOpen})}
         />
 
         <AppBar
