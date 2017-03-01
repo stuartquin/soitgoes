@@ -128,6 +128,5 @@ const actions = {
   ...navActions
 };
 
-
 const NavContainer = connect(mapStateToProps, actions)(Nav);
-export {NavContainer};
+export default NavContainer;
