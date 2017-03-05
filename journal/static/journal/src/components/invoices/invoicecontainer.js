@@ -7,6 +7,7 @@ import {Generator} from './generator';
 import {Settings} from './settings';
 import {InvoiceHeader} from './invoiceheader';
 import {Loading} from '../loading';
+import {Confirm} from '../confirm';
 
 import * as invoiceActions from '../../actions/invoices';
 
@@ -15,7 +16,8 @@ class Invoice extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dueDate: null
+      dueDate: null,
+      confirmDelete: false
     };
   }
 
@@ -53,13 +55,18 @@ class Invoice extends React.Component {
 
     return (
       <div className='invoice-container'>
+        <Confirm
+          title='Confirm Delete'
+          message='Are you sure you want to delete?'
+          open={this.state.confirmDelete}
+          onConfirm={() => this.props.deleteInvoice(invoice.get('id'))}
+          onCancel={() => this.setState({confirmDelete: false})}
+        />
         <div className='header'>
           <InvoiceHeader
             invoice={invoice}
             project={project}
-            onDelete={() =>
-              this.props.deleteInvoice(invoice.get('id'))
-            }
+            onDelete={() => this.setState({confirmDelete: true})}
             onMarkAsIssued={() =>
               this.props.markAsIssued(
                 invoice.get('id'),

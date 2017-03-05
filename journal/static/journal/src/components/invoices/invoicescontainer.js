@@ -7,11 +7,18 @@ import {InvoiceList} from './invoicelist';
 import {CreateInvoice} from './createinvoice';
 import {HeaderBar} from '../nav/headerbar';
 import {Loading} from '../loading';
+import {Confirm} from '../confirm';
 import * as invoiceActions from '../../actions/invoices';
 
 
-
 class Invoices extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      invoiceId: null
+    };
+  }
+
   componentDidMount() {
     this.fetchData();
   }
@@ -37,6 +44,17 @@ class Invoices extends React.Component {
 
     return (
       <div className='invoices-container'>
+        <Confirm
+          title='Confirm Delete'
+          message='Are you sure you want to delete?'
+          open={this.state.invoiceId !== null}
+          onConfirm={() => {
+            this.props.deleteInvoice(this.state.invoiceId);
+            this.setState({invoiceId: null});
+          }}
+          onCancel={() => this.setState({invoiceId: null})}
+        />
+
         <div className='content'>
           <CreateInvoice
             projects={this.props.projects}
@@ -48,7 +66,7 @@ class Invoices extends React.Component {
               <InvoiceList
                 projects={this.props.projects}
                 invoices={openInvoices}
-                onDeleteInvoice={(id) => this.props.deleteInvoice(id)}
+                onDeleteInvoice={(id) => this.setState({invoiceId: id})}
               />
 
               <h3>Closed Invoices ({closedInvoices.size})</h3>
