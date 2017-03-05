@@ -40,7 +40,6 @@ class Settings extends React.Component {
             autoOk={true}
             floatingLabelText='Due Date'
             defaultDate={this.state.form.due_date}
-            container='inline'
           />
         </div>
 
