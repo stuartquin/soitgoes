@@ -25,29 +25,12 @@ const taskInvoiceItem = (task) => {
   }
 };
 
-const getItemList = (title, items, onDelete) => {
-
-};
 
 class Generator extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      form: {}
-    };
-  }
-
-  updateForm(name, val) {
-    let form = this.state.form;
-    form[name] = val;
-    this.setState({form});
-  }
-
   render() {
     const invoice = this.props.invoice;
     const project = this.props.project;
-    const isIssued = false;
-    const isEditable = !Boolean(invoice.get('issued_at'));
+    const isEditable = this.props.isEditable;
 
     const timeslipItems = this.props.timeslips.toList().map(t =>
       timeslipInvoiceItem(t, project)

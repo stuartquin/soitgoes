@@ -12,8 +12,8 @@ export const updateInvoice = (invoiceId, projectId, updates) => (dispatch) =>
     });
   });
 
-export const markAsIssued = (invoiceId, projectId, timeslips) => (dispatch) =>
-  api.issueInvoice(invoiceId, projectId, timeslips).then(invoice => {
+export const markAsIssued = (invoiceId, projectId, dueDate, timeslips) => (dispatch) =>
+  api.issueInvoice(invoiceId, projectId, dueDate, timeslips).then(invoice => {
     dispatch({
       type: constants.SAVE_INVOICE_SUCCESS,
       invoice

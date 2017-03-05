@@ -122,8 +122,9 @@ export const updateInvoice = (invoiceId, projectId, updates) => {
   return fetch(req).then(res => res.json());
 };
 
-export const issueInvoice = (invoiceId, projectId, timeslips) => {
+export const issueInvoice = (invoiceId, projectId, dueDate, timeslips) => {
   const req = buildRequest(`invoices/${invoiceId}`, 'PUT', {
+    due_date: dueDate,
     project: projectId,
     timeslips: timeslips.map(t => t.get('id')).toJS()
   });

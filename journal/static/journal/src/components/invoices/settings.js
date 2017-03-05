@@ -8,38 +8,24 @@ import { InvoiceSummary } from './invoicesummary';
 
 
 class Settings extends React.Component {
-  constructor(props) {
-    super(props);
-    const invoice = props.invoice;
-    const due_date = moment(invoice.get('due_date')).toDate();
-
-    this.state = {
-      form: {
-        due_date,
-        tax: null,
-      }
-    };
-  }
-
-  updateForm(name, val) {
-    let form = this.state.form;
-    form[name] = val;
-    this.setState({form});
-  }
-
   render() {
     const invoice = this.props.invoice;
     const project = this.props.project;
+    const isEditable = this.props.isEditable;
+    const dueDate = moment(this.props.dueDate).toDate();
 
     return (
       <div className='settings'>
         <div>
           <DatePicker
             textFieldStyle={{width: '100%'}}
-            onChange={(e, date) => this.updateForm('issued_at', date)}
+            onChange={(e, date) => {
+              this.props.onSetDueDate(moment(date).format('YYYY-MM-DD'));
+            }}
             autoOk={true}
             floatingLabelText='Due Date'
-            defaultDate={this.state.form.due_date}
+            defaultDate={dueDate}
+            disabled={!isEditable}
           />
         </div>
 

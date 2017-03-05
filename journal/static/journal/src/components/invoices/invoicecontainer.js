@@ -12,6 +12,13 @@ import * as invoiceActions from '../../actions/invoices';
 
 
 class Invoice extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dueDate: null
+    };
+  }
+
   componentDidMount() {
     if (this.props.id !== 'add') {
       this.fetchInvoice().then(() => this.fetchData(this.props.id))
@@ -30,6 +37,10 @@ class Invoice extends React.Component {
     return Promise.all(promises);
   }
 
+  setDueDate(dueDate) {
+    this.setState({dueDate});
+  }
+
   render() {
     if (this.props.isLoading) {
       return (<Loading />);
@@ -37,6 +48,8 @@ class Invoice extends React.Component {
     const invoice = this.props.invoice;
     const modifiers = invoice.get('modifier');
     const project = this.props.project || Immutable.Map();
+    const isEditable = !Boolean(invoice.get('issued_at'));
+    const dueDate = this.state.dueDate || invoice.get('due_date');
 
     return (
       <div className='invoice-container'>
@@ -51,6 +64,7 @@ class Invoice extends React.Component {
               this.props.markAsIssued(
                 invoice.get('id'),
                 project.get('id'),
+                dueDate,
                 this.props.timeslips
               )
             }
@@ -70,12 +84,15 @@ class Invoice extends React.Component {
             timeslips={this.props.timeslips}
             tasks={this.props.tasks}
             modifiers={modifiers}
+            isEditable={isEditable}
+            dueDate={dueDate}
             onRemoveModifier={(modifier) =>
               this.props.deleteInvoiceModifier(
                 invoice.get('id'),
                 modifier.get('id')
               )
             }
+            onSetDueDate={(date) => this.setDueDate(date)}
           />
           <Generator
             invoice={invoice}
@@ -83,6 +100,7 @@ class Invoice extends React.Component {
             timeslips={this.props.timeslips}
             tasks={this.props.tasks}
             modifiers={modifiers}
+            isEditable={isEditable}
             onDeleteInvoiceTimeslip={(id) =>
               this.props.deleteInvoiceTimeslip(invoice.get('id'), id)
             }
@@ -111,12 +129,13 @@ const getInvoiceTasks = (invoice, tasks) => {
 
 const mapStateToProps = (state, { params }) => {
   const id = parseInt(params.id, 10);
+  const invoice = state.invoices.items.get(id);
+
   let mapState = {
     id,
     isLoading: true
   }
 
-  const invoice = state.invoices.items.get(id);
   if (!invoice) {
     return mapState;
   }
