@@ -50,6 +50,11 @@ const NavMenu = (props) => {
         primaryText='Tasks'
         onTouchTap={linkTo('/tasks')}
       />
+      <MenuItem
+        className='nav-item'
+        primaryText='Logout'
+        onTouchTap={props.onLogout}
+      />
     </Drawer>
   );
 };

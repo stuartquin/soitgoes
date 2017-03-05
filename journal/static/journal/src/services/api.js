@@ -261,3 +261,8 @@ export const login = (form) => {
   const req = buildRequest(`login/`, 'POST', form);
   return fetch(req);
 };
+
+export const logout = (form) => {
+  const req = buildRequest(`logout/`);
+  return fetch(req);
+};

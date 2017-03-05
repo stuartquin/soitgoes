@@ -90,6 +90,7 @@ class Nav extends React.Component {
         <NavMenu
           open={this.state.navOpen}
           onSetOpen={(navOpen) => this.setState({navOpen})}
+          onLogout={() => this.props.logout()}
         />
 
         <AppBar

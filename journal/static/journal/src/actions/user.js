@@ -61,3 +61,9 @@ export const login = (form) => (dispatch) => {
     }
   });
 };
+
+export const logout = (form) => (dispatch) => {
+  return api.logout().then(res => {
+    location.href = '/';
+  });
+};

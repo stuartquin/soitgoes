@@ -46,10 +46,10 @@ urlpatterns = [
     url(r'api/summary/expenses/$', apiviews.SummaryExpenses.as_view()),
 
     url(r'api/login/$', views.login_user),
+    url(r'api/logout/$', views.logout_user),
 
     # App Routing
     url(r'monzo/$', views.monzo_webhook),
-    url(r'logout/$', views.logout_user),
     url(r'^$', views.landing),
     url(r'^', views.landing)
 ]
