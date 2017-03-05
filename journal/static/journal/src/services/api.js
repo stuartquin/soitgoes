@@ -256,3 +256,8 @@ export const addTask = (form) => {
   const req = buildRequest(`tasks/`, 'POST', form);
   return fetch(req).then(res => res.json());
 };
+
+export const login = (form) => {
+  const req = buildRequest(`login/`, 'POST', form);
+  return fetch(req);
+};

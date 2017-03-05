@@ -57,10 +57,20 @@ const version = (state = Immutable.Map(), action) => {
   }
 };
 
+const login = (state = Immutable.Map({error: false}), action) => {
+  switch(action.type) {
+  case constants.LOGIN_USER_ERROR:
+    return Immutable.Map({error: true})
+  default:
+    return state;
+  }
+};
+
 const users = combineReducers({
   user,
   accounts,
   version,
+  login,
   view
 });
 

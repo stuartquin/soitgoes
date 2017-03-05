@@ -35,15 +35,17 @@ class Nav extends React.Component {
   }
 
   componentDidMount() {
-    // Starts a loop
-    this.props.fetchVersion();
-    Promise.all([
-      this.props.fetchUser(),
-      this.props.fetchAccounts(),
-      this.props.fetchProjects()
-    ]).then(() => {
+    this.fetchBase().then(() => {
       this.props.setIsLoaded(true);
     });
+  }
+
+  fetchBase() {
+    return Promise.all([
+      this.props.fetchVersion(),
+      this.props.fetchAccounts(),
+      this.props.fetchProjects()
+    ]);
   }
 
   onLogout() {
@@ -129,4 +131,4 @@ const actions = {
 };
 
 const NavContainer = connect(mapStateToProps, actions)(Nav);
-export default NavContainer;
+export { NavContainer };

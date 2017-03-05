@@ -68,6 +68,7 @@ class UserDetail(APIView):
     serializer_class = serializers.UserSerializer
 
     def get(self, request, pk=None):
+        import ipdb; ipdb.set_trace()
         user = serializers.UserSerializer(self.request.user)
         return Response(user.data)
 

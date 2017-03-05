@@ -1,4 +1,6 @@
 'use strict';
+import { push } from 'react-router-redux';
+
 import constants from '../constants';
 import * as api from '../services/api';
 
@@ -46,4 +48,16 @@ export const fetchVersion = () => (dispatch) => {
   setInterval(() => {
     _fetchVersion(dispatch);
   }, VERSION_INTERVAL);
+};
+
+export const login = (form) => (dispatch) => {
+  return api.login(form).then(res => {
+    if (res.ok) {
+      location.href = '/';
+    } else {
+      dispatch({
+        type: constants.LOGIN_USER_ERROR
+      });
+    }
+  });
 };
