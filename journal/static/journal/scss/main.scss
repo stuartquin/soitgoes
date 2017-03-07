@@ -19,6 +19,8 @@ $color-bg-warn: lighten($color-warn, 35%);
 $break-small: 700px;
 $break-large: 1200px;
 
+@import url('https://fonts.googleapis.com/css?family=Work+Sans');
+
 @import 'nav';
 @import 'base';
 
@@ -31,6 +33,7 @@ $break-large: 1200px;
 @import 'tables';
 @import 'loading';
 
+@import 'login';
 @import 'dash';
 @import 'tasks';
 @import 'project';

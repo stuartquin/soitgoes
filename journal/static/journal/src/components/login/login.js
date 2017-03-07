@@ -25,11 +25,10 @@ class Login extends React.Component {
     if (this.props.loginState.get('error')) {
       errorText = 'Incorrect username/password';
     }
-
     return (
-      <div className='content'>
+      <div className='content login'>
         <Card>
-          <CardText>
+          <CardText className='login-card'>
             <div>
               <TextField
                 hintText="Username Field"

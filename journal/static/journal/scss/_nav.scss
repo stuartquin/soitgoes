@@ -29,19 +29,14 @@ body {
 }
 
 .main-app-bar {
-  margin-left: 216px;
-  background-color: $color-text-light !important;
-
+  margin-left: 0;
+  background-color: $color-brand !important;
   h1 {
-    color: $color-text-dark !important;
+    color: white !important;
   }
 
-  @media screen and (max-width: $break-small) {
-    margin-left: 0;
-    background-color: $color-brand !important;
-    h1 {
-      color: white !important;
-    }
+  @media screen and (min-width: $break-small) {
+    display: none !important;
   }
 }
 

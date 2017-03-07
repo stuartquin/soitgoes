@@ -1,4 +1,7 @@
 .table {
+  font-family: 'Work Sans', sans-serif !important;
+  font-feature-settings: 'tnum';
+
   td:first-child {
     padding-left: 4px !important;
   }
@@ -17,11 +20,13 @@
 
   .col-number {
     width: 60px;
+
   }
 
   .col-right {
     text-align: right !important;
     padding-right: 0 !important;
+
   }
 
   @media screen and (max-width: $break-small) {
