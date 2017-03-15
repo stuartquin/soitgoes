@@ -128,7 +128,9 @@ tr.total td {
       <section class='client'>
         <div class='client-details'>
           {{ contact.name }} <br />
-          {{ contact.company.name }} <br />
+          {% if contact.name != contact.company.name %}
+            {{ contact.company.name }} <br />
+          {% endif %}
           {{ contact.company.address1 }} <br />
           {{ contact.company.city }} <br />
           {{ contact.company.post_code }}<br />

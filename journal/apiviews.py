@@ -68,7 +68,6 @@ class UserDetail(APIView):
     serializer_class = serializers.UserSerializer
 
     def get(self, request, pk=None):
-        import ipdb; ipdb.set_trace()
         user = serializers.UserSerializer(self.request.user)
         return Response(user.data)
 
@@ -207,6 +206,8 @@ class TimeSlipList(generics.ListCreateAPIView):
         kwargs['context'] = self.get_serializer_context()
         if 'data' in kwargs:
             kwargs['many'] = True
+            for timeslip in kwargs['data']:
+                timeslip['user'] = self.request.user.pk
 
         return self.serializer_class(*args, **kwargs)
 
@@ -300,3 +301,16 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
             kwargs['partial'] = True
 
         return self.serializer_class(*args, **kwargs)
+
+
+class InvoiceTaskDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Task.objects.all()
+    serializer_class = serializers.TaskSerializer
+
+    def destroy(self, request, pk=None, modifier=None):
+        invoice = models.Invoice.objects.get(id=pk)
+        invoice.modifier.remove(
+            models.InvoiceModifier.objects.get(id=modifier)
+        )
+        invoice.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
