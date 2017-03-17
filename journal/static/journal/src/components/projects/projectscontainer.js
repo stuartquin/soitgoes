@@ -6,12 +6,14 @@ import { browserHistory } from 'react-router';
 import {Card, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import {ProjectsList} from './projectslist';
+import ProjectsList from './projectslist';
 import * as projectActions from '../../actions/projects';
+import * as contactActions from '../../actions/contacts';
 
 class Projects extends React.Component {
   componentDidMount() {
     this.props.fetchProjects();
+    this.props.fetchContacts();
   }
 
   render() {
@@ -31,6 +33,7 @@ class Projects extends React.Component {
           <Card>
             <CardText>
               <ProjectsList
+                contacts={this.props.contacts}
                 projects={this.props.projects} />
             </CardText>
           </Card>
@@ -42,12 +45,14 @@ class Projects extends React.Component {
 
 const mapStateToProps = (state, { params }) => {
   return {
-    projects: state.projects.items
+    projects: state.projects.items,
+    contacts: state.contacts.items
   };
 };
 
 const actions = {
-  ...projectActions
+  fetchContacts: contactActions.fetchContacts,
+  fetchProjects: projectActions.fetchProjects
 };
 
 const ProjectsContainer = connect(mapStateToProps, actions)(Projects);

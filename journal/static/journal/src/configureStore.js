@@ -35,8 +35,7 @@ const logger = createLogger({
 let middlewares = [
   applyMiddleware(
     thunk,
-    routerMiddleware(browserHistory),
-    logger
+    routerMiddleware(browserHistory)
   )
 ];
 

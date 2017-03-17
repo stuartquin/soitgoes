@@ -72,7 +72,7 @@ class UserDetail(APIView):
         return Response(user.data)
 
 
-class ProjectList(generics.ListAPIView):
+class ProjectList(generics.ListCreateAPIView):
     serializer_class = serializers.ProjectSerializer
 
     def get_queryset(self):

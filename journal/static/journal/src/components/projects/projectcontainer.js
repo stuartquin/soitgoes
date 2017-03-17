@@ -22,7 +22,6 @@ class Project extends React.Component {
     const isEdit = this.props.id !== 'add';
     const loading = (isEdit && (!project || project.isEmpty()));
 
-    console.log(project, isEdit);
     if (loading) {
       return (<Loading />);
     }

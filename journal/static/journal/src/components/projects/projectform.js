@@ -22,7 +22,7 @@ class ProjectForm extends React.Component {
       this.state.form = {
         name: project.get('name'),
         hourly_rate: project.get('hourly_rate'),
-        contact: project.get('contact').get('id')
+        contact: project.get('contact')
       };
     } else {
       this.state.form = {

@@ -8,6 +8,11 @@ import journal.models as models
 VAT_MODIFIER_ID = 1
 
 
+class CurrentAccountDefault(serializers.CurrentUserDefault):
+    def __call__(self):
+        return self.user.account_set.first()
+
+
 class LogActivity(serializers.ModelSerializer):
     def create(self, validated_data):
         instance = super().create(validated_data)
@@ -23,8 +28,15 @@ class LogActivity(serializers.ModelSerializer):
 
 class ProjectSerializer(LogActivity):
     ACTIVITY_CODE = 'PRO'
-    uninvoiced_hours = serializers.IntegerField(source='get_uninvoiced_hours')
-    total_paid = serializers.IntegerField(source='get_total_paid')
+    uninvoiced_hours = serializers.IntegerField(
+        source='get_uninvoiced_hours',
+        read_only=True
+    )
+    total_paid = serializers.IntegerField(
+        source='get_total_paid',
+        read_only=True
+    )
+    account = serializers.HiddenField(default=CurrentAccountDefault())
 
     class Meta:
         model = models.Project
@@ -36,9 +48,9 @@ class ProjectSerializer(LogActivity):
             'uninvoiced_hours',
             'total_paid',
             'hourly_rate',
-            'archived'
+            'archived',
+            'account'
         ]
-        depth = 1
 
 
 class TimeSlipSerializer(LogActivity):
