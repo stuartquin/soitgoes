@@ -20,18 +20,18 @@ const view = (state = Immutable.Map({}), action) => {
   }
 };
 
-const items = (state = Immutable.Map({}), action) => {
+const items = (state = Immutable.OrderedMap({}), action) => {
   switch(action.type) {
-  case constants.GET_PROJECTS_SUCCESS:
-    return state.merge(Immutable.fromJS(getById(action.items)));
+  case constants.GET_CONTACTS_SUCCESS:
+    return state.merge(getById(action.items));
   default:
     return state;
   }
 };
 
-const projects = combineReducers({
+const contacts = combineReducers({
   items,
   view
 });
 
-export default projects;
+export default contacts;

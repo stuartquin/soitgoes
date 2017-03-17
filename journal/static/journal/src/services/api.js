@@ -66,6 +66,11 @@ export const fetchProjects = () => {
   );
 };
 
+export const addProject = (form) => {
+  const req = buildRequest(`projects/`, 'POST', form);
+  return fetch(req).then(res => res.json());
+};
+
 export const createTimeslips = (timeslips) => {
   const req = buildRequest('timeslips/', 'POST', timeslips.toJS());
   return fetch(req);
@@ -225,6 +230,17 @@ export const fetchExpenses = (start, end) => {
   return fetch(buildRequest(url)).then(
     res => res.json()
   );
+};
+
+export const fetchContacts = () => {
+  return fetch(buildRequest('contacts/')).then(
+    res => res.json()
+  );
+};
+
+export const addContact = (form) => {
+  const req = buildRequest(`contacts/`, 'POST', form);
+  return fetch(req).then(res => res.json());
 };
 
 export const fetchTasks = (id=null, project=null, invoice=null) => {

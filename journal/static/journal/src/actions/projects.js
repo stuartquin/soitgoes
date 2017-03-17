@@ -4,11 +4,21 @@ import constants from '../constants';
 
 export const fetchProjects = () => (dispatch) =>
   api.fetchProjects().then(res => {
-    const projects = res.results;
     dispatch({
       type: constants.GET_PROJECTS_SUCCESS,
-      projects: projects
+      items: res.results
     });
   });
 
+export const addProject = (form) => (dispatch) => {
+  dispatch({
+    type: constants.UPDATE_PROJECT_START
+  });
 
+  api.addProject(form).then(res => {
+    dispatch({
+      type: constants.GET_PROJECTS_SUCCESS,
+      items: [res]
+    });
+  });
+};

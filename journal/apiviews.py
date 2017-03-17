@@ -86,7 +86,7 @@ class ActivityFeedList(generics.ListAPIView):
         return models.Activity.objects.all().order_by('-created_at')[:10]
 
 
-class ProjectDetail(APIView):
+class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.ProjectSerializer
     permission_classes = (HasProjectAccess,)
 
@@ -294,6 +294,29 @@ class TaskList(generics.ListCreateAPIView):
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Task.objects.all()
     serializer_class = serializers.TaskSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
+        if 'data' in kwargs:
+            kwargs['partial'] = True
+
+        return self.serializer_class(*args, **kwargs)
+
+
+class ContactList(generics.ListCreateAPIView):
+    serializer_class = serializers.ContactSerializer
+
+    def get_queryset(self):
+        filters = {
+            'account__in': self.request.user.account_set.all()
+        }
+
+        return models.Contact.objects.filter(**filters)
+
+
+class ContactDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Contact.objects.all()
+    serializer_class = serializers.ContactSerializer
 
     def get_serializer(self, *args, **kwargs):
         kwargs['context'] = self.get_serializer_context()

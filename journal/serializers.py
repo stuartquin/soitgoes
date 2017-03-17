@@ -77,6 +77,13 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'billing', 'logo_image')
 
 
+class ContactSerializer(serializers.ModelSerializer):
+    company = CompanySerializer(read_only=True)
+
+    class Meta:
+        model = models.Contact
+
+
 class AccountSerializer(serializers.ModelSerializer):
     company = CompanySerializer()
     users = UserSerializer(many=True, read_only=True)

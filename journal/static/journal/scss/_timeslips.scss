@@ -1,9 +1,5 @@
 .timeslip-container {
-  width: 50%;
-
-  @media screen and (max-width: $break-small) {
     width: 100%;
-  }
 }
 
 .timeslip-grid {

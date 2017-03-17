@@ -40,6 +40,9 @@ urlpatterns = [
     url(r'api/tasks/$', apiviews.TaskList.as_view()),
     url(r'api/tasks/(?P<pk>[0-9]+)$', apiviews.TaskDetail.as_view()),
 
+    url(r'api/contacts/$', apiviews.ContactList.as_view()),
+    url(r'api/contacts/(?P<pk>[0-9]+)$', apiviews.ContactDetail.as_view()),
+
     url(r'api/version/$', apiviews.Version.as_view()),
 
     url(r'api/summary/invoices/$', apiviews.SummaryInvoices.as_view()),
