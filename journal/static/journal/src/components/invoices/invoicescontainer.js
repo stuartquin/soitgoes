@@ -46,14 +46,14 @@ class Invoices extends React.Component {
       <div className='invoices-container'>
         <Confirm
           title='Confirm Delete'
-          message='Are you sure you want to delete?'
           open={this.state.invoiceId !== null}
           onConfirm={() => {
             this.props.deleteInvoice(this.state.invoiceId);
             this.setState({invoiceId: null});
           }}
-          onCancel={() => this.setState({invoiceId: null})}
-        />
+          onCancel={() => this.setState({invoiceId: null})}>
+          Are you sure you want to delete?
+        </Confirm>
 
         <div className='content'>
           <CreateInvoice

@@ -3,9 +3,12 @@ import React from 'react';
 import moment from 'moment';
 
 import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
+
+import {Confirm} from '../confirm';
+import AddSelect from '../addselect';
+import ContactForm from '../contact/contactform';
 
 
 class ProjectForm extends React.Component {
@@ -15,6 +18,7 @@ class ProjectForm extends React.Component {
 
     this.state = {
       isEdit: !!props.isEdit,
+      showAddContact: false,
       form: {}
     };
 
@@ -34,6 +38,10 @@ class ProjectForm extends React.Component {
     let form = this.state.form;
     form[field] = val;
     this.setState({form: form});
+  }
+
+  handleAddContact() {
+    this.setState({showAddContact: !this.state.showAddContact});
   }
 
   onSave() {
@@ -65,13 +73,12 @@ class ProjectForm extends React.Component {
           value={this.state.form.name}
           onChange={(evt, val) => this.handleChange('name', val)}
           floatingLabelText='Name' />
-        <SelectField
-          style={{width: '100%'}}
+        <AddSelect
+          items={contacts}
           value={this.state.form.contact}
           onChange={(evt, idx, val) => this.handleChange('contact', val)}
-          floatingLabelText='Contact'>
-          {contacts}
-        </SelectField>
+          onAdd={() => this.handleAddContact()}
+        />
         <TextField
           style={{width: '100%'}}
           type='number'
@@ -86,6 +93,15 @@ class ProjectForm extends React.Component {
             this.onSave()
           }}
         />
+
+        <Confirm
+          title='Add Contact'
+          open={this.state.showAddContact}
+          onConfirm={() => this.props.deleteInvoice(invoice.get('id'))}
+          onCancel={() => this.setState({showAddContact: false})}>
+          <ContactForm />
+        </Confirm>
+
       </div>
     );
   }

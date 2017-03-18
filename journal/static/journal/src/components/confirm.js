@@ -6,6 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 
 const Confirm = (props) => {
+  const confirmText = props.confirmText || 'Confirm';
   const actions = [
     <FlatButton
       label='Cancel'
@@ -29,7 +30,7 @@ const Confirm = (props) => {
       open={props.open}
       onRequestClose={props.onCancel}
     >
-    {props.message}
+    {props.children}
     </Dialog>
   );
 };

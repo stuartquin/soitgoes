@@ -50,6 +50,7 @@ class Invoice extends React.Component {
     const invoice = this.props.invoice;
     const modifiers = invoice.get('modifier');
     const project = this.props.project || Immutable.Map();
+    const contact = this.props.contacts.get(project.get('contact'), Immutable.Map())
     const isEditable = !Boolean(invoice.get('issued_at'));
     const dueDate = this.state.dueDate || invoice.get('due_date');
 
@@ -57,15 +58,17 @@ class Invoice extends React.Component {
       <div className='invoice-container'>
         <Confirm
           title='Confirm Delete'
-          message='Are you sure you want to delete?'
           open={this.state.confirmDelete}
           onConfirm={() => this.props.deleteInvoice(invoice.get('id'))}
-          onCancel={() => this.setState({confirmDelete: false})}
-        />
+          onCancel={() => this.setState({confirmDelete: false})}>
+          Are you sure you want to delete?
+        </Confirm>
+
         <div className='header'>
           <InvoiceHeader
             invoice={invoice}
             project={project}
+            contact={contact}
             onDelete={() => this.setState({confirmDelete: true})}
             onMarkAsIssued={() =>
               this.props.markAsIssued(
@@ -150,6 +153,7 @@ const mapStateToProps = (state, { params }) => {
   mapState.isLoading = false;
   mapState.invoice = invoice;
   mapState.project = getInvoiceProject(invoice, state.projects.items);
+  mapState.contacts = state.contacts.items;
   mapState.timeslips = getInvoiceTimeslips(invoice, state.timeslips.items);
   mapState.tasks = getInvoiceTasks(invoice, state.tasks.items);
   return mapState;

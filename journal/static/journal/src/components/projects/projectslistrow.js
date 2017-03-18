@@ -5,7 +5,6 @@ import {TableRow, TableRowColumn} from 'material-ui/Table';
 import moment from 'moment';
 
 const ProjectListRow = ({ project, contact }) => {
-  console.log(contact.toJS());
   return (
     <TableRow className='invoice-list-row'>
       <TableRowColumn>

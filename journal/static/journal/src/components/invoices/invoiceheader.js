@@ -74,6 +74,7 @@ const getInvoiceActions = (invoice, onDelete) => {
 const InvoiceHeader = (props) => {
   const invoice = props.invoice;
   const project = props.project;
+  const contact = props.contact;
   const name = getDefaultName(invoice, project);
 
   return (
@@ -81,7 +82,7 @@ const InvoiceHeader = (props) => {
       <div className='invoice-header-info'>
         <h3>{ name }</h3>
         <span className='text-muted'>
-          { project.get('contact').get('name') }
+          { contact.get('name') }
         </span>
       </div>
       <div className='invoice-header-options'>
