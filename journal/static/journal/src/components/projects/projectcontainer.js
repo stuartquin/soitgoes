@@ -7,7 +7,7 @@ import {ProjectForm} from './projectform';
 import { Loading } from '../loading';
 
 import {fetchContacts} from 'modules/contact';
-import * as projectActions from '../../actions/projects';
+import {fetchProjects, addProject} from 'modules/project';
 
 
 class Project extends React.Component {
@@ -61,8 +61,8 @@ const mapStateToProps = (state, { params }) => {
 };
 
 const actions = {
-  addProject: projectActions.addProject,
-  fetchProjects: projectActions.fetchProjects,
+  addProject,
+  fetchProjects,
   fetchContacts
 };
 

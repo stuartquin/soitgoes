@@ -13,7 +13,7 @@ import { HeaderBarContainer } from './headerbar';
 import { UserMenu } from './usermenu';
 import { Loading } from '../loading';
 
-import * as projectActions from '../../actions/projects';
+import {fetchProjects} from 'modules/project';
 import * as userActions from '../../actions/user';
 import * as navActions from '../../actions/nav';
 
@@ -127,9 +127,9 @@ const mapStateToProps = (state, props) => {
 };
 
 const actions = {
-  ...projectActions,
   ...userActions,
-  ...navActions
+  ...navActions,
+  fetchProjects
 };
 
 const NavContainer = connect(mapStateToProps, actions)(Nav);

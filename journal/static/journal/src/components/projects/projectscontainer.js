@@ -7,7 +7,7 @@ import {Card, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import ProjectsList from './projectslist';
-import * as projectActions from '../../actions/projects';
+import {fetchProjects} from 'modules/project';
 import {fetchContacts} from 'modules/contact';
 
 class Projects extends React.Component {
@@ -52,7 +52,7 @@ const mapStateToProps = (state, { params }) => {
 
 const actions = {
   fetchContacts,
-  fetchProjects: projectActions.fetchProjects
+  fetchProjects
 };
 
 const ProjectsContainer = connect(mapStateToProps, actions)(Projects);

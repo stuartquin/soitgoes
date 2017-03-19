@@ -60,17 +60,6 @@ export const fetchByIds = (type, ids) => {
   );
 };
 
-export const fetchProjects = () => {
-  return fetch(buildRequest('projects/')).then(
-    res => res.json()
-  );
-};
-
-export const addProject = (form) => {
-  const req = buildRequest(`projects/`, 'POST', form);
-  return fetch(req).then(res => res.json());
-};
-
 export const createTimeslips = (timeslips) => {
   const req = buildRequest('timeslips/', 'POST', timeslips.toJS());
   return fetch(req);

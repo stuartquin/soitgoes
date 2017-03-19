@@ -7,7 +7,6 @@ import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import * as timeslipActions from '../../actions/timeslips';
-import * as projectActions from '../../actions/projects';
 
 import { TimeslipGrid } from './timeslipgrid';
 import { TimeslipDateControls } from './timeslipdatecontrols';
@@ -23,9 +22,7 @@ class Timeslips extends React.Component {
     const start = this.props.weekStart;
     const end = moment(start).add(7, 'days');
 
-    this.props.fetchTimeslips(null, start, end).then(() =>
-      this.props.fetchProjects()
-    );
+    this.props.fetchTimeslips(null, start, end)
   }
 
   render() {
@@ -99,7 +96,6 @@ const mapStateToProps = (state, props) => {
 };
 
 const actions = {
-  ...projectActions,  // eslint-disable-line
   ...timeslipActions  // eslint-disable-line
 };
 

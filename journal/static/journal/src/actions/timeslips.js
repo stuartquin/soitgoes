@@ -1,7 +1,7 @@
 'use strict';
 import constants from '../constants';
-import * as api from '../services/api';
-import { fetchProjects } from './projects';
+import * as api from 'services/api';
+import { fetchProjects } from 'modules/project';
 
 
 const saveTimeslipsSuccess = () => {
@@ -29,7 +29,7 @@ export const saveTimeslips = (existingTimeslips, newTimeslips) => {
 
     return Promise.all(calls).then(
       () => {
-        dispatch(fetchProjects());
+        dispatch(fetchTimeslips());
         return dispatch(saveTimeslipsSuccess());
       },
       error => console.error(error) // eslint-disable-line

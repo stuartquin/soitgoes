@@ -7,7 +7,6 @@ import { Iterable } from 'immutable';
 
 import timeslips from './reducers/timeslips';
 import activityFeed from './reducers/activityfeed';
-import projects from './reducers/projects';
 import invoice from './reducers/invoice';
 import invoices from './reducers/invoices';
 import user from './reducers/user';
@@ -17,6 +16,7 @@ import nav from './reducers/nav';
 
 import contacts from 'modules/contact';
 import companies from 'modules/company';
+import projects from 'modules/project';
 
 const logger = createLogger({
   stateTransformer: (state) => {
