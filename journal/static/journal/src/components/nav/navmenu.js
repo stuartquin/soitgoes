@@ -32,6 +32,11 @@ const NavMenu = (props) => {
       />
       <MenuItem
         className='nav-item'
+        primaryText='Contacts'
+        onTouchTap={linkTo('/contacts')}
+      />
+      <MenuItem
+        className='nav-item'
         primaryText='Projects'
         onTouchTap={linkTo('/projects')}
       />

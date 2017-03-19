@@ -43,7 +43,8 @@ class Project extends React.Component {
             isEdit={isEdit}
             contacts={contacts}
             project={project}
-            onSave={(form) => save(form)} />
+            onSave={(form) => save(form)}
+            onAddContact={this.props.addContact}/>
         </div>
       </div>
     );
@@ -63,6 +64,7 @@ const mapStateToProps = (state, { params }) => {
 const actions = {
   addProject: projectActions.addProject,
   fetchProjects: projectActions.fetchProjects,
+  addContact: contactActions.addContact,
   fetchContacts: contactActions.fetchContacts,
 };
 

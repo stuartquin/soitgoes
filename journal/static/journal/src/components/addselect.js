@@ -6,7 +6,7 @@ import ContentAddBox from 'material-ui/svg-icons/content/add-box';
 import IconButton from 'material-ui/IconButton';
 
 
-const AddSelect = ({ items, value, onAdd, onChange }) => {
+const AddSelect = ({ label, items, value, onAdd, onChange }) => {
   return (
     <div className='add-select'>
       <SelectField
@@ -14,7 +14,7 @@ const AddSelect = ({ items, value, onAdd, onChange }) => {
         style={{width: '90%'}}
         value={value}
         onChange={onChange}
-        floatingLabelText='Contact'>
+        floatingLabelText={label}>
         {items}
       </SelectField>
       <IconButton touch={true} onTouchTap={onAdd}>

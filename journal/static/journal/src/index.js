@@ -21,6 +21,8 @@ import { ProjectContainer } from './components/projects/projectcontainer';
 import { DashContainer } from './components/dash/dash';
 import { TasksContainer } from './components/tasks/taskscontainer';
 import { TaskContainer } from './components/tasks/taskcontainer';
+import { ContactsContainer } from './components/contact/contactscontainer';
+import { ContactContainer } from './components/contact/contactcontainer';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
@@ -48,6 +50,10 @@ const routes = (
       <Route path='tasks'>
         <IndexRoute component={TasksContainer}/>
         <Route path=':id' component={TaskContainer}/>
+      </Route>
+      <Route path='contacts'>
+        <IndexRoute component={ContactsContainer}/>
+        <Route path=':id' component={ContactContainer}/>
       </Route>
       <IndexRedirect to='/dash' />
     </Route>

@@ -90,7 +90,7 @@ class CompanySerializer(serializers.ModelSerializer):
 
 
 class ContactSerializer(serializers.ModelSerializer):
-    company = CompanySerializer(read_only=True)
+    account = serializers.HiddenField(default=CurrentAccountDefault())
 
     class Meta:
         model = models.Contact

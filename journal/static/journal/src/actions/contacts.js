@@ -1,6 +1,4 @@
 'use strict';
-import { push } from 'react-router-redux';
-
 import * as api from '../services/api';
 import constants from '../constants';
 

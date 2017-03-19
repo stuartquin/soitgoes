@@ -22,6 +22,7 @@ const PATH_TITLES = {
   'projects': 'Projects',
   'invoices': 'Invoices',
   'timeslips': 'Time',
+  'contacts': 'Contacts',
   'tasks': 'Tasks',
   'dash': 'Dash'
 }

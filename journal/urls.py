@@ -43,6 +43,9 @@ urlpatterns = [
     url(r'api/contacts/$', apiviews.ContactList.as_view()),
     url(r'api/contacts/(?P<pk>[0-9]+)$', apiviews.ContactDetail.as_view()),
 
+    url(r'api/companies/$', apiviews.CompanyList.as_view()),
+    url(r'api/companies/(?P<pk>[0-9]+)$', apiviews.CompanyDetail.as_view()),
+
     url(r'api/version/$', apiviews.Version.as_view()),
 
     url(r'api/summary/invoices/$', apiviews.SummaryInvoices.as_view()),

@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import moment from 'moment';
+import { browserHistory } from 'react-router';
 
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
@@ -8,7 +9,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import {Confirm} from '../confirm';
 import AddSelect from '../addselect';
-import ContactForm from '../contact/contactform';
 
 
 class ProjectForm extends React.Component {
@@ -41,7 +41,7 @@ class ProjectForm extends React.Component {
   }
 
   handleAddContact() {
-    this.setState({showAddContact: !this.state.showAddContact});
+    browserHistory.push('/contacts/add');
   }
 
   onSave() {
@@ -51,20 +51,13 @@ class ProjectForm extends React.Component {
   }
 
   render() {
-    const contacts = this.props.contacts.toList().toJS().map(p => {
-      let contact;
-      if (p.name !== p.company.name) {
-        contact = p.name;
-      }
-      return (
-        <MenuItem
-          key={p.id}
-          value={p.id}
-          primaryText={p.company.name}
-          secondaryText={contact}
-        />
-      );
-    });
+    const contacts = this.props.contacts.toList().toJS().map(p =>
+      <MenuItem
+        key={p.id}
+        value={p.id}
+        primaryText={p.name}
+      />
+    );
 
     return (
       <div className='settings'>
@@ -93,15 +86,6 @@ class ProjectForm extends React.Component {
             this.onSave()
           }}
         />
-
-        <Confirm
-          title='Add Contact'
-          open={this.state.showAddContact}
-          onConfirm={() => this.props.deleteInvoice(invoice.get('id'))}
-          onCancel={() => this.setState({showAddContact: false})}>
-          <ContactForm />
-        </Confirm>
-
       </div>
     );
   }

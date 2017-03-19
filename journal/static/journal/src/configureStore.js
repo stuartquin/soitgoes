@@ -15,6 +15,7 @@ import dash from './reducers/dash';
 import tasks from './reducers/tasks';
 import nav from './reducers/nav';
 import contacts from './reducers/contacts';
+import companies from './modules/company';
 
 
 const logger = createLogger({
@@ -55,6 +56,7 @@ const configureStore = () => {
     tasks,
     nav,
     contacts,
+    companies,
     routing: routerReducer
   }),
   compose( ...middlewares )

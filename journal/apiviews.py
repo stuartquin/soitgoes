@@ -303,6 +303,26 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
         return self.serializer_class(*args, **kwargs)
 
 
+class CompanyList(generics.ListCreateAPIView):
+    serializer_class = serializers.CompanySerializer
+
+    def get_queryset(self):
+        filters = {}
+        return models.Company.objects.filter(**filters)
+
+
+class CompanyDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Company.objects.all()
+    serializer_class = serializers.CompanySerializer
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
+        if 'data' in kwargs:
+            kwargs['partial'] = True
+
+        return self.serializer_class(*args, **kwargs)
+
+
 class ContactList(generics.ListCreateAPIView):
     serializer_class = serializers.ContactSerializer
 

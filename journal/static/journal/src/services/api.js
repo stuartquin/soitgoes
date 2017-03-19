@@ -190,6 +190,17 @@ export const deleteInvoiceTask = (itemId) => {
   return fetch(buildRequest(`invoices/items/${itemId}`, 'DELETE'));
 };
 
+export const fetchPath = (path) => {
+  return fetch(buildRequest(path)).then(
+    res => res.json()
+  );
+};
+
+export const add = (path, form) => {
+  const req = buildRequest(path, 'POST', form);
+  return fetch(req).then(res => res.json());
+};
+
 export const fetchAccounts = () => {
   return fetch(buildRequest('accounts/')).then(
     res => res.json()
