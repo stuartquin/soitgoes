@@ -4,12 +4,6 @@ import * as api from 'services/api';
 import { fetchProjects } from 'modules/project';
 
 
-const saveTimeslipsSuccess = () => {
-  return {
-    type: constants.SAVE_TIMESLIPS_SUCCESS
-  };
-};
-
 const savingTimeslips = () => {
   return {
     type: constants.SAVE_TIMESLIPS_START
@@ -17,7 +11,9 @@ const savingTimeslips = () => {
 };
 
 export const saveTimeslips = (existingTimeslips, newTimeslips) => {
-  const updates = existingTimeslips.filter(t => t.get('isUpdated'));
+  const updates = existingTimeslips.filter((t) =>
+    t.get('isUpdated')
+  );
   let calls = [api.updateTimeslips(updates)];
 
   if (newTimeslips.size) {
@@ -28,9 +24,12 @@ export const saveTimeslips = (existingTimeslips, newTimeslips) => {
     dispatch(savingTimeslips());
 
     return Promise.all(calls).then(
-      () => {
-        dispatch(fetchTimeslips());
-        return dispatch(saveTimeslipsSuccess());
+      ([updates, created=[]]) => {
+        dispatch(fetchProjects());
+        return dispatch({
+          type: constants.GET_TIMESLIPS_SUCCESS,
+          timeslips: updates.concat(created)
+        });
       },
       error => console.error(error) // eslint-disable-line
     );
@@ -45,6 +44,7 @@ export const hourChanged = (project, date, hours, user, timeslip) => {
     user,
     timeslip
   };
+
   if (timeslip && timeslip.get('id')) {
     action.type = constants.UPDATE_PROJECT_TIMESLIP;
   } else {

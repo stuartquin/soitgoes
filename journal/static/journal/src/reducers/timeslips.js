@@ -1,21 +1,13 @@
 'use strict';
 import Immutable from 'immutable';
 import moment from 'moment';
-import { combineReducers } from 'redux'; 
+import { combineReducers } from 'redux';
 import constants from '../constants';
-
-const getById = (items) => {
-  let map = Immutable.OrderedMap();
-  items.forEach(item => map = map.set(
-    item.id,
-    Immutable.fromJS(item)
-  ))
-  return map;
-};
+import getById from 'services/getById';
 
 const updateProjectTimeslip = (state, action) => {
   const timeslip = action.timeslip;
-  return state.mergeIn(['' + timeslip.get('id')], {
+  return state.mergeIn([timeslip.get('id')], {
     hours: action.hours,
     isUpdated: true
   });
@@ -73,7 +65,7 @@ const view = (state, action) => {
   case constants.GET_TIMESLIPS_START:
     return state.set('isLoading', true);
   case constants.GET_TIMESLIPS_SUCCESS:
-    return state.set('isLoading', false);
+    return state.set('isLoading', false).set('isSaving', false);
   default:
     return state;
   }

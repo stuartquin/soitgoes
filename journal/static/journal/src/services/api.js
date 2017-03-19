@@ -62,12 +62,16 @@ export const fetchByIds = (type, ids) => {
 
 export const createTimeslips = (timeslips) => {
   const req = buildRequest('timeslips/', 'POST', timeslips.toJS());
-  return fetch(req);
+  return fetch(req).then(
+    res => res.json()
+  );
 };
 
-export const updateTimeslips = (ids, updates) => {
-  return Promise.all(ids.map((id) => {
-    const req = buildRequest(`timeslips/${id}`, 'PUT', updates);
+export const updateTimeslips = (updates) => {
+  return Promise.all(updates.map((update) => {
+    const req = buildRequest(`timeslips/${update.get('id')}`, 'PUT', {
+      hours: update.get('hours')
+    });
     return fetch(req).then(res => res.json());
   }));
 };
