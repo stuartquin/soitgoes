@@ -8,7 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import { Loading } from '../loading';
 import ContactsList from './contactslist';
-import * as contactActions from '../../actions/contacts';
+import {fetchContacts} from 'modules/contact';
 
 class Contacts extends React.Component {
   componentDidMount() {
@@ -50,7 +50,7 @@ const mapStateToProps = (state, { params }) => {
 };
 
 const actions = {
-  fetchContacts: contactActions.fetchContacts
+  fetchContacts
 };
 
 const ContactsContainer = connect(mapStateToProps, actions)(Contacts);

@@ -243,17 +243,6 @@ export const fetchExpenses = (start, end) => {
   );
 };
 
-export const fetchContacts = () => {
-  return fetch(buildRequest('contacts/')).then(
-    res => res.json()
-  );
-};
-
-export const addContact = (form) => {
-  const req = buildRequest(`contacts/`, 'POST', form);
-  return fetch(req).then(res => res.json());
-};
-
 export const fetchTasks = (id=null, project=null, invoice=null) => {
   let url = 'tasks/';
   let query = [];

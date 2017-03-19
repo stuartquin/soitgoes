@@ -5,8 +5,8 @@ import {connect} from 'react-redux';
 import { Loading } from '../loading';
 import ContactForm from './contactform';
 
-import * as contactActions from '../../actions/contacts';
-import {fetchCompanies, addCompany} from '../../modules/company';
+import {fetchContacts, addContact} from 'modules/contact';
+import {fetchCompanies, addCompany} from 'modules/company';
 
 
 class Contact extends React.Component {
@@ -58,8 +58,8 @@ const mapStateToProps = (state, { params }) => {
 };
 
 const actions = {
-  addContact: contactActions.addContact,
-  fetchContacts: contactActions.fetchContacts,
+  addContact,
+  fetchContacts,
   fetchCompanies,
   addCompany
 };

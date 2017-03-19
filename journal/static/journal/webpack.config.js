@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 
+var ROOT = path.resolve(__dirname);
 var IS_DEV = JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true'));
 
 var plugins = [
@@ -25,6 +26,14 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
     publicPath: '/static/'
+  },
+  resolve: {
+    root: path.resolve(__dirname),
+    alias: {
+      components: ROOT + '/src/components',
+      modules: ROOT + '/src/modules',
+      services: ROOT + '/src/services'
+    }
   },
   plugins: plugins,
   module: {

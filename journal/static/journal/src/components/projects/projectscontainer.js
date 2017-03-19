@@ -8,7 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import ProjectsList from './projectslist';
 import * as projectActions from '../../actions/projects';
-import * as contactActions from '../../actions/contacts';
+import {fetchContacts} from 'modules/contact';
 
 class Projects extends React.Component {
   componentDidMount() {
@@ -51,7 +51,7 @@ const mapStateToProps = (state, { params }) => {
 };
 
 const actions = {
-  fetchContacts: contactActions.fetchContacts,
+  fetchContacts,
   fetchProjects: projectActions.fetchProjects
 };
 

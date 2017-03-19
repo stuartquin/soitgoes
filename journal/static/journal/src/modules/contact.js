@@ -1,18 +1,17 @@
-'use strict';
 import Immutable from 'immutable';
 import { combineReducers } from 'redux';
 
 import getById from 'services/getById';
 import * as api from 'services/api';
 
-const GET_COMPANIES_START = 'GET_COMPANIES_START';
-const GET_COMPANIES_SUCCESS = 'GET_COMPANIES_SUCCESS';
+const GET_CONTACTS_START = 'GET_CONTACTS_START';
+const GET_CONTACTS_SUCCESS = 'GET_CONTACTS_SUCCESS';
 
-export const fetchCompanies = () => (dispatch) => {
+export const fetchContacts = () => (dispatch) => {
   dispatch({
-    type: GET_COMPANIES_START
+    type: GET_CONTACTS_START
   });
-  api.fetchPath('companies/').then(res => {
+  api.fetchPath('contacts/').then(res => {
     let items = [];
     if (res.results) {
       items = res.results;
@@ -20,20 +19,20 @@ export const fetchCompanies = () => (dispatch) => {
       items = [res];
     }
     dispatch({
-      type: GET_COMPANIES_SUCCESS,
+      type: GET_CONTACTS_SUCCESS,
       items
     });
   });
 };
 
-export const addCompany = (form) => (dispatch) => {
+export const addContact = (form) => (dispatch) => {
   dispatch({
-    type: GET_COMPANIES_START
+    type: GET_CONTACTS_START
   });
 
-  api.add('companies/', form).then(res => {
+  api.add('contacts/', form).then(res => {
     dispatch({
-      type: GET_COMPANIES_SUCCESS,
+      type: GET_CONTACTS_SUCCESS,
       items: [res]
     });
   });
@@ -48,16 +47,16 @@ const view = (state = Immutable.Map({}), action) => {
 
 const items = (state = Immutable.OrderedMap({}), action) => {
   switch(action.type) {
-  case GET_COMPANIES_SUCCESS:
+  case GET_CONTACTS_SUCCESS:
     return state.merge(getById(action.items));
   default:
     return state;
   }
 };
 
-const companies = combineReducers({
+const contacts = combineReducers({
   items,
   view
 });
 
-export default companies;
+export default contacts;
