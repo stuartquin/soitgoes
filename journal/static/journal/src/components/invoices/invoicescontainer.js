@@ -73,6 +73,7 @@ class Invoices extends React.Component {
               <InvoiceList
                 projects={this.props.projects}
                 invoices={closedInvoices}
+                onDeleteInvoice={(id) => this.setState({invoiceId: id})}
               />
             </CardText>
           </Card>

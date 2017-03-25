@@ -12,29 +12,15 @@ const GET_INVOICES_SUCCESS = 'GET_INVOICES_SUCCESS';
 const DELETE_INVOICE_SUCCESS = 'DELETE_INVOICE_SUCCESS';
 const CREATE_INVOICE_SUCCESS = 'CREATE_INVOICE_SUCCESS';
 
-export const updateInvoice = (invoiceId, projectId, updates) => (dispatch) =>
-  api.updateInvoice(invoiceId, projectId, updates).then(invoice => {
+export const updateInvoice = (id, form) => (dispatch) => {
+  const path = 'invoices/';
+  return api.update(path, id, form).then(res =>
     dispatch({
       type: GET_INVOICES_SUCCESS,
-      items: [invoice]
-    });
-  });
-
-export const markAsIssued = (invoiceId, projectId, dueDate, timeslips) => (dispatch) =>
-  api.issueInvoice(invoiceId, projectId, dueDate, timeslips).then(invoice => {
-    dispatch({
-      type: GET_INVOICES_SUCCESS,
-      items: [invoice]
-    });
-  });
-
-export const markAsPaid = (invoiceId, projectId, totalPaid) => (dispatch) =>
-  api.paidInvoice(invoiceId, projectId, totalPaid).then(invoice => {
-    dispatch({
-      type: GET_INVOICES_SUCCESS,
-      items: [invoice]
-    });
-  });
+      items: [res]
+    })
+  );
+};
 
 export const deleteInvoice = (invoiceId) => (dispatch) =>
   api.deleteInvoice(invoiceId).then(() => {
@@ -66,15 +52,15 @@ export const createInvoice = (project, isVAT) => (dispatch) => {
   });
 };
 
-export const fetchInvoice = (invoiceId) => (dispatch) => {
+export const fetchInvoice = (id) => (dispatch) => {
   dispatch({
     type: GET_INVOICES_START
   });
 
-  return api.fetchInvoice(invoiceId).then(invoice =>
+  return api.fetchPath(`invoices/${id}`).then(res =>
     dispatch({
       type: GET_INVOICES_SUCCESS,
-      items: [invoice]
+      items: [res]
     })
   );
 };
@@ -84,7 +70,7 @@ export const fetchInvoices = () => (dispatch) => {
     type: GET_INVOICES_START
   });
 
-  api.fetchInvoices().then(res => {
+  api.fetchPath('invoices/').then(res => {
     const invoices = res.results;
     dispatch({
       type: GET_INVOICES_SUCCESS,
@@ -93,13 +79,13 @@ export const fetchInvoices = () => (dispatch) => {
   });
 };
 
-export const fetchInvoiceTimeslips = (invoiceId) => (dispatch) => {
-  api.fetchTimeslips(invoiceId, null, null).then(res => {
+export const fetchInvoiceTimeslips = (id) => (dispatch) => {
+  return api.fetchPath('timeslips/', {invoice: id}).then(res =>
     dispatch({
       type: constants.GET_TIMESLIPS_SUCCESS,
       timeslips: res.results
-    });
-  });
+    })
+  );
 };
 
 export const fetchInvoiceTasks = (invoiceId) => (dispatch) =>

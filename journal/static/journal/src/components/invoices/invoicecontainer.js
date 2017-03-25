@@ -11,9 +11,9 @@ import {Confirm} from '../confirm';
 
 import {fetchModifiers} from 'modules/modifier';
 import {
-  fetchInvoice, deleteInvoice, markAsPaid, markAsIssued, deleteInvoiceTask,
+  fetchInvoice, deleteInvoice, deleteInvoiceTask,
   deleteInvoiceModifier, deleteInvoiceTimeslip, addInvoiceModifier,
-  fetchInvoiceTasks, fetchInvoiceTimeslips
+  fetchInvoiceTasks, fetchInvoiceTimeslips, updateInvoice
 } from 'modules/invoice';
 
 
@@ -49,12 +49,28 @@ class Invoice extends React.Component {
     this.setState({dueDate});
   }
 
+  handleMarkIssued() {
+    const invoice = this.props.invoice;
+    this.props.updateInvoice(invoice.get('id'), {
+      due_date: this.state.dueDate || invoice.get('due_date'),
+      timeslips: this.props.timeslips.map(t => t.get('id')).toJS(),
+      status: 'ISSUED'
+    });
+  }
+
+  handleMarkPaid() {
+    const invoice = this.props.invoice;
+    this.props.updateInvoice(invoice.get('id'), {
+      total_paid: invoice.get('total_due'),
+      status: 'PAID'
+    });
+  }
+
   render() {
     const invoice = this.props.invoice;
     if (invoice.isEmpty()) {
       return (<Loading />);
     }
-
     const modifiers = this.props.modifiers;
     const project = this.props.project;
     const contact = this.props.contact;
@@ -77,21 +93,8 @@ class Invoice extends React.Component {
             project={project}
             contact={contact}
             onDelete={() => this.setState({confirmDelete: true})}
-            onMarkAsIssued={() =>
-              this.props.markAsIssued(
-                invoice.get('id'),
-                project.get('id'),
-                dueDate,
-                this.props.timeslips
-              )
-            }
-            onMarkAsPaid={() => {
-              this.props.markAsPaid(
-                invoice.get('id'),
-                project.get('id'),
-                invoice.get('total_due')
-              )
-            }}
+            onMarkAsIssued={() => this.handleMarkIssued()}
+            onMarkAsPaid={() => this.handleMarkPaid()}
           />
         </div>
         <div className='content'>
@@ -163,9 +166,15 @@ const mapStateToProps = (state, { params }) => {
 };
 
 const actions = {
-  fetchInvoice, deleteInvoice, markAsPaid, markAsIssued, deleteInvoiceTask,
-  deleteInvoiceModifier, deleteInvoiceTimeslip, addInvoiceModifier,
-  fetchInvoiceTasks, fetchInvoiceTimeslips,
+  fetchInvoice,
+  deleteInvoice,
+  deleteInvoiceTask,
+  deleteInvoiceModifier,
+  deleteInvoiceTimeslip,
+  addInvoiceModifier,
+  fetchInvoiceTasks,
+  fetchInvoiceTimeslips,
+  updateInvoice,
   fetchModifiers
 };
 

@@ -86,12 +86,6 @@ export const createInvoice = (project, isVAT) => {
   );
 };
 
-export const fetchInvoice = (invoiceId) => {
-  return fetch(buildRequest(`invoices/${invoiceId}`)).then(
-    res => res.json()
-  );
-};
-
 export const fetchInvoiceModifiers = (invoiceId) => {
   return fetch(buildRequest(`invoices/${invoiceId}/modifiers`)).then(
     res => res.json()
@@ -143,17 +137,6 @@ export const deleteInvoice = (invoiceId) => {
   return fetch(buildRequest(`invoices/${invoiceId}`, 'DELETE'));
 };
 
-export const fetchInvoices = (project=null) => {
-  let url = 'invoices/';
-  if (project !== null) {
-    url = url + `&project=${project}`;
-  }
-
-  return fetch(buildRequest(url)).then(
-    res => res.json()
-  );
-};
-
 export const fetchInvoiceItems = (invoice=null) => {
   let url = 'invoices/items/';
 
@@ -184,8 +167,14 @@ export const deleteInvoiceTask = (itemId) => {
   return fetch(buildRequest(`invoices/items/${itemId}`, 'DELETE'));
 };
 
-export const fetchPath = (path) => {
-  return fetch(buildRequest(path)).then(
+export const fetchPath = (path, params={}) => {
+  const qs = Object.keys(params).map(p => `${p}=${params[p]}`).join('&');
+  let url = path
+  if (qs) {
+    url = `${url}?${qs}`;
+  }
+
+  return fetch(buildRequest(url)).then(
     res => res.json()
   );
 };
