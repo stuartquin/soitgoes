@@ -61,8 +61,6 @@ class Contact(models.Model):
     post_code = models.CharField(max_length=128, blank=True, null=True)
     vat_number = models.CharField(max_length=128, blank=True, null=True)
 
-    company = models.ForeignKey(Company, default=None)
-
     def __str__(self):
         return "%s (%s)" % (self.name, self.email)
 
