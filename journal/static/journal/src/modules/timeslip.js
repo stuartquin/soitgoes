@@ -11,8 +11,8 @@ const GET_TIMESLIPS_START = 'GET_TIMESLIPS_START';
 const UPDATE_PROJECT_TIMESLIP = 'UPDATE_PROJECT_TIMESLIP';
 const ADD_PROJECT_TIMESLIP = 'ADD_PROJECT_TIMESLIP';
 const SAVE_TIMESLIPS_START = 'SAVE_TIMESLIPS_START';
+const SAVE_TIMESLIPS_SUCCESS = 'SAVE_TIMESLIPS_SUCCESS';
 const SET_TIMESLIP_ACTIVE_DATE = 'SET_TIMESLIP_ACTIVE_DATE';
-
 
 export const saveTimeslips = (existingTimeslips, newTimeslips) => {
   const updates = existingTimeslips.filter((t) =>
@@ -30,8 +30,8 @@ export const saveTimeslips = (existingTimeslips, newTimeslips) => {
     return Promise.all(calls).then(
       ([updates, created=[]]) => {
         return dispatch({
-          type: GET_TIMESLIPS_SUCCESS,
-          timeslips: updates.concat(created)
+          type: SAVE_TIMESLIPS_SUCCESS,
+          items: updates.concat(created)
         });
       },
       error => console.error(error) // eslint-disable-line
@@ -63,7 +63,7 @@ export const fetchTimeslips = (invoice, start, end) => (dispatch) => {
   return api.fetchTimeslips(invoice, startDate, endDate).then(res => {
     dispatch({
       type: GET_TIMESLIPS_SUCCESS,
-      timeslips: res.results
+      items: res.results
     });
   });
 };
@@ -103,9 +103,10 @@ const addProjectTimeslip = (state, action) => {
 
 const items = (state = Immutable.OrderedMap(), action) => {
   switch(action.type) {
+  case SAVE_TIMESLIPS_SUCCESS:
+    return state.merge(getById(action.items));
   case GET_TIMESLIPS_SUCCESS:
-    return state.merge(getById(action.timeslips));
-
+    return state.merge(getById(action.items));
   case UPDATE_PROJECT_TIMESLIP:
     return updateProjectTimeslip(state, action);
 
@@ -131,6 +132,8 @@ const view = (state, action) => {
     return state.set('weekStart', action.date);
   case SAVE_TIMESLIPS_START:
     return state.set('isSaving', true);
+  case SAVE_TIMESLIPS_SUCCESS:
+    return state.set('toAdd', Immutable.Map()).set('isLoading', false).set('isSaving', false);
   case GET_TIMESLIPS_START:
     return state.set('isLoading', true);
   case GET_TIMESLIPS_SUCCESS:

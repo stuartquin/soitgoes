@@ -84,7 +84,7 @@ export const fetchInvoiceTimeslips = (id) => (dispatch) => {
   return api.fetchPath('timeslips/', {invoice: id}).then(res =>
     dispatch({
       type: GET_TIMESLIPS_SUCCESS,
-      timeslips: res.results
+      items: res.results
     })
   );
 };
@@ -104,7 +104,7 @@ export const deleteInvoiceTimeslip = (invoiceId, timeslipId) => (dispatch) => {
   api.updateTimeslips([timeslipId], updates).then((timeslips) => {
     dispatch({
       type: GET_TIMESLIPS_SUCCESS,
-      timeslips
+      items: res.results
     });
     dispatch(fetchInvoiceTimeslips(invoiceId));
   });
