@@ -9,9 +9,12 @@ import {InvoiceHeader} from './invoiceheader';
 import {Loading} from '../loading';
 import {Confirm} from '../confirm';
 
-import * as invoiceActions from '../../actions/invoices';
-
 import {fetchModifiers} from 'modules/modifier';
+import {
+  fetchInvoice, deleteInvoice, markAsPaid, markAsIssued, deleteInvoiceTask,
+  deleteInvoiceModifier, deleteInvoiceTimeslip, addInvoiceModifier,
+  fetchInvoiceTasks, fetchInvoiceTimeslips
+} from 'modules/invoice';
 
 
 class Invoice extends React.Component {
@@ -160,7 +163,9 @@ const mapStateToProps = (state, { params }) => {
 };
 
 const actions = {
-  ...invoiceActions,
+  fetchInvoice, deleteInvoice, markAsPaid, markAsIssued, deleteInvoiceTask,
+  deleteInvoiceModifier, deleteInvoiceTimeslip, addInvoiceModifier,
+  fetchInvoiceTasks, fetchInvoiceTimeslips,
   fetchModifiers
 };
 

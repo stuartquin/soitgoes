@@ -1,37 +1,45 @@
 'use strict';
 import { push } from 'react-router-redux';
+import { combineReducers } from 'redux';
+import Immutable from 'immutable';
 
-import * as api from '../services/api';
+import getById from 'services/getById';
+import * as api from 'services/api';
 import constants from '../constants';
+
+const GET_INVOICES_START = 'GET_INVOICES_START';
+const GET_INVOICES_SUCCESS = 'GET_INVOICES_SUCCESS';
+const DELETE_INVOICE_SUCCESS = 'DELETE_INVOICE_SUCCESS';
+const CREATE_INVOICE_SUCCESS = 'CREATE_INVOICE_SUCCESS';
 
 export const updateInvoice = (invoiceId, projectId, updates) => (dispatch) =>
   api.updateInvoice(invoiceId, projectId, updates).then(invoice => {
     dispatch({
-      type: constants.SAVE_INVOICE_SUCCESS,
-      invoice
+      type: GET_INVOICES_SUCCESS,
+      items: [invoice]
     });
   });
 
 export const markAsIssued = (invoiceId, projectId, dueDate, timeslips) => (dispatch) =>
   api.issueInvoice(invoiceId, projectId, dueDate, timeslips).then(invoice => {
     dispatch({
-      type: constants.SAVE_INVOICE_SUCCESS,
-      invoice
+      type: GET_INVOICES_SUCCESS,
+      items: [invoice]
     });
   });
 
 export const markAsPaid = (invoiceId, projectId, totalPaid) => (dispatch) =>
   api.paidInvoice(invoiceId, projectId, totalPaid).then(invoice => {
     dispatch({
-      type: constants.SAVE_INVOICE_SUCCESS,
-      invoice
+      type: GET_INVOICES_SUCCESS,
+      items: [invoice]
     });
   });
 
 export const deleteInvoice = (invoiceId) => (dispatch) =>
   api.deleteInvoice(invoiceId).then(() => {
     dispatch({
-      type: constants.DELETE_INVOICE_SUCCESS,
+      type: DELETE_INVOICE_SUCCESS,
       invoiceId
     });
     dispatch(push(`/invoices`));
@@ -49,12 +57,9 @@ export const addInvoiceModifier = (id, modifierId) => (dispatch) => {
 };
 
 export const createInvoice = (project, isVAT) => (dispatch) => {
-  dispatch({
-    type: constants.CLEAR_INVOICE_TIMESLIPS
-  });
   api.createInvoice(project, isVAT).then(invoice => {
     dispatch({
-      type: constants.CREATE_INVOICE_SUCCESS,
+      type: CREATE_INVOICE_SUCCESS,
       invoice
     });
     dispatch(push(`/invoices/${invoice.id}`));
@@ -63,30 +68,27 @@ export const createInvoice = (project, isVAT) => (dispatch) => {
 
 export const fetchInvoice = (invoiceId) => (dispatch) => {
   dispatch({
-    type: constants.GET_INVOICE_START
+    type: GET_INVOICES_START
   });
 
   return api.fetchInvoice(invoiceId).then(invoice =>
     dispatch({
-      type: constants.GET_INVOICE_SUCCESS,
-      invoice
+      type: GET_INVOICES_SUCCESS,
+      items: [invoice]
     })
   );
 };
 
 export const fetchInvoices = () => (dispatch) => {
   dispatch({
-    type: constants.CLEAR_INVOICE_TIMESLIPS
-  });
-  dispatch({
-    type: constants.GET_INVOICES_START
+    type: GET_INVOICES_START
   });
 
   api.fetchInvoices().then(res => {
     const invoices = res.results;
     dispatch({
-      type: constants.GET_INVOICES_SUCCESS,
-      invoices
+      type: GET_INVOICES_SUCCESS,
+      items: invoices
     });
   });
 };
@@ -130,3 +132,37 @@ export const deleteInvoiceTask = (invoiceId, taskId) => (dispatch) => {
     dispatch(fetchInvoiceTasks(invoiceId));
   });
 };
+
+const items = (state = Immutable.OrderedMap(), action) => {
+  switch (action.type) {
+  case DELETE_INVOICE_SUCCESS:
+    return state.delete(action.invoiceId);
+  case GET_INVOICES_SUCCESS:
+    return state.merge(getById(action.items));
+  default:
+    return state;
+  }
+};
+
+const view = (state, action) => {
+  if (!state) {
+    return Immutable.Map({
+      isLoading: true
+    });
+  }
+  switch (action.type) {
+  case GET_INVOICES_START:
+    return state.merge({isLoading: true});
+  case GET_INVOICES_SUCCESS:
+    return state.merge({isLoading: false});
+  default:
+    return state;
+  }
+};
+
+const invoices = combineReducers({
+  items,
+  view
+});
+
+export default invoices;

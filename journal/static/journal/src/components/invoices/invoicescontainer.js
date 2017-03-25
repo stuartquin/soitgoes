@@ -8,7 +8,7 @@ import {CreateInvoice} from './createinvoice';
 import {HeaderBar} from '../nav/headerbar';
 import {Loading} from '../loading';
 import {Confirm} from '../confirm';
-import * as invoiceActions from '../../actions/invoices';
+import {fetchInvoices, deleteInvoice, createInvoice} from 'modules/invoice';
 
 
 class Invoices extends React.Component {
@@ -91,7 +91,9 @@ const mapStateToProps = (state) => {
 };
 
 const actions = {
-  ...invoiceActions,
+  fetchInvoices,
+  deleteInvoice,
+  createInvoice
 };
 
 const InvoicesContainer = connect(mapStateToProps, actions)(Invoices);
