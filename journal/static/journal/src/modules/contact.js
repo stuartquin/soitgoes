@@ -38,6 +38,19 @@ export const addContact = (form) => (dispatch) => {
   });
 };
 
+export const updateContact = (id, form) => (dispatch) => {
+  dispatch({
+    type: GET_CONTACTS_START
+  });
+
+  api.update('contacts/', id, form).then(res => {
+    dispatch({
+      type: GET_CONTACTS_SUCCESS,
+      items: [res]
+    });
+  });
+};
+
 const view = (state = Immutable.Map({}), action) => {
   switch (action.type) {
   default:

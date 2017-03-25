@@ -54,6 +54,13 @@ class Contact(models.Model):
     email = models.EmailField()
     created_at = models.DateTimeField(auto_now_add=True)
     account = models.ForeignKey(Account)
+
+    address1 = models.CharField(max_length=512, blank=True, null=True)
+    address2 = models.CharField(max_length=512, blank=True, null=True)
+    city = models.CharField(max_length=128, blank=True, null=True)
+    post_code = models.CharField(max_length=128, blank=True, null=True)
+    vat_number = models.CharField(max_length=128, blank=True, null=True)
+
     company = models.ForeignKey(Company, default=None)
 
     def __str__(self):

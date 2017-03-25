@@ -4,15 +4,11 @@ import {connect} from 'react-redux';
 
 import { Loading } from '../loading';
 import ContactForm from './contactform';
-
-import {fetchContacts, addContact} from 'modules/contact';
-import {fetchCompanies, addCompany} from 'modules/company';
-
+import {fetchContacts, addContact, updateContact} from 'modules/contact';
 
 class Contact extends React.Component {
   componentDidMount() {
     this.props.fetchContacts();
-    this.props.fetchCompanies();
   }
 
   render() {
@@ -27,6 +23,7 @@ class Contact extends React.Component {
 
     let save = (form) => {
       if (isEdit) {
+        this.props.updateContact(this.props.id, form);
       } else {
         this.props.addContact(form);
       }
@@ -35,12 +32,12 @@ class Contact extends React.Component {
     return (
       <div className='contact-container'>
         <div className='content'>
-          <ContactForm
-            isEdit={isEdit}
-            contact={contact}
-            companies={companies}
-            onSave={(form) => save(form)}
-            onAddCompany={this.props.addCompany}/>
+          <div className='settings'>
+            <ContactForm
+              isEdit={isEdit}
+              contact={contact}
+              onSave={(form) => save(form)} />
+          </div>
         </div>
       </div>
     );
@@ -59,9 +56,8 @@ const mapStateToProps = (state, { params }) => {
 
 const actions = {
   addContact,
-  fetchContacts,
-  fetchCompanies,
-  addCompany
+  updateContact,
+  fetchContacts
 };
 
 const ContactContainer = connect(mapStateToProps, actions)(Contact);

@@ -5,10 +5,6 @@ import moment from 'moment';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import Dialog from 'material-ui/Dialog';
-
-import AddSelect from '../addselect';
-import CompanyForm from '../company/companyform';
 
 class ContactForm extends React.Component {
   constructor(props) {
@@ -17,7 +13,6 @@ class ContactForm extends React.Component {
 
     this.state = {
       isEdit: !!props.isEdit,
-      showAddCompany: false,
       form: {}
     };
 
@@ -35,10 +30,6 @@ class ContactForm extends React.Component {
     this.setState({form: form});
   }
 
-  handleAddCompany() {
-    this.setState({showAddCompany: true});
-  }
-
   onSave() {
     this.props.onSave({
       ...this.state.form
@@ -47,15 +38,9 @@ class ContactForm extends React.Component {
 
   render() {
     const contact = this.props.contact;
-    const companies = this.props.companies.toList().toJS().map(c => {
-      return (
-        <MenuItem
-          key={c.id}
-          value={c.id}
-          primaryText={c.name}
-        />
-      );
-    });
+    const invoiceFields = [
+      'address1', 'address2', 'city', 'post_code', 'vat_number'
+    ];
 
     return (
       <div>
@@ -80,27 +65,21 @@ class ContactForm extends React.Component {
           value={this.state.form.email}
           onChange={(evt, val) => this.handleChange('email', val)}
           floatingLabelText='Email' />
-        <AddSelect
-          label='Company'
-          items={companies}
-          value={this.state.form.company}
-          onChange={(evt, idx, val) => this.handleChange('company', val)}
-          onAdd={() => this.handleAddCompany()}
-        />
 
-        <Dialog
-          title='Add Company'
-          open={this.state.showAddCompany}
-          onRequestClose={() =>
-            this.setState({showAddCompany: false})
-          }>
-          <CompanyForm
-            onSave={(form) => {
-              this.props.onAddCompany(form);
-              this.setState({showAddCompany: false});
-            }}
-          />
-        </Dialog>
+        <h4>Invoices</h4>
+        {invoiceFields.map((field, idx) => {
+          const label = field.split('_').map((word) =>
+            word.charAt(0).toUpperCase() + word.slice(1)
+          ).join(' ');
+          return (
+            <TextField
+              key={idx}
+              style={{width: '100%'}}
+              value={this.state.form[field]}
+              onChange={(evt, val) => this.handleChange(field, val)}
+              floatingLabelText={label} />
+          )
+        })}
       </div>
     );
   }

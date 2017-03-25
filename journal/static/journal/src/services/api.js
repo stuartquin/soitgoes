@@ -194,6 +194,11 @@ export const add = (path, form) => {
   return fetch(req).then(res => res.json());
 };
 
+export const update = (path, id, form) => {
+  const req = buildRequest(`${path}${id}`, 'PUT', form);
+  return fetch(req).then(res => res.json());
+};
+
 export const fetchAccounts = () => {
   return fetch(buildRequest('accounts/')).then(
     res => res.json()
