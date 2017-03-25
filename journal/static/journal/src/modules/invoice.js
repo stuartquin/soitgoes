@@ -6,6 +6,7 @@ import Immutable from 'immutable';
 import getById from 'services/getById';
 import * as api from 'services/api';
 import constants from '../constants';
+import { GET_TIMESLIPS_SUCCESS } from 'modules/timeslip';
 
 const GET_INVOICES_START = 'GET_INVOICES_START';
 const GET_INVOICES_SUCCESS = 'GET_INVOICES_SUCCESS';
@@ -82,7 +83,7 @@ export const fetchInvoices = () => (dispatch) => {
 export const fetchInvoiceTimeslips = (id) => (dispatch) => {
   return api.fetchPath('timeslips/', {invoice: id}).then(res =>
     dispatch({
-      type: constants.GET_TIMESLIPS_SUCCESS,
+      type: GET_TIMESLIPS_SUCCESS,
       timeslips: res.results
     })
   );
@@ -102,7 +103,7 @@ export const deleteInvoiceTimeslip = (invoiceId, timeslipId) => (dispatch) => {
   };
   api.updateTimeslips([timeslipId], updates).then((timeslips) => {
     dispatch({
-      type: constants.GET_TIMESLIPS_SUCCESS,
+      type: GET_TIMESLIPS_SUCCESS,
       timeslips
     });
     dispatch(fetchInvoiceTimeslips(invoiceId));

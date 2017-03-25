@@ -2,10 +2,12 @@
 import * as api from '../services/api';
 import constants from '../constants';
 
+import { GET_TIMESLIPS_SUCCESS } from 'modules/timeslip';
+
 const fetchTimeslipsByIds = (ids) => (dispatch) => {
   return api.fetchByIds('timeslips', ids).then(res => {
     dispatch({
-      type: constants.GET_TIMESLIPS_SUCCESS,
+      type: GET_TIMESLIPS_SUCCESS,
       timeslips: res.results
     });
   });

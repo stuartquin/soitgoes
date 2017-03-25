@@ -6,11 +6,12 @@ import moment from 'moment';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import * as timeslipActions from '../../actions/timeslips';
-
 import { TimeslipGrid } from './timeslipgrid';
 import { TimeslipDateControls } from './timeslipdatecontrols';
 import { Loading } from '../loading';
+import {
+  fetchTimeslips, saveTimeslips, hourChanged, setActiveDate
+} from 'modules/timeslip';
 
 
 class Timeslips extends React.Component {
@@ -96,7 +97,10 @@ const mapStateToProps = (state, props) => {
 };
 
 const actions = {
-  ...timeslipActions  // eslint-disable-line
+  fetchTimeslips,
+  saveTimeslips,
+  hourChanged,
+  setActiveDate
 };
 
 const TimeslipsContainer = connect(mapStateToProps, actions)(Timeslips);

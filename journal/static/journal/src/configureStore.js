@@ -5,7 +5,6 @@ import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 import { Iterable } from 'immutable';
 
-import timeslips from './reducers/timeslips';
 import activityFeed from './reducers/activityfeed';
 import user from './reducers/user';
 import dash from './reducers/dash';
@@ -17,6 +16,7 @@ import modifiers from 'modules/modifier';
 import companies from 'modules/company';
 import projects from 'modules/project';
 import invoices from 'modules/invoice';
+import timeslips from 'modules/timeslip';
 
 const logger = createLogger({
   stateTransformer: (state) => {
