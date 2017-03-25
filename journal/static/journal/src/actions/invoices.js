@@ -42,6 +42,12 @@ export const deleteInvoiceModifier = (invoiceId, invoiceModifierId) => (dispatch
     dispatch(fetchInvoice(invoiceId));
   });
 
+export const addInvoiceModifier = (id, modifierId) => (dispatch) => {
+  api.update('invoices/', id, {modifier: [modifierId]}).then(() => {
+    dispatch(fetchInvoice(id));
+  });
+};
+
 export const createInvoice = (project, isVAT) => (dispatch) => {
   dispatch({
     type: constants.CLEAR_INVOICE_TIMESLIPS

@@ -13,7 +13,6 @@ import {StateChip} from './state-chip';
 const InvoiceListRow = (props) => {
   const invoice = props.invoice;
   const issuedAt = invoice.get('issued_at') ? moment(invoice.get('issued_at')).format('YYYY-MM-DD') : '-';
-
   let totalClass = 'text-danger';
   let total = invoice.get('total_due');
   if (invoice.get('total_paid')) {

@@ -36,6 +36,7 @@ class Settings extends React.Component {
           tasks={this.props.tasks}
           modifiers={this.props.modifiers}
           total={this.props.total}
+          onAddModifier={this.props.onAddModifier}
           onRemoveModifier={this.props.onRemoveModifier}
         />
       </div>

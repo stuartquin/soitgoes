@@ -4,20 +4,21 @@ import {Table, TableBody} from 'material-ui/Table';
 import { InvoiceListRow } from './invoicelistrow';
 
 
-const InvoiceList = (props) => {
-  const projects = props.projects;
-
+const InvoiceList = ({ projects, invoices, onDeleteInvoice }) => {
   return (
     <Table className='invoice-list table'>
       <TableBody>
-      {props.invoices.map(invoice => (
-        <InvoiceListRow
-          key={invoice.get('id')}
-          onDelete={() => props.onDeleteInvoice(invoice.get('id'))}
-          project={invoice.get('project')}
-          invoice={invoice} />
-      ))}
-
+        {invoices.map(invoice => {
+          const id = invoice.get('id');
+          const project = projects.get(invoice.get('project'));
+          return (
+            <InvoiceListRow
+              key={id}
+              onDelete={() => onDeleteInvoice(id)}
+              project={project}
+              invoice={invoice} />
+          );
+        })}
       </TableBody>
     </Table>
   );

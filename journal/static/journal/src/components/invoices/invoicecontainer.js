@@ -11,6 +11,8 @@ import {Confirm} from '../confirm';
 
 import * as invoiceActions from '../../actions/invoices';
 
+import {fetchModifiers} from 'modules/modifier';
+
 
 class Invoice extends React.Component {
   constructor(props) {
@@ -22,6 +24,7 @@ class Invoice extends React.Component {
   }
 
   componentDidMount() {
+    this.props.fetchModifiers();
     if (this.props.id !== 'add') {
       this.fetchInvoice().then(() => this.fetchData(this.props.id))
     }
@@ -44,13 +47,14 @@ class Invoice extends React.Component {
   }
 
   render() {
-    if (this.props.isLoading) {
+    const invoice = this.props.invoice;
+    if (invoice.isEmpty()) {
       return (<Loading />);
     }
-    const invoice = this.props.invoice;
-    const modifiers = invoice.get('modifier');
-    const project = this.props.project || Immutable.Map();
-    const contact = this.props.contacts.get(project.get('contact'), Immutable.Map())
+
+    const modifiers = this.props.modifiers;
+    const project = this.props.project;
+    const contact = this.props.contact;
     const isEditable = !Boolean(invoice.get('issued_at'));
     const dueDate = this.state.dueDate || invoice.get('due_date');
 
@@ -96,6 +100,12 @@ class Invoice extends React.Component {
             modifiers={modifiers}
             isEditable={isEditable}
             dueDate={dueDate}
+            onAddModifier={(modifier) =>
+              this.props.addInvoiceModifier(
+                invoice.get('id'),
+                modifier.get('id')
+              )
+            }
             onRemoveModifier={(modifier) =>
               this.props.deleteInvoiceModifier(
                 invoice.get('id'),
@@ -124,11 +134,6 @@ class Invoice extends React.Component {
   }
 }
 
-const getInvoiceProject = (invoice, projects)  => {
-  const projectId = invoice.get('project').get('id');
-  return projects.find((x) => x.get('id') === projectId);
-};
-
 const getInvoiceTimeslips = (invoice, timeslips) => {
   return timeslips.filter((t) => t.get('invoice') === invoice.get('id'));
 }
@@ -139,28 +144,24 @@ const getInvoiceTasks = (invoice, tasks) => {
 
 const mapStateToProps = (state, { params }) => {
   const id = parseInt(params.id, 10);
-  const invoice = state.invoices.items.get(id);
+  const invoice = state.invoices.items.get(id, Immutable.Map());
+  const project = state.projects.items.get(invoice.get('project'), Immutable.Map());
+  const contact = state.contacts.items.get(project.get('contact'), Immutable.Map());
 
-  let mapState = {
+  return {
     id,
-    isLoading: true
-  }
-
-  if (!invoice) {
-    return mapState;
-  }
-
-  mapState.isLoading = false;
-  mapState.invoice = invoice;
-  mapState.project = getInvoiceProject(invoice, state.projects.items);
-  mapState.contacts = state.contacts.items;
-  mapState.timeslips = getInvoiceTimeslips(invoice, state.timeslips.items);
-  mapState.tasks = getInvoiceTasks(invoice, state.tasks.items);
-  return mapState;
+    invoice,
+    project,
+    contact,
+    modifiers: state.modifiers.items,
+    timeslips: getInvoiceTimeslips(invoice, state.timeslips.items),
+    tasks: getInvoiceTasks(invoice, state.tasks.items)
+  };
 };
 
 const actions = {
-  ...invoiceActions
+  ...invoiceActions,
+  fetchModifiers
 };
 
 const InvoiceContainer = connect(mapStateToProps, actions)(Invoice);

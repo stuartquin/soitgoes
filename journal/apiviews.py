@@ -101,6 +101,13 @@ class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Invoice.objects.all()
     serializer_class = serializers.InvoiceSerializer
 
+    def get_serializer(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
+        if 'data' in kwargs:
+            kwargs['partial'] = True
+
+        return self.serializer_class(*args, **kwargs)
+
 
 class InvoiceViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.InvoiceSerializer
@@ -118,12 +125,11 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         return [item for item in null] + [item for item in not_null]
 
 
-class InvoiceModifiers(generics.ListAPIView):
-    permission_classes = (HasInvoiceAccess,)
+class InvoiceModifierList(generics.ListAPIView):
     serializer_class = serializers.InvoiceModifierSerializer
 
     def get_queryset(self):
-        return models.Invoice.objects.get(**self.kwargs).modifier.all()
+        return models.InvoiceModifier.objects.all()
 
 
 class InvoiceModifierDetail(generics.RetrieveUpdateDestroyAPIView):

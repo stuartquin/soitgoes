@@ -124,7 +124,8 @@ export const issueInvoice = (invoiceId, projectId, dueDate, timeslips) => {
   const req = buildRequest(`invoices/${invoiceId}`, 'PUT', {
     due_date: dueDate,
     project: projectId,
-    timeslips: timeslips.map(t => t.get('id')).toJS()
+    timeslips: timeslips.map(t => t.get('id')).toJS(),
+    status: 'ISSUED'
   });
   return fetch(req).then(res => res.json());
 };
@@ -132,8 +133,8 @@ export const issueInvoice = (invoiceId, projectId, dueDate, timeslips) => {
 export const paidInvoice = (invoiceId, projectId, totalPaid) => {
   const req = buildRequest(`invoices/${invoiceId}`, 'PUT', {
     project: projectId,
-    paid: true,
-    total_paid: totalPaid
+    total_paid: totalPaid,
+    status: 'PAID'
   });
   return fetch(req).then(res => res.json());
 };
@@ -192,6 +193,10 @@ export const fetchPath = (path) => {
 export const add = (path, form) => {
   const req = buildRequest(path, 'POST', form);
   return fetch(req).then(res => res.json());
+};
+
+export const remove = (path, id) => {
+  return fetch(buildRequest(`${path}${id}`, 'DELETE'));
 };
 
 export const update = (path, id, form) => {

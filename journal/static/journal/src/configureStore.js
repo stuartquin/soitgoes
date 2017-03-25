@@ -15,6 +15,7 @@ import tasks from './reducers/tasks';
 import nav from './reducers/nav';
 
 import contacts from 'modules/contact';
+import modifiers from 'modules/modifier';
 import companies from 'modules/company';
 import projects from 'modules/project';
 
@@ -56,6 +57,7 @@ const configureStore = () => {
     tasks,
     nav,
     contacts,
+    modifiers,
     companies,
     routing: routerReducer
   }),

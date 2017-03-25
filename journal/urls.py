@@ -19,10 +19,6 @@ urlpatterns = [
     url(r'api/invoices/(?P<pk>[0-9]+)/pdf$', apiviews.InvoicePDF.as_view()),
 
     url(
-        r'api/invoices/(?P<pk>[0-9]+)/modifiers$',
-        apiviews.InvoiceModifiers.as_view()
-    ),
-    url(
         r'api/invoices/(?P<pk>[0-9]+)/modifiers/(?P<modifier>[0-9]+)$',
         apiviews.InvoiceModifierDetail.as_view()
     ),
@@ -42,6 +38,8 @@ urlpatterns = [
 
     url(r'api/contacts/$', apiviews.ContactList.as_view()),
     url(r'api/contacts/(?P<pk>[0-9]+)$', apiviews.ContactDetail.as_view()),
+
+    url(r'api/modifiers/$', apiviews.InvoiceModifierList.as_view()),
 
     url(r'api/companies/$', apiviews.CompanyList.as_view()),
     url(r'api/companies/(?P<pk>[0-9]+)$', apiviews.CompanyDetail.as_view()),

@@ -31,6 +31,9 @@ const InvoiceSummary = (props) => {
   const invoice = props.invoice;
   const project = props.project;
   const modifiers = props.modifiers;
+  const activeModifiers = modifiers.filter((mod) =>
+    invoice.get('modifier').contains(mod.get('id'))
+  );
   const isEditable = !Boolean(invoice.get('issued_at'));
 
   const totalHours = props.timeslips.reduce((prev, current) =>
@@ -42,11 +45,9 @@ const InvoiceSummary = (props) => {
   , 0);
 
   const subTotal = taskTotal + (project.get('hourly_rate') * totalHours);
-
-  const total = props.modifiers.reduce((prev, current) =>
+  const total = activeModifiers.reduce((prev, current) =>
     prev + getModifierImpact(subTotal, current)
   , subTotal);
-
   const timeTotal = project.get('hourly_rate') * totalHours;
 
   return (
@@ -73,8 +74,9 @@ const InvoiceSummary = (props) => {
       />
       <InvoiceModifiers
         invoice={invoice}
-        modifiers={props.modifiers}
+        modifiers={modifiers}
         isEditable={isEditable}
+        onAddModifier={props.onAddModifier}
         onRemoveModifier={props.onRemoveModifier}
       />
       <InvoiceSummaryTotal
