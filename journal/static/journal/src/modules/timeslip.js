@@ -15,13 +15,18 @@ const SAVE_TIMESLIPS_SUCCESS = 'SAVE_TIMESLIPS_SUCCESS';
 const SET_TIMESLIP_ACTIVE_DATE = 'SET_TIMESLIP_ACTIVE_DATE';
 
 export const saveTimeslips = (existingTimeslips, newTimeslips) => {
-  const updates = existingTimeslips.filter((t) =>
+  const updated = existingTimeslips.filter((t) =>
     t.get('isUpdated')
   );
-  let calls = [api.updateTimeslips(updates)];
+  const updates = Promise.all(updated.map((timeslip) =>
+    api.update('timeslips/', timeslip.get('id'), {
+      hours: timeslip.get('hours')
+    })
+  ));
+  let calls = [updates];
 
   if (newTimeslips.size) {
-    calls = calls.concat(api.createTimeslips(newTimeslips));
+    calls = calls.concat(api.add('timeslips/', newTimeslips));
   }
 
   return (dispatch) => {
@@ -56,11 +61,11 @@ export const hourChanged = (project, date, hours, user, timeslip) => {
   return action;
 };
 
-export const fetchTimeslips = (invoice, start, end) => (dispatch) => {
-  const startDate = start.format('YYYY-MM-DD');
-  const endDate = end.format('YYYY-MM-DD');
+export const fetchTimeslips = (invoice, startDate, endDate) => (dispatch) => {
+  const start = startDate.format('YYYY-MM-DD');
+  const end = endDate.format('YYYY-MM-DD');
 
-  return api.fetchTimeslips(invoice, startDate, endDate).then(res => {
+  return api.fetchPath('timeslips/', {invoice, start, end}).then(res => {
     dispatch({
       type: GET_TIMESLIPS_SUCCESS,
       items: res.results

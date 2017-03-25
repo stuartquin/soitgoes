@@ -33,47 +33,11 @@ export const createSession = () => {
   return fetch(buildRequest('session/', 'POST')).then(res => res.json());
 };
 
-export const fetchTimeslips = (invoice=null, start, end) => {
-  let url = `timeslips/?format=json`;
-
-  if (invoice !== null) {
-    url = url + `&invoice=${invoice}`;
-  }
-
-  if (start !== null) {
-    url = url + `&start=${start}`;
-  }
-
-  if (end !== null) {
-    url = url + `&end=${end}`;
-  }
-
-  return fetch(buildRequest(url)).then(
-    res => res.json()
-  );
-};
-
 export const fetchByIds = (type, ids) => {
   let url = `${type}/?ids=${ids.join(',')}`;
   return fetch(buildRequest(url)).then(
     res => res.json()
   );
-};
-
-export const createTimeslips = (timeslips) => {
-  const req = buildRequest('timeslips/', 'POST', timeslips.toJS());
-  return fetch(req).then(
-    res => res.json()
-  );
-};
-
-export const updateTimeslips = (updates) => {
-  return Promise.all(updates.map((update) => {
-    const req = buildRequest(`timeslips/${update.get('id')}`, 'PUT', {
-      hours: update.get('hours')
-    });
-    return fetch(req).then(res => res.json());
-  }));
 };
 
 export const createInvoice = (project, isVAT) => {
@@ -114,29 +78,6 @@ export const updateInvoice = (invoiceId, projectId, updates) => {
   return fetch(req).then(res => res.json());
 };
 
-export const issueInvoice = (invoiceId, projectId, dueDate, timeslips) => {
-  const req = buildRequest(`invoices/${invoiceId}`, 'PUT', {
-    due_date: dueDate,
-    project: projectId,
-    timeslips: timeslips.map(t => t.get('id')).toJS(),
-    status: 'ISSUED'
-  });
-  return fetch(req).then(res => res.json());
-};
-
-export const paidInvoice = (invoiceId, projectId, totalPaid) => {
-  const req = buildRequest(`invoices/${invoiceId}`, 'PUT', {
-    project: projectId,
-    total_paid: totalPaid,
-    status: 'PAID'
-  });
-  return fetch(req).then(res => res.json());
-};
-
-export const deleteInvoice = (invoiceId) => {
-  return fetch(buildRequest(`invoices/${invoiceId}`, 'DELETE'));
-};
-
 export const fetchInvoiceItems = (invoice=null) => {
   let url = 'invoices/items/';
 
@@ -168,7 +109,13 @@ export const deleteInvoiceTask = (itemId) => {
 };
 
 export const fetchPath = (path, params={}) => {
-  const qs = Object.keys(params).map(p => `${p}=${params[p]}`).join('&');
+  const qs = Object.keys(params).map(p => {
+    if (params[p] !== null) {
+      return `${p}=${params[p]}`;
+    } else {
+      return '';
+    }
+  }).join('&');
   let url = path
   if (qs) {
     url = `${url}?${qs}`;

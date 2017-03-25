@@ -24,7 +24,7 @@ export const updateInvoice = (id, form) => (dispatch) => {
 };
 
 export const deleteInvoice = (invoiceId) => (dispatch) =>
-  api.deleteInvoice(invoiceId).then(() => {
+  api.remove('invoices/', invoiceId).then(() => {
     dispatch({
       type: DELETE_INVOICE_SUCCESS,
       invoiceId
@@ -97,18 +97,14 @@ export const fetchInvoiceTasks = (invoiceId) => (dispatch) =>
     });
   });
 
-export const deleteInvoiceTimeslip = (invoiceId, timeslipId) => (dispatch) => {
-  const updates = {
-    invoice: null
-  };
-  api.updateTimeslips([timeslipId], updates).then((timeslips) => {
+export const deleteInvoiceTimeslip = (invoiceId, timeslipId) => (dispatch) =>
+  api.update('timeslips/', timeslipId, {invoice: null}).then((res) => {
     dispatch({
       type: GET_TIMESLIPS_SUCCESS,
-      items: res.results
+      items: [res]
     });
     dispatch(fetchInvoiceTimeslips(invoiceId));
   });
-};
 
 export const deleteInvoiceTask = (invoiceId, taskId) => (dispatch) => {
   api.updateTask(taskId, {invoice: null}).then((res) => {
