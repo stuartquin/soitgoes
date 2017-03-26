@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
+import { browserHistory } from 'react-router';
 
 import { TaskForm } from './taskform';
 import {fetchTasks, updateTask, addTask} from 'modules/task';
@@ -27,7 +28,9 @@ class Task extends React.Component {
       if (isEdit) {
         this.props.updateTask(task.get('id'), form);
       } else {
-        this.props.addTask(form);
+        this.props.addTask(form).then(() =>
+          browserHistory.push('/tasks')
+        );
       }
     };
 

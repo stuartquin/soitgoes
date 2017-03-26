@@ -6,9 +6,11 @@ import { browserHistory } from 'react-router';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
 
 import {Confirm} from '../confirm';
 import AddSelect from '../addselect';
+import ContactForm from 'components/contact/contactform';
 
 
 class ProjectForm extends React.Component {
@@ -40,8 +42,16 @@ class ProjectForm extends React.Component {
     this.setState({form: form});
   }
 
-  handleAddContact() {
-    browserHistory.push('/contacts/add');
+  handleAddContact(form) {
+    this.props.onAddContact(form).then(() => {
+      const contact = this.props.contacts.last();
+      this.handleChange('contact', contact.get('id'));
+    });
+    this.setState({showAddContact: false});
+  }
+
+  handleShowAddContact() {
+    this.setState({showAddContact: true});
   }
 
   onSave() {
@@ -70,7 +80,7 @@ class ProjectForm extends React.Component {
           items={contacts}
           value={this.state.form.contact}
           onChange={(evt, idx, val) => this.handleChange('contact', val)}
-          onAdd={() => this.handleAddContact()}
+          onAdd={() => this.handleShowAddContact()}
         />
         <TextField
           style={{width: '100%'}}
@@ -86,6 +96,12 @@ class ProjectForm extends React.Component {
             this.onSave()
           }}
         />
+        <Dialog open={this.state.showAddContact}>
+          <ContactForm
+            isEdit={false}
+            onSave={(form) => { this.handleAddContact(form) }}
+          />
+        </Dialog>
       </div>
     );
   }

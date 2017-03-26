@@ -1,10 +1,10 @@
 'use strict';
 import Immutable from 'immutable';
 import { combineReducers } from 'redux';
-import { push } from 'react-router-redux';
 
 import getById from 'services/getById';
 import * as api from 'services/api';
+import { addFlashMessage } from 'modules/flashmessage';
 
 const GET_TASKS_START = 'GET_TASKS_START';
 const GET_TASKS_SUCCESS = 'GET_TASKS_SUCCESS';
@@ -61,7 +61,12 @@ export const addTask = (form) => (dispatch) => {
     type: UPDATE_TASK_START
   });
 
-  api.add('tasks/', form).then(res => {
+  return api.add('tasks/', form).then(res => {
+    const text = `Added task ${res.name}`;
+    const link = `/tasks/${res.id}`;
+    const action = 'View';
+
+    dispatch(addFlashMessage({ text, action, link }));
     dispatch({
       type: GET_TASKS_SUCCESS,
       items: [res]

@@ -1,14 +1,14 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
+import { browserHistory } from 'react-router';
 
 import {TimeslipsContainer} from '../timeslips/timeslipcontainer';
 import {ProjectForm} from './projectform';
 import { Loading } from '../loading';
 
-import {fetchContacts} from 'modules/contact';
+import {fetchContacts, addContact} from 'modules/contact';
 import {fetchProjects, addProject} from 'modules/project';
-
 
 class Project extends React.Component {
   componentDidMount() {
@@ -30,7 +30,9 @@ class Project extends React.Component {
       if (isEdit) {
         console.log('Update Project', form);
       } else {
-        this.props.addProject(form);
+        this.props.addProject(form).then(() =>
+          browserHistory.push('/projects')
+        );
       }
     };
 
@@ -43,6 +45,7 @@ class Project extends React.Component {
             isEdit={isEdit}
             contacts={contacts}
             project={project}
+            onAddContact={(form) => this.props.addContact(form)}
             onSave={(form) => save(form)} />
         </div>
       </div>
@@ -63,7 +66,8 @@ const mapStateToProps = (state, { params }) => {
 const actions = {
   addProject,
   fetchProjects,
-  fetchContacts
+  addContact,
+  fetchContacts,
 };
 
 const ProjectContainer = connect(mapStateToProps, actions)(Project);

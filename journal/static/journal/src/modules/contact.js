@@ -1,8 +1,10 @@
 import Immutable from 'immutable';
 import { combineReducers } from 'redux';
+import { push } from 'react-router-redux';
 
 import getById from 'services/getById';
 import * as api from 'services/api';
+import { addFlashMessage } from 'modules/flashmessage';
 
 const GET_CONTACTS_START = 'GET_CONTACTS_START';
 const GET_CONTACTS_SUCCESS = 'GET_CONTACTS_SUCCESS';
@@ -30,7 +32,12 @@ export const addContact = (form) => (dispatch) => {
     type: GET_CONTACTS_START
   });
 
-  api.add('contacts/', form).then(res => {
+  return api.add('contacts/', form).then(res => {
+    const text = `Added contact ${res.name}`;
+    const link = `/contacts/${res.id}`;
+    const action = 'View';
+
+    dispatch(addFlashMessage({ text, action, link }));
     dispatch({
       type: GET_CONTACTS_SUCCESS,
       items: [res]

@@ -15,6 +15,7 @@ import modifiers from 'modules/modifier';
 import projects from 'modules/project';
 import invoices from 'modules/invoice';
 import timeslips from 'modules/timeslip';
+import flashMessage from 'modules/flashmessage';
 import tasks from 'modules/task';
 
 const logger = createLogger({
@@ -55,6 +56,7 @@ const configureStore = () => {
     nav,
     contacts,
     modifiers,
+    flashMessage,
     routing: routerReducer
   }),
   compose( ...middlewares )

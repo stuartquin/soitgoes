@@ -12,8 +12,10 @@ import { HeaderLogo } from './headerlogo';
 import { HeaderBarContainer } from './headerbar';
 import { UserMenu } from './usermenu';
 import { Loading } from '../loading';
+import FlashMesasge from 'components/flashmessage';
 
 import {fetchProjects} from 'modules/project';
+import {clearFlashMessage} from 'modules/flashmessage';
 import * as userActions from '../../actions/user';
 import * as navActions from '../../actions/nav';
 
@@ -105,6 +107,11 @@ class Nav extends React.Component {
           {this.props.children}
         </div>
 
+        <FlashMesasge
+          message={this.props.flashMessage}
+          onCloseMessage={this.props.clearFlashMessage}
+        />
+
         <Snackbar
           open={this.props.version.get('isNew')}
           message='A new version is available'
@@ -121,6 +128,7 @@ const mapStateToProps = (state, props) => {
   return {
     user: state.user.user,
     version: state.user.version,
+    flashMessage: state.flashMessage,
     path: state.nav.headerBar.get('path'),
     isLoaded: state.nav.view.get('isLoaded')
   };
@@ -129,7 +137,8 @@ const mapStateToProps = (state, props) => {
 const actions = {
   ...userActions,
   ...navActions,
-  fetchProjects
+  fetchProjects,
+  clearFlashMessage
 };
 
 const NavContainer = connect(mapStateToProps, actions)(Nav);

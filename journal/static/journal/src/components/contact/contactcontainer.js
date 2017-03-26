@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
+import { browserHistory } from 'react-router';
 
 import { Loading } from '../loading';
 import ContactForm from './contactform';
@@ -12,7 +13,6 @@ class Contact extends React.Component {
   }
 
   render() {
-    const companies = this.props.companies;
     const contact = this.props.contact;
     const isEdit = this.props.id !== 'add';
     const loading = (isEdit && (!contact || contact.isEmpty()));
@@ -25,7 +25,9 @@ class Contact extends React.Component {
       if (isEdit) {
         this.props.updateContact(this.props.id, form);
       } else {
-        this.props.addContact(form);
+        this.props.addContact(form).then(() =>
+          browserHistory.push('/contacts')
+        );
       }
     };
 
@@ -49,8 +51,7 @@ const mapStateToProps = (state, { params }) => {
 
   return {
     id: params.id,
-    contact: state.contacts.items.get(id),
-    companies: state.companies.items
+    contact: state.contacts.items.get(id)
   };
 };
 
