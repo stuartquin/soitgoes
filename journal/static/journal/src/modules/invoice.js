@@ -32,8 +32,8 @@ export const deleteInvoice = (invoiceId) => (dispatch) =>
   });
 
 export const deleteInvoiceModifier = (id, modifierId) => (dispatch) => {
-  const path = `invoices/${id}/modifiers/${modifierId}`;
-  api.remove(path).then(() => dispatch(fetchInvoice(id)));
+  const path = `invoices/${id}/modifiers/`;
+  api.remove(path, modifierId).then(() => dispatch(fetchInvoice(id)));
 }
 
 export const addInvoiceModifier = (id, modifierId) => (dispatch) => {
