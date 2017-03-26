@@ -6,7 +6,8 @@ class Form extends React.Component {
     super(props);
     this.state = {
       isEdit: !!props.isEdit,
-      form: {}
+      form: {},
+      original: {}
     };
   }
 
