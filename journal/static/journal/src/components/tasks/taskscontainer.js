@@ -7,7 +7,7 @@ import {Card, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { TaskList } from './tasklist';
-import * as taskActions from '../../actions/tasks';
+import {fetchTasks, completeTask} from 'modules/task';
 
 
 class Tasks extends React.Component {
@@ -69,7 +69,8 @@ const mapStateToProps = (state, { params }) => {
 };
 
 const actions = {
-  ...taskActions
+  fetchTasks,
+  completeTask
 };
 
 const TasksContainer = connect(mapStateToProps, actions)(Tasks);

@@ -62,8 +62,8 @@ export const hourChanged = (project, date, hours, user, timeslip) => {
 };
 
 export const fetchTimeslips = (invoice, startDate, endDate) => (dispatch) => {
-  const start = startDate.format('YYYY-MM-DD');
-  const end = endDate.format('YYYY-MM-DD');
+  const start = startDate ? startDate.format('YYYY-MM-DD') : null;
+  const end = endDate ? endDate.format('YYYY-MM-DD') : null;
 
   return api.fetchPath('timeslips/', {invoice, start, end}).then(res => {
     dispatch({
@@ -85,13 +85,13 @@ export const setActiveDate = (start, end) => (dispatch) => {
   return dispatch(fetchTimeslips(null, start, end));
 };
 
-const updateProjectTimeslip = (state, action) => {
-  const timeslip = action.timeslip;
-  return state.mergeIn([timeslip.get('id')], {
-    hours: action.hours,
-    isUpdated: true
-  });
-};
+export const updateTimeslip = (id, form) => (dispatch) =>
+  api.update('timeslips/', id, form).then(res =>
+    dispatch({
+      type: GET_TIMESLIPS_SUCCESS,
+      items: [res]
+    })
+  );
 
 const addProjectTimeslip = (state, action) => {
   const project = action.project;
@@ -113,8 +113,10 @@ const items = (state = Immutable.OrderedMap(), action) => {
   case GET_TIMESLIPS_SUCCESS:
     return state.merge(getById(action.items));
   case UPDATE_PROJECT_TIMESLIP:
-    return updateProjectTimeslip(state, action);
-
+  return state.mergeIn([action.timeslip.get('id')], {
+    hours: action.hours,
+    isUpdated: true
+  });
   default:
     return state;
   }

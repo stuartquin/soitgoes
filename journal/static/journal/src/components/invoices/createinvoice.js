@@ -52,7 +52,7 @@ class CreateInvoice extends React.Component {
             width='256px'
             className='invoice-projects'
             onChange={(evt, project) => {
-              this.props.onCreateInvoice(project)
+              this.props.onCreateInvoice(project.get('id'))
             }}>
           {projects.map((project) => {
             const label = (

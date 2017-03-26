@@ -9,13 +9,13 @@ import {InvoiceHeader} from './invoiceheader';
 import {Loading} from '../loading';
 import {Confirm} from '../confirm';
 
-import {fetchModifiers} from 'modules/modifier';
 import {
-  fetchInvoice, deleteInvoice, deleteInvoiceTask,
-  deleteInvoiceModifier, deleteInvoiceTimeslip, addInvoiceModifier,
-  fetchInvoiceTasks, fetchInvoiceTimeslips, updateInvoice
+  fetchInvoice, deleteInvoice, deleteInvoiceModifier, addInvoiceModifier,
+  updateInvoice
 } from 'modules/invoice';
-
+import {fetchModifiers} from 'modules/modifier';
+import { fetchTasks, updateTask } from 'modules/task';
+import { fetchTimeslips, updateTimeslip } from 'modules/timeslip';
 
 class Invoice extends React.Component {
   constructor(props) {
@@ -39,8 +39,8 @@ class Invoice extends React.Component {
 
   fetchData(id) {
     let promises = [
-      this.props.fetchInvoiceTimeslips(id),
-      this.props.fetchInvoiceTasks(id)
+      this.props.fetchTimeslips(id),
+      this.props.fetchTasks(null, null, id)
     ];
     return Promise.all(promises);
   }
@@ -128,10 +128,10 @@ class Invoice extends React.Component {
             modifiers={modifiers}
             isEditable={isEditable}
             onDeleteInvoiceTimeslip={(id) =>
-              this.props.deleteInvoiceTimeslip(invoice.get('id'), id)
+              this.props.updateTimeslip(id, {invoice: null})
             }
             onDeleteInvoiceTask={(id) =>
-              this.props.deleteInvoiceTask(invoice.get('id'), id)
+              this.props.updateTask(id, {invoice: null})
             }
           />
         </div>
@@ -167,15 +167,18 @@ const mapStateToProps = (state, { params }) => {
 
 const actions = {
   fetchInvoice,
-  deleteInvoice,
-  deleteInvoiceTask,
-  deleteInvoiceModifier,
-  deleteInvoiceTimeslip,
-  addInvoiceModifier,
-  fetchInvoiceTasks,
-  fetchInvoiceTimeslips,
   updateInvoice,
-  fetchModifiers
+  deleteInvoice,
+
+  fetchModifiers,
+  deleteInvoiceModifier,
+  addInvoiceModifier,
+
+  fetchTasks,
+  updateTask,
+
+  fetchTimeslips,
+  updateTimeslip
 };
 
 const InvoiceContainer = connect(mapStateToProps, actions)(Invoice);

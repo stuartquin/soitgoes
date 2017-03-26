@@ -8,15 +8,14 @@ import { Iterable } from 'immutable';
 import activityFeed from './reducers/activityfeed';
 import user from './reducers/user';
 import dash from './reducers/dash';
-import tasks from './reducers/tasks';
 import nav from './reducers/nav';
 
 import contacts from 'modules/contact';
 import modifiers from 'modules/modifier';
-import companies from 'modules/company';
 import projects from 'modules/project';
 import invoices from 'modules/invoice';
 import timeslips from 'modules/timeslip';
+import tasks from 'modules/task';
 
 const logger = createLogger({
   stateTransformer: (state) => {
@@ -56,7 +55,6 @@ const configureStore = () => {
     nav,
     contacts,
     modifiers,
-    companies,
     routing: routerReducer
   }),
   compose( ...middlewares )

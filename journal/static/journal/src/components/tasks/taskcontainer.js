@@ -3,7 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import { TaskForm } from './taskform';
-import * as taskActions from '../../actions/tasks';
+import {fetchTasks, updateTask, addTask} from 'modules/task';
 
 
 class Task extends React.Component {
@@ -56,7 +56,9 @@ const mapStateToProps = (state, { params }) => {
 };
 
 const actions = {
-  ...taskActions
+  fetchTasks,
+  updateTask,
+  addTask
 };
 
 const TaskContainer = connect(mapStateToProps, actions)(Task);
