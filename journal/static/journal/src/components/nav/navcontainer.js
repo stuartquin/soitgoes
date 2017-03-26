@@ -1,24 +1,54 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
+
+import AppBar from 'material-ui/AppBar';
+import Snackbar from 'material-ui/Snackbar';
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import IconButton from 'material-ui/IconButton';
 
 import { NavMenu } from './navmenu';
 import { HeaderLogo } from './headerlogo';
+import { HeaderBarContainer } from './headerbar';
 import { UserMenu } from './usermenu';
-import { Version } from '../version/version';
+import { Loading } from '../loading';
+import FlashMesasge from 'components/flashmessage';
 
-import styles from './styles.css';
-import * as projectActions from '../../actions/projects';
+import {fetchProjects} from 'modules/project';
+import {clearFlashMessage} from 'modules/flashmessage';
 import * as userActions from '../../actions/user';
+import * as navActions from '../../actions/nav';
 
+const PATH_TITLES = {
+  '': 'InvoiceTime',
+  'projects': 'Projects',
+  'invoices': 'Invoices',
+  'timeslips': 'Time',
+  'contacts': 'Contacts',
+  'tasks': 'Tasks',
+  'dash': 'Dash'
+}
 
 class Nav extends React.Component {
-  componentDidMount() {
-    // Starts a loop
-    this.props.fetchVersion();
+  constructor(props) {
+    super(props);
+    this.state = {
+      navOpen: false
+    };
+  }
 
-    this.props.fetchUser().then(() =>
+  componentDidMount() {
+    this.fetchBase().then(() => {
+      this.props.setIsLoaded(true);
+    });
+  }
+
+  fetchBase() {
+    return Promise.all([
+      this.props.fetchVersion(),
+      this.props.fetchAccounts(),
       this.props.fetchProjects()
-    );
+    ]);
   }
 
   onLogout() {
@@ -29,31 +59,65 @@ class Nav extends React.Component {
     location.reload();
   }
 
+  handleButton(isDeep) {
+    if (isDeep) {
+      browserHistory.goBack();
+    } else {
+      this.setState({navOpen: true});
+    }
+  }
+
+  closeMenu() {
+    this.setState({navOpen: false})
+  }
+
   render() {
-    const className = `${styles.navContainer}`;
-    const navClasses = `${styles.navInner}`;
+    if (!this.props.isLoaded) {
+      return (
+        <div className='wrapper'>
+          <Loading />
+        </div>
+      );
+    }
+    const basePath = this.props.path.get(0);
+    const title = PATH_TITLES[basePath];
+    const isDeep = this.props.path.count() > 1;
+
+    let icon = null;
+    if (isDeep) {
+      icon = (<IconButton><NavigationArrowBack /></IconButton>);
+    }
+
     return (
-      <div>
-        <nav className={navClasses}>
-          <div className={`container ${ styles.navContainer }`}>
-            <HeaderLogo />
-            <NavMenu />
-            <UserMenu
-              user={this.props.user}
-              version={this.props.version}
-              isLoading={this.props.isUserLoading}
-              onLogout={() => this.onLogout()}
-            />
-          </div>
-        </nav>
+      <div className='wrapper'>
+        <NavMenu
+          open={this.state.navOpen}
+          onSetOpen={(navOpen) => this.setState({navOpen})}
+          onLogout={() => this.props.logout()}
+        />
+
+        <AppBar
+          title={title}
+          className='main-app-bar'
+          iconElementLeft={icon}
+          onLeftIconButtonTouchTap={() => this.handleButton(isDeep)}
+        />
 
         <div className='container'>
           {this.props.children}
         </div>
 
-        <Version
-          isNew={this.props.version.get('isNew')}
-          onReload={() => this.onReload()}
+        <FlashMesasge
+          message={this.props.flashMessage}
+          onCloseMessage={this.props.clearFlashMessage}
+        />
+
+        <Snackbar
+          open={this.props.version.get('isNew')}
+          message='A new version is available'
+          action='Update'
+          autoHideDuration={20000}
+          onActionTouchTap={() => this.onReload()}
         />
       </div>
     );
@@ -64,15 +128,18 @@ const mapStateToProps = (state, props) => {
   return {
     user: state.user.user,
     version: state.user.version,
-    isUserLoading: state.user.isLoading
+    flashMessage: state.flashMessage,
+    path: state.nav.headerBar.get('path'),
+    isLoaded: state.nav.view.get('isLoaded')
   };
 };
 
 const actions = {
-  ...projectActions,
-  ...userActions
+  ...userActions,
+  ...navActions,
+  fetchProjects,
+  clearFlashMessage
 };
 
-
 const NavContainer = connect(mapStateToProps, actions)(Nav);
-export {NavContainer};
+export { NavContainer };

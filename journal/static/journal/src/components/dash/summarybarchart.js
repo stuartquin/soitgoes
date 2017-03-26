@@ -3,16 +3,14 @@ import React from 'react';
 import { Bar } from 'react-chartjs';
 import moment from 'moment';
 
+import {Loading} from '../loading';
+
 const MONTHLY_LOW = 8350;
 const MONTHLY_HIGH = 10000;
 
 const SummaryBarChart = (props) => {
   if (props.summary.isEmpty()){
-    return (
-      <div className='dash-summary-chart'>
-        Loading
-      </div>
-    );
+    return (<Loading />);
   }
 
   let months = props.summary.keySeq().sort();
@@ -48,15 +46,11 @@ const SummaryBarChart = (props) => {
   };
 
   return (
-    <div className='dash-summary-chart panel panel-default'>
-      <div className='panel-body'>
-        <h5>{props.title}</h5>
-        <Bar
-          data={chartData}
-          width='300'
-          height='240'
-          options={chartOptions} />
-      </div>
+    <div className='summary-chart'>
+      <h5>{props.title}</h5>
+      <Bar
+        data={chartData}
+        options={chartOptions} />
     </div>
   );
 };

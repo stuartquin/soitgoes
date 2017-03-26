@@ -10,9 +10,6 @@
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
 
-    <link rel="stylesheet" href="{% static "journal/css/bootstrap/css/bootstrap.min.css" %}?{{ cachebust }}">
-    <link rel="stylesheet" href="{% static "journal/css/bootstrap/css/bootstrap-material-design.min.css" %}?{{ cachebust }}">
-    <link rel="stylesheet" href="{% static "journal/css/bootstrap/css/ripples.min.css" %}?{{ cachebust }}">
     <link rel="stylesheet" href="{% static "journal/dist/main.css" %}?{{ cachebust }}">
 
     <link rel="shortcut icon" href="{% static "journal/assets/favicon.ico" %}" />
@@ -24,36 +21,15 @@
 
   {% block main %}
     {% if is_authenticated %}
-      <div id='root'>
-      </div>
-      <script src="{% static "journal/dist/bundle.js" %}?{{ cachebust }}"></script>
+      <script>GLOBAL_IS_AUTHENTICATED = true;</script>
     {% else %}
-      <div id="login">
-          <form class="form-horizontal" name="LoginForm" action="/login/" method="post">
-          {% csrf_token %}
-          {% if next %}
-              <input type="hidden" name="next" value="{{ next }}" />
-          {% endif %}
-          <div class="control-group">
-              <label class="control-label" for="username">Username</label>
-              <div class="controls">
-                  <input type="text" id="username" name="username"  placeholder="Username">
-              </div>
-          </div>
-          <div class="control-group">
-              <label class="control-label" for="password">Password</label>
-              <div class="controls">
-                  <input type="password" name="password" id="password" placeholder="Password">
-              </div>
-          </div>
-          <div class="control-group">
-              <div class="controls">
-                  <button type="submit" class="btn">Login</button>
-              </div>
-          </div>
-          </form>
-      </div>
+      <script>GLOBAL_IS_AUTHENTICATED = false;</script>
     {% endif %}
+
+    <div id='root'>
+    </div>
+    <script src="{% static "journal/dist/bundle.js" %}?{{ cachebust }}"></script>
+
   {% endblock %}
 
   </body>

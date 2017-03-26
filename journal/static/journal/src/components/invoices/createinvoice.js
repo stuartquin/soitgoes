@@ -1,128 +1,80 @@
 'use strict';
 import React from 'react';
 
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
+import Popover from 'material-ui/Popover';
 
-const NewInvoiceProjectSelector = (props) => {
-  return (
-    <div className='new-invoice-project-selector'>
-
-      <div className='close-action'>
-        <h5>Select Project</h5>
-        <a className='btn btn-default btn-xs'
-          onClick={props.onCancel}>
-          <i className='material-icons'>close</i>
-          <div className='ripple-container'></div>
-        </a>
-      </div>
-
-      <hr />
-
-      <ul>
-      {props.projects.map((project) => {
-        return (
-          <li key={project.get('id')}>
-            <label>
-              <input
-                type='radio'
-                checked={props.selected.get('id') === project.get('id')}
-                onChange={() => props.onSelectProject(project)} />
-              {project.get('name')}
-            </label>
-            <span>{ project.get('uninvoiced_hours') } hrs</span>
-          </li>
-        );
-      })}
-      </ul>
-
-      <hr />
-
-      <div className='vat-added'>
-        <label>
-           <input
-             type='checkbox'
-             checked={props.isVAT}
-             onChange={() => props.onSetVAT()} />
-          Add VAT
-        </label>
-      </div>
-
-      <button key={1}
-        className='btn btn-block btn-success btn-raised'
-        onClick={() => props.onCreateInvoice(props.selected, props.isVAT)}>
-        Create Invoice
-      </button>
-
-    </div>
-  );
-};
 
 class CreateInvoice extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isCreating: false,
-      isVAT: true,
-      selectedProject: props.projects.first()
+      anchorEl: null,
+      open: false
     };
   }
 
-  newInvoice() {
+  handleClose() {
     this.setState({
-      isCreating: true
-    });
-  }
-
-  selectProject(project) {
-    this.setState({
-      selectedProject: project
-    });
-  }
-
-  setVAT(vat) {
-    this.setState({
-      isVAT: vat
-    });
-  }
-
-  cancel() {
-    this.setState({
-      isCreating: false
+      open: false
     });
   }
 
   render() {
-    let item;
-    const projects = this.props.projects.filter(project => !project.get('archived'));
-    if (this.state.isCreating) {
-      item = (
-        <NewInvoiceProjectSelector
-          projects={ projects }
-          selected={ this.state.selectedProject }
-          isVAT={ this.state.isVAT }
-          onSelectProject={ (project) => this.selectProject(project) }
-          onCreateInvoice={ this.props.onCreateInvoice }
-          onSetVAT={(vat) => this.setVAT(vat)}
-          onCancel={ () => this.cancel() }
-        />
-      );
-    } else {
-      item = (
-        <button key={1}
-          className='btn btn-block btn-success btn-raised'
-          onClick={() => this.newInvoice()}>
-          New Invoice
-        </button>
-      );
-    }
+    const projects = this.props.projects.filter(p => !p.get('archived'));
 
     return (
-      <div className='create-invoice panel panel-default'>
-        <div className='panel-body'>
-          {item}
-        </div>
+      <div className='content-actions'>
+
+        <RaisedButton
+          className='btn-success'
+          label='Create New'
+          labelPosition='before'
+          onTouchTap={(evt) => {
+            evt.preventDefault();
+            this.setState({
+              anchorEl: evt.currentTarget,
+              open: true
+            });
+          }}
+        />
+
+        <Popover
+          open={this.state.open}
+          anchorEl={this.state.anchorEl}
+          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          onRequestClose={() => this.handleClose()}
+        >
+          <Menu
+            width='256px'
+            className='invoice-projects'
+            onChange={(evt, project) => {
+              this.props.onCreateInvoice(project.get('id'))
+            }}>
+          {projects.map((project) => {
+            const label = (
+              <div className='invoice-project-label'>
+                <span>{project.get('name')}</span>
+                <span>{project.get('uninvoiced_hours')} hrs</span>
+              </div>
+            );
+            return (
+              <MenuItem
+                className='invoice-project'
+                key={project.get('id')}
+                value={project}
+                primaryText={label}
+              />
+            );
+          }).toArray()}
+          </Menu>
+        </Popover>
       </div>
     );
   }
 }
 
-export {CreateInvoice, NewInvoiceProjectSelector};
+export {CreateInvoice};

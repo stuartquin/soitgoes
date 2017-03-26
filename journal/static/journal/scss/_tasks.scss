@@ -1,0 +1,37 @@
+.task-item-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-item-name {
+  padding-top: 12px;
+
+  a, span {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background-color: inherit;
+  }
+}
+
+.task-item-stats {
+  display: flex;
+}
+
+// TODO move to forms.scss
+.form-field {
+  flex: 1 0 260px;
+  padding: 10px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+input.form-control, select.form-control, {
+  line-height: 1;
+  height: 2.375rem;
+}

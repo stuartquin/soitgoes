@@ -1,103 +1,137 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
+import Immutable from 'immutable';
 
-import { InvoiceInfo } from './invoiceinfo';
-import { InvoiceTimeslips } from './invoicetimeslips';
-import { InvoiceAdvanced } from './invoiceadvanced';
-import * as invoiceActions from '../../actions/invoices';
+import {Generator} from './generator';
+import {Settings} from './settings';
+import {InvoiceHeader} from './invoiceheader';
+import {Loading} from '../loading';
+import {Confirm} from '../confirm';
 
-import styles from './styles.css';
+import {
+  fetchInvoice, deleteInvoice, deleteInvoiceModifier, addInvoiceModifier,
+  updateInvoice
+} from 'modules/invoice';
+import {fetchModifiers} from 'modules/modifier';
+import { fetchTasks, updateTask } from 'modules/task';
+import { fetchTimeslips, updateTimeslip } from 'modules/timeslip';
 
 class Invoice extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dueDate: null,
+      confirmDelete: false
+    };
+  }
+
   componentDidMount() {
-    this.fetchInvoice().then(() => {
-      this.fetchData();
-    });
+    this.props.fetchModifiers();
+    if (this.props.id !== 'add') {
+      this.fetchInvoice().then(() => this.fetchData(this.props.id))
+    }
   }
 
   fetchInvoice() {
-    return this.props.fetchInvoice(this.props.invoiceId);
+    return this.props.fetchInvoice(this.props.id);
   }
 
-  fetchData() {
+  fetchData(id) {
     let promises = [
-      this.props.fetchInvoiceTimeslips(this.props.invoiceId),
-      this.props.fetchInvoiceItems(this.props.invoiceId),
-      this.props.fetchInvoiceTasks(this.props.invoiceId)
+      this.props.fetchTimeslips(id),
+      this.props.fetchTasks(null, null, id)
     ];
     return Promise.all(promises);
   }
 
+  setDueDate(dueDate) {
+    this.setState({dueDate});
+  }
+
+  handleMarkIssued() {
+    const invoice = this.props.invoice;
+    this.props.updateInvoice(invoice.get('id'), {
+      due_date: this.state.dueDate || invoice.get('due_date'),
+      timeslips: this.props.timeslips.map(t => t.get('id')).toJS(),
+      status: 'ISSUED'
+    });
+  }
+
+  handleMarkPaid() {
+    const invoice = this.props.invoice;
+    this.props.updateInvoice(invoice.get('id'), {
+      total_paid: invoice.get('total_due'),
+      status: 'PAID'
+    });
+  }
+
   render() {
     const invoice = this.props.invoice;
-    if (this.props.projects.isEmpty() || this.props.isLoading) {
-      return (<strong>Loading...</strong>);
+    if (invoice.isEmpty()) {
+      return (<Loading />);
     }
-
-    const project = this.props.projects.get(`${invoice.get('project')}`)
-    const isIssued = !!invoice.get('issued_at');
+    const modifiers = this.props.modifiers;
+    const project = this.props.project;
+    const contact = this.props.contact;
+    const isEditable = !Boolean(invoice.get('issued_at'));
+    const dueDate = this.state.dueDate || invoice.get('due_date');
 
     return (
-      <div className='row'>
-        <div className='col-md-4'>
-          <InvoiceInfo
-            isIssued={isIssued}
-            project={project}
+      <div className='invoice-container'>
+        <Confirm
+          title='Confirm Delete'
+          open={this.state.confirmDelete}
+          onConfirm={() => this.props.deleteInvoice(invoice.get('id'))}
+          onCancel={() => this.setState({confirmDelete: false})}>
+          Are you sure you want to delete?
+        </Confirm>
+
+        <div className='header'>
+          <InvoiceHeader
             invoice={invoice}
-            timeslips={this.props.timeslips}
-            tasks={this.props.tasks}
-            modifiers={this.props.modifiers}
-            invoiceItems={this.props.invoiceItems}
-            onDelete={() =>
-              this.props.deleteInvoice(invoice.get('id'))
-            }
-            onMarkAsIssued={() =>
-              this.props.markAsIssued(
-                invoice.get('id'),
-                project.get('id'),
-                this.props.timeslips
-              )
-            }
-            onMarkAsPaid={() => {
-              this.props.markAsPaid(
-                invoice.get('id'),
-                project.get('id'),
-                invoice.get('total_due')
-              )
-            }}
+            project={project}
+            contact={contact}
+            onDelete={() => this.setState({confirmDelete: true})}
+            onMarkAsIssued={() => this.handleMarkIssued()}
+            onMarkAsPaid={() => this.handleMarkPaid()}
           />
         </div>
-        <div className='col-md-8'>
-          <InvoiceAdvanced
-            isIssued={isIssued}
-            project={project}
+        <div className='content'>
+          <Settings
             invoice={invoice}
-            onUpdate={(updates) =>
-              this.props.updateInvoice(
-                invoice.get('id'),
-                project.get('id'),
-                updates
-              )
-            }
-          />
-          <InvoiceTimeslips
-            isIssued={isIssued}
             project={project}
             timeslips={this.props.timeslips}
-            items={this.props.invoiceItems}
             tasks={this.props.tasks}
-            onAddItem={(name, price, qty) =>
-              this.props.createItem(invoice.get('id'), name, price, qty)
+            modifiers={modifiers}
+            isEditable={isEditable}
+            dueDate={dueDate}
+            onAddModifier={(modifier) =>
+              this.props.addInvoiceModifier(
+                invoice.get('id'),
+                modifier.get('id')
+              )
             }
-            onDeleteInvoiceTimeslip={(timeslipId) =>
-              this.props.deleteInvoiceTimeslip(invoice.get('id'), timeslipId)
+            onRemoveModifier={(modifier) =>
+              this.props.deleteInvoiceModifier(
+                invoice.get('id'),
+                modifier.get('id')
+              )
             }
-            onDeleteInvoiceItem={(itemId) =>
-              this.props.deleteInvoiceItem(invoice.get('id'), itemId)
+            onSetDueDate={(date) => this.setDueDate(date)}
+          />
+          <Generator
+            invoice={invoice}
+            project={project}
+            timeslips={this.props.timeslips}
+            tasks={this.props.tasks}
+            modifiers={modifiers}
+            isEditable={isEditable}
+            onDeleteInvoiceTimeslip={(id) =>
+              this.props.updateTimeslip(id, {invoice: null})
             }
-            onDeleteTask={(taskId) =>
-              this.props.deleteInvoiceTask(invoice.get('id'), taskId)
+            onDeleteInvoiceTask={(id) =>
+              this.props.updateTask(id, {invoice: null})
             }
           />
         </div>
@@ -106,35 +140,45 @@ class Invoice extends React.Component {
   }
 }
 
-const getInvoiceProject = (projects, invoice) => {
-  return projects.find((x) => x.get('id') === invoice.get('project').get('id'));
-};
-
 const getInvoiceTimeslips = (invoice, timeslips) => {
-  const invoiceId = invoice.get('id');
-  return timeslips.filter((t) => t.get('invoice') === invoiceId);
+  return timeslips.filter((t) => t.get('invoice') === invoice.get('id'));
+}
+
+const getInvoiceTasks = (invoice, tasks) => {
+  return tasks.filter((t) => t.get('invoice') === invoice.get('id'));
 }
 
 const mapStateToProps = (state, { params }) => {
-  const invoice = state.invoice;
-  const invoiceId = parseInt(params.id, 10);
-  const tasks = state.tasks.items.filter((task) =>
-    task.get('invoice') === invoiceId
-  );
+  const id = parseInt(params.id, 10);
+  const invoice = state.invoices.items.get(id, Immutable.Map());
+  const project = state.projects.items.get(invoice.get('project'), Immutable.Map());
+  const contact = state.contacts.items.get(project.get('contact'), Immutable.Map());
+
   return {
-    isLoading: invoice.view.get('isLoading'),
-    invoice: invoice.details,
-    invoiceItems: invoice.additionalItems,
-    timeslips: getInvoiceTimeslips(invoice.details, state.timeslips.items),
-    projects: state.projects.items,
-    tasks: tasks,
-    invoiceId: params.id,
-    modifiers: invoice.modifiers
+    id,
+    invoice,
+    project,
+    contact,
+    modifiers: state.modifiers.items,
+    timeslips: getInvoiceTimeslips(invoice, state.timeslips.items),
+    tasks: getInvoiceTasks(invoice, state.tasks.items)
   };
 };
 
 const actions = {
-  ...invoiceActions
+  fetchInvoice,
+  updateInvoice,
+  deleteInvoice,
+
+  fetchModifiers,
+  deleteInvoiceModifier,
+  addInvoiceModifier,
+
+  fetchTasks,
+  updateTask,
+
+  fetchTimeslips,
+  updateTimeslip
 };
 
 const InvoiceContainer = connect(mapStateToProps, actions)(Invoice);

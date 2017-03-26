@@ -1,26 +1,42 @@
 'use strict';
 import React from 'react';
 
-import styles from './styles.css';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
+import IconButton from 'material-ui/IconButton';
+import {TableRow, TableRowColumn} from 'material-ui/Table';
+
+
 
 const InvoiceItemRow = (props) => {
-  let btn = (<div />);
-  if (!props.isIssued) {
-    btn = (
-      <button className='btn btn-sm btn-default'
-        onClick={props.onDelete}>
-        <span className='glyphicon glyphicon-minus-sign'></span>
-      </button>
+  let actions = null;
+  if (props.isEditable) {
+    actions = (
+      <TableRowColumn className='col-actions'>
+        <IconButton
+          tooltip='Remove Item'
+          touch={true}
+          tooltipPosition='bottom-right'
+          className='btn-default'
+          onTouchTap={props.onDelete}>
+          <ActionDelete />
+        </IconButton>
+      </TableRowColumn>
     );
   }
 
   return (
-    <tr>
-      <td>{props.details}</td>
-      <td>{props.unitPrice}</td>
-      <td>{props.subTotal}</td>
-      <td>{btn}</td>
-    </tr>
+    <TableRow className='invoice-list-row'>
+      <TableRowColumn>
+        {props.details}
+      </TableRowColumn>
+      <TableRowColumn className='col-currency col-sm-hide col-right'>
+        {props.unitPrice}
+      </TableRowColumn>
+      <TableRowColumn className='col-currency col-right'>
+        {props.subTotal}
+      </TableRowColumn>
+      {actions}
+    </TableRow>
   );
 };
 

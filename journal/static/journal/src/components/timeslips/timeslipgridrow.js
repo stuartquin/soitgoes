@@ -2,8 +2,6 @@
 import React from 'react';
 import {TimeslipGridCell} from './timeslipgridcell';
 
-import styles from './styles.css';
-
 const TimeslipGridRow = (props) => {
   const dates = props.range.map((m) => m.format('YYYY-MM-DD'));
   const filledTimeslips = props.timeslips.reduce( (result, item) => {
@@ -12,8 +10,10 @@ const TimeslipGridRow = (props) => {
   }, {});
 
   return (
-    <tr className={styles.timeslipGridRow}>
-      <td className={styles.timeslipGridRowProject}>{props.project.get('name')}</td>
+    <tr className='timeslip-grid-row'>
+      <td className='timeslip-grid-row-project'>
+        {props.project.get('name')}
+      </td>
       {dates.map((date) => (
         <TimeslipGridCell
           isLoading={props.isLoading}

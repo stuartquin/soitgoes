@@ -2,15 +2,11 @@ import React from 'react';
 import { Link } from 'react-router';
 import moment from 'moment'
 
-const TaskItemStats = (props) => {
-  const icon = `glyphicon glyphicon-${props.icon}`;
-  return (
-    <div className='task-item-stat'>
-      <span className={icon} aria-hidden="true"></span>
-      <span>{props.value}</span>
-    </div>
-  );
-};
+import {TableRow, TableRowColumn} from 'material-ui/Table';
+import IconButton from 'material-ui/IconButton';
+import ActionDone from 'material-ui/svg-icons/action/done';
+
+import {StateChip} from './state-chip';
 
 const TaskItemActions = (props) => {
   const task = props.task;
@@ -19,54 +15,40 @@ const TaskItemActions = (props) => {
   }
 
   return (
-    <div className='task-item-actions'>
-      <button
-        className='btn btn-default btn-sm'
-        onClick={props.onComplete}>
-        <i className="material-icons">done</i>
-      </button>
-    </div>
+    <IconButton
+      touch={true}
+      tooltipPosition='bottom-center'
+      className='btn-default icon-btn-right'
+      onTouchTap={props.onComplete}>
+      <ActionDone />
+    </IconButton>
   );
 };
 
 const TaskListItem = (props) => {
   const task = props.task;
   const project = props.project;
-  const due = moment(task.get('due_date')).fromNow(true);
   const hours = task.get('hours_spent') + '/' + task.get('hours_predicted');
-  let stats = [
-    {icon: 'time', value: due},
-    {icon: 'hourglass', value: hours},
-  ];
-
-  if (task.get('completed_at')) {
-    stats.push({
-      icon: 'check',
-      value: moment(task.get('completed_at')).format('YYYY-MM-DD')
-    });
-  }
-
   return (
-    <div className='task-list-item panel panel-default'>
-      <div className='panel-body'>
-        <div className='task-item-content'>
-          <div className='task-item-name'>
-            <Link to={`/tasks/${task.get('id')}`}>
-              <strong>{task.get('name')}</strong>
-              <span>{project.get('name')}</span>
-            </Link>
-          </div>
-          <TaskItemActions
-            task={task}
-            onComplete={() => props.onComplete(task.get('id'))} />
-        </div>
-      </div>
-      <div className='task-item-stats panel-footer'>
-        {stats.map((stat, index) =>
-          <TaskItemStats key={index} icon={stat.icon} value={stat.value} />
-        )}
-      </div>
-    </div>
+    <TableRow className='task-list-row'>
+      <TableRowColumn className='task-item-name'>
+        <Link to={`/tasks/${task.get('id')}`}>{task.get('name')}</Link>
+        <span className='text-muted'>{project.get('name')}</span>
+      </TableRowColumn>
+      <TableRowColumn className='col-number col-right'>
+        {hours}
+      </TableRowColumn>
+      <TableRowColumn className='col-state col-right'>
+        <StateChip
+          task={task}
+        />
+      </TableRowColumn>
+      <TableRowColumn className='col-actions'>
+        <TaskItemActions
+          task={task}
+          onComplete={() => props.onComplete(task.get('id'))} />
+      </TableRowColumn>
+    </TableRow>
   );
 };
 

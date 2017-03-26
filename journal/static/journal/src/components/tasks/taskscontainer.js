@@ -1,11 +1,13 @@
 'use strict';
 import React from 'react';
-import { Link } from 'react-router';
 import {connect} from 'react-redux';
+import { browserHistory } from 'react-router';
+
+import {Card, CardText} from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import { TaskList } from './tasklist';
-
-import * as taskActions from '../../actions/tasks';
+import {fetchTasks, completeTask} from 'modules/task';
 
 
 class Tasks extends React.Component {
@@ -14,31 +16,45 @@ class Tasks extends React.Component {
   }
 
   render() {
-    const loading = (
-      this.props.projects.isEmpty()
-    );
-
-    if (loading) {
-      return (<div>Loading</div>);
-    }
+    const projects = this.props.projects;
+    const tasks = this.props.tasks;
+    const openTasks = tasks.filter((task) => {
+      return task.get('completed_at') === null;
+    });
+    const closedTasks = tasks.filter((task) => {
+      return task.get('completed_at') !== null;
+    });
 
     return (
-      <div>
-        <div className='row'>
-          <div className='col-md-12'>
-            <Link to={`/tasks/add`}>
-              New Task
-            </Link>
-          </div>
-        </div>
-        <div className='row'>
-          <div className='col-md-12'>
-            <TaskList
-              tasks={this.props.tasks}
-              projects={this.props.projects}
-              onCompleteTask={(id) => this.props.completeTask(id)}
+      <div className='tasks-container'>
+        <div className='content'>
+          <div className='content-actions'>
+            <RaisedButton
+              className='btn-success'
+              label='Create New'
+              labelPosition='before'
+              onTouchTap={(evt) => {
+                browserHistory.push('/tasks/add');
+              }}
             />
           </div>
+
+          <Card>
+            <CardText>
+              <h3>Open Tasks ({openTasks.size})</h3>
+              <TaskList
+                tasks={openTasks}
+                projects={projects}
+                onCompleteTask={(id) => this.props.completeTask(id)}
+              />
+              <h3>Complete Tasks ({closedTasks.size})</h3>
+              <TaskList
+                tasks={closedTasks}
+                projects={projects}
+                onCompleteTask={(id) => this.props.completeTask(id)}
+              />
+            </CardText>
+          </Card>
         </div>
       </div>
     );
@@ -53,7 +69,8 @@ const mapStateToProps = (state, { params }) => {
 };
 
 const actions = {
-  ...taskActions
+  fetchTasks,
+  completeTask
 };
 
 const TasksContainer = connect(mapStateToProps, actions)(Tasks);

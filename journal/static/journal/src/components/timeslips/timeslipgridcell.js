@@ -1,10 +1,6 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 
-import styles from './styles.css';
-
-const cx = classNames.bind(styles);
-
 const TimeslipGridCell = (props) => {
   const timeslip = props.timeslip;
   let hours;
@@ -15,12 +11,8 @@ const TimeslipGridCell = (props) => {
     isDisabled = isDisabled || Boolean(timeslip.get('invoice'));
   }
 
-  const className = cx({
-    timeslipGridCell: true
-  });
-
   return (
-    <td className={className}>
+    <td className='timeslip-grid-cell'>
       <input
         value={hours || ''}
         type='number'

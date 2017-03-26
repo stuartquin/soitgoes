@@ -5,7 +5,10 @@ import datetime
 
 import journal.models as models
 
-VAT_MODIFIER_ID = 1
+
+class CurrentAccountDefault(serializers.CurrentUserDefault):
+    def __call__(self):
+        return self.user.account_set.first()
 
 
 class LogActivity(serializers.ModelSerializer):
@@ -23,8 +26,15 @@ class LogActivity(serializers.ModelSerializer):
 
 class ProjectSerializer(LogActivity):
     ACTIVITY_CODE = 'PRO'
-    uninvoiced_hours = serializers.IntegerField(source='get_uninvoiced_hours')
-    total_paid = serializers.IntegerField(source='get_total_paid')
+    uninvoiced_hours = serializers.IntegerField(
+        source='get_uninvoiced_hours',
+        read_only=True
+    )
+    total_paid = serializers.IntegerField(
+        source='get_total_paid',
+        read_only=True
+    )
+    account = serializers.HiddenField(default=CurrentAccountDefault())
 
     class Meta:
         model = models.Project
@@ -36,9 +46,9 @@ class ProjectSerializer(LogActivity):
             'uninvoiced_hours',
             'total_paid',
             'hourly_rate',
-            'archived'
+            'archived',
+            'account'
         ]
-        depth = 1
 
 
 class TimeSlipSerializer(LogActivity):
@@ -46,6 +56,7 @@ class TimeSlipSerializer(LogActivity):
 
     class Meta:
         model = models.TimeSlip
+        partial = True
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -73,7 +84,14 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Company
-        fields = ('id', 'name', 'billing')
+        fields = ('id', 'name', 'billing', 'logo_image')
+
+
+class ContactSerializer(serializers.ModelSerializer):
+    account = serializers.HiddenField(default=CurrentAccountDefault())
+
+    class Meta:
+        model = models.Contact
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -120,37 +138,17 @@ class TaskSerializer(serializers.ModelSerializer):
 class InvoiceSerializer(LogActivity):
     ACTIVITY_CODE = 'INV'
 
-    def _add_vat_modifier(self, invoice):
-        modifier = models.InvoiceModifier.objects.get(pk=VAT_MODIFIER_ID)
-        invoice.modifier.add(modifier)
-        invoice.save()
-
     def update(self, instance, validated_data):
         request_data = self.context['request'].data
-        if 'paid' in request_data and request_data['paid']:
-            instance.paid_at = datetime.datetime.now()
-            instance.total_paid = request_data['total_paid']
-            status = 'PAID'
-        else:
-            status = 'ISSUED'
-            instance.issued_at = datetime.datetime.now()
+        if 'status' in request_data:
+            if request_data['status'] == 'PAID':
+                instance.paid_at = datetime.datetime.now()
+                instance.total_paid = request_data['total_paid']
+            if request_data['status'] == 'ISSUED':
+                instance.issued_at = datetime.datetime.now()
 
-        if 'modifiers' in request_data and request_data['modifiers']:
-            # TODO this looks weird...
-            instance.modifier.add(None)
-
-        return super().update(instance, validated_data, status)
-
-    def save(self, *args, **kwargs):
-        project = models.Project.objects.filter(
-            id=self.context['request'].data['project']
-        ).first()
-        invoice = super().save(project=project,)
-
-        if 'isVAT' in self.context['request'].data:
-            self._add_vat_modifier(invoice)
-
-        return invoice
+        return super().update(instance, validated_data)
 
     class Meta:
         model = models.Invoice
+        partial = True

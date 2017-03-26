@@ -1,25 +1,26 @@
 import React from 'react';
+import {Table, TableBody} from 'material-ui/Table';
+
 import { InvoiceListRow } from './invoicelistrow';
 
-const InvoiceList = (props) => {
+
+const InvoiceList = ({ projects, invoices, onDeleteInvoice }) => {
   return (
-    <table className='table'>
-      <thead>
-        <tr>
-          <th>Invoice</th>
-          <th>Issued</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-      {props.invoices.map(invoice => (
-        <InvoiceListRow
-          key={invoice.id}
-          project={props.projects.get(`${invoice.project}`)}
-          invoice={invoice} />
-      ))}
-      </tbody>
-    </table>
+    <Table className='invoice-list table'>
+      <TableBody>
+        {invoices.map(invoice => {
+          const id = invoice.get('id');
+          const project = projects.get(invoice.get('project'));
+          return (
+            <InvoiceListRow
+              key={id}
+              onDelete={() => onDeleteInvoice(id)}
+              project={project}
+              invoice={invoice} />
+          );
+        })}
+      </TableBody>
+    </Table>
   );
 };
 

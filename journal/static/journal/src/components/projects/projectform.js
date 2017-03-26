@@ -1,0 +1,106 @@
+'use strict';
+import React from 'react';
+import moment from 'moment';
+import { browserHistory } from 'react-router';
+
+import TextField from 'material-ui/TextField';
+import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
+
+import {Confirm} from '../confirm';
+import AddSelect from '../addselect';
+import ContactForm from 'components/contact/contactform';
+import Form from 'components/form';
+
+
+class ProjectForm extends Form {
+  constructor(props) {
+    super(props);
+    const project = props.project;
+    this.state.isEdit = !!props.isEdit;
+    this.state.showAddContact = false;
+
+    if (project) {
+      this.setForm({
+        name: project.get('name'),
+        hourly_rate: project.get('hourly_rate'),
+        contact: project.get('contact')
+      });
+    };
+  }
+
+  handleAddContact(form) {
+    this.props.onAddContact(form).then(() => {
+      const contact = this.props.contacts.last();
+      this.handleChange('contact', contact.get('id'));
+    });
+    this.setState({showAddContact: false});
+  }
+
+  handleShowAddContact() {
+    this.setState({showAddContact: true});
+  }
+
+  onSave() {
+    this.props.onSave({
+      ...this.state.form
+    }).then(() => this.refreshForm());
+  }
+
+  render() {
+    const contacts = this.props.contacts.toList().toJS().map(p =>
+      <MenuItem
+        key={p.id}
+        value={p.id}
+        primaryText={p.name}
+      />
+    );
+
+    return (
+      <div className='settings'>
+        <TextField
+          style={{width: '100%'}}
+          value={this.state.form.name}
+          onChange={(evt, val) => this.handleChange('name', val)}
+          floatingLabelText='Name' />
+        <AddSelect
+          items={contacts}
+          value={this.state.form.contact}
+          onChange={(evt, idx, val) => this.handleChange('contact', val)}
+          onAdd={() => this.handleShowAddContact()}
+        />
+        <TextField
+          style={{width: '100%'}}
+          type='number'
+          value={this.state.form.hourly_rate}
+          onChange={(evt, val) => this.handleChange('hourly_rate', val)}
+          floatingLabelText='Hourly Rate' />
+        <div className='action-btns'>
+          <RaisedButton
+            className='btn-success'
+            label='Save'
+            labelPosition='before'
+            disabled={!this.state.isSaveRequired}
+            onTouchTap={(evt) => {
+              this.onSave()
+            }}
+          />
+        </div>
+        <Dialog
+          title='New Contact'
+          open={this.state.showAddContact}
+          onRequestClose={() => this.setState({ showAddContact: false })}
+          autoScrollBodyContent={true}
+        >
+          <ContactForm
+            isEdit={false}
+            onSave={(form) => { this.handleAddContact(form) }}
+          />
+        </Dialog>
+      </div>
+    );
+  }
+}
+
+export {ProjectForm};

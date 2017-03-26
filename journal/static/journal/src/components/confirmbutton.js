@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 
+import RaisedButton from 'material-ui/RaisedButton';
 
 const TIMEOUT = 5000;
 
@@ -22,20 +23,21 @@ class ConfirmButton extends React.Component {
     let button;
     if (this.state.confirmMode) {
       button = (
-        <button className='btn btn-danger btn-block btn-raised'
-          onClick={() => this.props.onConfirmClick()}>
-          {this.props.confirmText} 
-          <span className='glyphicon glyphicon-question-sign pull-right'
-            aria-hidden='true'>
-          </span>
-        </button>
+        <RaisedButton
+          className='btn-error'
+          label={this.props.confirmText}
+          fullWidth={true}
+          onTouchTap={(evt) => this.props.onConfirmClick()}
+        />
       );
     } else {
       button = (
-        <button className='btn btn-warning btn-block btn-raised'
-          onClick={() => this.onInitialClick()}>
-          {this.props.text}
-        </button>
+        <RaisedButton
+          className='btn-default'
+          label={this.props.text}
+          fullWidth={true}
+          onTouchTap={(evt) => this.onInitialClick()}
+        />
       );
     }
 

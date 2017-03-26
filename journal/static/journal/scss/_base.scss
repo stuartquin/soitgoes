@@ -1,0 +1,56 @@
+html, body, #root {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+.content {
+  padding: 25px;
+
+  @media screen and (max-width: $break-small) {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+.header {
+  padding-top: 25px;
+  padding-left: 25px;
+  padding-right: 25px;
+
+  @media screen and (max-width: $break-small) {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+.text-muted {
+  color: $color-text-secondary;
+}
+
+.content-actions {
+  margin-bottom: 25px;
+
+  display: flex;
+  justify-content: flex-end;
+}
+
+a {
+  color: $color-bg-dark;
+  text-decoration: none;
+
+  &:visited {
+    color: $color-bg-dark;
+  }
+}
+
+
+.settings {
+  width: 340px;
+  margin-right: 15px;
+
+  @media screen and (max-width: $break-small) {
+    margin-right: 0;
+    width: 100%;
+  }
+}

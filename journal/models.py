@@ -54,7 +54,12 @@ class Contact(models.Model):
     email = models.EmailField()
     created_at = models.DateTimeField(auto_now_add=True)
     account = models.ForeignKey(Account)
-    company = models.ForeignKey(Company, default=None)
+
+    address1 = models.CharField(max_length=512, blank=True, null=True)
+    address2 = models.CharField(max_length=512, blank=True, null=True)
+    city = models.CharField(max_length=128, blank=True, null=True)
+    post_code = models.CharField(max_length=128, blank=True, null=True)
+    vat_number = models.CharField(max_length=128, blank=True, null=True)
 
     def __str__(self):
         return "%s (%s)" % (self.name, self.email)
@@ -102,6 +107,12 @@ class Invoice(models.Model):
     total_paid = models.FloatField(default=None, blank=True, null=True)
     total_due = models.FloatField(default=None, blank=True, null=True)
     subtotal_due = models.FloatField(default=None, blank=True, null=True)
+    subtotal_due = models.FloatField(default=None, blank=True, null=True)
+    status = models.CharField(default='DRAFT', max_length=128, choices=[
+        ('DRAFT', 'DRAFT'),
+        ('ISSUED', 'ISSUED'),
+        ('PAID', 'PAID')
+    ])
 
     modifier = models.ManyToManyField(InvoiceModifier, blank=True)
 
@@ -118,21 +129,31 @@ class Invoice(models.Model):
         self.subtotal_due = total
         self.total_due = total + modifier_impact
 
+    def _set_default_modifiers(self):
+        DEFAULT_MODIFIERS = [1]
+        for modifier_id in DEFAULT_MODIFIERS:
+            self.modifier.add(InvoiceModifier.objects.get(pk=modifier_id))
+
     def save(self, *args, **kwargs):
         pk = self.pk
         if pk is None:
+            # Status - New
             if self.sequence_num == 0:
                 invoices = Invoice.objects.filter(project=self.project)
-                max = invoices.aggregate(Max('sequence_num')).get('sequence_num__max')
+                max = invoices.aggregate(
+                    Max('sequence_num')
+                ).get('sequence_num__max')
                 self.sequence_num = (max or 0) + 1
             if self.due_date is None:
                 self.due_date = (datetime.datetime.now() + datetime.timedelta(
                     days=INVOICE_DUE_DAYS
                 )).date()
 
-        super().save(*args, **kwargs)
+            super().save(*args, **kwargs)
+            self._set_default_modifiers()
 
         if self.issued_at is None:
+            # Status - Draft
             TimeSlip.set_invoice(
                 TimeSlip.objects.filter(
                     project=self.project,
@@ -149,6 +170,7 @@ class Invoice(models.Model):
                 self.pk
             )
         else:
+            # Status - Issued
             self.set_total_due()
             super().save(*args, **kwargs)
 

@@ -1,34 +1,49 @@
+'use strict';
 import React from 'react';
 import { Link } from 'react-router';
 import moment from 'moment';
 
-import styles from './styles.css';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
+import IconButton from 'material-ui/IconButton';
+import {TableRow, TableRowColumn} from 'material-ui/Table';
+
+import {StateChip} from './state-chip';
+
 
 const InvoiceListRow = (props) => {
   const invoice = props.invoice;
-  const issuedAt = invoice.issued_at ? moment(invoice.issued_at).format('YYYY-MM-DD') : '-';
-
+  const issuedAt = invoice.get('issued_at') ? moment(invoice.get('issued_at')).format('YYYY-MM-DD') : '-';
   let totalClass = 'text-danger';
-  let total = invoice.total_due;
-  if (invoice.total_paid) {
+  let total = invoice.get('total_due');
+  if (invoice.get('total_paid')) {
     totalClass = 'text-success';
-    total = invoice.total_paid;
+    total = invoice.get('total_paid');
   }
 
   return (
-    <tr className={ styles.invoiceListRow }>
-      <td>
-        <Link to={`/invoices/${invoice.id}`}>
-        {props.project.get('name')} #{invoice.sequence_num}
+    <TableRow className='invoice-list-row'>
+      <TableRowColumn>
+        <Link to={`/invoices/${invoice.get('id')}`}>
+          #{invoice.get('sequence_num')} {props.project.get('name')}
         </Link>
-      </td>
-      <td>
-        {issuedAt}
-      </td>
-      <td>
+      </TableRowColumn>
+      <TableRowColumn className='col-number col-right'>
         <span className={ totalClass }>&pound;{total}</span>
-      </td>
-    </tr>
+      </TableRowColumn>
+      <TableRowColumn className='col-state col-right'>
+        <StateChip invoice={invoice} />
+      </TableRowColumn>
+      <TableRowColumn className='col-actions col-right'>
+        <IconButton
+          tooltip='Delete Invoice'
+          touch={true}
+          tooltipPosition='bottom-right'
+          className='btn-default'
+          onTouchTap={props.onDelete}>
+          <ActionDelete />
+        </IconButton>
+      </TableRowColumn>
+    </TableRow>
   );
 };
 

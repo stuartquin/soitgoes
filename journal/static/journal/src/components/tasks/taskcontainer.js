@@ -1,9 +1,10 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
+import { browserHistory } from 'react-router';
 
 import { TaskForm } from './taskform';
-import * as taskActions from '../../actions/tasks';
+import {fetchTasks, updateTask, addTask} from 'modules/task';
 
 
 class Task extends React.Component {
@@ -16,8 +17,8 @@ class Task extends React.Component {
   render() {
     const task = this.props.task;
     const projects = this.props.projects;
-    const loading = (!projects || projects.isEmpty());
     const isEdit = this.props.id !== 'add';
+    const loading = (isEdit && (!task || task.isEmpty()));
 
     if (loading) {
       return (<div>Loading</div>);
@@ -25,15 +26,19 @@ class Task extends React.Component {
 
     let saveTask = (form) => {
       if (isEdit) {
-        this.props.updateTask(task.get('id'), form);
+        return this.props.updateTask(task.get('id'), form);
       } else {
-        this.props.addTask(form);
+        return this.props.addTask(form).then(() =>
+          browserHistory.push('/tasks')
+        );
       }
     };
 
     return (
-      <div className='row'>
-        <div className='col-md-12'>
+      <div className='task-container'>
+        <div className='header'>
+        </div>
+        <div className='content'>
           <TaskForm
             isEdit={isEdit}
             task={task}
@@ -54,7 +59,9 @@ const mapStateToProps = (state, { params }) => {
 };
 
 const actions = {
-  ...taskActions
+  fetchTasks,
+  updateTask,
+  addTask
 };
 
 const TaskContainer = connect(mapStateToProps, actions)(Task);

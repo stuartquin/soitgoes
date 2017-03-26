@@ -5,15 +5,18 @@ import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 import { Iterable } from 'immutable';
 
-import timeslips from './reducers/timeslips';
 import activityFeed from './reducers/activityfeed';
-import projects from './reducers/projects';
-import invoice from './reducers/invoice';
-import invoices from './reducers/invoices';
 import user from './reducers/user';
 import dash from './reducers/dash';
-import tasks from './reducers/tasks';
+import nav from './reducers/nav';
 
+import contacts from 'modules/contact';
+import modifiers from 'modules/modifier';
+import projects from 'modules/project';
+import invoices from 'modules/invoice';
+import timeslips from 'modules/timeslip';
+import flashMessage from 'modules/flashmessage';
+import tasks from 'modules/task';
 
 const logger = createLogger({
   stateTransformer: (state) => {
@@ -33,8 +36,7 @@ const logger = createLogger({
 let middlewares = [
   applyMiddleware(
     thunk,
-    routerMiddleware(browserHistory),
-    logger
+    routerMiddleware(browserHistory)
   )
 ];
 
@@ -47,11 +49,14 @@ const configureStore = () => {
     activityFeed,
     timeslips,
     projects,
-    invoice,
     invoices,
     user,
     dash,
     tasks,
+    nav,
+    contacts,
+    modifiers,
+    flashMessage,
     routing: routerReducer
   }),
   compose( ...middlewares )

@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-from rest_framework import generics, viewsets
+from rest_framework import generics, viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
@@ -72,7 +72,7 @@ class UserDetail(APIView):
         return Response(user.data)
 
 
-class ProjectList(generics.ListAPIView):
+class ProjectList(generics.ListCreateAPIView):
     serializer_class = serializers.ProjectSerializer
 
     def get_queryset(self):
@@ -86,9 +86,17 @@ class ActivityFeedList(generics.ListAPIView):
         return models.Activity.objects.all().order_by('-created_at')[:10]
 
 
-class ProjectDetail(APIView):
+class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.ProjectSerializer
+    queryset = models.Project.objects.all()
     permission_classes = (HasProjectAccess,)
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
+        if 'data' in kwargs:
+            kwargs['partial'] = True
+
+        return self.serializer_class(*args, **kwargs)
 
     def get(self, request, pk=None):
         project = get_object_or_404(models.Project.objects.all(), pk=pk)
@@ -100,6 +108,13 @@ class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (HasInvoiceAccess,)
     queryset = models.Invoice.objects.all()
     serializer_class = serializers.InvoiceSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
+        if 'data' in kwargs:
+            kwargs['partial'] = True
+
+        return self.serializer_class(*args, **kwargs)
 
 
 class InvoiceViewSet(viewsets.ModelViewSet):
@@ -118,12 +133,27 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         return [item for item in null] + [item for item in not_null]
 
 
-class InvoiceModifiers(generics.ListAPIView):
+class InvoiceModifierList(generics.ListAPIView):
+    serializer_class = serializers.InvoiceModifierSerializer
+
+    def get_queryset(self):
+        return models.InvoiceModifier.objects.all()
+
+
+class InvoiceModifierDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (HasInvoiceAccess,)
     serializer_class = serializers.InvoiceModifierSerializer
 
     def get_queryset(self):
         return models.Invoice.objects.get(**self.kwargs).modifier.all()
+
+    def destroy(self, request, pk=None, modifier=None):
+        invoice = models.Invoice.objects.get(id=pk)
+        invoice.modifier.remove(
+            models.InvoiceModifier.objects.get(id=modifier)
+        )
+        invoice.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class InvoiceItem(generics.DestroyAPIView):
@@ -158,7 +188,13 @@ class InvoicePDF(APIView):
 class TimeSlipDetail(generics.UpdateAPIView):
     queryset = models.TimeSlip.objects.all()
     serializer_class = serializers.TimeSlipSerializer
-    permission_classes = (HasTimeslipAccess,)
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
+        if 'data' in kwargs:
+            kwargs['partial'] = True
+
+        return self.serializer_class(*args, **kwargs)
 
 
 class ExpenseList(generics.ListCreateAPIView):
@@ -184,6 +220,8 @@ class TimeSlipList(generics.ListCreateAPIView):
         kwargs['context'] = self.get_serializer_context()
         if 'data' in kwargs:
             kwargs['many'] = True
+            for timeslip in kwargs['data']:
+                timeslip['user'] = self.request.user.pk
 
         return self.serializer_class(*args, **kwargs)
 
@@ -264,7 +302,9 @@ class TaskList(generics.ListCreateAPIView):
             invoice = self.request.query_params['invoice']
             filters['invoice'] = invoice if invoice != 'none' else None
 
-        return models.Task.objects.filter(**filters).order_by('completed_at')
+        return models.Task.objects.filter(**filters).order_by(
+            'completed_at', 'due_date'
+        )
 
 
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -277,3 +317,59 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
             kwargs['partial'] = True
 
         return self.serializer_class(*args, **kwargs)
+
+
+class CompanyList(generics.ListCreateAPIView):
+    serializer_class = serializers.CompanySerializer
+
+    def get_queryset(self):
+        filters = {}
+        return models.Company.objects.filter(**filters)
+
+
+class CompanyDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Company.objects.all()
+    serializer_class = serializers.CompanySerializer
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
+        if 'data' in kwargs:
+            kwargs['partial'] = True
+
+        return self.serializer_class(*args, **kwargs)
+
+
+class ContactList(generics.ListCreateAPIView):
+    serializer_class = serializers.ContactSerializer
+
+    def get_queryset(self):
+        filters = {
+            'account__in': self.request.user.account_set.all()
+        }
+
+        return models.Contact.objects.filter(**filters)
+
+
+class ContactDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Contact.objects.all()
+    serializer_class = serializers.ContactSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
+        if 'data' in kwargs:
+            kwargs['partial'] = True
+
+        return self.serializer_class(*args, **kwargs)
+
+
+class InvoiceTaskDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Task.objects.all()
+    serializer_class = serializers.TaskSerializer
+
+    def destroy(self, request, pk=None, modifier=None):
+        invoice = models.Invoice.objects.get(id=pk)
+        invoice.modifier.remove(
+            models.InvoiceModifier.objects.get(id=modifier)
+        )
+        invoice.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)

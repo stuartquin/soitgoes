@@ -1,4 +1,6 @@
 'use strict';
+import { push } from 'react-router-redux';
+
 import constants from '../constants';
 import * as api from '../services/api';
 
@@ -17,6 +19,19 @@ export const fetchUser = () => (dispatch) => {
   });
 };
 
+export const fetchAccounts = () => (dispatch) => {
+  dispatch({
+    type: constants.GET_ACCOUNTS_START
+  });
+
+  return api.fetchAccounts().then(res => {
+    const accounts = res.results;
+    dispatch({
+      type: constants.GET_ACCOUNTS_SUCCESS,
+      accounts
+    });
+  });
+};
 
 const _fetchVersion = (dispatch) => {
   api.fetchVersion().then(version => {
@@ -33,4 +48,22 @@ export const fetchVersion = () => (dispatch) => {
   setInterval(() => {
     _fetchVersion(dispatch);
   }, VERSION_INTERVAL);
+};
+
+export const login = (form) => (dispatch) => {
+  return api.login(form).then(res => {
+    if (res.ok) {
+      location.href = '/';
+    } else {
+      dispatch({
+        type: constants.LOGIN_USER_ERROR
+      });
+    }
+  });
+};
+
+export const logout = (form) => (dispatch) => {
+  return api.logout().then(res => {
+    location.href = '/';
+  });
 };

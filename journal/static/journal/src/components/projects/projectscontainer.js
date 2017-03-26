@@ -1,28 +1,42 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
+import { browserHistory } from 'react-router';
 
-import {ActivityFeedContainer} from '../activityfeed/activityfeedcontainer';
-import * as projectActions from '../../actions/projects';
+import {Card, CardText} from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
+
+import ProjectsList from './projectslist';
+import {fetchProjects} from 'modules/project';
+import {fetchContacts} from 'modules/contact';
 
 class Projects extends React.Component {
   componentDidMount() {
     this.props.fetchProjects();
+    this.props.fetchContacts();
   }
 
   render() {
-    if (this.props.projects.isEmpty()) {
-      return (<div>Loading</div>);
-    }
-
     return (
-      <div className='row'>
-        <div className='col-md-4'>
-        </div>
-        <div className='col-md-8'>
-          <ActivityFeedContainer
-            projects={this.props.projects}
-          />
+      <div className='projects-container'>
+        <div className='content'>
+          <div className='content-actions'>
+            <RaisedButton
+              className='btn-success'
+              label='Create New'
+              labelPosition='before'
+              onTouchTap={(evt) => {
+                browserHistory.push('/projects/add');
+              }}
+            />
+          </div>
+          <Card>
+            <CardText>
+              <ProjectsList
+                contacts={this.props.contacts}
+                projects={this.props.projects} />
+            </CardText>
+          </Card>
         </div>
       </div>
     );
@@ -31,12 +45,14 @@ class Projects extends React.Component {
 
 const mapStateToProps = (state, { params }) => {
   return {
-    projects: state.projects.items
+    projects: state.projects.items,
+    contacts: state.contacts.items
   };
 };
 
 const actions = {
-  ...projectActions
+  fetchContacts,
+  fetchProjects
 };
 
 const ProjectsContainer = connect(mapStateToProps, actions)(Projects);

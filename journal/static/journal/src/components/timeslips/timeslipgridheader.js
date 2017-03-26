@@ -1,53 +1,51 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 
-import styles from './styles.css';
-
-const cx = classNames.bind(styles);
-
 
 const TimeslipGridHeaderDate = (props) => {
   const date = props.date.format('D');
   const day = props.date.format('ddd').toLowerCase();
 
-  const className = cx({
-    timeslipGridHeaderDate: true,
-    today: props.today === date,
-    weekend: day === 'sun' || day === 'sat'
-  });
+  let classNames = ['timeslip-header-date'];
+  if (props.today === date) {
+    classNames.push('today');
+  }
+  if (day === 'sun' || day === 'sat') {
+    classNames.push('weekend');
+  }
 
   return (
-    <td className={ className }>
+    <th className={ classNames.join(' ') }>
       { date }
       <br />
       { day }
-    </td>
+    </th>
   );
 };
 
 const TimeslipGridHeaderProjects = (props) => {
   const date = props.date.format('MMMM Y');
   return (
-    <td className={ styles.timeslipGridHeaderProjects }>
+    <th className='timeslip-grid-header-projects'>
       <span className='text-muted'>{date}</span>
-    </td>
+    </th>
   );
 };
 
 const TimeslipGridHeader = (props) => {
   const today = props.today.format('D');
   return (
-    <tr className={styles.timeslipGridHeader}>
-      <TimeslipGridHeaderProjects date={props.range[0]}/>
+    <tr className='timeslip-grid-header'>
+      <th />
       {props.range.map((date, index) => (
         <TimeslipGridHeaderDate
           key={index}
           today={today}
           date={date} />
       ))}
-      <td className={ styles.timeslipGridHeaderProjects }>
+      <th className='timeslip-grid-header-projects'>
         <span>Uninvoiced Hours</span>
-      </td>
+      </th>
     </tr>
   );
 };

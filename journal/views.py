@@ -20,21 +20,22 @@ def landing(request):
 
 
 def login_user(request):
-    if request.POST:
-        username = request.POST['username']
-        password = request.POST['password']
+    if request.method == 'POST':
+        data = json.loads(request.read().decode('utf-8'))
+        username = data.get('username', None)
+        password = data.get('password', None)
         user = auth.authenticate(username=username, password=password)
 
         if user and user.is_active:
             auth.login(request, user)
-            return HttpResponseRedirect('/')
+            return HttpResponse()
 
         raise PermissionDenied()
 
 
 def logout_user(request):
     auth.logout(request)
-    return HttpResponseRedirect('/')
+    return HttpResponse()
 
 
 @csrf_exempt

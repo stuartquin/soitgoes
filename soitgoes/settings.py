@@ -143,3 +143,6 @@ REST_FRAMEWORK = {
 }
 
 JET_DEFAULT_THEME = 'light-gray'
+
+# TODO Is ths OK?
+SESSION_COOKIE_HTTPONLY = False

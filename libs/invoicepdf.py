@@ -39,6 +39,7 @@ def render(invoice):
     output_name = INVOICE_DIR + invoice.pdf_name
     timeslips = invoice.timeslips.order_by('date').all()
     project = invoice.project
+    contact = project.contact
 
     modifiers = get_invoice_modifiers(
         invoice.modifier.all(),
@@ -52,7 +53,7 @@ def render(invoice):
 
     context = {
         'invoice': invoice,
-        'contact': project.contact,
+        'contact': contact,
         'project': project,
         'company': project.account.company,
         'timeslips': timeslips,

@@ -1,72 +1,84 @@
 'use strict';
 import React from 'react';
 
-import { InvoiceSummaryRow } from './invoicesummaryrow';
+import {InvoiceModifiers} from './invoicemodifiers';
+import {List, ListItem} from 'material-ui/List';
 
 const getModifierImpact = (subTotal, modifier) => {
   return (subTotal / 100 * modifier.get('percent'));
 };
 
 const InvoiceSummaryTotal = (props) => {
-  return (
+  const content = (
     <div className='invoice-summary-total'>
       <strong className='title'>{props.title}</strong>
-      <span className='value'>
-        {`£${props.value.toFixed(2)}`}
-      </span>
+      <span className='value'>{`£${props.value.toFixed(2)}`}</span>
     </div>
+  );
+
+  return (
+    <List>
+      <ListItem
+        className='invoice-summary-item'
+        primaryText={content}
+        disabled={true}
+      />
+    </List>
   );
 };
 
 const InvoiceSummary = (props) => {
+  const invoice = props.invoice;
+  const project = props.project;
+  const modifiers = props.modifiers;
+  const activeModifiers = modifiers.filter((mod) =>
+    invoice.get('modifier').contains(mod.get('id'))
+  );
+  const isEditable = !Boolean(invoice.get('issued_at'));
+
   const totalHours = props.timeslips.reduce((prev, current) =>
     prev + current.get('hours')
-  , 0);
-
-  const itemTotal = props.invoiceItems.reduce((prev, current) =>
-    prev + (current.get('cost_per_unit') * current.get('qty'))
   , 0);
 
   const taskTotal = props.tasks.reduce((prev, current) =>
     prev + current.get('cost')
   , 0);
 
-  const subTotal = taskTotal + itemTotal + (
-    props.project.get('hourly_rate') * totalHours
-  );
-
-  const total = props.modifiers.reduce((prev, current) =>
+  const subTotal = taskTotal + (project.get('hourly_rate') * totalHours);
+  const total = activeModifiers.reduce((prev, current) =>
     prev + getModifierImpact(subTotal, current)
   , subTotal);
+  const timeTotal = project.get('hourly_rate') * totalHours;
 
   return (
-    <div className='panel-body'>
-      <InvoiceSummaryRow
-        key={0}
-        title='Time'
-        subTitle={`${totalHours} Hours`}
-        value={props.project.get('hourly_rate') * totalHours}
-      />
-      <InvoiceSummaryRow
-        key={1}
-        title='Aditional'
-        subTitle={`${props.invoiceItems.count()} Items`}
-        value={itemTotal + taskTotal}
-      />
+    <div>
+      <List>
+        <ListItem
+          key={0}
+          className='invoice-summary-item'
+          primaryText='Time'
+          secondaryText={`${totalHours} Hours -  £${timeTotal}`}
+          disabled={true}
+        />
+        <ListItem
+          key={1}
+          primaryText='Tasks'
+          className='invoice-summary-item'
+          secondaryText={`${props.tasks.count()} Tasks - £${taskTotal}`}
+          disabled={true}
+        />
+      </List>
       <InvoiceSummaryTotal
         title='Subtotal'
         value={subTotal}
       />
-      <hr />
-      {props.modifiers.map((modifier) => (
-        <InvoiceSummaryRow
-          key={2 + modifier.get('id')}
-          title={modifier.get('name')}
-          subTitle={modifier.get('percent') + '%'}
-          value={getModifierImpact(subTotal, modifier)}
-          onToggle={true}
-        />
-      ))}
+      <InvoiceModifiers
+        invoice={invoice}
+        modifiers={modifiers}
+        isEditable={isEditable}
+        onAddModifier={props.onAddModifier}
+        onRemoveModifier={props.onRemoveModifier}
+      />
       <InvoiceSummaryTotal
         title='Total'
         value={total}
