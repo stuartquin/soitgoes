@@ -1,6 +1,8 @@
 .btn-success {
   button {
-    background-color: $color-success !important;
+    &:not([disabled]) {
+        background-color: $color-success !important;
+    }
     span {
         color: white !important;
     }

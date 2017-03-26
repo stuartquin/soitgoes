@@ -23,9 +23,9 @@ class Contact extends React.Component {
 
     let save = (form) => {
       if (isEdit) {
-        this.props.updateContact(this.props.id, form);
+        return this.props.updateContact(this.props.id, form);
       } else {
-        this.props.addContact(form).then(() =>
+        return this.props.addContact(form).then(() =>
           browserHistory.push('/contacts')
         );
       }

@@ -35,6 +35,15 @@ export const addProject = (form) => (dispatch) => {
   });
 };
 
+export const updateProject = (id, form) => (dispatch) => {
+  return api.update('projects/', id, form).then(res => {
+    dispatch({
+      type: GET_PROJECTS_SUCCESS,
+      items: [res]
+    });
+  });
+};
+
 const view = (state = Immutable.Map(), action) => {
   switch (action.type) {
   default:

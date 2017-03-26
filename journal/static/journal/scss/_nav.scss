@@ -22,6 +22,8 @@ body {
 
 .nav-container {
   background-color: $color-bg-dark !important;
+  display: flex;
+  flex-direction: column;
 
   @media screen and (min-width: $break-small) {
     transform: translate(0px, 0px) !important;
@@ -56,5 +58,9 @@ body {
     padding: 0;
     margin-left: 0px;
   }
+}
+
+.user-menu {
+  margin-top: auto;
 }
 

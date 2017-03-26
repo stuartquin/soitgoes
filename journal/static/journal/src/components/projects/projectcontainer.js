@@ -8,7 +8,7 @@ import {ProjectForm} from './projectform';
 import { Loading } from '../loading';
 
 import {fetchContacts, addContact} from 'modules/contact';
-import {fetchProjects, addProject} from 'modules/project';
+import {fetchProjects, addProject, updateProject} from 'modules/project';
 
 class Project extends React.Component {
   componentDidMount() {
@@ -28,9 +28,9 @@ class Project extends React.Component {
 
     let save = (form) => {
       if (isEdit) {
-        console.log('Update Project', form);
+        return this.props.updateProject(project.get('id'), form);
       } else {
-        this.props.addProject(form).then(() =>
+        return this.props.addProject(form).then(() =>
           browserHistory.push('/projects')
         );
       }
@@ -65,6 +65,7 @@ const mapStateToProps = (state, { params }) => {
 
 const actions = {
   addProject,
+  updateProject,
   fetchProjects,
   addContact,
   fetchContacts,

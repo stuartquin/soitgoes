@@ -8,7 +8,7 @@ invoices = apiviews.InvoiceViewSet.as_view({
 
 urlpatterns = [
     url(r'api/projects/$', apiviews.ProjectList.as_view()),
-    url(r'api/projects/(?P<pk>[0-9]+)/$', apiviews.ProjectDetail.as_view()),
+    url(r'api/projects/(?P<pk>[0-9]+)$', apiviews.ProjectDetail.as_view()),
 
     url(r'api/invoices/$', invoices, name='project-invoices'),
 

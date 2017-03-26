@@ -26,9 +26,9 @@ class Task extends React.Component {
 
     let saveTask = (form) => {
       if (isEdit) {
-        this.props.updateTask(task.get('id'), form);
+        return this.props.updateTask(task.get('id'), form);
       } else {
-        this.props.addTask(form).then(() =>
+        return this.props.addTask(form).then(() =>
           browserHistory.push('/tasks')
         );
       }

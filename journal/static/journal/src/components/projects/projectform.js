@@ -11,35 +11,23 @@ import Dialog from 'material-ui/Dialog';
 import {Confirm} from '../confirm';
 import AddSelect from '../addselect';
 import ContactForm from 'components/contact/contactform';
+import Form from 'components/form';
 
 
-class ProjectForm extends React.Component {
+class ProjectForm extends Form {
   constructor(props) {
     super(props);
     const project = props.project;
-
-    this.state = {
-      isEdit: !!props.isEdit,
-      showAddContact: false,
-      form: {}
-    };
+    this.state.isEdit = !!props.isEdit;
+    this.state.showAddContact = false;
 
     if (project) {
-      this.state.form = {
+      this.setForm({
         name: project.get('name'),
         hourly_rate: project.get('hourly_rate'),
         contact: project.get('contact')
-      };
-    } else {
-      this.state.form = {
-      };
+      });
     };
-  }
-
-  handleChange(field, val) {
-    let form = this.state.form;
-    form[field] = val;
-    this.setState({form: form});
   }
 
   handleAddContact(form) {
@@ -57,7 +45,7 @@ class ProjectForm extends React.Component {
   onSave() {
     this.props.onSave({
       ...this.state.form
-    });
+    }).then(() => this.refreshForm());
   }
 
   render() {
@@ -88,15 +76,23 @@ class ProjectForm extends React.Component {
           value={this.state.form.hourly_rate}
           onChange={(evt, val) => this.handleChange('hourly_rate', val)}
           floatingLabelText='Hourly Rate' />
-        <RaisedButton
-          className='btn-success'
-          label='Save'
-          labelPosition='before'
-          onTouchTap={(evt) => {
-            this.onSave()
-          }}
-        />
-        <Dialog open={this.state.showAddContact}>
+        <div className='action-btns'>
+          <RaisedButton
+            className='btn-success'
+            label='Save'
+            labelPosition='before'
+            disabled={!this.state.isSaveRequired}
+            onTouchTap={(evt) => {
+              this.onSave()
+            }}
+          />
+        </div>
+        <Dialog
+          title='New Contact'
+          open={this.state.showAddContact}
+          onRequestClose={() => this.setState({ showAddContact: false })}
+          autoScrollBodyContent={true}
+        >
           <ContactForm
             isEdit={false}
             onSave={(form) => { this.handleAddContact(form) }}

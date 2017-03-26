@@ -6,34 +6,24 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
-class ContactForm extends React.Component {
+import Form from 'components/form';
+
+class ContactForm extends Form {
   constructor(props) {
     super(props);
     const contact = props.contact;
 
-    this.state = {
-      isEdit: !!props.isEdit,
-      form: {}
-    };
+    this.state.isEdit = !!props.isEdit;
 
     if (contact) {
-      this.state.form = contact.toJS();
-    } else {
-      this.state.form = {
-      };
+      this.setForm(contact.toJS());
     };
-  }
-
-  handleChange(field, val) {
-    let form = this.state.form;
-    form[field] = val;
-    this.setState({form: form});
   }
 
   onSave() {
     this.props.onSave({
       ...this.state.form
-    });
+    }).then(() => this.refreshForm());
   }
 
   render() {
@@ -44,16 +34,6 @@ class ContactForm extends React.Component {
 
     return (
       <div>
-        <div className='action-btns'>
-          <RaisedButton
-            className='btn-success'
-            label='Save'
-            labelPosition='before'
-            onTouchTap={(evt) => {
-              this.onSave()
-            }}
-          />
-        </div>
         <TextField
           style={{width: '100%'}}
           value={this.state.form.name}
@@ -66,7 +46,6 @@ class ContactForm extends React.Component {
           onChange={(evt, val) => this.handleChange('email', val)}
           floatingLabelText='Email' />
 
-        <h4>Invoices</h4>
         {invoiceFields.map((field, idx) => {
           const label = field.split('_').map((word) =>
             word.charAt(0).toUpperCase() + word.slice(1)
@@ -80,6 +59,18 @@ class ContactForm extends React.Component {
               floatingLabelText={label} />
           )
         })}
+
+        <div className='action-btns'>
+          <RaisedButton
+            className='btn-success'
+            label='Save'
+            labelPosition='before'
+            disabled={!this.state.isSaveRequired}
+            onTouchTap={(evt) => {
+              this.onSave()
+            }}
+          />
+        </div>
       </div>
     );
   }

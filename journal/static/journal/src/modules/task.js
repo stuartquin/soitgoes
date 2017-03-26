@@ -48,12 +48,12 @@ export const updateTask = (id, updates) => (dispatch) => {
     type: UPDATE_TASK_START
   });
 
-  api.update('tasks/', id, updates).then(res => {
+  return api.update('tasks/', id, updates).then(res =>
     dispatch({
       type: GET_TASKS_SUCCESS,
       items: [res]
-    });
-  });
+    })
+  );
 };
 
 export const addTask = (form) => (dispatch) => {

@@ -50,7 +50,7 @@ export const updateContact = (id, form) => (dispatch) => {
     type: GET_CONTACTS_START
   });
 
-  api.update('contacts/', id, form).then(res => {
+  return api.update('contacts/', id, form).then(res => {
     dispatch({
       type: GET_CONTACTS_SUCCESS,
       items: [res]

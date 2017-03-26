@@ -88,7 +88,15 @@ class ActivityFeedList(generics.ListAPIView):
 
 class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.ProjectSerializer
+    queryset = models.Project.objects.all()
     permission_classes = (HasProjectAccess,)
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
+        if 'data' in kwargs:
+            kwargs['partial'] = True
+
+        return self.serializer_class(*args, **kwargs)
 
     def get(self, request, pk=None):
         project = get_object_or_404(models.Project.objects.all(), pk=pk)
@@ -294,7 +302,9 @@ class TaskList(generics.ListCreateAPIView):
             invoice = self.request.query_params['invoice']
             filters['invoice'] = invoice if invoice != 'none' else None
 
-        return models.Task.objects.filter(**filters).order_by('completed_at')
+        return models.Task.objects.filter(**filters).order_by(
+            'completed_at', 'due_date'
+        )
 
 
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
