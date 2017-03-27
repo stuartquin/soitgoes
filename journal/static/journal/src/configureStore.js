@@ -1,9 +1,6 @@
 import {createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
-import { browserHistory } from 'react-router';
-import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
-import { Iterable } from 'immutable';
 
 import activityFeed from './reducers/activityfeed';
 import user from './reducers/user';
@@ -18,33 +15,18 @@ import timeslips from 'modules/timeslip';
 import flashMessage from 'modules/flashmessage';
 import tasks from 'modules/task';
 
-const logger = createLogger({
-  stateTransformer: (state) => {
-    let newState = {};
+const configureStore = (history) => {
+  let middlewares = [
+    applyMiddleware(
+      thunk,
+      routerMiddleware(history)
+    )
+  ];
 
-    for (let i of Object.keys(state)) {
-      if (Iterable.isIterable(state[i])) {
-        newState[i] = state[i].toJS();
-      } else {
-        newState[i] = state[i];
-      }
-    }
-    return newState;
+  if (window.__REDUX_DEVTOOLS_EXTENSION__) {
+    middlewares.push(window.__REDUX_DEVTOOLS_EXTENSION__());
   }
-});
 
-let middlewares = [
-  applyMiddleware(
-    thunk,
-    routerMiddleware(browserHistory)
-  )
-];
-
-if (window.__REDUX_DEVTOOLS_EXTENSION__) {
-  middlewares.push(window.__REDUX_DEVTOOLS_EXTENSION__());
-}
-
-const configureStore = () => {
   return createStore(combineReducers({
     activityFeed,
     timeslips,
@@ -57,7 +39,7 @@ const configureStore = () => {
     contacts,
     modifiers,
     flashMessage,
-    routing: routerReducer
+    router: routerReducer
   }),
   compose( ...middlewares )
   );

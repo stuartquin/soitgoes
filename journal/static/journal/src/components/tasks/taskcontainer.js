@@ -1,10 +1,10 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
-import { browserHistory } from 'react-router';
 
 import { TaskForm } from './taskform';
 import {fetchTasks, updateTask, addTask} from 'modules/task';
+import {navigate} from 'modules/nav';
 
 
 class Task extends React.Component {
@@ -29,7 +29,7 @@ class Task extends React.Component {
         return this.props.updateTask(task.get('id'), form);
       } else {
         return this.props.addTask(form).then(() =>
-          browserHistory.push('/tasks')
+          this.props.navigate('/tasks')
         );
       }
     };
@@ -50,7 +50,8 @@ class Task extends React.Component {
   }
 }
 
-const mapStateToProps = (state, { params }) => {
+const mapStateToProps = (state, { match }) => {
+  const params = match.params;
   return {
     task: state.tasks.items.get(parseInt(params.id, 10)),
     projects: state.projects.items,
@@ -61,7 +62,8 @@ const mapStateToProps = (state, { params }) => {
 const actions = {
   fetchTasks,
   updateTask,
-  addTask
+  addTask,
+  navigate
 };
 
 const TaskContainer = connect(mapStateToProps, actions)(Task);

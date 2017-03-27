@@ -2,8 +2,21 @@
 import { combineReducers } from 'redux';
 import Immutable from 'immutable';
 
-import constants from '../constants';
+import * as api from 'services/api';
+import { push } from 'react-router-redux';
 
+const SET_APP_LOAD_SUCCESS = 'SET_APP_LOAD_SUCCESS';
+
+export const setIsLoaded = (loaded=true) => {
+  return {
+    type: SET_APP_LOAD_SUCCESS,
+    loaded
+  };
+};
+
+export const navigate = (path) => (dispatch) => {
+  dispatch(push(path));
+};
 
 const headerBar = (state=Immutable.Map(), action) => {
   switch (action.type) {
@@ -19,7 +32,7 @@ const headerBar = (state=Immutable.Map(), action) => {
 
 const view = (state=Immutable.Map(), action) => {
   switch (action.type) {
-  case constants.SET_APP_LOAD_SUCCESS:
+  case SET_APP_LOAD_SUCCESS:
     return Immutable.fromJS({
       isLoaded: action.loaded
     });

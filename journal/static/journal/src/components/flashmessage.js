@@ -1,14 +1,13 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
 
 import Snackbar from 'material-ui/Snackbar';
 
-const FlashMessage = ({ message, onCloseMessage }) => {
+const FlashMessage = ({ message, onCloseMessage, onNavigate }) => {
   const isOpen = !message.isEmpty();
   let onTap = null;
   if (isOpen && message.get('link')) {
     onTap = () => {
-      browserHistory.push(message.get('link'))
+      onNavigate(message.get('link'));
       onCloseMessage();
     };
   }

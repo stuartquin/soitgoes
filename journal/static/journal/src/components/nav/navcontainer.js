@@ -1,23 +1,35 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
+import { Route } from 'react-router-dom'
+import { push, goBack } from 'react-router-redux';
 
 import AppBar from 'material-ui/AppBar';
 import Snackbar from 'material-ui/Snackbar';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import IconButton from 'material-ui/IconButton';
 
-import { NavMenu } from './navmenu';
+import NavMenu from './navmenu';
 import { HeaderLogo } from './headerlogo';
 import { HeaderBarContainer } from './headerbar';
 import { UserMenu } from './usermenu';
 import { Loading } from '../loading';
 import FlashMesasge from 'components/flashmessage';
 
+import { TimeslipsContainer} from 'components/timeslips/timeslipcontainer';
+import { InvoicesContainer } from 'components/invoices/invoicescontainer';
+import { InvoiceContainer } from 'components/invoices/invoicecontainer';
+import { ProjectsContainer } from 'components/projects/projectscontainer';
+import { ProjectContainer } from 'components/projects/projectcontainer';
+import { DashContainer } from 'components/dash/dash';
+import { TasksContainer } from 'components/tasks/taskscontainer';
+import { TaskContainer } from 'components/tasks/taskcontainer';
+import { ContactsContainer } from 'components/contact/contactscontainer';
+import { ContactContainer } from 'components/contact/contactcontainer';
+
 import {fetchProjects} from 'modules/project';
 import {clearFlashMessage} from 'modules/flashmessage';
+import {setIsLoaded, navigate} from 'modules/nav';
 import * as userActions from '../../actions/user';
-import * as navActions from '../../actions/nav';
 
 const PATH_TITLES = {
   '': 'InvoiceTime',
@@ -59,9 +71,13 @@ class Nav extends React.Component {
     location.reload();
   }
 
+  handleNavigate(path) {
+    this.props.navigate(path);
+  }
+
   handleButton(isDeep) {
     if (isDeep) {
-      browserHistory.goBack();
+      goBack();
     } else {
       this.setState({navOpen: true});
     }
@@ -92,6 +108,7 @@ class Nav extends React.Component {
       <div className='wrapper'>
         <NavMenu
           open={this.state.navOpen}
+          onNavigate={(path) => this.handleNavigate(path)}
           onSetOpen={(navOpen) => this.setState({navOpen})}
           onLogout={() => this.props.logout()}
         />
@@ -104,12 +121,22 @@ class Nav extends React.Component {
         />
 
         <div className='container'>
-          {this.props.children}
+          <Route path='/timeslips' component={TimeslipsContainer} />
+          <Route exact path='/invoices' component={InvoicesContainer} />
+          <Route path='/invoices/:id' component={InvoiceContainer} />
+          <Route exact path='/projects' component={ProjectsContainer} />
+          <Route path='/projects/:id' component={ProjectContainer} />
+          <Route exact path='/tasks' component={TasksContainer} />
+          <Route path='/tasks/:id' component={TaskContainer} />
+          <Route exact path='/contacts' component={ContactsContainer} />
+          <Route path='/contacts/:id' component={ContactContainer} />
+          <Route exact path='/' component={DashContainer} />
         </div>
 
         <FlashMesasge
           message={this.props.flashMessage}
           onCloseMessage={this.props.clearFlashMessage}
+          onNavigate={(path) => this.handleNavigate(path)}
         />
 
         <Snackbar
@@ -136,9 +163,10 @@ const mapStateToProps = (state, props) => {
 
 const actions = {
   ...userActions,
-  ...navActions,
   fetchProjects,
-  clearFlashMessage
+  clearFlashMessage,
+  setIsLoaded,
+  navigate
 };
 
 const NavContainer = connect(mapStateToProps, actions)(Nav);

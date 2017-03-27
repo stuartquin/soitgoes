@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import moment from 'moment';
-import { browserHistory } from 'react-router';
 
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';

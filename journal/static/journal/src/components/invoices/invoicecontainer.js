@@ -148,7 +148,8 @@ const getInvoiceTasks = (invoice, tasks) => {
   return tasks.filter((t) => t.get('invoice') === invoice.get('id'));
 }
 
-const mapStateToProps = (state, { params }) => {
+const mapStateToProps = (state, { match }) => {
+  const params = match.params;
   const id = parseInt(params.id, 10);
   const invoice = state.invoices.items.get(id, Immutable.Map());
   const project = state.projects.items.get(invoice.get('project'), Immutable.Map());

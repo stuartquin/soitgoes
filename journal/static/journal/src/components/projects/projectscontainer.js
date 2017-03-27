@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
-import { browserHistory } from 'react-router';
 
 import {Card, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -9,6 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import ProjectsList from './projectslist';
 import {fetchProjects} from 'modules/project';
 import {fetchContacts} from 'modules/contact';
+import { navigate } from 'modules/nav';
 
 class Projects extends React.Component {
   componentDidMount() {
@@ -26,7 +26,7 @@ class Projects extends React.Component {
               label='Create New'
               labelPosition='before'
               onTouchTap={(evt) => {
-                browserHistory.push('/projects/add');
+                this.props.navigate('/projects/add');
               }}
             />
           </div>
@@ -52,7 +52,8 @@ const mapStateToProps = (state, { params }) => {
 
 const actions = {
   fetchContacts,
-  fetchProjects
+  fetchProjects,
+  navigate
 };
 
 const ProjectsContainer = connect(mapStateToProps, actions)(Projects);

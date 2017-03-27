@@ -1,11 +1,11 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
-import { browserHistory } from 'react-router';
 
 import { Loading } from '../loading';
 import ContactForm from './contactform';
 import {fetchContacts, addContact, updateContact} from 'modules/contact';
+import { navigate } from 'modules/nav';
 
 class Contact extends React.Component {
   componentDidMount() {
@@ -26,7 +26,7 @@ class Contact extends React.Component {
         return this.props.updateContact(this.props.id, form);
       } else {
         return this.props.addContact(form).then(() =>
-          browserHistory.push('/contacts')
+          this.props.navigate('/contacts')
         );
       }
     };
@@ -46,7 +46,8 @@ class Contact extends React.Component {
   }
 }
 
-const mapStateToProps = (state, { params }) => {
+const mapStateToProps = (state, { match }) => {
+  const params = match.params;
   const id = parseInt(params.id, 10);
 
   return {
@@ -58,7 +59,8 @@ const mapStateToProps = (state, { params }) => {
 const actions = {
   addContact,
   updateContact,
-  fetchContacts
+  fetchContacts,
+  navigate
 };
 
 const ContactContainer = connect(mapStateToProps, actions)(Contact);

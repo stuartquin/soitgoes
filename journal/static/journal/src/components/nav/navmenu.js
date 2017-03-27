@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import { browserHistory } from 'react-router';
 
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
@@ -9,7 +8,7 @@ import MenuItem from 'material-ui/MenuItem';
 
 const NavMenu = (props) => {
   const linkTo = (route) => () => {
-    browserHistory.push(route);
+    props.onNavigate(route);
     props.onSetOpen(false);
   }
 
@@ -29,7 +28,7 @@ const NavMenu = (props) => {
         <MenuItem
           className='nav-item'
           primaryText='Dash'
-          onTouchTap={linkTo('/dash')}
+          onTouchTap={linkTo('/')}
         />
         <MenuItem
           className='nav-item'
@@ -68,4 +67,4 @@ const NavMenu = (props) => {
   );
 };
 
-export {NavMenu};
+export default NavMenu;

@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
-import { browserHistory } from 'react-router';
 
 import {TimeslipsContainer} from '../timeslips/timeslipcontainer';
 import {ProjectForm} from './projectform';
@@ -9,6 +8,7 @@ import { Loading } from '../loading';
 
 import {fetchContacts, addContact} from 'modules/contact';
 import {fetchProjects, addProject, updateProject} from 'modules/project';
+import { navigate } from 'modules/nav';
 
 class Project extends React.Component {
   componentDidMount() {
@@ -31,7 +31,7 @@ class Project extends React.Component {
         return this.props.updateProject(project.get('id'), form);
       } else {
         return this.props.addProject(form).then(() =>
-          browserHistory.push('/projects')
+          this.props.navigate('/projects')
         );
       }
     };
@@ -53,7 +53,8 @@ class Project extends React.Component {
   }
 }
 
-const mapStateToProps = (state, { params }) => {
+const mapStateToProps = (state, { match }) => {
+  const params = match.params;
   const id = parseInt(params.id, 10);
 
   return {
@@ -69,6 +70,7 @@ const actions = {
   fetchProjects,
   addContact,
   fetchContacts,
+  navigate
 };
 
 const ProjectContainer = connect(mapStateToProps, actions)(Project);

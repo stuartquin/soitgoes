@@ -1,13 +1,13 @@
 'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
-import { browserHistory } from 'react-router';
 
 import {Card, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { TaskList } from './tasklist';
 import {fetchTasks, completeTask} from 'modules/task';
+import {navigate} from 'modules/nav';
 
 
 class Tasks extends React.Component {
@@ -34,7 +34,7 @@ class Tasks extends React.Component {
               label='Create New'
               labelPosition='before'
               onTouchTap={(evt) => {
-                browserHistory.push('/tasks/add');
+                this.props.navigate('/tasks/add');
               }}
             />
           </div>
@@ -70,7 +70,8 @@ const mapStateToProps = (state, { params }) => {
 
 const actions = {
   fetchTasks,
-  completeTask
+  completeTask,
+  navigate
 };
 
 const TasksContainer = connect(mapStateToProps, actions)(Tasks);

@@ -1,7 +1,10 @@
 import React from 'react';
+import { Route } from 'react-router-dom'
 import { connect } from 'react-redux';
 
-import { Login } from './components/login/login';
+import { Login } from 'components/login/login';
+import { NavContainer } from 'components/nav/navcontainer';
+import { TimeslipsContainer } from 'components/timeslips/timeslipcontainer';
 
 import * as userActions from './actions/user';
 
@@ -24,7 +27,7 @@ class App extends React.Component {
 
   render() {
     if (this.state.loggedIn) {
-      return this.props.children;
+      return (<Route component={NavContainer} />);
     } else {
       return (
         <Login
