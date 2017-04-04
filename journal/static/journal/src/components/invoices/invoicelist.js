@@ -56,7 +56,7 @@ const InvoiceList = ({ projects, invoices, onDeleteInvoice }) => {
              {getRows(grouped[month], projects, onDeleteInvoice)}
             </TableBody>
           </Table>
-        )
+        );
       })}
     </div>
   );
