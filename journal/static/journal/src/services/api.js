@@ -1,31 +1,26 @@
 'use strict';
 import { getCookie } from './user';
 
-// TODO this has a lot of hacky stuff to support npm server.js
-export const buildRequest = (path, method='GET', data=null) => {
-  const params = {
-    method: method,
+const getRequestParams = (method) => {
+  return {
+    method,
     mode: 'cors',
-    credentials: 'same-origin'
+    credentials: 'same-origin',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken')
+    })
   };
-  let headers = {
-    'Content-Type': 'application/json',
-    'X-CSRFToken': getCookie('csrftoken')
-  };
+};
 
+export const buildRequest = (path, method='GET', data=null) => {
+  let params = getRequestParams(method);
   let url = `/api/${path}`;
 
   if (data) {
     params.body = JSON.stringify(data);
   }
 
-  if (__USERNAME__) {
-    const auth = btoa(__USERNAME__ + ':' + __PASSWORD__);
-    headers.Authorization = 'Basic ' + auth;
-    url = `http://localhost:8000/${url}`;
-  }
-
-  params.headers = new Headers(headers);
   return new Request(url, params);
 };
 
@@ -40,15 +35,23 @@ export const fetchByIds = (type, ids) => {
   );
 };
 
+export const paginate = (url) => {
+  const params = getRequestParams('GET');
+  const req = new Request(url, params);
+
+  return fetch(req).then(
+    res => res.json()
+  );
+};
+
 export const fetchPath = (path, params={}) => {
   const qs = Object.keys(params).map(p => {
     if (params[p] !== null) {
       return `${p}=${params[p]}`;
-    } else {
-      return '';
     }
+    return '';
   }).join('&');
-  let url = path
+  let url = path;
   if (qs) {
     url = `${url}?${qs}`;
   }

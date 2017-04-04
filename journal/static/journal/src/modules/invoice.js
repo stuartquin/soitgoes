@@ -1,16 +1,13 @@
-'use strict';
 import { push } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import Immutable from 'immutable';
 
 import getById from 'services/getById';
 import * as api from 'services/api';
-import { GET_TIMESLIPS_SUCCESS } from 'modules/timeslip';
 
 const GET_INVOICES_START = 'GET_INVOICES_START';
 const GET_INVOICES_SUCCESS = 'GET_INVOICES_SUCCESS';
 const DELETE_INVOICE_SUCCESS = 'DELETE_INVOICE_SUCCESS';
-const CREATE_INVOICE_SUCCESS = 'CREATE_INVOICE_SUCCESS';
 
 export const updateInvoice = (id, form) => (dispatch) => {
   const path = 'invoices/';
@@ -31,6 +28,19 @@ export const deleteInvoice = (invoiceId) => (dispatch) =>
     dispatch(push(`/invoices`));
   });
 
+export const fetchInvoice = (id) => (dispatch) => {
+  dispatch({
+    type: GET_INVOICES_START
+  });
+
+  return api.fetchPath(`invoices/${id}`).then(res =>
+    dispatch({
+      type: GET_INVOICES_SUCCESS,
+      items: [res]
+    })
+  );
+};
+
 export const deleteInvoiceModifier = (id, modifierId) => (dispatch) => {
   const path = `invoices/${id}/modifiers/`;
   api.remove(path, modifierId).then(() => dispatch(fetchInvoice(id)));
@@ -47,31 +57,32 @@ export const createInvoice = (projectId) => (dispatch) =>
     dispatch(push(`/invoices/${res.id}`))
   );
 
-export const fetchInvoice = (id) => (dispatch) => {
-  dispatch({
-    type: GET_INVOICES_START
-  });
-
-  return api.fetchPath(`invoices/${id}`).then(res =>
-    dispatch({
-      type: GET_INVOICES_SUCCESS,
-      items: [res]
-    })
-  );
-};
-
 export const fetchInvoices = () => (dispatch) => {
   dispatch({
     type: GET_INVOICES_START
   });
 
   api.fetchPath('invoices/').then(res => {
-    const invoices = res.results;
     dispatch({
       type: GET_INVOICES_SUCCESS,
-      items: invoices
+      items: res.results,
+      next: res.next,
+      count: res.count
     });
   });
+};
+
+export const fetchNext = (next) => (dispatch) => {
+  if (next) {
+    api.paginate(next).then(res => {
+      dispatch({
+        type: GET_INVOICES_SUCCESS,
+        items: res.results,
+        next: res.next,
+        count: res.count
+      });
+    });
+  }
 };
 
 const items = (state = Immutable.OrderedMap(), action) => {
@@ -88,14 +99,18 @@ const items = (state = Immutable.OrderedMap(), action) => {
 const view = (state, action) => {
   if (!state) {
     return Immutable.Map({
-      isLoading: true
+      isLoading: true,
+      next: null
     });
   }
   switch (action.type) {
   case GET_INVOICES_START:
     return state.merge({isLoading: true});
   case GET_INVOICES_SUCCESS:
-    return state.merge({isLoading: false});
+    return state.merge({
+      isLoading: false,
+      next: action.next
+    });
   default:
     return state;
   }

@@ -5,7 +5,6 @@ import thunk from 'redux-thunk';
 import activityFeed from './reducers/activityfeed';
 import user from './reducers/user';
 import dash from './reducers/dash';
-import nav from './reducers/nav';
 
 import contacts from 'modules/contact';
 import modifiers from 'modules/modifier';
@@ -14,6 +13,7 @@ import invoices from 'modules/invoice';
 import timeslips from 'modules/timeslip';
 import flashMessage from 'modules/flashmessage';
 import tasks from 'modules/task';
+import nav from 'modules/nav';
 
 const configureStore = (history) => {
   let middlewares = [

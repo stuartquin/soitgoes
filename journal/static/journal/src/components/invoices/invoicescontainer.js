@@ -2,14 +2,16 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Card, CardText} from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import {InvoiceList} from './invoicelist';
 import {CreateInvoice} from './createinvoice';
 import {HeaderBar} from '../nav/headerbar';
 import {Loading} from '../loading';
 import {Confirm} from '../confirm';
-import {fetchInvoices, deleteInvoice, createInvoice} from 'modules/invoice';
-
+import {
+  fetchInvoices, fetchNext, deleteInvoice, createInvoice
+} from 'modules/invoice';
 
 class Invoices extends React.Component {
   constructor(props) {
@@ -31,9 +33,10 @@ class Invoices extends React.Component {
 
   render() {
     if (this.props.view.get('isLoading')) {
-      return (<Loading />);
+      return <Loading />;
     }
 
+    const next = this.props.view.get('next');
     const openInvoices = this.props.invoices.toList().filter((invoice) => {
       return invoice.get('paid_at') === null;
     });
@@ -41,6 +44,17 @@ class Invoices extends React.Component {
     const closedInvoices = this.props.invoices.toList().filter((invoice) => {
       return invoice.get('paid_at') !== null;
     });
+
+    const loadMore = next ? (
+      <RaisedButton
+        className='btn-success'
+        label='Load More'
+        onTouchTap={(evt) => {
+          evt.preventDefault();
+          this.props.fetchNext(next);
+        }}
+      />
+    ) : null;
 
     return (
       <div className='invoices-container'>
@@ -75,6 +89,7 @@ class Invoices extends React.Component {
                 invoices={closedInvoices}
                 onDeleteInvoice={(id) => this.setState({invoiceId: id})}
               />
+              {loadMore}
             </CardText>
           </Card>
         </div>
@@ -93,6 +108,7 @@ const mapStateToProps = (state) => {
 
 const actions = {
   fetchInvoices,
+  fetchNext,
   deleteInvoice,
   createInvoice
 };
