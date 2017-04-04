@@ -6,7 +6,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import {InvoiceList} from './invoicelist';
 import {CreateInvoice} from './createinvoice';
-import {HeaderBar} from '../nav/headerbar';
 import {Loading} from '../loading';
 import {Confirm} from '../confirm';
 import {
@@ -33,7 +32,7 @@ class Invoices extends React.Component {
 
   render() {
     if (this.props.view.get('isLoading')) {
-      return <Loading />;
+      return (<Loading />);
     }
 
     const next = this.props.view.get('next');
@@ -76,20 +75,22 @@ class Invoices extends React.Component {
           />
           <Card>
             <CardText>
-              <h3>Open Invoices ({openInvoices.size})</h3>
+              <h3 className='invoice-list-header'>Open</h3>
               <InvoiceList
                 projects={this.props.projects}
                 invoices={openInvoices}
                 onDeleteInvoice={(id) => this.setState({invoiceId: id})}
               />
 
-              <h3>Closed Invoices ({closedInvoices.size})</h3>
+              <h3 className='invoice-list-header'>Closed</h3>
               <InvoiceList
                 projects={this.props.projects}
                 invoices={closedInvoices}
                 onDeleteInvoice={(id) => this.setState({invoiceId: id})}
               />
-              {loadMore}
+              <div className='invoice-load-more'>
+                {loadMore}
+              </div>
             </CardText>
           </Card>
         </div>

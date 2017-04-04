@@ -50,9 +50,20 @@
   }
 }
 
+.invoice-load-more {
+  margin: 32px;
+  display: flex;
+  justify-content: center;
+}
+
 .invoices-container {
   @media screen and (max-width: $break-small) {
     width: 100%;
+  }
+
+  .invoice-list-header {
+    margin-top: 32px;
+    margin-bottom: 0;
   }
 
   .invoice-list-row {

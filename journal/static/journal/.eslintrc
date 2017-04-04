@@ -6,10 +6,14 @@
     "es6": true
   },
 
-  "plugins": ["react"],
+  "plugins": ["react", "jsx"],
 
   "parserOptions": {
+      "ecmaVersion": 6,
       "sourceType": "module",
+      "ecmaFeatures": {
+          "jsx": true
+      }
   },
 
   "ecmaFeatures": {
