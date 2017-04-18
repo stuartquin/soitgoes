@@ -1,0 +1,38 @@
+version: '2'
+services:
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile-nodejs
+    volumes:
+      - ./journal/static/journal/src:/app/src
+      - ./journal/static/journal/dist:/app/dist
+    command: ./node_modules/webpack/bin/webpack.js --watch --progress
+
+  sass:
+    build:
+      context: .
+      dockerfile: Dockerfile-nodejs
+    volumes:
+      - ./journal/static/journal/scss:/app/scss
+      - ./journal/static/journal/dist:/app/dist
+    command: ./node_modules/node-sass/bin/node-sass --watch /app/scss -r -o dist/
+
+  soitgoes:
+    environment:
+     - DEV=true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+     - "8000:8000"
+    depends_on:
+     - nodejs
+     - sass
+    volumes:
+      - ./journal:/app/journal
+      - ./soitgoes:/app/soitgoes
+      - ./libs:/app/libs
+      - ./assets:/app/assets
+      - ./db.sqlite3:/app/db.sqlite3

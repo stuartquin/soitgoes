@@ -1,0 +1,17 @@
+FROM node:7.9.0
+
+RUN mkdir /app
+
+# tmux send-keys -tsoitgoes:0.0 'cd journal/static/journal; webpack --watch --progress' Enter
+# tmux send-keys -tsoitgoes:0.1 'cd journal/static/journal; watch -n 5 ./node_modules/node-sass/bin/node-sass scss -r -o dist/' Enter
+# tmux send-keys -tsoitgoes:0.2 'workon soitgoes; DEV=true python manage.py runserver' Enter
+# tmux send-keys -tsoitgoes:0.3 'workon soitgoes' Enter
+
+ADD journal/static/journal/package.json /app/package.json
+WORKDIR /app
+RUN npm install
+
+ADD journal/static/journal/webpack.config.js /app/webpack.config.js
+ADD journal/static/journal/src /app/src
+ADD journal/static/journal/.babelrc /app/.babelrc
+ADD journal/static/journal/.eslintrc /app/.eslintrc
