@@ -20,6 +20,7 @@
   <body>
 
   {% block main %}
+    {% csrf_token %}
     {% if is_authenticated %}
       <script>GLOBAL_IS_AUTHENTICATED = true;</script>
     {% else %}

@@ -1,5 +1,8 @@
 'use strict';
-import { getCookie } from './user';
+
+const CSRF_TOKEN = document.querySelector(
+  "input[name=csrfmiddlewaretoken]"
+).value;
 
 const getRequestParams = (method) => {
   return {
@@ -8,7 +11,7 @@ const getRequestParams = (method) => {
     credentials: 'same-origin',
     headers: new Headers({
       'Content-Type': 'application/json',
-      'X-CSRFToken': getCookie('csrftoken')
+      'X-CSRFToken': CSRF_TOKEN
     })
   };
 };
