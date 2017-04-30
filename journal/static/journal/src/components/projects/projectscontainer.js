@@ -17,6 +17,9 @@ class Projects extends React.Component {
   }
 
   render() {
+    const projects = this.props.projects.filter((p) => !p.get('archived'));
+    const archived = this.props.projects.filter((p) => p.get('archived'));
+
     return (
       <div className='projects-container'>
         <div className='content'>
@@ -32,9 +35,14 @@ class Projects extends React.Component {
           </div>
           <Card>
             <CardText>
+              <h3 className='invoice-list-header'>Active</h3>
               <ProjectsList
                 contacts={this.props.contacts}
-                projects={this.props.projects} />
+                projects={projects} />
+              <h3 className='invoice-list-header'>Archived</h3>
+              <ProjectsList
+                contacts={this.props.contacts}
+                projects={archived} />
             </CardText>
           </Card>
         </div>

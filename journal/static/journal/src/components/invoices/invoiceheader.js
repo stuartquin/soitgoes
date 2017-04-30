@@ -96,5 +96,4 @@ const InvoiceHeader = (props) => {
   );
 }
 
-
 export {InvoiceHeader};

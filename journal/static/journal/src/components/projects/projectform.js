@@ -6,6 +6,7 @@ import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
+import Toggle from 'material-ui/Toggle';
 
 import {Confirm} from '../confirm';
 import AddSelect from '../addselect';
@@ -24,7 +25,8 @@ class ProjectForm extends Form {
       this.setForm({
         name: project.get('name'),
         hourly_rate: project.get('hourly_rate'),
-        contact: project.get('contact')
+        contact: project.get('contact'),
+        archived: project.get('archived')
       });
     };
   }
@@ -75,6 +77,11 @@ class ProjectForm extends Form {
           value={this.state.form.hourly_rate}
           onChange={(evt, val) => this.handleChange('hourly_rate', val)}
           floatingLabelText='Hourly Rate' />
+        <Toggle
+          label="Archived"
+          toggled={this.state.form.archived}
+          onToggle={(evt, val) => this.handleChange('archived', val)}
+        />
         <div className='action-btns'>
           <RaisedButton
             className='btn-success'
