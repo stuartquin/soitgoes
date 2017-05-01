@@ -21,3 +21,9 @@ webpack --progress --watch
 # Requires libnotify stuff: apt-get install inotify-tools libnotify-bin
 inotifywait -m -e modify dist/ | while read -r filename event;  do notify-send "Assets Compiled" -t 500; done
 ```
+
+## LetsEncrypt renew
+
+```
+./letsencrypt-auto certonly --renew-by-default --email <EMAIL> -a manual -d <DOMAIN>
+```
