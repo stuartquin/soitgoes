@@ -29,7 +29,7 @@ class TaskForm extends Form {
       this.state.form = {
         project: this.props.projects.first().get('id')
       };
-    };
+    }
   }
 
   onSave() {
@@ -85,7 +85,7 @@ class TaskForm extends Form {
             label='Save'
             labelPosition='before'
             disabled={!this.state.isSaveRequired}
-            onTouchTap={(evt) => {
+            onTouchTap={() => {
               this.onSave()
             }}
           />

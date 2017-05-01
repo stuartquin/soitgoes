@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import moment from 'moment';
 
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
@@ -8,7 +7,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import Toggle from 'material-ui/Toggle';
 
-import {Confirm} from '../confirm';
 import AddSelect from '../addselect';
 import ContactForm from 'components/contact/contactform';
 import Form from 'components/form';
@@ -28,7 +26,7 @@ class ProjectForm extends Form {
         contact: project.get('contact'),
         archived: project.get('archived')
       });
-    };
+    }
   }
 
   handleAddContact(form) {
@@ -88,7 +86,7 @@ class ProjectForm extends Form {
             label='Save'
             labelPosition='before'
             disabled={!this.state.isSaveRequired}
-            onTouchTap={(evt) => {
+            onTouchTap={() => {
               this.onSave()
             }}
           />

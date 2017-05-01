@@ -35,4 +35,5 @@ services:
       - ./soitgoes:/app/soitgoes
       - ./libs:/app/libs
       - ./assets:/app/assets
+      - ./journal/static/journal/dist:/app/journal/static/journal/dist
       - ./db.sqlite3:/app/db.sqlite3

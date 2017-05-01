@@ -1,8 +1,6 @@
 'use strict';
 import React from 'react';
-import {Card, CardTitle, CardText} from 'material-ui/Card';
-import DatePicker from 'material-ui/DatePicker';
-import TextField from 'material-ui/TextField';
+import {Card, CardText} from 'material-ui/Card';
 
 import { InvoiceItems } from './invoiceitems';
 
@@ -21,14 +19,13 @@ const taskInvoiceItem = (task) => {
     id: task.get('id'),
     details: task.get('name'),
     unitPrice: task.get('cost'),
-    subTotal: task.get('cost'),
+    subTotal: task.get('cost')
   }
 };
 
 
 class Generator extends React.Component {
   render() {
-    const invoice = this.props.invoice;
     const project = this.props.project;
     const isEditable = this.props.isEditable;
 
