@@ -5,11 +5,20 @@ APP_PATH = '/var/app/soitgoes'
 
 
 def deploy_js():
-    with context_managers.lcd('journal/static/journal/'):
-        operations.local('webpack -p')
-        operations.local("""
-        ./node_modules/node-sass/bin/node-sass scss -r -o dist/
-        """)
+    # with context_managers.lcd('journal/static/journal/'):
+    #     operations.local('webpack -p')
+    #     operations.local("""
+    #     ./node_modules/node-sass/bin/node-sass scss -r -o dist/
+    #     """)
+    docker = 'docker exec soitgoes_nodejs_1'
+    operations.local(
+        '%s ./node_modules/webpack/bin/webpack.js -p' % docker
+    )
+
+# ./node_modules/webpack/bin/webpack.js --optimize-minimize --define process.env.NODE_ENV="'production'"
+    # operations.local(
+    #     '%s ./node_modules/node-sass/bin/node-sass scss -r -o dist' % docker
+    # )
 
     operations.put(
         'journal/static/journal/dist/bundle.js',

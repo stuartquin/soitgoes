@@ -5,6 +5,7 @@ import { combineReducers } from 'redux';
 
 import getById from 'services/getById';
 import * as api from 'services/api';
+import { fetchProjects } from 'modules/project';
 
 export const GET_TIMESLIPS_SUCCESS = 'GET_TIMESLIPS_SUCCESS';
 const GET_TIMESLIPS_START = 'GET_TIMESLIPS_START';
@@ -32,15 +33,14 @@ export const saveTimeslips = (existingTimeslips, newTimeslips) => {
   return (dispatch) => {
     dispatch({ type: SAVE_TIMESLIPS_START });
 
-    return Promise.all(calls).then(
-      ([updates, created=[]]) => {
-        return dispatch({
-          type: SAVE_TIMESLIPS_SUCCESS,
-          items: updates.concat(created)
-        });
-      },
-      error => console.error(error) // eslint-disable-line
-    );
+    return Promise.all(calls).then(([updatesRes, created=[]]) => {
+      dispatch(fetchProjects());
+
+      return dispatch({
+        type: SAVE_TIMESLIPS_SUCCESS,
+        items: updatesRes.concat(created)
+      });
+    });
   };
 };
 
