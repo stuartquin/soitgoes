@@ -3,6 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Card, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import Immutable from 'immutable';
 
 import {InvoiceList} from './invoicelist';
 import {CreateInvoice} from './createinvoice';
@@ -16,7 +17,8 @@ class Invoices extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      invoiceId: null
+      invoiceId: null,
+      selectedInvoiceIds: Immutable.Set()
     };
   }
 
@@ -28,6 +30,16 @@ class Invoices extends React.Component {
     return Promise.all([
       this.props.fetchInvoices()
     ]);
+  }
+
+  handleSelectInvoice (selected, unSelected) {
+    let selectedIds = this.state.selectedInvoiceIds;
+    selectedIds = selectedIds.union(selected);
+    selectedIds = selectedIds.subtract(unSelected);
+
+    this.setState({
+      selectedInvoiceIds: selectedIds
+    });
   }
 
   render() {
@@ -55,6 +67,18 @@ class Invoices extends React.Component {
       />
     ) : null;
 
+    const downloadBtn = this.state.selectedInvoiceIds.size > 0 ? (
+      <RaisedButton
+        className='btn-success'
+        label='Download'
+        onTouchTap={(evt) => {
+          evt.preventDefault();
+          console.log('Download');
+        }}
+      />
+    ) : null;
+
+
     return (
       <div className='invoices-container'>
         <Confirm
@@ -75,18 +99,22 @@ class Invoices extends React.Component {
           />
           <Card>
             <CardText>
+              { downloadBtn }
+
               <h3 className='invoice-list-header'>Open</h3>
               <InvoiceList
                 projects={this.props.projects}
                 invoices={openInvoices}
-                onDeleteInvoice={(id) => this.setState({invoiceId: id})}
+                selectedInvoiceIds={this.state.selectedInvoiceIds.toJS()}
+                onSelectInvoice={this.handleSelectInvoice.bind(this)}
               />
 
               <h3 className='invoice-list-header'>Closed</h3>
               <InvoiceList
                 projects={this.props.projects}
                 invoices={closedInvoices}
-                onDeleteInvoice={(id) => this.setState({invoiceId: id})}
+                selectedInvoiceIds={this.state.selectedInvoiceIds.toJS()}
+                onSelectInvoice={this.handleSelectInvoice.bind(this)}
               />
               <div className='invoice-load-more'>
                 {loadMore}

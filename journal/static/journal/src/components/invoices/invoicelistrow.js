@@ -21,30 +21,40 @@ const InvoiceListRow = (props) => {
   }
 
   return (
-    <TableRow className='invoice-list-row'>
+    <TableRow>
       <TableRowColumn>
-        <Link to={`/invoices/${invoice.get('id')}`}>
-          #{invoice.get('sequence_num')} {props.project.get('name')}
-        </Link>
+      1
       </TableRowColumn>
-      <TableRowColumn className='col-number col-right'>
-        <span className={ totalClass }>&pound;{total}</span>
-      </TableRowColumn>
-      <TableRowColumn className='col-state col-right'>
-        <StateChip invoice={invoice} />
-      </TableRowColumn>
-      <TableRowColumn className='col-actions col-right'>
-        <IconButton
-          tooltip='Delete Invoice'
-          touch={true}
-          tooltipPosition='bottom-right'
-          className='btn-default'
-          onTouchTap={props.onDelete}>
-          <ActionDelete />
-        </IconButton>
-      </TableRowColumn>
+      <TableRowColumn>John Smith</TableRowColumn>
+      <TableRowColumn>Employed</TableRowColumn>
     </TableRow>
   );
+
+  // return (
+  //   <TableRow>
+  //     <TableRowColumn>
+  //       <Link to={`/invoices/${invoice.get('id')}`}>
+  //         #{invoice.get('sequence_num')} {props.project.get('name')}
+  //       </Link>
+  //     </TableRowColumn>
+  //     <TableRowColumn className='col-number col-right'>
+  //       <span className={ totalClass }>&pound;{total}</span>
+  //     </TableRowColumn>
+  //     <TableRowColumn className='col-state col-right'>
+  //       <StateChip invoice={invoice} />
+  //     </TableRowColumn>
+  //     <TableRowColumn className='col-actions col-right'>
+  //       <IconButton
+  //         tooltip='Delete Invoice'
+  //         touch={true}
+  //         tooltipPosition='bottom-right'
+  //         className='btn-default'
+  //         onTouchTap={props.onDelete}>
+  //         <ActionDelete />
+  //       </IconButton>
+  //     </TableRowColumn>
+  //   </TableRow>
+  // );
 };
 
 export {InvoiceListRow};

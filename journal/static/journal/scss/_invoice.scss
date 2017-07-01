@@ -67,6 +67,17 @@
   }
 
   .invoice-list-row {
+    @media screen and (max-width: $break-small) {
+      .invoice-list-col {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+
+      }
+      td:first-child {
+        display: none;
+      }
+    }
+
     .invoice-column-total {
         width: 45px !important;
     }
