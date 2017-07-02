@@ -19,6 +19,8 @@ services:
     command: ./node_modules/node-sass/bin/node-sass --watch /app/scss -r -o dist/
 
   soitgoes:
+    stdin_open: true
+    tty: true
     environment:
      - DEV=true
     build:

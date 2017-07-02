@@ -3,8 +3,7 @@ import tempfile
 import subprocess
 import os
 
-INVOICE_DIR = '/tmp/invoices/'
-
+INVOICE_DIR = '/tmp/'
 
 def get_pdf_file(invoice):
     """
