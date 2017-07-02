@@ -2,14 +2,16 @@ from django.template import loader
 import tempfile
 import subprocess
 import os
+import shutil
 
-INVOICE_DIR = '/tmp/'
+INVOICE_DIR = '/tmp'
 
-def get_pdf_file(invoice):
+def get_pdf_file(invoice, user, path=''):
     """
     Returns full path and name of PDF if it exists, otherwise None
     """
-    file_name = INVOICE_DIR + invoice.pdf_name
+    tmp_dir = get_tmp_dir('%s/%s/%s' % (INVOICE_DIR, user.id, path))
+    file_name = tmp_dir + invoice.pdf_name
     if os.path.isfile(file_name):
         return open(file_name, 'rb')
     else:
@@ -31,11 +33,37 @@ def get_invoice_modifiers(modifiers, value):
     return modifiers
 
 
-def render(invoice):
+def get_tmp_dir(tmp_path):
+    directory = os.path.dirname(tmp_path)
+
+    try:
+        os.makedirs(directory)
+    except:
+        pass
+
+    return tmp_path
+
+
+def get_bulk_file(invoices, user):
+    bulk_dir = get_tmp_dir('%s/%s/bulk/' % (INVOICE_DIR, user.id))
+    zip_file = '%sbulk' % get_tmp_dir('%s/%s/' % (INVOICE_DIR, user.id))
+    pdfs = [invoice.get_pdf_file(user, 'bulk/') for invoice in invoices]
+
+    try:
+        os.remove(zip_file + '.zip')
+    except OSError:
+        pass
+
+    shutil.make_archive(zip_file, 'zip', bulk_dir)
+    return zip_file + '.zip'
+
+
+def render(invoice, user, path=''):
     template = loader.get_template('invoice.html')
     temp_name = tempfile.NamedTemporaryFile(delete=False).name
     html_name = temp_name + '.html'
-    output_name = INVOICE_DIR + invoice.pdf_name
+    tmp_dir = get_tmp_dir('%s/%s/%s' % (INVOICE_DIR, user.id, path))
+    output_name = tmp_dir + invoice.pdf_name
     timeslips = invoice.timeslips.order_by('date').all()
     project = invoice.project
     contact = project.contact

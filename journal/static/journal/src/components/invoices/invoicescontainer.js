@@ -71,9 +71,9 @@ class Invoices extends React.Component {
       <RaisedButton
         className='btn-success'
         label='Download'
-        onTouchTap={(evt) => {
-          evt.preventDefault();
-          console.log('Download');
+        onTouchTap={() => {
+          const invoiceIds = this.state.selectedInvoiceIds.join(',');
+          window.open(`/api/invoices/zip?invoice_ids=${invoiceIds}`);
         }}
       />
     ) : null;

@@ -1,4 +1,5 @@
 import json
+import zipfile
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
@@ -20,6 +21,11 @@ class HasProjectAccess(BasePermission):
 
 # TODO Not yet implemented
 class HasInvoiceItemAccess(BasePermission):
+    def has_permission(self, request, view):
+        return True
+
+
+class HasBulkInvoiceAccess(BasePermission):
     def has_permission(self, request, view):
         return True
 
@@ -178,10 +184,26 @@ class InvoicePDF(APIView):
 
     def get(self, request, pk=None):
         invoice = models.Invoice.objects.get(id=pk)
-        pdf = invoice.get_pdf_file()
+        pdf = invoice.get_pdf_file(request.user)
         response = HttpResponse(pdf.read(), content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="%s"' % invoice.pdf_name
         pdf.close()
+        return response
+
+class BulkInvoicePDF(APIView):
+    permission_classes = (HasBulkInvoiceAccess,)
+
+    def get(self, request, pk=None):
+        invoice_ids = request.query_params.get('invoice_ids', '').split(',')
+        invoices = models.Invoice.objects.filter(id__in=invoice_ids)
+
+        zip_file = models.Invoice.get_bulk_file(invoices, request.user)
+
+        response = HttpResponse(
+            open(zip_file, 'rb').read(),
+            content_type='application/zip'
+        )
+        response['Content-Disposition'] = 'attachment; filename="Invoices.zip"'
         return response
 
 

@@ -192,12 +192,16 @@ class Invoice(models.Model):
     def total_hours(self):
         return sum([t.hours for t in self.timeslips.all()])
 
-    def get_pdf_file(self):
-        pdf_file = invoicepdf.get_pdf_file(self)
+    def get_pdf_file(self, user, path):
+        pdf_file = invoicepdf.get_pdf_file(self, user, path)
         if pdf_file is None:
-            invoicepdf.render(self)
-            return invoicepdf.get_pdf_file(self)
+            invoicepdf.render(self, user, path)
+            return invoicepdf.get_pdf_file(self, user, path)
         return pdf_file
+
+    @staticmethod
+    def get_bulk_file(invoices, user):
+        return invoicepdf.get_bulk_file(invoices, user)
 
     def __str__(self):
         return "[%s] %s" % (self.sequence_num, self.project.name)
