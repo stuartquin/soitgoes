@@ -26,8 +26,7 @@ class CreateInvoice extends React.Component {
     const projects = this.props.projects.filter(p => !p.get('archived'));
 
     return (
-      <div className='content-actions'>
-
+      <div className="create-invoice">
         <RaisedButton
           className='btn-success'
           label='Create New'

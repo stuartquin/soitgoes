@@ -61,6 +61,17 @@
     width: 100%;
   }
 
+  .create-invoice {
+    margin-left: 16px;
+  }
+
+
+  .content-actions {
+    .btn-default {
+      margin-right: 16px;
+    }
+  }
+
   .invoice-list-header {
     margin-top: 32px;
     margin-bottom: 0;
@@ -100,3 +111,4 @@
 .invoice-generator {
   z-index: inherit !important;
 }
+

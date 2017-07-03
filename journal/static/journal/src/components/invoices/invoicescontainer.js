@@ -3,6 +3,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Card, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
+import FileDownload from 'material-ui/svg-icons/file/file-download';
 import Immutable from 'immutable';
 
 import {InvoiceList} from './invoicelist';
@@ -68,14 +70,15 @@ class Invoices extends React.Component {
     ) : null;
 
     const downloadBtn = this.state.selectedInvoiceIds.size > 0 ? (
-      <RaisedButton
-        className='btn-success'
-        label='Download'
+      <IconButton
+        touch={true}
+        className='btn-default icon-btn-right'
         onTouchTap={() => {
           const invoiceIds = this.state.selectedInvoiceIds.join(',');
           window.open(`/api/invoices/zip?invoice_ids=${invoiceIds}`);
-        }}
-      />
+        }}>
+        <FileDownload />
+      </IconButton>
     ) : null;
 
 
@@ -93,13 +96,15 @@ class Invoices extends React.Component {
         </Confirm>
 
         <div className='content'>
-          <CreateInvoice
-            projects={this.props.projects}
-            onCreateInvoice={this.props.createInvoice}
-          />
+          <div className='content-actions'>
+            { downloadBtn }
+            <CreateInvoice
+              projects={this.props.projects}
+              onCreateInvoice={this.props.createInvoice}
+            />
+          </div>
           <Card>
             <CardText>
-              { downloadBtn }
 
               <h3 className='invoice-list-header'>Open</h3>
               <InvoiceList

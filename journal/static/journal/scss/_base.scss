@@ -31,10 +31,12 @@ html, body, #root {
 }
 
 .content-actions {
+  height: 48px;
   margin-bottom: 25px;
 
   display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
 
 a {
