@@ -192,7 +192,7 @@ class Invoice(models.Model):
     def total_hours(self):
         return sum([t.hours for t in self.timeslips.all()])
 
-    def get_pdf_file(self, user, path):
+    def get_pdf_file(self, user, path=''):
         pdf_file = invoicepdf.get_pdf_file(self, user, path)
         if pdf_file is None:
             invoicepdf.render(self, user, path)
