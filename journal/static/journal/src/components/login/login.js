@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Card, CardText} from 'material-ui/Card';
+import {Card, CardText, CardTitle} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
@@ -26,9 +26,10 @@ class Login extends React.Component {
       errorText = 'Incorrect username/password';
     }
     return (
-      <div className='content login'>
-        <Card>
-          <CardText className='login-card'>
+      <div className='login'>
+        <Card className='login-card'>
+          <CardTitle className='login-card-title' />
+          <CardText>
             <div>
               <TextField
                 hintText="Username Field"

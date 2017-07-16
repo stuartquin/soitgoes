@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route } from 'react-router-dom'
-import { push, goBack } from 'react-router-redux';
+import { Route } from 'react-router-dom';
 
 import AppBar from 'material-ui/AppBar';
 import Snackbar from 'material-ui/Snackbar';
@@ -9,9 +8,6 @@ import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import IconButton from 'material-ui/IconButton';
 
 import NavMenu from './navmenu';
-import { HeaderLogo } from './headerlogo';
-import { HeaderBarContainer } from './headerbar';
-import { UserMenu } from './usermenu';
 import { Loading } from '../loading';
 import FlashMesasge from 'components/flashmessage';
 
@@ -77,7 +73,7 @@ class Nav extends React.Component {
 
   handleButton(isDeep) {
     if (isDeep) {
-      goBack();
+      window.history.back();
     } else {
       this.setState({navOpen: true});
     }
