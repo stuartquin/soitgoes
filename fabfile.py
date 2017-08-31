@@ -3,6 +3,11 @@ from fabric import operations, context_managers
 
 APP_PATH = '/var/app/soitgoes'
 
+def letsencrypt():
+    cmd = '/opt/letsencrypt/letsencrypt-auto'
+    params = 'certonly -a webroot --webroot-path=/usr/share/nginx/html -d books.stuartquin.com'
+
+    run('%s %s' % (cmd, params))
 
 def deploy_js():
     # with context_managers.lcd('journal/static/journal/'):
