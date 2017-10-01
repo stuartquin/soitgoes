@@ -2,30 +2,8 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import { isMobile } from "services/environment";
 
-const MobileGridCell = ({ hours, onClick }) => {
-  return (
-    <input
-      value={hours || 'ARSE'}
-      className="mobile-grid-cell"
-      type='number'
-      onFocus={(e) => {
-        e.target.select();
-      }}
-      onClick={(e) => onClick(e)}
-    />
-  );
-};
-
 class TimeslipGridCell extends React.Component {
-  constructor (props) {
-    super(props);
-
-    this.state = {
-      showInput: !isMobile()
-    };
-  }
-
-  handleMobile = () => {
+  handleInputClick = () => {
     const { timeslip } = this.props;
     const hours = timeslip ? timeslip.get('hours') : null;
 
@@ -33,9 +11,6 @@ class TimeslipGridCell extends React.Component {
       this.props.onHourChanged(8, timeslip);
     } else if (hours === 8) {
       this.props.onHourChanged(4, timeslip);
-    } else {
-      this.props.onHourChanged(1, timeslip);
-      this.setState({ showInput: true });
     }
   };
 
@@ -49,12 +24,8 @@ class TimeslipGridCell extends React.Component {
       isDisabled = isDisabled || Boolean(timeslip.get('invoice'));
     }
 
-    const inputField = isMobile() && !isDisabled && !this.state.showInput ? (
-      <MobileGridCell
-        onClick={this.handleMobile}
-        hours={hours}
-      />
-    ): (
+    return (
+      <td className='timeslip-grid-cell'>
       <input
         value={hours || ''}
         type='number'
@@ -62,13 +33,9 @@ class TimeslipGridCell extends React.Component {
           e.target.select();
         }}
         disabled={ isDisabled }
+        onClick={this.handleInputClick}
         onChange={(e) => this.props.onHourChanged(e.target.value, timeslip)}
       />
-    );
-
-    return (
-      <td className='timeslip-grid-cell'>
-        {inputField}
       </td>
     );
   }
