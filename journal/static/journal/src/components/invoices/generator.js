@@ -31,7 +31,9 @@ class Generator extends React.Component {
 
     const timeslipItems = this.props.timeslips.sort((a, b) => {
       return a.get('date') > b.get('date') ? 1 : -1;
-    }).toList().map(t =>
+    }).toList().filter(t =>
+      t.get('hours') > 0
+    ).map(t =>
       timeslipInvoiceItem(t, project)
     );
     const taskItems = this.props.tasks.toList().map(taskInvoiceItem);
