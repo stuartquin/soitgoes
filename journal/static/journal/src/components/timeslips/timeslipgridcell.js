@@ -4,9 +4,15 @@ import { isMobile } from "services/environment";
 
 const MobileGridCell = ({ hours, onClick }) => {
   return (
-    <div className="mobile-grid-cell" onClick={onClick}>
-      {hours}
-    </div>
+    <input
+      value={hours || 'ARSE'}
+      className="mobile-grid-cell"
+      type='number'
+      onFocus={(e) => {
+        e.target.select();
+      }}
+      onClick={(e) => onClick(e)}
+    />
   );
 };
 
