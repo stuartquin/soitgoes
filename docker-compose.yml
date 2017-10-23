@@ -7,6 +7,7 @@ services:
     volumes:
       - ./journal/static/journal/src:/app/src
       - ./journal/static/journal/dist:/app/dist
+      - ./journal/static/journal/webpack.config.js:/app/webpack.config.js
     command: ./node_modules/webpack/bin/webpack.js --watch --progress
 
   sass:

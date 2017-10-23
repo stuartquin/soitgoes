@@ -325,7 +325,7 @@ class TaskList(generics.ListCreateAPIView):
             filters['invoice'] = invoice if invoice != 'none' else None
 
         return models.Task.objects.filter(**filters).order_by(
-            'completed_at', 'due_date'
+            '-completed_at', 'due_date'
         )
 
 

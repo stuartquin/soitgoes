@@ -24,7 +24,7 @@ class Task extends React.Component {
       return (<div>Loading</div>);
     }
 
-    let saveTask = (form) => {
+    const saveTask = (form) => {
       if (isEdit) {
         return this.props.updateTask(task.get('id'), form);
       } else {

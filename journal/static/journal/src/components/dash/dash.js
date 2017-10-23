@@ -6,7 +6,6 @@ import moment from 'moment';
 import {Card, CardText} from 'material-ui/Card';
 
 import * as dashActions from '../../actions/dash';
-import { SummaryBarChart } from './summarybarchart';
 
 
 class Dash extends React.Component {
@@ -34,22 +33,12 @@ class Dash extends React.Component {
         <div className='content'>
           <Card className='dash-card'>
             <CardText>
-              <SummaryBarChart
-                title='Invoices Paid'
-                summary={ this.props.invoiceSummary }
-                totalField='total_paid'
-                threshold={8350}
-              />
+              Coming soon
             </CardText>
           </Card>
           <Card className='dash-card'>
             <CardText>
-              <SummaryBarChart
-                title='Expenses'
-                summary={ this.props.expensesSummary }
-                totalField='value'
-                threshold={0}
-              />
+              Coming soon
             </CardText>
           </Card>
         </div>
