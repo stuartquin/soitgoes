@@ -47,6 +47,7 @@ class ProjectSerializer(LogActivity):
             'total_paid',
             'hourly_rate',
             'archived',
+            'currency',
             'account'
         ]
 

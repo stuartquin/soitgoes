@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { asCurrency } from 'services/currency';
 import {
   Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn
 } from 'material-ui/Table';
@@ -56,7 +57,7 @@ class InvoiceList extends Component {
             </Link>
           </TableRowColumn>
           <TableRowColumn className='invoice-list-col'>
-            <span className={ totalClass }>&pound;{total}</span>
+            <span className={ totalClass }>{asCurrency(total, project.get('currency'))}</span>
           </TableRowColumn>
           <TableRowColumn className='invoice-list-col'>
             <StateChip invoice={invoice} />

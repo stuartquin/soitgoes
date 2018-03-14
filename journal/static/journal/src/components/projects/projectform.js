@@ -24,7 +24,8 @@ class ProjectForm extends Form {
         name: project.get('name'),
         hourly_rate: project.get('hourly_rate'),
         contact: project.get('contact'),
-        archived: project.get('archived')
+        archived: project.get('archived'),
+        currency: project.get('currency'),
       });
     }
   }
@@ -75,6 +76,12 @@ class ProjectForm extends Form {
           value={this.state.form.hourly_rate}
           onChange={(evt, val) => this.handleChange('hourly_rate', val)}
           floatingLabelText='Hourly Rate' />
+        <TextField
+          style={{width: '100%'}}
+          type='text'
+          value={this.state.form.currency}
+          onChange={(evt, val) => this.handleChange('currency', val)}
+          floatingLabelText='Currency' />
         <Toggle
           label="Archived"
           toggled={this.state.form.archived}

@@ -4,15 +4,17 @@ import React from 'react';
 import {InvoiceModifiers} from './invoicemodifiers';
 import {List, ListItem} from 'material-ui/List';
 
+import { asCurrency } from 'services/currency';
+
 const getModifierImpact = (subTotal, modifier) => {
   return (subTotal / 100 * modifier.get('percent'));
 };
 
-const InvoiceSummaryTotal = (props) => {
+const InvoiceSummaryTotal = ({ currency, value, title }) => {
   const content = (
     <div className='invoice-summary-total'>
-      <strong className='title'>{props.title}</strong>
-      <span className='value'>{`£${props.value.toFixed(2)}`}</span>
+      <strong className='title'>{title}</strong>
+      <span className='value'>{`${asCurrency(value, currency)}`}</span>
     </div>
   );
 
@@ -57,18 +59,19 @@ const InvoiceSummary = (props) => {
           key={0}
           className='invoice-summary-item'
           primaryText='Time'
-          secondaryText={`${totalHours} Hours -  £${timeTotal}`}
+          secondaryText={`${totalHours} Hours -  ${asCurrency(timeTotal, project.get('currency'))}`}
           disabled={true}
         />
         <ListItem
           key={1}
           primaryText='Tasks'
           className='invoice-summary-item'
-          secondaryText={`${props.tasks.count()} Tasks - £${taskTotal}`}
+          secondaryText={`${props.tasks.count()} Tasks - ${asCurrency(taskTotal, project.get('currency'))}`}
           disabled={true}
         />
       </List>
       <InvoiceSummaryTotal
+        currency={project.get('currency')}
         title='Subtotal'
         value={subTotal}
       />
@@ -80,6 +83,7 @@ const InvoiceSummary = (props) => {
         onRemoveModifier={props.onRemoveModifier}
       />
       <InvoiceSummaryTotal
+        currency={project.get('currency')}
         title='Total'
         value={total}
       />

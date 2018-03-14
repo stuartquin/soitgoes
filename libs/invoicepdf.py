@@ -6,6 +6,11 @@ import shutil
 
 INVOICE_DIR = '/tmp'
 
+CURRENCY_LOOKUP = {
+    'GBP': '&pound;',
+    'USD': '$',
+}
+
 def get_pdf_file(invoice, user, path=''):
     """
     Returns full path and name of PDF if it exists, otherwise None
@@ -78,10 +83,13 @@ def render(invoice, user, path=''):
     else:
         due_date = None
 
+    print(project.currency, CURRENCY_LOOKUP.get(project.currency))
+
     context = {
         'invoice': invoice,
         'contact': contact,
         'project': project,
+        'currency': CURRENCY_LOOKUP.get(project.currency),
         'company': project.account.company,
         'timeslips': timeslips,
         'items': invoice.items.all(),
