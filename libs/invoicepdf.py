@@ -7,9 +7,10 @@ import shutil
 INVOICE_DIR = '/tmp'
 
 CURRENCY_LOOKUP = {
-    'GBP': '&pound;',
-    'USD': '$',
+    'GBP': 'GBP',
+    'USD': 'USD'
 }
+
 
 def get_pdf_file(invoice, user, path=''):
     """
@@ -52,7 +53,6 @@ def get_tmp_dir(tmp_path):
 def get_bulk_file(invoices, user):
     bulk_dir = get_tmp_dir('%s/%s/bulk/' % (INVOICE_DIR, user.id))
     zip_file = '%sbulk' % get_tmp_dir('%s/%s/' % (INVOICE_DIR, user.id))
-    pdfs = [invoice.get_pdf_file(user, 'bulk/') for invoice in invoices]
 
     try:
         os.remove(zip_file + '.zip')
@@ -83,13 +83,11 @@ def render(invoice, user, path=''):
     else:
         due_date = None
 
-    print(project.currency, CURRENCY_LOOKUP.get(project.currency))
-
     context = {
         'invoice': invoice,
         'contact': contact,
         'project': project,
-        'currency': CURRENCY_LOOKUP.get(project.currency),
+        'currency': CURRENCY_LOOKUP.get(project.currency, 'GBP'),
         'company': project.account.company,
         'timeslips': timeslips,
         'items': invoice.items.all(),
