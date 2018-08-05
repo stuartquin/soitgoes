@@ -118,3 +118,5 @@ jspm_packages
 
 /static
 version.txt
+
+.mypy_cache/

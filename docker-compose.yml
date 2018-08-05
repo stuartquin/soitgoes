@@ -5,8 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile-nodejs
     volumes:
-      - ./journal/static/journal/src:/app/src
-      - ./journal/static/journal/dist:/app/dist
+      - ./client/src:/app/src
+      - ./client/dist:/app/dist
     command: ./node_modules/webpack/bin/webpack.js --watch --progress
 
   sass:
@@ -14,8 +14,8 @@ services:
       context: .
       dockerfile: Dockerfile-nodejs
     volumes:
-      - ./journal/static/journal/scss:/app/scss
-      - ./journal/static/journal/dist:/app/dist
+      - ./client/scss:/app/scss
+      - ./client/dist:/app/dist
     command: ./node_modules/node-sass/bin/node-sass --watch /app/scss -r -o dist/
 
   soitgoes:
@@ -37,5 +37,5 @@ services:
       - ./soitgoes:/app/soitgoes
       - ./libs:/app/libs
       - ./assets:/app/assets
-      - ./journal/static/journal/dist:/app/journal/static/journal/dist
+      - ./client/dist:/app/journal/static/journal/dist
       - ./db.sqlite3:/app/db.sqlite3
