@@ -114,6 +114,7 @@ class Invoice(models.Model):
         ('ISSUED', 'ISSUED'),
         ('PAID', 'PAID')
     ])
+    reference = models.CharField(default=None, null=True, blank=True, max_length=256)
 
     modifier = models.ManyToManyField(InvoiceModifier, blank=True)
 
