@@ -1,10 +1,24 @@
 import React from 'react';
+import styled from 'styled-components';
 import classNames from 'classnames/bind';
 import { isMobile } from "services/environment";
 
+
+const StyledInput = styled.input`
+  width: 80px;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+`;
+
 class TimeslipGridCell extends React.Component {
   handleInputClick = () => {
-    const {timeslip} = this.props;
+    const { timeslip} = this.props;
     const hours = timeslip ? timeslip.hours : null;
 
     if (!hours) {
@@ -26,12 +40,10 @@ class TimeslipGridCell extends React.Component {
 
     return (
       <td className='timeslip-grid-cell'>
-      <input
+      <StyledInput
         value={hours || ''}
         type='number'
-        onFocus={(e) => {
-          e.target.select();
-        }}
+        onFocus={(e) => e.target.select()}
         disabled={ isDisabled }
         onClick={this.handleInputClick}
         onChange={(e) => this.props.onHourChanged(e.target.value, timeslip)}

@@ -1,13 +1,19 @@
-'use strict';
 import React from 'react';
+import styled from 'styled-components'
 
 import MenuItem from 'components/MenuItem';
 
 
+const AppMenu = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+
 const NavMenu = () => {
   return (
-    <div className="navMenu">
-      <div className="app-menu">
+    <div>
+      <AppMenu>
         <MenuItem
           text="Dash"
           linkTo="/"
@@ -32,7 +38,7 @@ const NavMenu = () => {
           text="Tasks"
           linkTo="/tasks"
         />
-      </div>
+      </AppMenu>
       <div className="user-menu">
         <MenuItem
           text="Logout"
@@ -43,4 +49,6 @@ const NavMenu = () => {
   );
 };
 
-export default NavMenu;
+export default styled(NavMenu)`
+  display: flex;
+`;
