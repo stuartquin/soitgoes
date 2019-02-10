@@ -1,38 +1,27 @@
 'use strict';
 import React from 'react';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
 
+import Button from 'components/Button';
 
 const Confirm = (props) => {
   const confirmText = props.confirmText || 'Confirm';
   const actions = [
-    <FlatButton
+    <Button
       label='Cancel'
-      primary={true}
-      onTouchTap={props.onCancel}
+      onClick={props.onCancel}
     />,
-    <RaisedButton
+    <Button
       className='btn btn-success'
       label='Confirm'
-      primary={true}
-      keyboardFocused={true}
-      onTouchTap={props.onConfirm}
+      onClick={props.onConfirm}
     />,
   ];
 
-  return (
-    <Dialog
-      title={props.title}
-      actions={actions}
-      modal={false}
-      open={props.open}
-      onRequestClose={props.onCancel}
-    >
-    {props.children}
-    </Dialog>
-  );
+  return props.open ? (
+    <div>
+      {props.children}
+    </div>
+  ) : null;
 };
 
 export {Confirm}

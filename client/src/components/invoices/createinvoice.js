@@ -1,10 +1,7 @@
 'use strict';
 import React from 'react';
 
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
-import Popover from 'material-ui/Popover';
+import Button from 'components/Button';
 
 
 class CreateInvoice extends React.Component {
@@ -23,15 +20,14 @@ class CreateInvoice extends React.Component {
   }
 
   render() {
-    const projects = this.props.projects.filter(p => !p.get('archived'));
+    const projects = Object.values(this.props.projects).filter(p => !p.archived);
 
     return (
       <div className="create-invoice">
-        <RaisedButton
+        <Button
           className='btn-success'
           label='Create New'
-          labelPosition='before'
-          onTouchTap={(evt) => {
+          onClick={(evt) => {
             evt.preventDefault();
             this.setState({
               anchorEl: evt.currentTarget,
@@ -40,37 +36,21 @@ class CreateInvoice extends React.Component {
           }}
         />
 
-        <Popover
-          open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          onRequestClose={() => this.handleClose()}
-        >
-          <Menu
-            width='256px'
-            className='invoice-projects'
-            onChange={(evt, project) => {
-              this.props.onCreateInvoice(project.get('id'))
-            }}>
+        <div>
           {projects.map((project) => {
             const label = (
               <div className='invoice-project-label'>
-                <span>{project.get('name')}</span>
-                <span>{project.get('uninvoiced_hours')} hrs</span>
+                <span>{project.name}</span>
+                <span>{project.uninvoiced_hours} hrs</span>
               </div>
             );
             return (
-              <MenuItem
-                className='invoice-project'
-                key={project.get('id')}
-                value={project}
-                primaryText={label}
-              />
+            <a href="#" className='invoice-project' key={project.id}>
+              {label}
+            </a>
             );
-          }).toArray()}
-          </Menu>
-        </Popover>
+          })}
+        </div>
       </div>
     );
   }

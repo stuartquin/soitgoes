@@ -2,7 +2,7 @@ import { push } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import Immutable from 'immutable';
 
-import getById from 'services/getById';
+import keyById from 'services/keyById';
 import * as api from 'services/api';
 
 const GET_INVOICES_START = 'GET_INVOICES_START';
@@ -85,14 +85,21 @@ export const fetchNext = (next) => (dispatch) => {
   }
 };
 
-const items = (state = Immutable.OrderedMap(), action) => {
+const items = (state = {}, action) => {
   switch (action.type) {
-  case DELETE_INVOICE_SUCCESS:
-    return state.delete(action.invoiceId);
-  case GET_INVOICES_SUCCESS:
-    return state.merge(getById(action.items));
-  default:
-    return state;
+    case DELETE_INVOICE_SUCCESS:
+      return Object.values(state).filter(
+        o => o.id !== action.invoiceId
+      ).map(o => ({
+        [o.id]: o
+      }));
+    case GET_INVOICES_SUCCESS:
+      return {
+        ...state,
+        ...keyById(action.items)
+      };
+    default:
+      return state;
   }
 };
 

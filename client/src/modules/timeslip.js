@@ -3,7 +3,6 @@ import Immutable from 'immutable';
 import moment from 'moment';
 import { combineReducers } from 'redux';
 
-import getById from 'services/getById';
 import keyById from 'services/keyById';
 import * as api from 'services/api';
 import { fetchProjects } from 'modules/project';

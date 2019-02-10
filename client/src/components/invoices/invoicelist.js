@@ -2,16 +2,13 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { asCurrency } from 'services/currency';
-import {
-  Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn
-} from 'material-ui/Table';
 
 import { StateChip } from './state-chip';
 
 const groupByMonth = (invoices) => {
   let grouped = {};
   invoices.forEach((inv) => {
-    const date = inv.get('due_date').substring(0, 7);
+    const date = inv.due_date.substring(0, 7);
 
     if (grouped[date]) {
       grouped[date].push(inv);
@@ -21,6 +18,11 @@ const groupByMonth = (invoices) => {
   });
 
   return grouped;
+};
+
+const getInvoiceName = (invoice, projects) => {
+  const project = projects[invoice.project] || {};
+  return `#${invoice.sequence_num} ${project.name}`;
 };
 
 class InvoiceList extends Component {
@@ -37,39 +39,36 @@ class InvoiceList extends Component {
 
   getRows (month, invoices, projects) {
     return invoices.map((invoice) => {
-      const id = invoice.get('id');
-      const project = projects.get(invoice.get('project'));
+      const project = projects[invoice.project];
       let totalClass = 'text-danger';
-      let total = invoice.get('total_due');
-      if (invoice.get('total_paid')) {
+      let total = invoice.total_due;
+      if (invoice.total_paid) {
         totalClass = 'text-success';
-        total = invoice.get('total_paid');
+        total = invoice.total_paid;
       }
 
+      console.log('Invoice', invoice);
       return (
-        <TableRow
-          key={id}
-          className='invoice-list-row'
-          selected={this.isSelected(invoice.get('id'))}>
-          <TableRowColumn className='invoice-list-col'>
-            <Link to={`/invoices/${invoice.get('id')}`}>
-              #{invoice.get('sequence_num')} {project.get('name')}
+        <tr key={invoice.id} className='invoice-list-row'>
+          <td className='invoice-list-col'>
+            <Link to={`/invoices/${invoice.id}`}>
+              #{invoice.sequence_num} {project.name}
             </Link>
-          </TableRowColumn>
-          <TableRowColumn className='invoice-list-col'>
-            <span className={ totalClass }>{asCurrency(total, project.get('currency'))}</span>
-          </TableRowColumn>
-          <TableRowColumn className='invoice-list-col'>
+          </td>
+          <td className='invoice-list-col'>
+            <span className={ totalClass }>{asCurrency(total, project.currency)}</span>
+          </td>
+          <td className='invoice-list-col'>
             <StateChip invoice={invoice} />
-          </TableRowColumn>
-        </TableRow>
+          </td>
+        </tr>
       );
     });
   }
 
   handleSelectRow (grouped, month, selected) {
-    const monthIds = grouped[month].map(invoice => invoice.get('id'));
-    const selectedIds = selected.map((idx) => grouped[month][idx].get('id'));
+    const monthIds = grouped[month].map(invoice => invoice.id);
+    const selectedIds = selected.map((idx) => grouped[month][idx].id);
     const unSelectedIds = monthIds.filter((id) => selectedIds.indexOf(id) === -1);
 
     this.props.onSelectInvoice(selectedIds, unSelectedIds);
@@ -80,29 +79,32 @@ class InvoiceList extends Component {
     const grouped = groupByMonth(invoices);
     const months = Object.keys(grouped);
 
+    if (grouped['2018-10']) {
+      console.log('Rows', this.getRows('2018-10', grouped['2018-10'], projects));
+    }
+
     return (
-      <div>
-        {months.map((month, idx) => {
-          return (
-            <Table key={idx}
-              multiSelectable={true}
-              onRowSelection={(selected) => {
-                this.handleSelectRow(grouped, month, selected);
-              }}>
-              <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                <TableRow>
-                  <TableHeaderColumn colSpan='3' style={{paddingLeft: 0}}>
-                    {moment(`${month}-01`).format('MMMM YYYY')}
-                  </TableHeaderColumn>
-                </TableRow>
-              </TableHeader>
-             <TableBody deselectOnClickaway={false}>
-              {this.getRows(month, grouped[month], projects)}
-             </TableBody>
-            </Table>
-          );
-        })}
-      </div>
+      <table>
+        <tbody>
+          {invoices.map(invoice => (
+            <tr key={invoice.id} className='invoice-list-row'>
+              <td className='invoice-list-col'>
+                <Link to={`/invoices/${invoice.id}`}>
+                  {getInvoiceName(invoice, projects)}
+                </Link>
+              </td>
+              <td className='invoice-list-col'>
+                <span>
+                  {asCurrency(invoice.total_due, projects[invoice.project].currency)}
+                </span>
+              </td>
+              <td className='invoice-list-col'>
+                <StateChip invoice={invoice} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     );
   }
 }

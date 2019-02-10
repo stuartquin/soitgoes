@@ -56,18 +56,18 @@ class Invoice extends React.Component {
 
   handleMarkIssued() {
     const invoice = this.props.invoice;
-    this.props.updateInvoice(invoice.get('id'), {
+    this.props.updateInvoice(invoice.id, {
       reference: this.state.reference,
-      due_date: this.state.dueDate || invoice.get('due_date'),
-      timeslips: this.props.timeslips.map(t => t.get('id')).toJS(),
+      due_date: this.state.dueDate || invoice.due_date,
+      timeslips: this.props.timeslips.map(t => t.id).toJS(),
       status: 'ISSUED'
     });
   }
 
   handleMarkPaid() {
     const invoice = this.props.invoice;
-    this.props.updateInvoice(invoice.get('id'), {
-      total_paid: invoice.get('total_due'),
+    this.props.updateInvoice(invoice.id, {
+      total_paid: invoice.total_due,
       status: 'PAID'
     });
   }
@@ -80,15 +80,15 @@ class Invoice extends React.Component {
     const modifiers = this.props.modifiers;
     const project = this.props.project;
     const contact = this.props.contact;
-    const isEditable = !Boolean(invoice.get('issued_at'));
-    const dueDate = this.state.dueDate || invoice.get('due_date');
+    const isEditable = !Boolean(invoice.issued_at);
+    const dueDate = this.state.dueDate || invoice.due_date;
 
     return (
       <div className='invoice-container'>
         <Confirm
           title='Confirm Delete'
           open={this.state.confirmDelete}
-          onConfirm={() => this.props.deleteInvoice(invoice.get('id'))}
+          onConfirm={() => this.props.deleteInvoice(invoice.id)}
           onCancel={() => this.setState({confirmDelete: false})}>
           Are you sure you want to delete?
         </Confirm>
@@ -114,13 +114,13 @@ class Invoice extends React.Component {
             dueDate={dueDate}
             onAddModifier={(modifier) =>
               this.props.addInvoiceModifier(
-                invoice.get('id'),
+                invoice.id,
                 modifier.get('id')
               )
             }
             onRemoveModifier={(modifier) =>
               this.props.deleteInvoiceModifier(
-                invoice.get('id'),
+                invoice.id,
                 modifier.get('id')
               )
             }
@@ -148,19 +148,19 @@ class Invoice extends React.Component {
 }
 
 const getInvoiceTimeslips = (invoice, timeslips) => {
-  return timeslips.filter((t) => t.get('invoice') === invoice.get('id'));
+  return timeslips.filter((t) => t.invoice === invoice.id);
 }
 
 const getInvoiceTasks = (invoice, tasks) => {
-  return tasks.filter((t) => t.get('invoice') === invoice.get('id'));
+  return tasks.filter((t) => t.get('invoice') === invoice.id);
 }
 
 const mapStateToProps = (state, { match }) => {
   const params = match.params;
   const id = parseInt(params.id, 10);
-  const invoice = state.invoices.items.get(id, Immutable.Map());
-  const project = state.projects.items.get(invoice.get('project'), Immutable.Map());
-  const contact = state.contacts.items.get(project.get('contact'), Immutable.Map());
+  const invoice = state.invoices.items[id] || {};
+  const project = state.projects.items[invoice.project] || {}
+  const contact = state.contacts.items.get(project.contact, Immutable.Map());
 
   return {
     id,

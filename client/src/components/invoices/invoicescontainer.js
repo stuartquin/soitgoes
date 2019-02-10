@@ -1,12 +1,8 @@
-'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
-import {Card, CardText} from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
-import IconButton from 'material-ui/IconButton';
-import FileDownload from 'material-ui/svg-icons/file/file-download';
 import Immutable from 'immutable';
 
+import Button from 'components/Button';
 import {InvoiceList} from './invoicelist';
 import {CreateInvoice} from './createinvoice';
 import {Loading} from '../loading';
@@ -49,20 +45,21 @@ class Invoices extends React.Component {
       return (<Loading />);
     }
 
+    const {invoices} = this.props;
     const next = this.props.view.get('next');
-    const openInvoices = this.props.invoices.toList().filter((invoice) => {
-      return invoice.get('paid_at') === null;
+    const openInvoices = invoices.filter((invoice) => {
+      return invoice.paid_at === null;
     });
 
-    const closedInvoices = this.props.invoices.toList().filter((invoice) => {
-      return invoice.get('paid_at') !== null;
+    const closedInvoices = invoices.filter((invoice) => {
+      return invoice.paid_at !== null;
     });
 
     const loadMore = next ? (
-      <RaisedButton
+      <Button
         className='btn-success'
         label='Load More'
-        onTouchTap={(evt) => {
+        onClick={(evt) => {
           evt.preventDefault();
           this.props.fetchNext(next);
         }}
@@ -70,17 +67,14 @@ class Invoices extends React.Component {
     ) : null;
 
     const downloadBtn = this.state.selectedInvoiceIds.size > 0 ? (
-      <IconButton
-        touch={true}
+      <Button
         className='btn-default icon-btn-right'
-        onTouchTap={() => {
+        onClick={() => {
           const invoiceIds = this.state.selectedInvoiceIds.join(',');
           window.open(`/api/invoices/zip?invoice_ids=${invoiceIds}`);
-        }}>
-        <FileDownload />
-      </IconButton>
+        }}
+      />
     ) : null;
-
 
     return (
       <div className='invoices-container'>
@@ -88,8 +82,8 @@ class Invoices extends React.Component {
           title='Confirm Delete'
           open={this.state.invoiceId !== null}
           onConfirm={() => {
-            this.props.deleteInvoice(this.state.invoiceId);
-            this.setState({invoiceId: null});
+          this.props.deleteInvoice(this.state.invoiceId);
+          this.setState({invoiceId: null});
           }}
           onCancel={() => this.setState({invoiceId: null})}>
           Are you sure you want to delete?
@@ -103,29 +97,24 @@ class Invoices extends React.Component {
               onCreateInvoice={this.props.createInvoice}
             />
           </div>
-          <Card>
-            <CardText>
+          <h3 className='invoice-list-header'>Open</h3>
+          <InvoiceList
+            projects={this.props.projects}
+            invoices={openInvoices}
+            selectedInvoiceIds={this.state.selectedInvoiceIds.toJS()}
+            onSelectInvoice={this.handleSelectInvoice.bind(this)}
+          />
+        </div>
 
-              <h3 className='invoice-list-header'>Open</h3>
-              <InvoiceList
-                projects={this.props.projects}
-                invoices={openInvoices}
-                selectedInvoiceIds={this.state.selectedInvoiceIds.toJS()}
-                onSelectInvoice={this.handleSelectInvoice.bind(this)}
-              />
-
-              <h3 className='invoice-list-header'>Closed</h3>
-              <InvoiceList
-                projects={this.props.projects}
-                invoices={closedInvoices}
-                selectedInvoiceIds={this.state.selectedInvoiceIds.toJS()}
-                onSelectInvoice={this.handleSelectInvoice.bind(this)}
-              />
-              <div className='invoice-load-more'>
-                {loadMore}
-              </div>
-            </CardText>
-          </Card>
+        <h3 className='invoice-list-header'>Closed</h3>
+        <InvoiceList
+          projects={this.props.projects}
+          invoices={closedInvoices}
+          selectedInvoiceIds={this.state.selectedInvoiceIds.toJS()}
+          onSelectInvoice={this.handleSelectInvoice.bind(this)}
+        />
+        <div className='invoice-load-more'>
+          {loadMore}
         </div>
       </div>
     );
@@ -135,7 +124,7 @@ class Invoices extends React.Component {
 const mapStateToProps = (state) => {
   return {
     projects: state.projects.items,
-    invoices: state.invoices.items,
+    invoices: Object.values(state.invoices.items),
     view: state.invoices.view
   };
 };

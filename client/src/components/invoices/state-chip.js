@@ -3,9 +3,8 @@ import React from 'react';
 import moment from 'moment';
 
 
-const StateChip = (props) => {
-  const invoice = props.invoice;
-  const issued = invoice.get('issued_at');
+const StateChip = ({invoice}) => {
+  const issued = invoice.issued_at;
   const today = moment();
 
   let text = '';
@@ -17,11 +16,11 @@ const StateChip = (props) => {
     classNames.push('state-label-default');
     text = 'Draft';
   } else {
-    if (invoice.get('paid_at')) {
+    if (invoice.paid_at) {
       classNames.push('state-label-success');
-      text = moment(invoice.get('paid_at')).format('YYYY-MM-DD');
+      text = moment(invoice.paid_at).format('YYYY-MM-DD');
     } else {
-      const dueDate = moment(invoice.get('due_date'));
+      const dueDate = moment(invoice.due_date);
       if (dueDate.isBefore(today)) {
         classNames.push('state-label-error');
         text = dueDate.fromNow(true)
