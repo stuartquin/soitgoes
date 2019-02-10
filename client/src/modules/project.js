@@ -1,13 +1,19 @@
 'use strict';
-import Immutable from 'immutable';
 import { combineReducers } from 'redux';
 
-import getById from 'services/getById';
 import * as api from 'services/api';
 import {addFlashMessage} from 'modules/flashmessage';
 
 const GET_PROJECTS_START = 'GET_PROJECTS_START';
 const GET_PROJECTS_SUCCESS = 'GET_PROJECTS_SUCCESS';
+
+const getById = (items) => {
+  console.log('Items', items);
+  return items.reduce((agg, item) => ({
+    ...agg,
+    [item.id]: item,
+  }), {});
+};
 
 export const fetchProjects = () => (dispatch) =>
   api.fetchPath('projects/').then(res => {
@@ -44,17 +50,14 @@ export const updateProject = (id, form) => (dispatch) => {
   });
 };
 
-const view = (state = Immutable.Map(), action) => {
-  switch (action.type) {
-  default:
-    return state;
-  }
-};
 
-const items = (state = Immutable.Map(), action) => {
+const items = (state = {}, action) => {
   switch(action.type) {
   case GET_PROJECTS_SUCCESS:
-    return state.merge(Immutable.fromJS(getById(action.items)));
+    return {
+      ...state,
+      ...getById(action.items)
+    };
   default:
     return state;
   }
@@ -62,7 +65,6 @@ const items = (state = Immutable.Map(), action) => {
 
 const projects = combineReducers({
   items,
-  view
 });
 
 export default projects;

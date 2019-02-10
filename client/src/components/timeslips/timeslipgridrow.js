@@ -5,14 +5,14 @@ import {TimeslipGridCell} from './timeslipgridcell';
 const TimeslipGridRow = (props) => {
   const dates = props.range.map((m) => m.format('YYYY-MM-DD'));
   const filledTimeslips = props.timeslips.reduce( (result, item) => {
-    result[item.get('date')] = item;
+    result[item.date] = item;
     return result;
   }, {});
 
   return (
     <tr className='timeslip-grid-row'>
       <td className='timeslip-grid-row-project'>
-        {props.project.get('name')}
+        {props.project.name}
       </td>
       {dates.map((date) => (
         <TimeslipGridCell
@@ -25,7 +25,7 @@ const TimeslipGridRow = (props) => {
           }}
           timeslip={filledTimeslips[date]} />
       ))}
-      <td>{props.project.get('uninvoiced_hours')}</td>
+      <td>{props.project.uninvoiced_hours}</td>
     </tr>
   );
 };

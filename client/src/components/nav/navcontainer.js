@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom';
 import NavMenu from './navmenu';
 import { Loading } from 'components/loading';
 
-// import { TimeslipsContainer} from 'components/timeslips/timeslipcontainer';
+import { TimeslipsContainer} from 'components/timeslips/timeslipcontainer';
 // import { InvoicesContainer } from 'components/invoices/invoicescontainer';
 // import { InvoiceContainer } from 'components/invoices/invoicecontainer';
 // import { ProjectsContainer } from 'components/projects/projectscontainer';
@@ -65,6 +65,9 @@ class Nav extends React.Component {
     return (
       <div className='wrapper'>
         <NavMenu />
+        <div className='container'>
+          <Route path='/timeslips' component={TimeslipsContainer} />
+        </div>
       </div>
     );
   }

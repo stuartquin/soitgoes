@@ -15,16 +15,16 @@ const getDateRange = (today) => {
 };
 
 const getTimeslipsForProject = (project, timeslips) => {
-  const projectId = project.get('id');
-  return timeslips.filter((t) => t.get('project') === projectId);
+  const projectId = project.id;
+  return timeslips.filter(t => t.project === projectId);
 };
 
 const TimeslipGrid = (props) => {
-  'use strict';
   const range = getDateRange(props.weekStart);
   const today = props.today;
-
-  const projects = props.projects.filter(project => !project.get('archived'));
+  const projects = Object.values(props.projects).filter(
+    p => p && !p.archived
+  );
 
   return (
     <div className='timeslip-grid'>
@@ -35,7 +35,7 @@ const TimeslipGrid = (props) => {
         <tbody>
           {projects.map(project => (
             <TimeslipGridRow
-              key={project.get('id')}
+              key={project.id}
               project={project}
               today={today}
               range={range}

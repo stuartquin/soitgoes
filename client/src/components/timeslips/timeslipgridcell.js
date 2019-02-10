@@ -4,8 +4,8 @@ import { isMobile } from "services/environment";
 
 class TimeslipGridCell extends React.Component {
   handleInputClick = () => {
-    const { timeslip } = this.props;
-    const hours = timeslip ? timeslip.get('hours') : null;
+    const {timeslip} = this.props;
+    const hours = timeslip ? timeslip.hours : null;
 
     if (!hours) {
       this.props.onHourChanged(8, timeslip);
@@ -20,8 +20,8 @@ class TimeslipGridCell extends React.Component {
     let isDisabled = this.props.isLoading;
 
     if (timeslip) {
-      hours = timeslip.get('hours');
-      isDisabled = isDisabled || Boolean(timeslip.get('invoice'));
+      hours = timeslip.hours;
+      isDisabled = isDisabled || Boolean(timeslip.invoice);
     }
 
     return (
