@@ -1,5 +1,6 @@
-import {createStore, applyMiddleware, combineReducers, compose } from 'redux';
-import { routerReducer, routerMiddleware } from 'react-router-redux';
+import {
+  createStore, applyMiddleware, combineReducers, compose
+} from 'redux';
 import thunk from 'redux-thunk';
 
 import activityFeed from './reducers/activityfeed';
@@ -15,11 +16,10 @@ import flashMessage from 'modules/flashmessage';
 import tasks from 'modules/task';
 import nav from 'modules/nav';
 
-const configureStore = (history) => {
+const configureStore = () => {
   let middlewares = [
     applyMiddleware(
       thunk,
-      routerMiddleware(history)
     )
   ];
 
@@ -39,7 +39,6 @@ const configureStore = (history) => {
     contacts,
     modifiers,
     flashMessage,
-    router: routerReducer
   }),
   compose( ...middlewares )
   );

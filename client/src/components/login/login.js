@@ -1,10 +1,5 @@
 import React from 'react';
 
-import {Card, CardText, CardTitle} from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-
-
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -12,12 +7,14 @@ class Login extends React.Component {
     this.state = {
       form: {}
     };
+
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(field, val) {
-    let form = this.state.form;
-    form[field] = val;
-    this.setState({form: form});
+  handleChange({target}) {
+    const {form} = this.state;
+    form[target.name] = target.value;
+    this.setState({form});
   }
 
   render() {
@@ -27,39 +24,32 @@ class Login extends React.Component {
     }
     return (
       <div className='login'>
-        <Card className='login-card'>
-          <CardTitle className='login-card-title' />
-          <CardText>
-            <div>
-              <TextField
-                hintText="Username Field"
-                floatingLabelText="Username"
-                errorText={errorText}
-                value={this.state.form.username}
-                onChange={(evt, val) => this.handleChange('username', val)}
-              />
-            </div>
-            <div>
-              <TextField
-                hintText="Password Field"
-                floatingLabelText="Password"
-                errorText={errorText}
-                type="password"
-                value={this.state.form.password}
-                onChange={(evt, val) => this.handleChange('password', val)}
-              />
-            </div>
-            <RaisedButton
-              className='btn-success'
-              label='Login'
-              labelPosition='before'
-              onTouchTap={(evt) => {
-                evt.preventDefault();
-                this.props.onSubmit(this.state.form);
-              }}
-            />
-          </CardText>
-        </Card>
+        <div>
+          <input
+            placeholder="Username"
+            name="username"
+            value={this.state.form.username}
+            onChange={this.handleChange}
+          />
+        </div>
+        <div>
+          <input
+            placeholder="Password"
+            name="password"
+            type="password"
+            value={this.state.form.password}
+            onChange={this.handleChange}
+          />
+        </div>
+        <button
+          className='btn-success'
+          onClick={(evt) => {
+            evt.preventDefault();
+            this.props.onSubmit(this.state.form);
+          }}
+        >
+          Login
+        </button>
       </div>
     );
   }

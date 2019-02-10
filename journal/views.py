@@ -20,8 +20,11 @@ def landing(request):
 
 
 def login_user(request):
+    print('REQUEST', request)
+
     if request.method == 'POST':
         data = json.loads(request.read().decode('utf-8'))
+        print('DATA', data)
         username = data.get('username', None)
         password = data.get('password', None)
         user = auth.authenticate(username=username, password=password)

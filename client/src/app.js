@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import { Login } from 'components/login/login';
 import { NavContainer } from 'components/nav/navcontainer';
-import { TimeslipsContainer } from 'components/timeslips/timeslipcontainer';
 
 import * as userActions from './actions/user';
 
@@ -28,16 +27,17 @@ class App extends React.Component {
   render() {
     if (this.state.loggedIn) {
       return (<Route component={NavContainer} />);
-    } else {
-      return (
-        <Login
-          loginState={this.props.loginState}
-          onSubmit={(form) =>
-            this.props.login(form)
-          }
-        />
-      );
     }
+
+    return (
+      <Login
+        loginState={this.props.loginState}
+        onSubmit={(form) => {
+          console.log('onSubmit', form);
+          this.props.login(form);
+        }}
+      />
+    );
   }
 }
 

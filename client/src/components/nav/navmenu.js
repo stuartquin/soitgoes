@@ -1,69 +1,45 @@
 'use strict';
 import React from 'react';
 
-import AppBar from 'material-ui/AppBar';
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
+import MenuItem from 'components/MenuItem';
 
 
-const NavMenu = (props) => {
-  const linkTo = (route) => () => {
-    props.onNavigate(route);
-    props.onSetOpen(false);
-  }
-
+const NavMenu = () => {
   return (
-    <Drawer
-      containerClassName='nav-container'
-      docked={false}
-      open={props.open}
-      onRequestChange={(open) => props.onSetOpen(open)}>
-
-      <AppBar
-        title='InvoiceTime'
-        className='nav-app-bar'
-        onTitleTouchTap={() => props.onSetOpen(!props.open)}
-      />
-      <div className='app-menu'>
+    <div className="navMenu">
+      <div className="app-menu">
         <MenuItem
-          className='nav-item'
-          primaryText='Dash'
-          onTouchTap={linkTo('/')}
+          text="Dash"
+          linkTo="/"
         />
         <MenuItem
-          className='nav-item'
-          primaryText='Contacts'
-          onTouchTap={linkTo('/contacts')}
+          text="Contacts"
+          linkTo="/contacts"
         />
         <MenuItem
-          className='nav-item'
-          primaryText='Projects'
-          onTouchTap={linkTo('/projects')}
+          text="Projects"
+          linkTo="/projects"
         />
         <MenuItem
-          className='nav-item'
-          primaryText='Invoices'
-          onTouchTap={linkTo('/invoices')}
+          text="Invoices"
+          linkTo="/invoices"
         />
         <MenuItem
-          className='nav-item'
-          primaryText='Time'
-          onTouchTap={linkTo('/timeslips')}
+          text="Time"
+          linkTo="/timeslips"
         />
         <MenuItem
-          className='nav-item'
-          primaryText='Tasks'
-          onTouchTap={linkTo('/tasks')}
+          text="Tasks"
+          linkTo="/tasks"
         />
       </div>
-      <div className='user-menu'>
+      <div className="user-menu">
         <MenuItem
-          className='nav-item'
-          primaryText='Logout'
-          onTouchTap={props.onLogout}
+          text="Logout"
+          linkTo="/"
         />
       </div>
-    </Drawer>
+    </div>
   );
 };
 

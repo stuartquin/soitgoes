@@ -6,17 +6,9 @@ services:
       dockerfile: Dockerfile-nodejs
     volumes:
       - ./client/src:/app/src
+      - ./client/webpack.config.js:/app/webpack.config.js
       - ./client/dist:/app/dist
-    command: ./node_modules/webpack/bin/webpack.js --watch --progress
-
-  sass:
-    build:
-      context: .
-      dockerfile: Dockerfile-nodejs
-    volumes:
-      - ./client/scss:/app/scss
-      - ./client/dist:/app/dist
-    command: ./node_modules/node-sass/bin/node-sass --watch /app/scss -r -o dist/
+    command: npm run start
 
   soitgoes:
     stdin_open: true
@@ -31,7 +23,6 @@ services:
      - "8000:8000"
     depends_on:
      - nodejs
-     - sass
     volumes:
       - ./journal:/app/journal
       - ./soitgoes:/app/soitgoes
