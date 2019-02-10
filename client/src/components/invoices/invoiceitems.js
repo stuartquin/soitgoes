@@ -1,14 +1,11 @@
-'use strict';
 import React from 'react';
-import {Table, TableBody} from 'material-ui/Table';
-
 import { InvoiceItemRow } from './invoiceitemrow';
 
 
 const InvoiceItems = (props) => {
   return (
-    <Table className='invoice-items table'>
-      <TableBody>
+    <table className='invoice-items table'>
+      <tbody>
       {props.items.map((item) => (
         <InvoiceItemRow
           key={item.id}
@@ -21,8 +18,8 @@ const InvoiceItems = (props) => {
           }}
         />
       ))}
-    </TableBody>
-    </Table>
+      </tbody>
+    </table>
   );
 };
 

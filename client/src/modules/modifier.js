@@ -1,7 +1,6 @@
-import Immutable from 'immutable';
 import { combineReducers } from 'redux';
 
-import getById from 'services/getById';
+import keyById from 'services/keyById';
 import * as api from 'services/api';
 
 const GET_MODIFIERS_START = 'GET_MODIFIER_START';
@@ -45,17 +44,13 @@ export const updateModifier = (id, form) => (dispatch) => {
   });
 };
 
-const view = (state = Immutable.Map({}), action) => {
-  switch (action.type) {
-  default:
-    return state;
-  }
-};
-
-const items = (state = Immutable.OrderedMap({}), action) => {
+const items = (state = {}, action) => {
   switch(action.type) {
   case GET_MODIFIERS_SUCCESS:
-    return state.merge(getById(action.items));
+    return {
+      ...state,
+      ...keyById(action.items)
+    };
   default:
     return state;
   }
@@ -63,7 +58,6 @@ const items = (state = Immutable.OrderedMap({}), action) => {
 
 const modifiers = combineReducers({
   items,
-  view
 });
 
 export default modifiers;

@@ -1,7 +1,5 @@
-'use strict';
 import React from 'react';
 import moment from 'moment';
-
 
 const StateChip = (props) => {
   const task = props.task;

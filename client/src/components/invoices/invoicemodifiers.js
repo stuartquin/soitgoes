@@ -1,50 +1,35 @@
 'use strict';
 import React from 'react';
 
-import TextField from 'material-ui/TextField';
-import ContentRemoveCircleOutline from 'material-ui/svg-icons/content/remove-circle-outline';
-import ContentAddCircleOutline from 'material-ui/svg-icons/content/add-circle-outline';
-import IconButton from 'material-ui/IconButton';
-import {List, ListItem} from 'material-ui/List';
-
+import Button from 'components/Button';
 
 const getModifierListItem = (invoice, modifier, isEditable, onAdd, onDelete) => {
   let actionBtn = null;
+  const invoiceModifiers = invoice.modifier || [];
   if (isEditable) {
-    if (invoice.get('modifier').contains(modifier.get('id'))) {
+    if (invoiceModifiers.includes(modifier.id)) {
       actionBtn = (
-        <IconButton
-          tooltip='Remove'
-          touch={true}
-          tooltipPosition='bottom-right'
+        <Button
           className='btn-default icon-btn-right'
-          onTouchTap={() => onDelete(modifier)}>
-          <ContentRemoveCircleOutline />
-        </IconButton>
+          onClick={() => onDelete(modifier)}
+          label="Remove"
+        />
       );
     } else {
       actionBtn = (
-        <IconButton
-          tooltip='Add'
-          touch={true}
-          tooltipPosition='bottom-right'
+        <Button
           className='btn-default icon-btn-right'
-          onTouchTap={() => onAdd(modifier)}>
-          <ContentAddCircleOutline />
-        </IconButton>
+          onClick={() => onAdd(modifier)}
+          label="Add"
+        />
       );
     }
   }
-  const secondaryText = `${modifier.get('percent')}%`;
+
   return (
-    <ListItem
-      key={modifier.get('id')}
-      className='invoice-summary-item'
-      primaryText={modifier.get('name')}
-      secondaryText={secondaryText}
-      rightIconButton={actionBtn}
-      disabled={true}
-    />
+    <li key={modifier.id}>
+      <strong>modifier.name: </strong>{modifier.percent}%
+    </li>
   );
 };
 
@@ -56,9 +41,6 @@ class InvoiceModifiers extends React.Component {
     };
   }
 
-  updateForm(name, val) {
-  }
-
   render() {
     const invoice = this.props.invoice;
     const project = this.props.project;
@@ -66,7 +48,7 @@ class InvoiceModifiers extends React.Component {
     const isEditable = this.props.isEditable;
 
     return (
-      <List className='invoice-modifiers'>
+      <ul className='invoice-modifiers'>
         {modifiers.map(modifier =>
           getModifierListItem(invoice, modifier, isEditable,
             () => {
@@ -77,9 +59,9 @@ class InvoiceModifiers extends React.Component {
             },
           )
         )}
-      </List>
+      </ul>
     );
   }
 }
 
-export {InvoiceModifiers}
+export default InvoiceModifiers;

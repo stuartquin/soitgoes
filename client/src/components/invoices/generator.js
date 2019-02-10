@@ -1,15 +1,13 @@
-'use strict';
 import React from 'react';
-import {Card, CardText} from 'material-ui/Card';
 
 import { InvoiceItems } from './invoiceitems';
 
 const timeslipInvoiceItem = (timeslip, project) => {
-  const subTotal = project.get('hourly_rate') * timeslip.get('hours');
+  const subTotal = project.hourly_rate * timeslip.hours;
   return {
-    id: timeslip.get('id'),
-    details: `${timeslip.get('hours')} hours on ${timeslip.get('date')}`,
-    unitPrice: project.get('hourly_rate'),
+    id: timeslip.id,
+    details: `${timeslip.hours} hours on ${timeslip.date}`,
+    unitPrice: project.hourly_rate,
     subTotal: subTotal
   }
 };
@@ -26,13 +24,12 @@ const taskInvoiceItem = (task) => {
 
 class Generator extends React.Component {
   render() {
-    const project = this.props.project;
+    const {timeslips, project} = this.props;
     const isEditable = this.props.isEditable;
-
-    const timeslipItems = this.props.timeslips.sort((a, b) => {
-      return a.get('date') > b.get('date') ? 1 : -1;
-    }).toList().filter(t =>
-      t.get('hours') > 0
+    const timeslipItems = Object.values(timeslips).sort((a, b) => {
+      return a.date > b.date ? 1 : -1;
+    }).filter(t =>
+      t.hours > 0
     ).map(t =>
       timeslipInvoiceItem(t, project)
     );
@@ -40,7 +37,7 @@ class Generator extends React.Component {
 
     let itemViews = [];
 
-    if (timeslipItems.count()) {
+    if (timeslipItems.length) {
       itemViews.push((
         <div key={0}>
           <h4>Tracked Time</h4>
@@ -71,11 +68,9 @@ class Generator extends React.Component {
     }
 
     return (
-      <Card className='invoice-generator'>
-        <CardText>
-          {itemViews}
-        </CardText>
-      </Card>
+    <div className='invoice-generator'>
+      {itemViews}
+    </div>
     );
   }
 }

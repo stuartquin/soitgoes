@@ -5,9 +5,9 @@ import Immutable from 'immutable';
 
 import {Generator} from './generator';
 import {Settings} from './settings';
-import {InvoiceHeader} from './invoiceheader';
 import {Loading} from '../loading';
 import {Confirm} from '../confirm';
+import InvoiceHeader from './invoiceheader';
 
 import {
   fetchInvoice, deleteInvoice, deleteInvoiceModifier, addInvoiceModifier,
@@ -74,7 +74,7 @@ class Invoice extends React.Component {
 
   render() {
     const invoice = this.props.invoice;
-    if (invoice.isEmpty()) {
+    if (!invoice) {
       return (<Loading />);
     }
     const modifiers = this.props.modifiers;
@@ -115,13 +115,13 @@ class Invoice extends React.Component {
             onAddModifier={(modifier) =>
               this.props.addInvoiceModifier(
                 invoice.id,
-                modifier.get('id')
+                modifier.id
               )
             }
             onRemoveModifier={(modifier) =>
               this.props.deleteInvoiceModifier(
                 invoice.id,
-                modifier.get('id')
+                modifier.id
               )
             }
             onSetDueDate={(date) => this.setDueDate(date)}
@@ -132,7 +132,6 @@ class Invoice extends React.Component {
             project={project}
             timeslips={this.props.timeslips}
             tasks={this.props.tasks}
-            modifiers={modifiers}
             isEditable={isEditable}
             onDeleteInvoiceTimeslip={(id) =>
               this.props.updateTimeslip(id, {invoice: null})
@@ -148,7 +147,7 @@ class Invoice extends React.Component {
 }
 
 const getInvoiceTimeslips = (invoice, timeslips) => {
-  return timeslips.filter((t) => t.invoice === invoice.id);
+  return Object.values(timeslips).filter((t) => t.invoice === invoice.id);
 }
 
 const getInvoiceTasks = (invoice, tasks) => {
@@ -167,7 +166,7 @@ const mapStateToProps = (state, { match }) => {
     invoice,
     project,
     contact,
-    modifiers: state.modifiers.items,
+    modifiers: Object.values(state.modifiers.items),
     timeslips: getInvoiceTimeslips(invoice, state.timeslips.items),
     tasks: getInvoiceTasks(invoice, state.tasks.items)
   };

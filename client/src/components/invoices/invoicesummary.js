@@ -1,80 +1,64 @@
 'use strict';
 import React from 'react';
 
-import {InvoiceModifiers} from './invoicemodifiers';
-import {List, ListItem} from 'material-ui/List';
-
+import InvoiceModifiers from './invoicemodifiers';
 import { asCurrency } from 'services/currency';
 
 const getModifierImpact = (subTotal, modifier) => {
-  return (subTotal / 100 * modifier.get('percent'));
+  return (subTotal / 100 * modifier.percent);
 };
 
 const InvoiceSummaryTotal = ({ currency, value, title }) => {
-  const content = (
+  return (
     <div className='invoice-summary-total'>
       <strong className='title'>{title}</strong>
       <span className='value'>{`${asCurrency(value, currency)}`}</span>
     </div>
   );
-
-  return (
-    <List>
-      <ListItem
-        className='invoice-summary-item'
-        primaryText={content}
-        disabled={true}
-      />
-    </List>
-  );
 };
 
 const InvoiceSummary = (props) => {
-  const invoice = props.invoice;
-  const project = props.project;
-  const modifiers = props.modifiers;
-  const activeModifiers = modifiers.filter((mod) =>
-    invoice.get('modifier').contains(mod.get('id'))
-  );
-  const isEditable = !Boolean(invoice.get('issued_at'));
+  const {invoice, timeslips, project, modifiers, tasks} = props;
+  const {modifier = []} = invoice;
 
-  const totalHours = props.timeslips.reduce((prev, current) =>
-    prev + current.get('hours')
+  const activeModifiers = modifiers.filter((mod) =>
+    modifier.includes(mod.id)
+  );
+  const isEditable = !Boolean(invoice.issued_at);
+
+  const totalHours = timeslips.reduce((prev, current) =>
+    prev + current.hours
   , 0);
 
-  const taskTotal = props.tasks.reduce((prev, current) =>
+  const taskTotal = tasks.reduce((prev, current) =>
     prev + current.get('cost')
   , 0);
 
-  const subTotal = taskTotal + (project.get('hourly_rate') * totalHours);
+  const subTotal = taskTotal + (project.hourly_rate * totalHours);
   const total = activeModifiers.reduce((prev, current) =>
     prev + getModifierImpact(subTotal, current)
   , subTotal);
-  const timeTotal = project.get('hourly_rate') * totalHours;
+  const timeTotal = project.hourly_rate * totalHours;
 
   return (
     <div>
-      <List>
-        <ListItem
-          key={0}
-          className='invoice-summary-item'
-          primaryText='Time'
-          secondaryText={`${totalHours} Hours -  ${asCurrency(timeTotal, project.get('currency'))}`}
-          disabled={true}
-        />
-        <ListItem
-          key={1}
-          primaryText='Tasks'
-          className='invoice-summary-item'
-          secondaryText={`${props.tasks.count()} Tasks - ${asCurrency(taskTotal, project.get('currency'))}`}
-          disabled={true}
-        />
-      </List>
+      <ul>
+        <li key={0}>
+          <strong>Time: </strong>
+          {`${totalHours} Hours -  ${asCurrency(timeTotal, project.currency)}`}
+        </li>
+        <li key={1}>
+          <strong>Tasks: </strong>
+          {`${tasks.count()} Tasks - ${asCurrency(taskTotal, project.currency)}`}
+        </li>
+      </ul>
+
       <InvoiceSummaryTotal
-        currency={project.get('currency')}
+        currency={project.currency}
         title='Subtotal'
         value={subTotal}
       />
+
       <InvoiceModifiers
         invoice={invoice}
         modifiers={modifiers}
@@ -82,8 +66,9 @@ const InvoiceSummary = (props) => {
         onAddModifier={props.onAddModifier}
         onRemoveModifier={props.onRemoveModifier}
       />
+
       <InvoiceSummaryTotal
-        currency={project.get('currency')}
+        currency={project.currency}
         title='Total'
         value={total}
       />
