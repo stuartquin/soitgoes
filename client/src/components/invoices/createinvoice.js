@@ -23,23 +23,13 @@ class CreateInvoice extends React.Component {
 
     return (
       <div className="create-invoice">
-        <Button
-          className='btn-success'
-          label='Create New'
-          onClick={(evt) => {
-            evt.preventDefault();
-            this.setState({
-              anchorEl: evt.currentTarget,
-              open: true
-            });
-          }}
-        />
+        <h3>Create New</h3>
 
         <div>
           {projects.map((project) => {
             const label = (
               <div className='invoice-project-label'>
-                <span>{project.name}</span>
+                <span>{project.name} </span>
                 <span>{project.uninvoiced_hours} hrs</span>
               </div>
             );

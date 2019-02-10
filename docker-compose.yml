@@ -4,11 +4,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-nodejs
+    ports:
+     - "8080:8080"
     volumes:
       - ./client/src:/app/src
-      - ./client/webpack.config.js:/app/webpack.config.js
       - ./client/dist:/app/dist
-    command: npm run start
+      - ./client/index.html:/app/index.html
+      - ./client/webpack.config.js:/app/webpack.config.js
+    command: npm run start:dev
 
   soitgoes:
     stdin_open: true

@@ -3,7 +3,6 @@ import { combineReducers } from 'redux';
 import Immutable from 'immutable';
 
 import * as api from 'services/api';
-import { push } from 'react-router-redux';
 
 const SET_APP_LOAD_SUCCESS = 'SET_APP_LOAD_SUCCESS';
 
@@ -12,10 +11,6 @@ export const setIsLoaded = (loaded=true) => {
     type: SET_APP_LOAD_SUCCESS,
     loaded
   };
-};
-
-export const navigate = (path) => (dispatch) => {
-  dispatch(push(path));
 };
 
 const headerBar = (state=Immutable.Map(), action) => {

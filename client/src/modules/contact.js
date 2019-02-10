@@ -1,6 +1,5 @@
 import Immutable from 'immutable';
 import { combineReducers } from 'redux';
-import { push } from 'react-router-redux';
 
 import getById from 'services/getById';
 import * as api from 'services/api';

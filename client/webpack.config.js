@@ -30,6 +30,13 @@ function srcPath(subdir) { return path.join(__dirname, "src", subdir);}
 module.exports = {
   mode: IS_DEV ? 'development' : 'production',
   devtool: 'source-map',
+  devServer: {
+    host: '0.0.0.0',
+    historyApiFallback: true,
+    proxy: {
+      '/api': 'http://soitgoes:8000'
+    }
+  },
   entry: [
     './src/index'
   ],

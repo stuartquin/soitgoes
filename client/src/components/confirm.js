@@ -5,21 +5,21 @@ import Button from 'components/Button';
 
 const Confirm = (props) => {
   const confirmText = props.confirmText || 'Confirm';
-  const actions = [
-    <Button
-      label='Cancel'
-      onClick={props.onCancel}
-    />,
-    <Button
-      className='btn btn-success'
-      label='Confirm'
-      onClick={props.onConfirm}
-    />,
-  ];
 
   return props.open ? (
     <div>
       {props.children}
+      <div>
+        <Button
+          label='Cancel'
+          onClick={props.onCancel}
+        />
+        <Button
+          className='btn btn-success'
+          label={confirmText}
+          onClick={props.onConfirm}
+        />
+      </div>
     </div>
   ) : null;
 };

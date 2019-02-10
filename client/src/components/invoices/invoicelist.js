@@ -47,7 +47,6 @@ class InvoiceList extends Component {
         total = invoice.total_paid;
       }
 
-      console.log('Invoice', invoice);
       return (
         <tr key={invoice.id} className='invoice-list-row'>
           <td className='invoice-list-col'>
@@ -78,10 +77,6 @@ class InvoiceList extends Component {
     const { projects, invoices } = this.props;
     const grouped = groupByMonth(invoices);
     const months = Object.keys(grouped);
-
-    if (grouped['2018-10']) {
-      console.log('Rows', this.getRows('2018-10', grouped['2018-10'], projects));
-    }
 
     return (
       <table>

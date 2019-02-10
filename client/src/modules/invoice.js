@@ -1,4 +1,3 @@
-import { push } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import Immutable from 'immutable';
 
@@ -25,7 +24,6 @@ export const deleteInvoice = (invoiceId) => (dispatch) =>
       type: DELETE_INVOICE_SUCCESS,
       invoiceId
     });
-    dispatch(push(`/invoices`));
   });
 
 export const fetchInvoice = (id) => (dispatch) => {

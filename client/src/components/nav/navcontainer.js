@@ -17,7 +17,7 @@ import { InvoiceContainer } from 'components/invoices/invoicecontainer';
 // import { ContactContainer } from 'components/contact/contactcontainer';
 
 import {fetchProjects} from 'modules/project';
-import {setIsLoaded, navigate} from 'modules/nav';
+import {setIsLoaded} from 'modules/nav';
 import * as userActions from '../../actions/user';
 
 const PATH_TITLES = {
@@ -83,7 +83,6 @@ const actions = {
   ...userActions,
   fetchProjects,
   setIsLoaded,
-  navigate
 };
 
 const NavContainer = connect(mapStateToProps, actions)(Nav);
