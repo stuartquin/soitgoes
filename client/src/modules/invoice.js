@@ -53,9 +53,7 @@ export const addInvoiceModifier = (id, modifierId) => (dispatch) => {
 };
 
 export const createInvoice = (projectId) => (dispatch) =>
-  api.add('invoices/', {project: projectId}).then(res =>
-    dispatch(push(`/invoices/${res.id}`))
-  );
+  api.add('invoices/', {project: projectId})
 
 export const fetchInvoices = () => (dispatch) => {
   dispatch({

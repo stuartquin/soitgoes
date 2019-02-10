@@ -3,8 +3,9 @@ import {connect} from 'react-redux';
 import Immutable from 'immutable';
 
 import Button from 'components/Button';
+import CreateInvoice from './createinvoice';
+
 import {InvoiceList} from './invoicelist';
-import {CreateInvoice} from './createinvoice';
 import {Loading} from '../loading';
 import {Confirm} from '../confirm';
 import {
@@ -18,6 +19,8 @@ class Invoices extends React.Component {
       invoiceId: null,
       selectedInvoiceIds: Immutable.Set()
     };
+
+    this.handleCreateInvoice = this.handleCreateInvoice.bind(this);
   }
 
   componentDidMount() {
@@ -37,6 +40,12 @@ class Invoices extends React.Component {
 
     this.setState({
       selectedInvoiceIds: selectedIds
+    });
+  }
+
+  handleCreateInvoice(projectId) {
+    this.props.createInvoice(projectId).then((invoice) => {
+      location.href = `/invoices/${invoice.id}`;
     });
   }
 
@@ -94,7 +103,7 @@ class Invoices extends React.Component {
             { downloadBtn }
             <CreateInvoice
               projects={this.props.projects}
-              onCreateInvoice={this.props.createInvoice}
+              onCreateInvoice={this.handleCreateInvoice}
             />
           </div>
           <h3 className='invoice-list-header'>Open</h3>

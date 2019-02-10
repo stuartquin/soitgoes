@@ -55,11 +55,11 @@ class Invoice extends React.Component {
   }
 
   handleMarkIssued() {
-    const invoice = this.props.invoice;
+    const {timeslips, invoice} = this.props;
     this.props.updateInvoice(invoice.id, {
       reference: this.state.reference,
       due_date: this.state.dueDate || invoice.due_date,
-      timeslips: this.props.timeslips.map(t => t.id).toJS(),
+      timeslips: timeslips.map(t => t.id),
       status: 'ISSUED'
     });
   }

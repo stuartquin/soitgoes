@@ -3,7 +3,6 @@ import React from 'react';
 
 import Button from 'components/Button';
 
-
 class CreateInvoice extends React.Component {
   constructor(props) {
     super(props);
@@ -45,9 +44,13 @@ class CreateInvoice extends React.Component {
               </div>
             );
             return (
-            <a href="#" className='invoice-project' key={project.id}>
-              {label}
-            </a>
+              <a
+                onClick={() => this.props.onCreateInvoice(project.id)}
+                className='invoice-project'
+                key={project.id}
+              >
+                {label}
+              </a>
             );
           })}
         </div>
@@ -56,4 +59,4 @@ class CreateInvoice extends React.Component {
   }
 }
 
-export {CreateInvoice};
+export default CreateInvoice;
