@@ -134,7 +134,12 @@ tr.total td {
         </div>
 
         <div class='invoice-details'>
+          {% if invoice.reference %}
+          <h3>{{invoice.reference}}</h3>
+          <h4>Invoice #{{invoice.sequence_num}}</h4>
+          {% else %}
           <h3>Invoice #{{invoice.sequence_num}}</h3>
+          {% endif %}
           <span class='invoice-sent-date'>
             <strong>Issued:</strong>
             <span>{{ sent_date }}</span>

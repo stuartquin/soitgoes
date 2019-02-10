@@ -22,6 +22,7 @@ class Invoice extends React.Component {
     super(props);
     this.state = {
       dueDate: null,
+      reference: '',
       confirmDelete: false
     };
   }
@@ -49,9 +50,14 @@ class Invoice extends React.Component {
     this.setState({dueDate});
   }
 
+  setReference(reference) {
+    this.setState({reference});
+  }
+
   handleMarkIssued() {
     const invoice = this.props.invoice;
     this.props.updateInvoice(invoice.get('id'), {
+      reference: this.state.reference,
       due_date: this.state.dueDate || invoice.get('due_date'),
       timeslips: this.props.timeslips.map(t => t.get('id')).toJS(),
       status: 'ISSUED'
@@ -119,6 +125,7 @@ class Invoice extends React.Component {
               )
             }
             onSetDueDate={(date) => this.setDueDate(date)}
+            onSetReference={(reference) => this.setReference(reference)}
           />
           <Generator
             invoice={invoice}

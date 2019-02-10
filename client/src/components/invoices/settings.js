@@ -3,6 +3,7 @@ import React from 'react';
 import moment from 'moment';
 
 import DatePicker from 'material-ui/DatePicker';
+import TextField from 'material-ui/TextField';
 
 import { InvoiceSummary } from './invoicesummary';
 
@@ -26,6 +27,15 @@ class Settings extends React.Component {
             floatingLabelText='Due Date'
             defaultDate={dueDate}
             disabled={!isEditable}
+          />
+        </div>
+
+        <div>
+          <TextField
+            style={{width: '100%'}}
+            value={this.props.reference}
+            onChange={(evt, val) => this.props.onSetReference(val)}
+            floatingLabelText='Reference'
           />
         </div>
 
