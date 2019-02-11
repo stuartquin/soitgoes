@@ -58,7 +58,7 @@ export const fetchInvoices = () => (dispatch) => {
     type: GET_INVOICES_START
   });
 
-  api.fetchPath('invoices/').then(res => {
+  return api.fetchPath('invoices/').then(res => {
     dispatch({
       type: GET_INVOICES_SUCCESS,
       items: res.results,
@@ -99,29 +99,8 @@ const items = (state = {}, action) => {
   }
 };
 
-const view = (state, action) => {
-  if (!state) {
-    return Immutable.Map({
-      isLoading: true,
-      next: null
-    });
-  }
-  switch (action.type) {
-  case GET_INVOICES_START:
-    return state.merge({isLoading: true});
-  case GET_INVOICES_SUCCESS:
-    return state.merge({
-      isLoading: false,
-      next: action.next
-    });
-  default:
-    return state;
-  }
-};
-
 const invoices = combineReducers({
-  items,
-  view
+  items
 });
 
 export default invoices;

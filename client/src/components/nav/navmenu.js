@@ -49,6 +49,4 @@ const NavMenu = () => {
   );
 };
 
-export default styled(NavMenu)`
-  display: flex;
-`;
+export default NavMenu;

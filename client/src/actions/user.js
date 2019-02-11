@@ -42,9 +42,6 @@ const _fetchVersion = (dispatch) => {
 // TODO probably doesn't belong here...
 export const fetchVersion = () => (dispatch) => {
   _fetchVersion(dispatch);
-  setInterval(() => {
-    _fetchVersion(dispatch);
-  }, VERSION_INTERVAL);
 };
 
 export const login = (form) => (dispatch) => {

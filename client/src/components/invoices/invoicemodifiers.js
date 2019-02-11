@@ -28,7 +28,7 @@ const getModifierListItem = (invoice, modifier, isEditable, onAdd, onDelete) => 
 
   return (
     <li key={modifier.id}>
-      <strong>modifier.name: </strong>{modifier.percent}%
+      <strong>{modifier.name}: </strong>{modifier.percent}%
     </li>
   );
 };

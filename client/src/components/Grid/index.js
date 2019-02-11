@@ -13,6 +13,9 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-gap: 20px;
+
+  max-width: 1200px;
+  flex-grow: 1;
 `;
 
 const media = '@media';
