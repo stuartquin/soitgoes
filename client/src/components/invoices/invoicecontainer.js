@@ -3,6 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import Immutable from 'immutable';
 
+import {Grid, Cell} from 'components/Grid';
 import {Generator} from './generator';
 import {Settings} from './settings';
 import {Loading} from '../loading';
@@ -103,44 +104,48 @@ class Invoice extends React.Component {
             onMarkAsPaid={() => this.handleMarkPaid()}
           />
         </div>
-        <div className='content'>
-          <Settings
-            invoice={invoice}
-            project={project}
-            timeslips={this.props.timeslips}
-            tasks={this.props.tasks}
-            modifiers={modifiers}
-            isEditable={isEditable}
-            dueDate={dueDate}
-            onAddModifier={(modifier) =>
-              this.props.addInvoiceModifier(
-                invoice.id,
-                modifier.id
-              )
-            }
-            onRemoveModifier={(modifier) =>
-              this.props.deleteInvoiceModifier(
-                invoice.id,
-                modifier.id
-              )
-            }
-            onSetDueDate={(date) => this.setDueDate(date)}
-            onSetReference={(reference) => this.setReference(reference)}
-          />
-          <Generator
-            invoice={invoice}
-            project={project}
-            timeslips={this.props.timeslips}
-            tasks={this.props.tasks}
-            isEditable={isEditable}
-            onDeleteInvoiceTimeslip={(id) =>
-              this.props.updateTimeslip(id, {invoice: null})
-            }
-            onDeleteInvoiceTask={(id) =>
-              this.props.updateTask(id, {invoice: null})
-            }
-          />
-        </div>
+        <Grid>
+          <Cell sm="4">
+            <Settings
+              invoice={invoice}
+              project={project}
+              timeslips={this.props.timeslips}
+              tasks={this.props.tasks}
+              modifiers={modifiers}
+              isEditable={isEditable}
+              dueDate={dueDate}
+              onAddModifier={(modifier) =>
+                this.props.addInvoiceModifier(
+                  invoice.id,
+                  modifier.id
+                )
+              }
+              onRemoveModifier={(modifier) =>
+                this.props.deleteInvoiceModifier(
+                  invoice.id,
+                  modifier.id
+                )
+              }
+              onSetDueDate={(date) => this.setDueDate(date)}
+              onSetReference={(reference) => this.setReference(reference)}
+            />
+          </Cell>
+          <Cell sm="8">
+            <Generator
+              invoice={invoice}
+              project={project}
+              timeslips={this.props.timeslips}
+              tasks={this.props.tasks}
+              isEditable={isEditable}
+              onDeleteInvoiceTimeslip={(id) =>
+                this.props.updateTimeslip(id, {invoice: null})
+              }
+              onDeleteInvoiceTask={(id) =>
+                this.props.updateTask(id, {invoice: null})
+              }
+            />
+          </Cell>
+        </Grid>
       </div>
     );
   }

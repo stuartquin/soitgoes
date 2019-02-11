@@ -23,7 +23,7 @@ class CreateInvoice extends React.Component {
 
     return (
       <div className="create-invoice">
-        <h3>Create New</h3>
+        <h3>New</h3>
 
         <div>
           {projects.map((project) => {

@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import Immutable from 'immutable';
 
 import Button from 'components/Button';
+import {Grid, Cell} from 'components/Grid';
 import CreateInvoice from './createinvoice';
 
 import {InvoiceList} from './invoicelist';
@@ -86,7 +87,7 @@ class Invoices extends React.Component {
     ) : null;
 
     return (
-      <div className='invoices-container'>
+      <React.Fragment>
         <Confirm
           title='Confirm Delete'
           open={this.state.invoiceId !== null}
@@ -97,35 +98,39 @@ class Invoices extends React.Component {
           onCancel={() => this.setState({invoiceId: null})}>
           Are you sure you want to delete?
         </Confirm>
+        <Grid>
+          <Cell sm="3">
+            <div className='content-actions'>
+              { downloadBtn }
+              <CreateInvoice
+                projects={this.props.projects}
+                onCreateInvoice={this.handleCreateInvoice}
+              />
+            </div>
+          </Cell>
 
-        <div className='content'>
-          <div className='content-actions'>
-            { downloadBtn }
-            <CreateInvoice
+          <Cell sm="9">
+            <h3 className='invoice-list-header'>Open</h3>
+            <InvoiceList
               projects={this.props.projects}
-              onCreateInvoice={this.handleCreateInvoice}
+              invoices={openInvoices}
+              selectedInvoiceIds={this.state.selectedInvoiceIds.toJS()}
+              onSelectInvoice={this.handleSelectInvoice.bind(this)}
             />
-          </div>
-          <h3 className='invoice-list-header'>Open</h3>
-          <InvoiceList
-            projects={this.props.projects}
-            invoices={openInvoices}
-            selectedInvoiceIds={this.state.selectedInvoiceIds.toJS()}
-            onSelectInvoice={this.handleSelectInvoice.bind(this)}
-          />
-        </div>
 
-        <h3 className='invoice-list-header'>Closed</h3>
-        <InvoiceList
-          projects={this.props.projects}
-          invoices={closedInvoices}
-          selectedInvoiceIds={this.state.selectedInvoiceIds.toJS()}
-          onSelectInvoice={this.handleSelectInvoice.bind(this)}
-        />
-        <div className='invoice-load-more'>
-          {loadMore}
-        </div>
-      </div>
+            <h3 className='invoice-list-header'>Closed</h3>
+            <InvoiceList
+              projects={this.props.projects}
+              invoices={closedInvoices}
+              selectedInvoiceIds={this.state.selectedInvoiceIds.toJS()}
+              onSelectInvoice={this.handleSelectInvoice.bind(this)}
+            />
+            <div className='invoice-load-more'>
+              {loadMore}
+            </div>
+          </Cell>
+        </Grid>
+      </React.Fragment>
     );
   }
 }
@@ -147,3 +152,5 @@ const actions = {
 
 const InvoicesContainer = connect(mapStateToProps, actions)(Invoices);
 export {InvoicesContainer};
+
+

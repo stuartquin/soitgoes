@@ -12,11 +12,11 @@ class Settings extends React.Component {
     const dueDate = moment(this.props.dueDate).toDate();
 
     return (
-      <div className='settings'>
+      <div>
         <div>
           <input
-            style={{width: '100%'}}
             value={this.props.reference}
+            placeholder="Reference"
             onChange={(evt, val) => this.props.onSetReference(val)}
           />
         </div>

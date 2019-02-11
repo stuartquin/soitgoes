@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom'
+import { hot } from 'react-hot-loader/root'
 import { connect } from 'react-redux';
 
 import { Login } from 'components/login/login';
@@ -51,5 +52,6 @@ const actions = {
   ...userActions,
 };
 
-const AppContainer = connect(mapStateToProps, actions)(App);
-export { AppContainer };
+export default connect(mapStateToProps, actions)(
+  hot(App)
+);
