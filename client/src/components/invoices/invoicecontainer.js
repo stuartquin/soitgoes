@@ -172,7 +172,7 @@ const mapStateToProps = (state, { match }) => {
     project,
     contact,
     modifiers: Object.values(state.modifiers.items),
-    timeslips: getInvoiceTimeslips(invoice, state.timeslips.items),
+    timeslips: getInvoiceTimeslips(invoice, state.timeslip.items),
     tasks: getInvoiceTasks(invoice, state.tasks.items)
   };
 };

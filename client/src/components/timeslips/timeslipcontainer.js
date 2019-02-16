@@ -70,13 +70,13 @@ class Timeslips extends React.Component {
   }
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
   return {
-    weekStart: state.timeslips.view.get('weekStart'),
-    isSaving: state.timeslips.view.get('isSaving'),
-    isLoading: state.timeslips.view.get('isLoading'),
-    timeslips: state.timeslips.items,
-    projects: state.projects.items,
+    weekStart: state.timeslip.view.get('weekStart'),
+    isSaving: state.timeslip.view.get('isSaving'),
+    isLoading: state.timeslip.view.get('isLoading'),
+    timeslips: state.timeslip.items,
+    projects: state.project.items,
     user: state.user.user
   };
 };

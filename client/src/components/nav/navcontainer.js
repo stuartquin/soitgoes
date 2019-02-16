@@ -1,8 +1,8 @@
 import React from 'react';
+import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 
-import NavMenu from './navmenu';
 import { Loading } from 'components/loading';
 
 import { TimeslipsContainer} from 'components/timeslips/timeslipcontainer';
@@ -22,21 +22,17 @@ import {fetchProjects} from 'modules/project';
 import {setIsLoaded} from 'modules/nav';
 import * as userActions from '../../actions/user';
 
-const PATH_TITLES = {
-  '': 'InvoiceTime',
-  'projects': 'Projects',
-  'invoices': 'Invoices',
-  'timeslips': 'Time',
-  'contacts': 'Contacts',
-  'tasks': 'Tasks',
-  'dash': 'Dash'
-}
+const Styled = styled.div`
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  background: #ebeff7;
+`;
 
 class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      navOpen: false,
       isLoaded: false,
     };
   }
@@ -67,19 +63,16 @@ class Nav extends React.Component {
     }
 
     return (
-      <div>
-        <NavMenu />
-        <div className='container'>
-          <Route path='/timeslips' component={TimeslipsContainer} />
-          <Route exact path='/invoices' component={Invoices} />
-          <Route path='/invoices/:id' component={InvoiceContainer} />
-        </div>
-      </div>
+      <Styled>
+        <Route path='/timeslips' component={TimeslipsContainer} />
+        <Route exact path='/invoices' component={Invoices} />
+        <Route path='/invoices/:id' component={InvoiceContainer} />
+      </Styled>
     );
   }
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = () => {
   return {};
 };
 
@@ -92,19 +85,3 @@ const actions = {
 
 const NavContainer = connect(mapStateToProps, actions)(Nav);
 export { NavContainer };
-
-
-
-        // <div className='container'>
-        //   <Route path='/timeslips' component={TimeslipsContainer} />
-        //   <Route exact path='/invoices' component={InvoicesContainer} />
-        //   <Route path='/invoices/:id' component={InvoiceContainer} />
-        //   <Route exact path='/projects' component={ProjectsContainer} />
-        //   <Route path='/projects/:id' component={ProjectContainer} />
-        //   <Route exact path='/tasks' component={TasksContainer} />
-        //   <Route path='/tasks/:id' component={TaskContainer} />
-        //   <Route exact path='/contacts' component={ContactsContainer} />
-        //   <Route path='/contacts/:id' component={ContactContainer} />
-        //   <Route exact path='/' component={DashContainer} />
-        // </div>
-

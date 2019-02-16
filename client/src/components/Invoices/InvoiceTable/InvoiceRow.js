@@ -24,6 +24,7 @@ const Styled = styled(Grid)`
   color: #4e5767;
   padding: 12px 16px;
   cursor: pointer;
+  background: white;
 
   &:nth-child(odd) {
     background: #f4f6fa;
@@ -39,7 +40,6 @@ const ContactName = styled.div`
   font-size: 0.9em;
   margin-top: 4px;
 `;
-
 
 const StatusCell = styled(Cell)`
   display: flex;

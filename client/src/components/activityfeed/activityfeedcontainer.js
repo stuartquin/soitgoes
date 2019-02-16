@@ -60,8 +60,8 @@ class ActivityFeed extends React.Component {
 
 const mapStateToProps = (state, { params }) => {
   return {
-    timeslips: state.timeslips.items,
-    invoices: state.invoices.items,
+    timeslips: state.timeslip.items,
+    invoices: state.invoice.items,
     activityFeed: state.activityFeed.items
   };
 };
