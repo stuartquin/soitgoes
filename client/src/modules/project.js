@@ -1,4 +1,3 @@
-'use strict';
 import { combineReducers } from 'redux';
 
 import * as api from 'services/api';

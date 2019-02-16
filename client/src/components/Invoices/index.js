@@ -3,12 +3,14 @@ import {connect} from 'react-redux';
 
 import Button from 'components/Button';
 import InvoiceSummary from 'components/Invoices/InvoiceSummary';
+import InvoiceTable from 'components/Invoices/InvoiceTable';
 import {Grid, Cell} from 'components/Grid';
 
 import {fetchInvoices} from 'modules/invoice';
 import {fetchTimeslips} from 'modules/timeslip';
 import {getTotal, getOverdue} from 'services/invoice';
 import {getHourlyTotal} from 'services/timeslip';
+import {selectJoined, selectResults} from 'services/selectors';
 
 class Invoices extends React.Component {
   constructor(props) {
@@ -31,7 +33,7 @@ class Invoices extends React.Component {
     const overdue = getTotal(getOverdue(invoices));
     const unbilled = getHourlyTotal(timeslips, projects);
 
-    console.log(getOverdue(invoices), overdue);
+    console.log('Invoices', invoices);
 
     return (
       <React.Fragment>
@@ -40,6 +42,10 @@ class Invoices extends React.Component {
           overdue={overdue}
           unbilled={unbilled}
         />
+        <InvoiceTable
+          invoices={invoices}
+          projects={projects}
+        />
       </React.Fragment>
     )
   }
@@ -47,10 +53,15 @@ class Invoices extends React.Component {
 
 
 const mapStateToProps = (state) => {
+  const project = selectJoined(state.project.items, state);
   return {
-    projects: state.projects.items,
-    invoices: Object.values(state.invoices.items),
-    timeslips: Object.values(state.timeslips.items),
+    projects: state.project.items,
+    contacts: state.contact.items,
+    timeslips: Object.values(state.timeslip.items),
+    invoices: selectResults(
+      selectJoined(state.invoice.items, {project}),
+      state.invoice.results,
+    ),
   };
 };
 

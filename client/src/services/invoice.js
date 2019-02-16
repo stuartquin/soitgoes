@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const getTotal = (invoices, status = null) => {
   const filterFn = status ? (inv) => inv.status === status : (inv) => true;
 
@@ -13,4 +15,25 @@ export const getOverdue = (invoices) => {
     inv.status === 'ISSUED' &&
     today > inv.due_date
   ));
+};
+
+export const getInvoiceStatus = (invoice) => {
+  if (!invoice.issued_at) {
+    return 'Draft';
+  }
+
+  if (invoice.paid_at) {
+    return 'Paid';
+  }
+
+  const now = moment();
+  if (moment(invoice.due_date).isBefore(now)) {
+    return 'Pending';
+  }
+
+  if (moment(invoice.due_date).isAfter(now)) {
+    return 'Overdue';
+  }
+
+  return 'Unknown';
 };

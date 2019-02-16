@@ -7,11 +7,11 @@ import activityFeed from './reducers/activityfeed';
 import user from './reducers/user';
 import dash from './reducers/dash';
 
-import contacts from 'modules/contact';
-import modifiers from 'modules/modifier';
-import projects from 'modules/project';
-import invoices from 'modules/invoice';
-import timeslips from 'modules/timeslip';
+import contact from 'modules/contact';
+import modifier from 'modules/modifier';
+import project from 'modules/project';
+import invoice from 'modules/invoice';
+import timeslip from 'modules/timeslip';
 import flashMessage from 'modules/flashmessage';
 import tasks from 'modules/task';
 import nav from 'modules/nav';
@@ -29,15 +29,15 @@ const configureStore = () => {
 
   return createStore(combineReducers({
     activityFeed,
-    timeslips,
-    projects,
-    invoices,
+    timeslip,
+    project,
+    invoice,
     user,
     dash,
     tasks,
     nav,
-    contacts,
-    modifiers,
+    contact,
+    modifier,
     flashMessage,
   }),
   compose( ...middlewares )

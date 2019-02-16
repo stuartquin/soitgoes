@@ -1,30 +1,16 @@
 import Immutable from 'immutable';
 import { combineReducers } from 'redux';
 
-import getById from 'services/getById';
+import reduxHelper from 'services/reduxHelper';
 import * as api from 'services/api';
 import { addFlashMessage } from 'modules/flashmessage';
 
+const NS = 'CONTACTS';
 const GET_CONTACTS_START = 'GET_CONTACTS_START';
 const GET_CONTACTS_SUCCESS = 'GET_CONTACTS_SUCCESS';
 
-export const fetchContacts = () => (dispatch) => {
-  dispatch({
-    type: GET_CONTACTS_START
-  });
-  api.fetchPath('contacts/').then(res => {
-    let items = [];
-    if (res.results) {
-      items = res.results;
-    } else {
-      items = [res];
-    }
-    dispatch({
-      type: GET_CONTACTS_SUCCESS,
-      items
-    });
-  });
-};
+export const fetchContacts = reduxHelper.fetch(NS, () => api.fetchPath('contacts/'));
+
 
 export const addContact = (form) => (dispatch) => {
   dispatch({
@@ -57,25 +43,12 @@ export const updateContact = (id, form) => (dispatch) => {
   });
 };
 
-const view = (state = Immutable.Map({}), action) => {
-  switch (action.type) {
-  default:
-    return state;
-  }
-};
-
-const items = (state = Immutable.OrderedMap({}), action) => {
-  switch(action.type) {
-  case GET_CONTACTS_SUCCESS:
-    return state.merge(getById(action.items));
-  default:
-    return state;
-  }
-};
+const items = reduxHelper.items(NS);
+const results = reduxHelper.results(NS);
 
 const contacts = combineReducers({
   items,
-  view
+  results,
 });
 
 export default contacts;

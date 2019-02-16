@@ -17,6 +17,7 @@ import Invoices from 'components/Invoices';
 // import { ContactsContainer } from 'components/contact/contactscontainer';
 // import { ContactContainer } from 'components/contact/contactcontainer';
 
+import {fetchContacts} from 'modules/contact';
 import {fetchProjects} from 'modules/project';
 import {setIsLoaded} from 'modules/nav';
 import * as userActions from '../../actions/user';
@@ -45,10 +46,12 @@ class Nav extends React.Component {
   }
 
   fetchBase() {
+    // Populate store with some essentials
     return Promise.all([
       this.props.fetchVersion(),
       this.props.fetchAccounts(),
-      this.props.fetchProjects()
+      this.props.fetchProjects(),
+      this.props.fetchContacts()
     ]);
   }
 
@@ -83,6 +86,7 @@ const mapStateToProps = (state, props) => {
 const actions = {
   ...userActions,
   fetchProjects,
+  fetchContacts,
   setIsLoaded,
 };
 
