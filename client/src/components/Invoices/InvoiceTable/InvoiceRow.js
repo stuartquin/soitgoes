@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 
-import {Grid, Cell} from 'components/Grid';
+import {BREAKPOINTS, Grid, Cell, CellMd} from 'components/Grid';
 import {getInvoiceStatus} from 'services/invoice';
 import {asCurrency} from 'services/currency';
 import StatusPill from 'components/StatusPill';
@@ -25,8 +25,12 @@ const Styled = styled(Grid)`
   padding: 12px 16px;
   cursor: pointer;
 
+  &:nth-child(odd) {
+    background: #f4f6fa;
+  }
+
   &:hover {
-    background: #bde9ff;
+    background: #f5fcff;
   }
 `;
 
@@ -37,6 +41,15 @@ const ContactName = styled.div`
 `;
 
 
+const StatusCell = styled(Cell)`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  @media(max-width: ${BREAKPOINTS.sm}) {
+    align-items: center;
+  }
+`;
 
 class InvoiceRow extends React.Component {
   render() {
@@ -45,22 +58,20 @@ class InvoiceRow extends React.Component {
     const status = getInvoiceStatus(invoice);
     return (
       <Styled>
-        <Cell sm="5">
+        <Cell xs="7" sm="5">
           <div>#{invoice.sequence_num} {project.name}</div>
           <ContactName>{project.contact.name}</ContactName>
         </Cell>
-        <Cell sm="2">
+        <CellMd sm="2">
           {getIssuedDate(invoice)}
-        </Cell>
-        <Cell sm="2">
+        </CellMd>
+        <CellMd sm="2">
           {moment(invoice.due_date).fromNow()}
-        </Cell>
-        <Cell sm="2">
+        </CellMd>
+        <StatusCell xs="5" sm="3">
           {asCurrency(invoice.total_due, 'GBP')}
-        </Cell>
-        <Cell sm="1">
           <StatusPill status={STATUS_MAP[status]}>{status}</StatusPill>
-        </Cell>
+        </StatusCell>
       </Styled>
     );
   }

@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {Grid, Cell} from 'components/Grid';
+import {Grid, Cell, CellMd} from 'components/Grid';
 
 const Styled = styled(Grid)`
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   background: #f4f6fa;
   color: #4e5767;
   text-transform: uppercase;
@@ -17,19 +19,18 @@ class InvoiceTableHeader extends React.Component {
 
     return (
       <Styled>
-        <Cell sm="5">
+        <Cell xs="7" sm="5">
           Client
         </Cell>
-        <Cell sm="2">
+        <CellMd sm="2">
           Issued Date
-        </Cell>
-        <Cell sm="2">
+        </CellMd>
+        <CellMd sm="2">
           Due Date
-        </Cell>
-        <Cell sm="2">
+        </CellMd>
+        <Cell xs="5" sm="3">
           Amount
         </Cell>
-        <Cell sm="1" />
       </Styled>
     );
   }

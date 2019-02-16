@@ -2,14 +2,15 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
 
-const BREAKPOINTS = {
+export const BREAKPOINTS = {
+  xs: '0px',
   sm: '576px',
   md: '768px',
   lg: '992px',
   xl: '1200px',
 };
 
-const Grid = styled.div`
+export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-gap: 20px;
@@ -18,9 +19,8 @@ const Grid = styled.div`
   flex-grow: 1;
 `;
 
-const media = '@media';
 
-const Cell = styled.div`
+export const Cell = styled.div`
   grid-column: span 12;
 
   ${props => Object.keys(BREAKPOINTS).map(k => props[k] ? css`
@@ -30,4 +30,8 @@ const Cell = styled.div`
   `: '')}
 `;
 
-export {Grid, Cell};
+export const CellMd = styled(Cell)`
+  @media(max-width: ${BREAKPOINTS.sm}) {
+    display: none;
+  }
+`;
