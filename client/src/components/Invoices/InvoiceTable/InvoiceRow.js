@@ -25,6 +25,7 @@ const Styled = styled(Grid)`
   padding: 12px 16px;
   cursor: pointer;
   background: white;
+  align-items: center;
 
   &:nth-child(odd) {
     background: #f4f6fa;
@@ -43,12 +44,7 @@ const ContactName = styled.div`
 
 const StatusCell = styled(Cell)`
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-
-  @media(max-width: ${BREAKPOINTS.sm}) {
-    align-items: center;
-  }
 `;
 
 class InvoiceRow extends React.Component {
@@ -69,7 +65,7 @@ class InvoiceRow extends React.Component {
           {moment(invoice.due_date).fromNow()}
         </CellMd>
         <StatusCell xs="5" sm="3">
-          {asCurrency(invoice.total_due, 'GBP')}
+          {asCurrency(invoice.total_due, project.currency || 'GBP')}
           <StatusPill status={STATUS_MAP[status]}>{status}</StatusPill>
         </StatusCell>
       </Styled>

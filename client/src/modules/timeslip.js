@@ -6,6 +6,9 @@ import { combineReducers } from 'redux';
 import keyById from 'services/keyById';
 import * as api from 'services/api';
 import { fetchProjects } from 'modules/project';
+import reduxHelper from 'services/reduxHelper';
+
+const NS = 'TIMESLIP';
 
 export const GET_TIMESLIPS_SUCCESS = 'GET_TIMESLIPS_SUCCESS';
 const GET_TIMESLIPS_START = 'GET_TIMESLIPS_START';
@@ -60,17 +63,12 @@ export const hourChanged = (project, date, hours, user, timeslip) => {
   return action;
 };
 
-export const fetchTimeslips = (invoice, startDate, endDate) => (dispatch) => {
-  const start = startDate ? startDate.format('YYYY-MM-DD') : null;
-  const end = endDate ? endDate.format('YYYY-MM-DD') : null;
-
-  return api.fetchPath('timeslips/', {invoice, start, end}).then(res => {
-    dispatch({
-      type: GET_TIMESLIPS_SUCCESS,
-      items: res.results
-    });
-  });
-};
+export const fetchTimeslips = reduxHelper.fetch(
+  NS,
+  (invoice, start = null, end = null) => (
+    api.fetchPath('timeslips/', {invoice, start, end})
+  )
+);
 
 export const setActiveDate = (start, end) => (dispatch) => {
   dispatch({
@@ -107,61 +105,12 @@ const addProjectTimeslip = (action) => {
   };
 };
 
-const items = (state = {}, action) => {
-  switch(action.type) {
-  case SAVE_TIMESLIPS_SUCCESS:
-  case GET_TIMESLIPS_SUCCESS:
-    return {
-      ...state,
-      ...keyById(action.items),
-    };
-  case ADD_PROJECT_TIMESLIP:
-    return {
-      ...state,
-      ...addProjectTimeslip(action),
-    };
-  case UPDATE_PROJECT_TIMESLIP:
-    return {
-      ...state,
-      [action.timeslip.id]: {
-        ...state[action.timeslip.id],
-        hours: action.hours,
-        isUpdated: true,
-      }
-    };
-  default:
-    return state;
-  }
-};
+const items = reduxHelper.items(NS);
+const results = reduxHelper.results(NS);
 
-const view = (state, action) => {
-  if (!state) {
-    return Immutable.Map({
-      weekStart: moment().startOf('isoweek'),
-      isSaving: false,
-      isLoading: false,
-    });
-  }
-
-  switch (action.type) {
-  case SET_TIMESLIP_ACTIVE_DATE:
-    return state.set('weekStart', action.date);
-  case SAVE_TIMESLIPS_START:
-    return state.set('isSaving', true);
-  case SAVE_TIMESLIPS_SUCCESS:
-    return state.set('isLoading', false).set('isSaving', false);
-  case GET_TIMESLIPS_START:
-    return state.set('isLoading', true);
-  case GET_TIMESLIPS_SUCCESS:
-    return state.set('isLoading', false).set('isSaving', false);
-  default:
-    return state;
-  }
-};
-
-const timeslips = combineReducers({
+const timeslip = combineReducers({
   items,
-  view
+  results,
 });
 
-export default timeslips;
+export default timeslip;

@@ -1,9 +1,12 @@
 import React from 'react';
+import styled from 'styled-components';
 import {connect} from 'react-redux';
 
 import NavMenu from 'components/nav/navmenu';
 import ActionButton from 'components/ActionButton';
 import InvoiceTable from 'components/Invoices/InvoiceTable';
+import UpcomingSummary from 'components/Invoices/UpcomingSummary';
+import Heading from 'components/Heading';
 import {Grid, Cell} from 'components/Grid';
 
 import {fetchInvoices} from 'modules/invoice';
@@ -11,6 +14,17 @@ import {fetchTimeslips} from 'modules/timeslip';
 import {getTotal, getOverdue} from 'services/invoice';
 import {getHourlyTotal} from 'services/timeslip';
 import {selectJoined, selectResults} from 'services/selectors';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
+
+const Content = styled.div`
+  width: 1200px;
+`;
 
 class Invoices extends React.Component {
   constructor(props) {
@@ -23,6 +37,7 @@ class Invoices extends React.Component {
   }
 
   componentDidMount() {
+    this.props.fetchTimeslips('none');
     this.props.fetchInvoices().then(() => {
       this.setState({isLoading: false});
     });
@@ -32,7 +47,7 @@ class Invoices extends React.Component {
   }
 
   render() {
-    const {invoices, projects} = this.props;
+    const {invoices, timeslips} = this.props;
 
     return (
       <React.Fragment>
@@ -42,10 +57,19 @@ class Invoices extends React.Component {
           </ActionButton>
         </NavMenu>
 
-        <InvoiceTable
-          invoices={invoices}
-          projects={projects}
-        />
+        <Container>
+          <Content>
+            <Heading size="h2">Upcoming Invoices</Heading>
+            <UpcomingSummary
+              timeslips={timeslips}
+            />
+
+            <Heading size="h2">Issued Invoices</Heading>
+            <InvoiceTable
+              invoices={invoices}
+            />
+          </Content>
+        </Container>
       </React.Fragment>
     )
   }
@@ -54,8 +78,10 @@ class Invoices extends React.Component {
 const mapStateToProps = (state) => {
   const project = selectJoined(state.project.items, state);
   return {
-    projects: state.project.items,
-    contacts: state.contact.items,
+    timeslips: selectResults(
+      selectJoined(state.timeslip.items, {project}),
+      state.timeslip.results,
+    ),
     invoices: selectResults(
       selectJoined(state.invoice.items, {project}),
       state.invoice.results,
@@ -65,6 +91,7 @@ const mapStateToProps = (state) => {
 
 const actions = {
   fetchInvoices,
+  fetchTimeslips,
 };
 
 export default connect(mapStateToProps, actions)(Invoices);

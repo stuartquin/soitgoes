@@ -14,8 +14,6 @@ const getWithJoined = (item, state) => {
 };
 
 export const selectJoined = (items, state) => {
-  console.log('selectJoined', items, state);
-
   return Object.keys(items).reduce((agg, key) => ({
     ...agg,
     [key]: getWithJoined(items[key], state)
