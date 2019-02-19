@@ -7,8 +7,8 @@ import Button from 'components/Button';
 const DAY_OFFSET = 7;
 
 
-const TimeslipDateControls = (props) => {
-  const disabled = props.activeDate.isSame(props.today, 'isoweek');
+const TimeslipDateControls = ({weekStart, today, onSetActiveDate}) => {
+  const disabled = weekStart.isSame(today, 'isoweek');
 
   return (
     <div className='timeslip-date-controls'>
@@ -16,18 +16,14 @@ const TimeslipDateControls = (props) => {
         className='btn-default date-control'
         label='<'
         onClick={() => {
-          const start = moment(props.activeDate).subtract(DAY_OFFSET, 'days');
-          const end = moment(start).add(DAY_OFFSET, 'days');
-          props.onSetActiveDate(start, end);
+          onSetActiveDate(moment(weekStart).subtract(DAY_OFFSET, 'days'));
         }}
       />
       <Button
         className='btn-default date-control'
         label='>'
         onClick={() => {
-          const start = moment(props.activeDate).add(DAY_OFFSET, 'days');
-          const end = moment(start).add(DAY_OFFSET, 'days');
-          props.onSetActiveDate(start, end);
+          onSetActiveDate(moment(weekStart).add(DAY_OFFSET, 'days'));
         }}
       />
       <Button
@@ -35,9 +31,7 @@ const TimeslipDateControls = (props) => {
         disabled={disabled}
         label='Today'
         onClick={() => {
-          const start = moment().startOf('isoweek').isoWeekday(1);
-          const end = moment(start).add(DAY_OFFSET, 'days');
-          props.onSetActiveDate(start, end);
+          onSetActiveDate(moment());
         }}
       />
     </div>

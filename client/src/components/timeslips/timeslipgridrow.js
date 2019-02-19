@@ -4,7 +4,7 @@ import {TimeslipGridCell} from './timeslipgridcell';
 
 const TimeslipGridRow = (props) => {
   const dates = props.range.map((m) => m.format('YYYY-MM-DD'));
-  const filledTimeslips = props.timeslips.reduce( (result, item) => {
+  const filledTimeslips = props.timeslips.reduce((result, item) => {
     result[item.date] = item;
     return result;
   }, {});

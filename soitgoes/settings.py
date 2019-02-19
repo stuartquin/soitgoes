@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'journal.apps.JournalConfig',
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -136,7 +137,7 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
@@ -147,3 +148,5 @@ JET_DEFAULT_THEME = 'light-gray'
 
 # TODO Is ths OK?
 SESSION_COOKIE_HTTPONLY = False
+
+CSRF_TRUSTED_ORIGINS = ['localhost', 'localhost:8080']

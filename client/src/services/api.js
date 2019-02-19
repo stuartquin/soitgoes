@@ -1,8 +1,4 @@
-'use strict';
-
-const CSRF_TOKEN = document.querySelector(
-  "input[name=csrfmiddlewaretoken]"
-).value;
+const TOKEN = '471dfc9d7fc294269df6f91e15ea2346c4aef79a';
 
 const getRequestParams = (method) => {
   return {
@@ -11,7 +7,7 @@ const getRequestParams = (method) => {
     credentials: 'same-origin',
     headers: new Headers({
       'Content-Type': 'application/json',
-      'X-CSRFToken': CSRF_TOKEN
+      'Authorization': `Token ${TOKEN}`,
     })
   };
 };
