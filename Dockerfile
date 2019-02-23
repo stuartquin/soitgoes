@@ -23,4 +23,4 @@ ADD soitgoes /app/soitgoes
 ADD libs /app/libs
 ADD assets /app/assets
 
-EXPOSE 8000
+EXPOSE 8000:8000
