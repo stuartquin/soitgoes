@@ -31,7 +31,7 @@ const InvoiceSummary = (props) => {
   , 0);
 
   const taskTotal = tasks.reduce((prev, current) =>
-    prev + current.get('cost')
+    prev + current.cost
   , 0);
 
   const subTotal = taskTotal + (project.hourly_rate * totalHours);
@@ -49,7 +49,7 @@ const InvoiceSummary = (props) => {
         </li>
         <li key={1}>
           <strong>Tasks: </strong>
-          {`${tasks.count()} Tasks - ${asCurrency(taskTotal, project.currency)}`}
+          {`${tasks.length} Tasks - ${asCurrency(taskTotal, project.currency)}`}
         </li>
       </ul>
 

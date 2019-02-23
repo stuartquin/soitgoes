@@ -22,10 +22,6 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const Content = styled.div`
-  width: 1200px;
-`;
-
 class Invoices extends React.Component {
   constructor(props) {
     super(props);
@@ -58,7 +54,7 @@ class Invoices extends React.Component {
         </NavMenu>
 
         <Container>
-          <Content>
+          <div>
             <Heading size="h2">Upcoming Invoices</Heading>
             <UpcomingSummary
               timeslips={timeslips}
@@ -68,10 +64,10 @@ class Invoices extends React.Component {
             <InvoiceTable
               invoices={invoices}
             />
-          </Content>
+          </div>
         </Container>
       </React.Fragment>
-    )
+    );
   }
 }
 
@@ -80,7 +76,7 @@ const mapStateToProps = (state) => {
   return {
     timeslips: selectResults(
       selectJoined(state.timeslip.items, {project}),
-      state.timeslip.results,
+      nvostate.timeslip.results,
     ),
     invoices: selectResults(
       selectJoined(state.invoice.items, {project}),

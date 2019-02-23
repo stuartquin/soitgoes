@@ -2,7 +2,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {TimeslipsContainer} from '../timeslips/timeslipcontainer';
 import {ProjectForm} from './projectform';
 import { Loading } from '../loading';
 

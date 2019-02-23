@@ -3,12 +3,14 @@ import React from 'react';
 import {connect} from 'react-redux';
 import Immutable from 'immutable';
 
+import NavMenu from 'components/nav/navmenu';
 import {Grid, Cell} from 'components/Grid';
 import {Generator} from './generator';
 import {Settings} from './settings';
 import {Loading} from '../loading';
 import {Confirm} from '../confirm';
 import InvoiceHeader from './invoiceheader';
+import {selectJoined, selectResults} from 'services/selectors';
 
 import {
   fetchInvoice, deleteInvoice, deleteInvoiceModifier, addInvoiceModifier,
@@ -30,21 +32,15 @@ class Invoice extends React.Component {
 
   componentDidMount() {
     this.props.fetchModifiers();
-    if (this.props.id !== 'add') {
-      this.fetchInvoice().then(() => this.fetchData(this.props.id))
-    }
-  }
-
-  fetchInvoice() {
-    return this.props.fetchInvoice(this.props.id);
-  }
-
-  fetchData(id) {
-    let promises = [
-      this.props.fetchTimeslips(id),
-      this.props.fetchTasks(null, null, id)
+    const {projectId, invoiceId, fetchInvoice, fetchTimeslips} = this.props;
+    const promises = invoiceId ? [
+      fetchInvoice(),
+      fetchTimeslips(invoiceId),
+    ] : [
+      fetchTimeslips('none', null, null, projectId),
     ];
-    return Promise.all(promises);
+
+    Promise.all(promises);
   }
 
   setDueDate(dueDate) {
@@ -74,31 +70,22 @@ class Invoice extends React.Component {
   }
 
   render() {
-    const invoice = this.props.invoice;
+    const {invoice, project} = this.props;
     if (!invoice) {
       return (<Loading />);
     }
     const modifiers = this.props.modifiers;
-    const project = this.props.project;
-    const contact = this.props.contact;
     const isEditable = !Boolean(invoice.issued_at);
     const dueDate = this.state.dueDate || invoice.due_date;
 
     return (
-      <div className='invoice-container'>
-        <Confirm
-          title='Confirm Delete'
-          open={this.state.confirmDelete}
-          onConfirm={() => this.props.deleteInvoice(invoice.id)}
-          onCancel={() => this.setState({confirmDelete: false})}>
-          Are you sure you want to delete?
-        </Confirm>
+      <React.Fragment>
+        <NavMenu />
 
         <div className='header'>
           <InvoiceHeader
             invoice={invoice}
             project={project}
-            contact={contact}
             onDelete={() => this.setState({confirmDelete: true})}
             onMarkAsIssued={() => this.handleMarkIssued()}
             onMarkAsPaid={() => this.handleMarkPaid()}
@@ -146,34 +133,38 @@ class Invoice extends React.Component {
             />
           </Cell>
         </Grid>
-      </div>
+      </React.Fragment>
     );
   }
 }
 
-const getInvoiceTimeslips = (invoice, timeslips) => {
-  return Object.values(timeslips).filter((t) => t.invoice === invoice.id);
-}
-
-const getInvoiceTasks = (invoice, tasks) => {
-  return tasks.filter((t) => t.get('invoice') === invoice.id);
-}
-
 const mapStateToProps = (state, { match }) => {
+  const projects = selectJoined(state.project.items, state);
   const params = match.params;
-  const id = parseInt(params.id, 10);
-  const invoice = state.invoices.items[id] || {};
-  const project = state.projects.items[invoice.project] || {}
-  const contact = state.contacts.items.get(project.contact, Immutable.Map());
+  let invoice = null;
+  let project = null;
+  let invoiceId = null;
+  let projectId = null;
+
+  if (params.invoiceId) {
+    invoiceId = parseInt(paramse.invoiceId, 10);
+    invoice = state.invoice.items[invoiceId] || {};
+    project = projects[invoice.project] || {}
+    projectId = project.id;
+  } else {
+    projectId = parseInt(params.projectId, 10);
+    project = projects[projectId] || {}
+    invoice = {};
+  }
 
   return {
-    id,
+    invoiceId,
+    projectId,
     invoice,
     project,
-    contact,
-    modifiers: Object.values(state.modifiers.items),
-    timeslips: getInvoiceTimeslips(invoice, state.timeslip.items),
-    tasks: getInvoiceTasks(invoice, state.tasks.items)
+    modifiers: [],
+    timeslips: [],
+    tasks: [],
   };
 };
 

@@ -46,8 +46,8 @@ export const saveTimeslips = (timeslips) => {
 
 export const fetchTimeslips = reduxHelper.fetch(
   NS,
-  (invoice, start = null, end = null) => (
-    api.fetchPath('timeslips/', {invoice, start, end})
+  (invoice, start = null, end = null, project = null) => (
+    api.fetchPath('timeslips/', {invoice, start, end, project})
   )
 );
 

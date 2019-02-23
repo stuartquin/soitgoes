@@ -5,10 +5,10 @@ import { Route } from 'react-router-dom';
 
 import { Loading } from 'components/loading';
 
-import { TimeslipsContainer} from 'components/timeslips/timeslipcontainer';
 // import { InvoicesContainer } from 'components/invoices/invoicescontainer';
 import { InvoiceContainer } from 'components/invoices/invoicecontainer';
 import Invoices from 'components/Invoices';
+import Timeslips from 'components/Timeslips';
 // import { ProjectsContainer } from 'components/projects/projectscontainer';
 // import { ProjectContainer } from 'components/projects/projectcontainer';
 // import { DashContainer } from 'components/dash/dash';
@@ -42,7 +42,6 @@ class Nav extends React.Component {
   }
 
   fetchBase() {
-    // Populate store with some essentials
     return Promise.all([
       this.props.fetchVersion(),
       this.props.fetchAccounts(),
@@ -64,9 +63,13 @@ class Nav extends React.Component {
 
     return (
       <Styled>
-        <Route path='/timeslips' component={TimeslipsContainer} />
+        <Route path='/timeslips' component={Timeslips} />
         <Route exact path='/invoices' component={Invoices} />
         <Route path='/invoices/:id' component={InvoiceContainer} />
+        <Route
+          path='/project/:projectId/invoice'
+          component={InvoiceContainer}
+        />
       </Styled>
     );
   }

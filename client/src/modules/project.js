@@ -7,7 +7,6 @@ const GET_PROJECTS_START = 'GET_PROJECTS_START';
 const GET_PROJECTS_SUCCESS = 'GET_PROJECTS_SUCCESS';
 
 const getById = (items) => {
-  console.log('Items', items);
   return items.reduce((agg, item) => ({
     ...agg,
     [item.id]: item,

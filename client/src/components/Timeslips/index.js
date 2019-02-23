@@ -1,9 +1,9 @@
-'use strict';
 import React from 'react';
 import {connect} from 'react-redux';
 import moment from 'moment';
 
 import Button from 'components/Button';
+import NavMenu from 'components/nav/navmenu';
 
 import { TimeslipGrid } from './timeslipgrid';
 import { TimeslipDateControls } from './timeslipdatecontrols';
@@ -83,32 +83,33 @@ class Timeslips extends React.Component {
 
     if (this.props.projects) {
       return (
-      <div className='content'>
-        <TimeslipGrid
-          today={today}
-          isLoading={this.props.isLoading}
-          weekStart={weekStart}
-          timeslips={displayTimeslips}
-          projects={projects}
-          onHourChanged={this.handleSetHour}
-          onInvoice={this.props.onInvoice}
-        />
-        <div className='timeslip-actions'>
-          <TimeslipDateControls
+        <React.Fragment>
+          <NavMenu />
+          <TimeslipGrid
             today={today}
-            month={month}
-            weekStart={weekStart}
             isLoading={this.props.isLoading}
-            onSetActiveDate={this.handleSetActiveDate}
+            weekStart={weekStart}
+            timeslips={displayTimeslips}
+            projects={projects}
+            onHourChanged={this.handleSetHour}
+            onInvoice={this.props.onInvoice}
           />
-          <Button
-            onClick={this.handleSave}
-            label='Save'
-            className='btn-success'
-            disabled={this.props.isSaving}
-          />
-        </div>
-      </div>
+          <div className='timeslip-actions'>
+            <TimeslipDateControls
+              today={today}
+              month={month}
+              weekStart={weekStart}
+              isLoading={this.props.isLoading}
+              onSetActiveDate={this.handleSetActiveDate}
+            />
+            <Button
+              onClick={this.handleSave}
+              label='Save'
+              className='btn-success'
+              disabled={this.props.isSaving}
+            />
+          </div>
+        </React.Fragment>
       );
     } else {
       return (<p>No Timeslips</p>);
@@ -132,5 +133,4 @@ const actions = {
   saveTimeslips,
 };
 
-const TimeslipsContainer = connect(mapStateToProps, actions)(Timeslips);
-export {TimeslipsContainer};
+export default connect(mapStateToProps, actions)(Timeslips);

@@ -4,7 +4,6 @@ import {Link} from 'react-router';
 import styles from './styles.css';
 
 const HeaderLogo = (props) => {
-  'use strict';
   return (
     <div className={styles.headerLogo}>
       <div className={styles.headerBrand}>

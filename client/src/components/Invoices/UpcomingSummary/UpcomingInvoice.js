@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components';
 import moment from 'moment';
 
@@ -17,7 +18,8 @@ const Heading = styled.div`
   padding-bottom: 0;
 `;
 
-const Issue = styled.div`
+const Issue = styled(Link)`
+  display: block;
   font-size: 16px;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
@@ -41,6 +43,7 @@ const Styled = styled(Cell)`
   background: white;
   cursor: pointer;
   color: #050505;
+  width: 285px;
 
   &:hover ${Issue} {
     text-decoration: underline;
@@ -49,6 +52,7 @@ const Styled = styled(Cell)`
 
 const UpcomingInvoice = ({summary}) => {
   const {project, total, date} = summary;
+  const url = `/project/${project.id}/invoice`;
   return (
     <Styled sm="3">
       <Heading>{project.name}</Heading>
@@ -56,7 +60,7 @@ const UpcomingInvoice = ({summary}) => {
         <TotalAmount>{asCurrency(total, project.currency)}</TotalAmount>
         <div>Since {moment(date).format('MMM. DD')}</div>
       </Info>
-      <Issue>Issue &raquo;</Issue>
+      <Issue to={url}>Issue &raquo;</Issue>
     </Styled>
   );
 };

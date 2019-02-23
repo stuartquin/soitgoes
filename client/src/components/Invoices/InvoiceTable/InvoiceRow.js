@@ -45,6 +45,8 @@ const ContactName = styled.div`
 const StatusCell = styled(Cell)`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  min-width: 124px;
 `;
 
 class InvoiceRow extends React.Component {

@@ -14,10 +14,10 @@ const timeslipInvoiceItem = (timeslip, project) => {
 
 const taskInvoiceItem = (task) => {
   return {
-    id: task.get('id'),
-    details: task.get('name'),
-    unitPrice: task.get('cost'),
-    subTotal: task.get('cost')
+    id: task.id,
+    details: task.name,
+    unitPrice: task.cost,
+    subTotal: task.cost,
   }
 };
 
@@ -33,7 +33,7 @@ class Generator extends React.Component {
     ).map(t =>
       timeslipInvoiceItem(t, project)
     );
-    const taskItems = this.props.tasks.toList().map(taskInvoiceItem);
+    const taskItems = this.props.tasks.map(taskInvoiceItem);
 
     let itemViews = [];
 
@@ -52,7 +52,7 @@ class Generator extends React.Component {
       ));
     }
 
-    if (isEditable || taskItems.count()) {
+    if (isEditable || taskItems.length) {
       itemViews.push((
         <div key={1}>
           <h4>Completed Tasks</h4>
