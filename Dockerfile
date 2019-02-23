@@ -22,4 +22,3 @@ ADD journal /app/journal
 ADD soitgoes /app/soitgoes
 ADD libs /app/libs
 ADD assets /app/assets
-ADD version.txt /app/version.txt
