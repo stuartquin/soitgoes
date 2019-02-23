@@ -9,7 +9,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
 
 from . import serializers, models, summary
-from soitgoes.context_processors.cachebust import VERSION
 
 
 class HasProjectAccess(BasePermission):
@@ -306,7 +305,7 @@ class SummaryExpenses(APIView):
 class Version(APIView):
     def get(self, request, pk=None):
         return Response({
-            'hash': VERSION
+            'hash': '0.0.0'
         })
 
 
