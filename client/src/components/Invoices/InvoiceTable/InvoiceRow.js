@@ -6,6 +6,7 @@ import {BREAKPOINTS, Grid, Cell, CellMd} from 'components/Grid';
 import {getInvoiceStatus} from 'services/invoice';
 import {asCurrency} from 'services/currency';
 import StatusPill from 'components/StatusPill';
+import {Row} from 'components/DataTable';
 
 const STATUS_MAP = {
   Draft: 'draft',
@@ -19,22 +20,6 @@ const getIssuedDate = (invoice) => {
     moment(invoice.issued_at).format('MMM. DD, YYYY') :
     '';
 }
-
-const Styled = styled(Grid)`
-  color: #4e5767;
-  padding: 12px 16px;
-  cursor: pointer;
-  background: white;
-  align-items: center;
-
-  &:nth-child(odd) {
-    background: #f4f6fa;
-  }
-
-  &:hover {
-    background: #f5fcff;
-  }
-`;
 
 const ContactName = styled.div`
   color: #828282;
@@ -55,7 +40,7 @@ class InvoiceRow extends React.Component {
     const {project} = invoice;
     const status = getInvoiceStatus(invoice);
     return (
-      <Styled>
+      <Row>
         <Cell xs="7" sm="5">
           <div>#{invoice.sequence_num} {project.name}</div>
           <ContactName>{project.contact.name}</ContactName>
@@ -70,7 +55,7 @@ class InvoiceRow extends React.Component {
           {asCurrency(invoice.total_due, project.currency || 'GBP')}
           <StatusPill status={STATUS_MAP[status]}>{status}</StatusPill>
         </StatusCell>
-      </Styled>
+      </Row>
     );
   }
 }

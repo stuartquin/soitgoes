@@ -1,6 +1,10 @@
 import React from 'react';
+import styled from 'styled-components';
+import moment from 'moment';
 
-import { InvoiceItems } from './invoiceitems';
+import {Header} from 'components/DataTable';
+import {Cell, CellMd} from 'components/Grid';
+import InvoiceItem from './InvoiceItem';
 
 const timeslipInvoiceItem = (timeslip, project) => {
   const subTotal = project.hourly_rate * timeslip.hours;
@@ -21,6 +25,12 @@ const taskInvoiceItem = (task) => {
   }
 };
 
+const Styled = styled.div`
+  border-radius: 6px;
+  box-shadow: 0 4px 6px hsla(0, 0%, 40%, 0.74);
+  min-height: 400px;
+  width: 800px;
+`;
 
 class Generator extends React.Component {
   render() {
@@ -30,47 +40,26 @@ class Generator extends React.Component {
       return a.date > b.date ? 1 : -1;
     }).filter(t =>
       t.hours > 0
-    ).map(t =>
-      timeslipInvoiceItem(t, project)
     );
-    const taskItems = this.props.tasks.map(taskInvoiceItem);
-
-    let itemViews = [];
-
-    if (timeslipItems.length) {
-      itemViews.push((
-        <div key={0}>
-          <h4>Tracked Time</h4>
-          <InvoiceItems
-            isEditable={isEditable}
-            items={timeslipItems}
-            onDeleteItem={(item) => {
-              this.props.onDeleteInvoiceTimeslip(item.id);
-            }}
-          />
-        </div>
-      ));
-    }
-
-    if (isEditable || taskItems.length) {
-      itemViews.push((
-        <div key={1}>
-          <h4>Completed Tasks</h4>
-          <InvoiceItems
-            isEditable={isEditable}
-            items={taskItems}
-            onDeleteItem={(item) => {
-              this.props.onDeleteInvoiceTask(item.id);
-            }}
-          />
-        </div>
-      ));
-    }
 
     return (
-    <div className='invoice-generator'>
-      {itemViews}
-    </div>
+      <Styled>
+        <Header>
+          <Cell xs="7" sm="5">Time</Cell>
+          <CellMd sm="2">Unit</CellMd>
+          <Cell sm="2">Total</Cell>
+        </Header>
+        {timeslipItems.map((timeslip) => (
+          <InvoiceItem
+            key={timeslip.id}
+            project={project}
+            title={`${timeslip.hours} hours`}
+            subTitle={moment(timeslip.date).format('MMM. DD, YYYY')}
+            unitPrice={project.hourly_rate}
+            subTotal={timeslip.hours * project.hourly_rate}
+          />
+        ))}
+      </Styled>
     );
   }
 }

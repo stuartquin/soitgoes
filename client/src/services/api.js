@@ -49,7 +49,8 @@ export const fetchPath = (path, params={}) => {
       return `${p}=${params[p]}`;
     }
     return '';
-  }).join('&');
+  }).filter(q => q).join('&');
+
   let url = path;
   if (qs) {
     url = `${url}?${qs}`;

@@ -7,20 +7,13 @@ import ActionButton from 'components/ActionButton';
 import InvoiceTable from 'components/Invoices/InvoiceTable';
 import UpcomingSummary from 'components/Invoices/UpcomingSummary';
 import Heading from 'components/Heading';
-import {Grid, Cell} from 'components/Grid';
+import {Container, Grid, Cell} from 'components/Grid';
 
 import {fetchInvoices} from 'modules/invoice';
 import {fetchTimeslips} from 'modules/timeslip';
 import {getTotal, getOverdue} from 'services/invoice';
 import {getHourlyTotal} from 'services/timeslip';
 import {selectJoined, selectResults} from 'services/selectors';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-`;
 
 class Invoices extends React.Component {
   constructor(props) {
@@ -76,7 +69,7 @@ const mapStateToProps = (state) => {
   return {
     timeslips: selectResults(
       selectJoined(state.timeslip.items, {project}),
-      nvostate.timeslip.results,
+      state.timeslip.results,
     ),
     invoices: selectResults(
       selectJoined(state.invoice.items, {project}),
