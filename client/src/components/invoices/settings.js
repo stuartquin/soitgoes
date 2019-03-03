@@ -37,28 +37,20 @@ const Actions = styled.div`
 const Settings = (props) => {
   const {
     invoice, timeslips, project, modifiers, tasks, reference,
-    onSetReference, onRemoveModifier
+    onSetReference, onRemoveModifier, onUpdateStatus
   } = props;
   const {modifier = []} = invoice;
   const isEditable = !Boolean(invoice.issued_at);
-
   const totalHours = timeslips.reduce((prev, current) =>
     prev + current.hours
   , 0);
-
   const taskTotal = tasks.reduce((prev, current) =>
     prev + current.cost
   , 0);
-
-  const subTotal = taskTotal + (project.hourly_rate * totalHours);
-  const total = modifiers.reduce((prev, mod) => (
-    prev + getModifierImpact(mod, subTotal)
-  ), subTotal);
   const timeTotal = project.hourly_rate * totalHours;
 
   return (
     <Styled>
-
       <InvoiceSummaryRow>
         <div>
           <span>Time</span>
@@ -76,10 +68,9 @@ const Settings = (props) => {
         </span>
       </InvoiceSummaryRow>
 
-
       <InvoiceSummaryRow>
         <strong>Subtotal</strong>
-        <span>{asCurrency(subTotal, project.currency)}</span>
+        <span>{asCurrency(invoice.subtotal_due, project.currency)}</span>
       </InvoiceSummaryRow>
 
       {modifiers.length > 0 && (
@@ -98,7 +89,7 @@ const Settings = (props) => {
                 )}
               </div>
               <span>
-                {asCurrency(getModifierImpact(modifier, subTotal), project.currency)}
+                {asCurrency(getModifierImpact(modifier, invoice.subtotal_due), project.currency)}
               </span>
             </InvoiceSummaryRow>
           ))}
@@ -108,12 +99,14 @@ const Settings = (props) => {
       <Divider />
       <InvoiceSummaryRow>
         <strong>Total</strong>
-        <span>{asCurrency(total, project.currency)}</span>
+        <span>{asCurrency(invoice.total_due, project.currency)}</span>
       </InvoiceSummaryRow>
 
       <Actions>
         <ActionLink type="danger">Delete</ActionLink>
-        <Button type="success">Issue</Button>
+        <Button type="success" onClick={() => onUpdateStatus('ISSUED')}>
+          Issue
+        </Button>
       </Actions>
     </Styled>
   );

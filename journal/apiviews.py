@@ -122,20 +122,19 @@ class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
         return self.serializer_class(*args, **kwargs)
 
 
-class InvoiceViewSet(viewsets.ModelViewSet):
+class InvoiceListCreate(generics.ListCreateAPIView):
     serializer_class = serializers.InvoiceSerializer
 
     def get_queryset(self):
-        if 'ids' in self.request.query_params:
-            ids = self.request.query_params['ids'].split(',')
-            return models.Invoice.objects.filter(id__in=ids)
+        return models.Invoice.objects.all().order_by('-issued_at')
 
-        null = models.Invoice.objects.filter(issued_at__isnull=True)
-        not_null = models.Invoice.objects.filter(
-            issued_at__isnull=False
-        ).order_by('-issued_at')
-
-        return [item for item in null] + [item for item in not_null]
+    def perform_create(self, serializer):
+        invoice = serializer.save()
+        ids = [t.get('id') for t in self.request.data.get('timeslips')]
+        models.TimeSlip.set_invoice(
+            models.TimeSlip.objects.filter(id__in=ids),
+            invoice.pk
+        )
 
 
 class InvoiceModifierList(generics.ListAPIView):

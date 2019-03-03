@@ -9,7 +9,7 @@ const NS = 'CONTACTS';
 const GET_CONTACTS_START = 'GET_CONTACTS_START';
 const GET_CONTACTS_SUCCESS = 'GET_CONTACTS_SUCCESS';
 
-export const fetchContacts = reduxHelper.fetch(NS, () => api.fetchPath('contacts/'));
+export const fetchContacts = reduxHelper.fetch(NS, () => api.get('contacts/'));
 
 
 export const addContact = (form) => (dispatch) => {

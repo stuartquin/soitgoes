@@ -12,7 +12,7 @@ export const fetchCompanies = () => (dispatch) => {
   dispatch({
     type: GET_COMPANIES_START
   });
-  api.fetchPath('companies/').then(res => {
+  api.get('companies/').then(res => {
     let items = [];
     if (res.results) {
       items = res.results;

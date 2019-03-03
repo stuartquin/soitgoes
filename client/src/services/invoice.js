@@ -37,3 +37,8 @@ export const getInvoiceStatus = (invoice) => {
 
   return 'Unknown';
 };
+
+
+export const createNewInvoice = () => {
+
+};

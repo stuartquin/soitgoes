@@ -18,7 +18,7 @@ export const fetchTasks = (id=null, project=null, invoice=null) => (dispatch) =>
   const path = id === null ? 'tasks/' : `tasks/${id}`;
   const params = {project, invoice};
 
-  api.fetchPath(path, params).then(res => {
+  api.get(path, params).then(res => {
     dispatch({
       type: GET_TASKS_SUCCESS,
       items: res.results ? res.results : [res]

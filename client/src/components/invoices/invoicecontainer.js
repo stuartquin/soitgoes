@@ -8,15 +8,30 @@ import {Generator} from './generator';
 import {Loading} from '../loading';
 import {Confirm} from '../confirm';
 import InvoiceHeader from './invoiceheader';
-import {selectJoined, selectResults} from 'services/selectors';
 import Settings from './settings';
 
-import {
-  fetchInvoice, deleteInvoice, updateInvoice
-} from 'modules/invoice';
+import {selectJoined, selectResults} from 'services/selectors';
+import {getModifierImpact} from 'services/modifier';
+
+import {fetchInvoice, deleteInvoice, saveInvoice} from 'modules/invoice';
 import {fetchModifiers} from 'modules/modifier';
 import { fetchTasks, updateTask } from 'modules/task';
 import { fetchTimeslips, updateTimeslip } from 'modules/timeslip';
+
+const getInvoiceTotals = (invoice, project) => {
+  const {timeslips, modifiers} = invoice;
+  const totalHours = timeslips.reduce((prev, {hours}) =>prev + hours, 0);
+  const subTotal = totalHours * project.hourly_rate;
+  const total = modifiers.reduce((prev, mod) => (
+    prev + getModifierImpact(mod, subTotal)
+  ), subTotal);
+
+  return {
+    ...invoice,
+    subtotal_due: subTotal,
+    total_due: total,
+  };
+};
 
 class Invoice extends React.Component {
   constructor(props) {
@@ -29,26 +44,31 @@ class Invoice extends React.Component {
     };
 
     this.handleRemoveModifier = this.handleRemoveModifier.bind(this);
+    this.handleUpdateStatus = this.handleUpdateStatus.bind(this);
   }
 
   componentDidMount() {
-    const {projectId, invoiceId, fetchInvoice, fetchTimeslips} = this.props;
+    const {
+      project, invoiceId, fetchModifiers, fetchInvoice, fetchTimeslips
+    } = this.props;
     const promises = invoiceId ? [
       fetchInvoice(),
       fetchTimeslips(invoiceId),
-      this.props.fetchModifiers(),
+      fetchModifiers(),
     ] : [
-      fetchTimeslips('none', null, null, projectId),
-      this.props.fetchModifiers(),
+      fetchTimeslips('none', null, null, project.id),
+      fetchModifiers(),
     ];
 
     Promise.all(promises).then(() => {
-      const editableInvoice = {
-        ...this.props.invoice,
+      const editableInvoice = getInvoiceTotals({
+        ...this.props.invoice || {},
         timeslips: [...this.props.timeslips],
         modifiers: [...this.props.modifiers],
-      };
+        project: project.id,
+      }, project);
 
+      console.log('editableInvoice', editableInvoice);
       this.setState({editableInvoice});
     });
   }
@@ -66,17 +86,20 @@ class Invoice extends React.Component {
   }
 
   handleRemoveModifier(modifier) {
+    const {project} = this.props;
     const {editableInvoice} = this.state;
     const modifiers = editableInvoice.modifiers.filter(m => (
       m.id !== modifier.id
     ));
 
     this.setState({
-      editableInvoice: {
-        ...editableInvoice,
-        modifiers
-      }
+      editableInvoice: getInvoiceTotals({...editableInvoice, modifiers}, project)
     });
+  }
+
+  handleUpdateStatus(status) {
+    const {editableInvoice} = this.state;
+    this.props.saveInvoice({...editableInvoice, status});
   }
 
   handleMarkIssued() {
@@ -100,6 +123,7 @@ class Invoice extends React.Component {
   render() {
     const {project} = this.props;
     const {editableInvoice} = this.state;
+    console.log(editableInvoice);
     if (!editableInvoice) {
       return (<Loading />);
     }
@@ -118,7 +142,6 @@ class Invoice extends React.Component {
                 editableInvoice={editableInvoice}
                 project={project}
                 onDelete={() => this.setState({confirmDelete: true})}
-                onMarkAsIssued={() => this.handleMarkIssued()}
                 onMarkAsPaid={() => this.handleMarkPaid()}
               />
             </Cell>
@@ -149,6 +172,7 @@ class Invoice extends React.Component {
                 onRemoveModifier={this.handleRemoveModifier}
                 onSetDueDate={(date) => this.setDueDate(date)}
                 onSetReference={(reference) => this.setReference(reference)}
+                onUpdateStatus={this.handleUpdateStatus}
               />
             </Cell>
           </Grid>
@@ -189,7 +213,7 @@ const mapStateToProps = (state, { match }) => {
 
 const actions = {
   fetchInvoice,
-  updateInvoice,
+  saveInvoice,
   deleteInvoice,
 
   fetchModifiers,

@@ -137,45 +137,45 @@ class Invoice(models.Model):
             self.modifier.add(InvoiceModifier.objects.get(pk=modifier_id))
 
     def save(self, *args, **kwargs):
-        pk = self.pk
-        if pk is None:
-            # Status - New
-            if self.sequence_num == 0:
-                invoices = Invoice.objects.filter(project=self.project)
-                max = invoices.aggregate(
-                    Max('sequence_num')
-                ).get('sequence_num__max')
-                self.sequence_num = (max or 0) + 1
-            if self.due_date is None:
-                self.due_date = (datetime.datetime.now() + datetime.timedelta(
-                    days=INVOICE_DUE_DAYS
-                )).date()
+        # pk = self.pk
+        # if pk is None:
+        #     # Status - New
+        #     if self.sequence_num == 0:
+        #         invoices = Invoice.objects.filter(project=self.project)
+        #         max = invoices.aggregate(
+        #             Max('sequence_num')
+        #         ).get('sequence_num__max')
+        #         self.sequence_num = (max or 0) + 1
+        #     if self.due_date is None:
+        #         self.due_date = (datetime.datetime.now() + datetime.timedelta(
+        #             days=INVOICE_DUE_DAYS
+        #         )).date()
 
-            super().save(*args, **kwargs)
-            self._set_default_modifiers()
+        #     super().save(*args, **kwargs)
+        #     self._set_default_modifiers()
 
-        if self.issued_at is None:
-            # Status - Draft
-            TimeSlip.set_invoice(
-                TimeSlip.objects.filter(
-                    project=self.project,
-                    invoice=None
-                ),
-                self.pk
-            )
+        # if self.issued_at is None:
+        #     # Status - Draft
+        #     TimeSlip.set_invoice(
+        #         TimeSlip.objects.filter(
+        #             project=self.project,
+        #             invoice=None
+        #         ),
+        #         self.pk
+        #     )
 
-            Task.set_invoice(
-                Task.objects.filter(
-                    project=self.project,
-                    invoice=None,
-                ).exclude(completed_at=None),
-                self.pk
-            )
-        else:
-            # Status - Issued
-            self.set_total_due()
-            super().save(*args, **kwargs)
+        #     Task.set_invoice(
+        #         Task.objects.filter(
+        #             project=self.project,
+        #             invoice=None,
+        #         ).exclude(completed_at=None),
+        #         self.pk
+        #     )
+        # else:
+        #     # Status - Issued
+        #     self.set_total_due()
 
+        super().save(*args, **kwargs)
         invoicepdf.remove_pdf_file(self)
 
     def get_modifier_value(self, value):

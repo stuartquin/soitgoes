@@ -42,14 +42,23 @@ export const createInvoice = (projectId) => (dispatch) => (
   api.add('invoices/', {project: projectId})
 );
 
+const _saveInvoice = (invoice) => (
+  invoice.id ?
+    api.put(`invoices/${invoice.id}`, invoice) :
+    api.post('invoices/', invoice)
+);
+
+export const saveInvoice = reduxHelper.save(NS, _saveInvoice);
+
+
 export const fetchInvoices = reduxHelper.fetch(
   NS,
-  () => api.fetchPath(`invoices/`)
+  () => api.get(`invoices/`)
 );
 
 export const fetchInvoice = reduxHelper.fetch(
   NS,
-  (id) => api.fetchPath(`invoices/${id}`)
+  (id) => api.get(`invoices/${id}`)
 );
 
 export const fetchNext = (next) => (dispatch) => {

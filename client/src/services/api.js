@@ -23,6 +23,13 @@ export const buildRequest = (path, method='GET', data=null) => {
   return new Request(url, params);
 };
 
+export const post = (path, body = null) => {
+  return fetch(buildRequest(path, 'POST', body)).then(res => res.json());
+}
+export const put = (path, body = null) => {
+  return fetch(buildRequest(path, 'PUT', body)).then(res => res.json());
+}
+
 export const createSession = () => {
   return fetch(buildRequest('session/', 'POST')).then(res => res.json());
 };
@@ -43,7 +50,7 @@ export const paginate = (url) => {
   );
 };
 
-export const fetchPath = (path, params={}) => {
+export const get = (path, params={}) => {
   const qs = Object.keys(params).map(p => {
     if (params[p] !== null) {
       return `${p}=${params[p]}`;

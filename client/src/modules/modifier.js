@@ -2,21 +2,16 @@ import { combineReducers } from 'redux';
 
 import keyById from 'services/keyById';
 import * as api from 'services/api';
+import reduxHelper from 'services/reduxHelper';
 
+const NS = 'MODIFIERS';
 const GET_MODIFIERS_START = 'GET_MODIFIER_START';
 const GET_MODIFIERS_SUCCESS = 'GET_MODIFIER_SUCCESS';
 
-export const fetchModifiers = () => (dispatch) => {
-  dispatch({
-    type: GET_MODIFIERS_START
-  });
-  api.fetchPath('modifiers/').then(res => {
-    dispatch({
-      type: GET_MODIFIERS_SUCCESS,
-      items: res.results
-    });
-  });
-};
+export const fetchModifiers = reduxHelper.fetch(
+  NS,
+  () => api.get('modifiers/')
+);
 
 export const addModifier = (form) => (dispatch) => {
   dispatch({
@@ -44,17 +39,7 @@ export const updateModifier = (id, form) => (dispatch) => {
   });
 };
 
-const items = (state = {}, action) => {
-  switch(action.type) {
-  case GET_MODIFIERS_SUCCESS:
-    return {
-      ...state,
-      ...keyById(action.items)
-    };
-  default:
-    return state;
-  }
-};
+const items = reduxHelper.items(NS);
 
 const modifiers = combineReducers({
   items,

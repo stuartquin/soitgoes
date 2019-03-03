@@ -14,7 +14,7 @@ const getById = (items) => {
 };
 
 export const fetchProjects = () => (dispatch) =>
-  api.fetchPath('projects/').then(res => {
+  api.get('projects/').then(res => {
     dispatch({
       type: GET_PROJECTS_SUCCESS,
       items: res.results
