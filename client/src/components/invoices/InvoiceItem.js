@@ -5,12 +5,8 @@ import styled from 'styled-components';
 import {asCurrency} from 'services/currency';
 import {Cell, CellMd} from 'components/Grid';
 import {Row} from 'components/DataTable';
+import {SubTitle} from 'components/GUI';
 
-const SubTitle = styled.div`
-  color: #828282;
-  font-size: 0.9em;
-  margin-top: 4px;
-`;
 
 const InvoiceItem = ({
   title, subTitle, unitPrice, subTotal, project

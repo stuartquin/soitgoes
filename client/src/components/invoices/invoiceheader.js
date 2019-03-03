@@ -1,36 +1,8 @@
-'use strict';
 import React from 'react';
 
 import Button from 'components/Button';
+import Heading from 'components/Heading';
 
-import {StateChip} from './state-chip';
-
-
-const getDefaultName = (invoice, project) => {
-  return `${project.name} #${invoice.sequence_num}`;
-};
-
-const getStateAction = (invoice, onMarkAsIssued, onMarkAsPaid) => {
-  if (!invoice.paid_at) {
-    if (invoice.issued_at) {
-      return (
-        <Button
-          className='btn btn-success'
-          label='Set Paid'
-          onClick={onMarkAsPaid}
-        />
-      );
-    } else {
-      return (
-        <Button
-          className='btn btn-warn'
-          label='Issue'
-          onClick={onMarkAsIssued}
-        />
-      );
-    }
-  }
-};
 
 const getInvoiceActions = (invoice, onDelete) => {
   return (
@@ -46,25 +18,12 @@ const getInvoiceActions = (invoice, onDelete) => {
   );
 };
 
-const InvoiceHeader = (props) => {
-  const invoice = props.invoice;
-  const project = props.project;
-  const name = getDefaultName(invoice, project);
-
+const InvoiceHeader = ({project}) => {
   return (
     <div className='invoice-header'>
       <div className='invoice-header-info'>
-        <h3>{ name }</h3>
-        <span className='text-muted'>
-          { project.contact.name }
-        </span>
-      </div>
-      <div className='invoice-header-options'>
-        {getInvoiceActions(invoice, props.onDelete)}
-        <div className='invoice-header-actions'>
-          <StateChip invoice={invoice} />
-          {getStateAction(invoice, props.onMarkAsIssued, props.onMarkAsPaid)}
-        </div>
+        <Heading size="h2">{project.name}</Heading>
+        <Heading size="h3">{project.contact.name}</Heading>
       </div>
     </div>
   );

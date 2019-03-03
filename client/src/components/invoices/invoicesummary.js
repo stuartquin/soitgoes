@@ -1,5 +1,5 @@
-'use strict';
 import React from 'react';
+import styled from 'styled-components';
 
 import InvoiceModifiers from './invoicemodifiers';
 import { asCurrency } from 'services/currency';
@@ -16,6 +16,32 @@ const InvoiceSummaryTotal = ({ currency, value, title }) => {
     </div>
   );
 };
+
+
+const InvoiceSummaryRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 12px 16px;
+`;
+
+const Styled = styled.div`
+  border-radius: 6px;
+  box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
+  background: white;
+`;
+
+const Actions = styled.div`
+  display: block;
+  font-size: 16px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  background: #f5f3f5;
+  color: #464d59;
+  padding: 12px 16px;
+  text-align: center;
+`;
 
 const InvoiceSummary = (props) => {
   const {invoice, timeslips, project, modifiers, tasks} = props;
@@ -41,7 +67,7 @@ const InvoiceSummary = (props) => {
   const timeTotal = project.hourly_rate * totalHours;
 
   return (
-    <div>
+    <Styled>
       <ul>
         <li key={0}>
           <strong>Time: </strong>
@@ -53,11 +79,11 @@ const InvoiceSummary = (props) => {
         </li>
       </ul>
 
-      <InvoiceSummaryTotal
-        currency={project.currency}
-        title='Subtotal'
-        value={subTotal}
-      />
+      <hr />
+      <InvoiceSummaryRow>
+        <strong>Subtotal</strong>
+        <span>{asCurrency(subTotal, project.currency)}</span>
+      </InvoiceSummaryRow>
 
       <InvoiceModifiers
         invoice={invoice}
@@ -67,12 +93,14 @@ const InvoiceSummary = (props) => {
         onRemoveModifier={props.onRemoveModifier}
       />
 
-      <InvoiceSummaryTotal
-        currency={project.currency}
-        title='Total'
-        value={total}
-      />
-    </div>
+      <hr />
+      <InvoiceSummaryRow>
+        <strong>Total</strong>
+        <span>{asCurrency(total, project.currency)}</span>
+      </InvoiceSummaryRow>
+
+      <Actions />
+    </Styled>
   );
 };
 
