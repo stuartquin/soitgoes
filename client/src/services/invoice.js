@@ -27,7 +27,7 @@ export const getInvoiceStatus = (invoice) => {
   }
 
   const now = moment();
-  const dueDate = moment(invoice.due_date);
+  const dueDate = moment(invoice.due_date, 'YYYY-MM-DD');
   if (dueDate.isAfter(now)) {
     return 'ISSUED';
   }
@@ -49,12 +49,7 @@ export const getInvoiceDueMessage = (invoice) => {
   }
 
   const now = moment();
-  const dueDate = moment(invoice.due_date);
-  if (dueDate.isAfter(now)) {
-    const due = dueDate.subtract(now);
-    return `Due ${due.toNow()}`;
-  }
+  const dueDate = moment(invoice.due_date, 'YYYY-MM-DD');
 
-  const due = now.subtract(dueDate);
-  return `Due ${due.fromNow()}`;
+  return `Due ${dueDate.fromNow()}`;
 };

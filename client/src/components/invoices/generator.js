@@ -28,6 +28,7 @@ const taskInvoiceItem = (task) => {
 const Styled = styled.div`
   min-height: 600px;
   flex-grow: 1;
+  border-top-right-radius: 6px;
 `;
 
 class Generator extends React.Component {
@@ -43,9 +44,9 @@ class Generator extends React.Component {
     return (
       <Styled>
         <Header>
-          <Cell xs="7" sm="5">Time</Cell>
+          <Cell xs="8" sm="6">Time</Cell>
           <CellMd sm="2">Unit</CellMd>
-          <Cell sm="2">Total</Cell>
+          <CellMd sm="2">Total</CellMd>
         </Header>
         {timeslipItems.map((timeslip) => (
           <InvoiceItem

@@ -69,6 +69,11 @@ class Nav extends React.Component {
         <Route
           path='/project/:projectId/invoice'
           component={InvoiceContainer}
+          exact
+        />
+        <Route
+          path='/project/:projectId/invoice/:invoiceId'
+          component={InvoiceContainer}
         />
       </Styled>
     );

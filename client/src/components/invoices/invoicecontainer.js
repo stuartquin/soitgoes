@@ -66,7 +66,7 @@ class Invoice extends React.Component {
       project, invoiceId, fetchModifiers, fetchInvoice, fetchTimeslips
     } = this.props;
     const promises = invoiceId ? [
-      fetchInvoice(),
+      fetchInvoice(invoiceId),
       fetchTimeslips(invoiceId),
       fetchModifiers(),
     ] : [
@@ -135,20 +135,7 @@ class Invoice extends React.Component {
             </Cell>
           </Grid>
 
-          <Styled gap="0">
-            <Generator
-              invoice={editableInvoice}
-              project={project}
-              timeslips={this.props.timeslips}
-              tasks={this.props.tasks}
-              isEditable={isEditable}
-              onDeleteInvoiceTimeslip={(id) =>
-                this.props.updateTimeslip(id, {editableInvoice: null})
-              }
-              onDeleteInvoiceTask={(id) =>
-                this.props.updateTask(id, {editableInvoice: null})
-              }
-            />
+          <Styled>
             <Settings
               invoice={editableInvoice}
               project={project}
@@ -161,6 +148,19 @@ class Invoice extends React.Component {
               onSetDueDate={(date) => this.setDueDate(date)}
               onSetReference={(reference) => this.setReference(reference)}
               onUpdateStatus={this.handleUpdateStatus}
+            />
+            <Generator
+              invoice={editableInvoice}
+              project={project}
+              timeslips={this.props.timeslips}
+              tasks={this.props.tasks}
+              isEditable={isEditable}
+              onDeleteInvoiceTimeslip={(id) =>
+                this.props.updateTimeslip(id, {editableInvoice: null})
+              }
+              onDeleteInvoiceTask={(id) =>
+                this.props.updateTask(id, {editableInvoice: null})
+              }
             />
           </Styled>
         </Container>
@@ -178,7 +178,7 @@ const mapStateToProps = (state, { match }) => {
   let projectId = null;
 
   if (params.invoiceId) {
-    invoiceId = parseInt(paramse.invoiceId, 10);
+    invoiceId = parseInt(params.invoiceId, 10);
     invoice = state.invoice.items[invoiceId] || {};
     project = projects[invoice.project] || {}
     projectId = project.id;

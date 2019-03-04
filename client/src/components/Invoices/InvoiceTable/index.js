@@ -9,6 +9,8 @@ const Styled = styled.div`
   border-radius: 6px;
   box-shadow: 0 4px 6px hsla(0, 0%, 40%, 0.74);
   min-height: 400px;
+  max-width: 1200px;
+  width: 100%;
 `;
 
 class InvoiceTable extends React.Component {

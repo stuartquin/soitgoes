@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom'
 
 import {BREAKPOINTS, Grid, Cell, CellMd} from 'components/Grid';
 import {getInvoiceStatus} from 'services/invoice';
@@ -34,13 +35,20 @@ const StatusCell = styled(Cell)`
   min-width: 124px;
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
 class InvoiceRow extends React.Component {
   render() {
     const {invoice} = this.props;
     const {project} = invoice;
     const status = getInvoiceStatus(invoice);
     return (
-      <Row>
+      <Row
+        as={StyledLink}
+        to={`/project/${project.id}/invoice/${invoice.id}`}
+      >
         <Cell xs="7" sm="5">
           <div>#{invoice.sequence_num} {project.name}</div>
           <ContactName>{project.contact.name}</ContactName>

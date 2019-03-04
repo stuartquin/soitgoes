@@ -10,9 +10,10 @@ export const fetch = (
   dispatch({type: constant(moduleName, 'FETCH', 'start')});
 
   return fetchFn(...args).then((res) => {
+    const results = res.results || res;
     dispatch({
       type: constant(moduleName, 'FETCH', 'success'),
-      items: Array.isArray(res.results) ? res.results : [res.results],
+      items: Array.isArray(results) ? results : [results],
     });
   });
 };

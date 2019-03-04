@@ -5,6 +5,7 @@ import InvoiceModifiers from './invoicemodifiers';
 import {Button, ActionLink, Divider, SubTitle} from 'components/GUI';
 import { asCurrency } from 'services/currency';
 import { getModifierImpact, getModifierDisplayName } from 'services/modifier';
+import { BREAKPOINTS } from 'components/Grid';
 
 const InvoiceSummaryRow = styled.div`
   display: flex;
@@ -19,6 +20,13 @@ const Styled = styled.div`
   color: #4e5767;
   height: 100%;
   width: 290px;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+
+  @media(max-width: ${BREAKPOINTS.sm}) {
+    height: auto;
+    width: 100%;
+  }
 `;
 
 const Actions = styled.div`
@@ -26,8 +34,7 @@ const Actions = styled.div`
   justify-content: space-between;
   align-items: center;
   font-size: 16px;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
+  border-top-left-radius: 6px;
   color: #464d59;
   padding: 12px 16px;
   text-align: center;
