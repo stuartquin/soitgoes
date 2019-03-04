@@ -26,10 +26,8 @@ const taskInvoiceItem = (task) => {
 };
 
 const Styled = styled.div`
-  border-radius: 6px;
-  box-shadow: 0 4px 6px hsla(0, 0%, 40%, 0.74);
-  min-height: 400px;
-  width: 800px;
+  min-height: 600px;
+  flex-grow: 1;
 `;
 
 class Generator extends React.Component {

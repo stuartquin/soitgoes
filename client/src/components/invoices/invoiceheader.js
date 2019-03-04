@@ -1,31 +1,39 @@
 import React from 'react';
+import styled from 'styled-components';
+import moment from 'moment';
 
 import Button from 'components/Button';
 import Heading from 'components/Heading';
+import StatusPill from 'components/StatusPill';
+import {getInvoiceStatus, getInvoiceDueMessage} from 'services/invoice';
 
+const Styled = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
-const getInvoiceActions = (invoice, onDelete) => {
-  return (
-    <div>
-      <Button onClick={onDelete} label="Delete" />
-      {invoice.issued_at && (
-        <Button
-          onClick={() => window.open(`/api/invoices/${invoice.id}/pdf`)}
-          label="Download"
-        />
-      )}
-    </div>
-  );
+const STATUS_MAP = {
+  DRAFT: 'draft',
+  PENDING: 'warning',
+  OVERDUE: 'danger',
+  PAID: 'success',
 };
 
-const InvoiceHeader = ({project}) => {
+const InvoiceHeader = ({invoice, project}) => {
+  const status = STATUS_MAP[getInvoiceStatus(invoice)];
+
   return (
-    <div className='invoice-header'>
+    <Styled>
       <div className='invoice-header-info'>
         <Heading size="h2">{project.name}</Heading>
         <Heading size="h3">{project.contact.name}</Heading>
       </div>
-    </div>
+
+      <StatusPill size="lg" status={status}>
+        {getInvoiceDueMessage(invoice)}
+      </StatusPill>
+    </Styled>
   );
 }
 

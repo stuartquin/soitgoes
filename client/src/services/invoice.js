@@ -19,26 +19,42 @@ export const getOverdue = (invoices) => {
 
 export const getInvoiceStatus = (invoice) => {
   if (!invoice.issued_at) {
-    return 'Draft';
+    return 'DRAFT';
   }
 
   if (invoice.paid_at) {
-    return 'Paid';
+    return 'PAID';
   }
 
   const now = moment();
-  if (moment(invoice.due_date).isBefore(now)) {
-    return 'Pending';
+  const dueDate = moment(invoice.due_date);
+  if (dueDate.isAfter(now)) {
+    return 'ISSUED';
   }
 
-  if (moment(invoice.due_date).isAfter(now)) {
-    return 'Overdue';
+  if (dueDate.isBefore(now)) {
+    return 'OVERDUE';
   }
 
   return 'Unknown';
 };
 
+export const getInvoiceDueMessage = (invoice) => {
+  if (!invoice.issued_at) {
+    return 'Draft';
+  }
 
-export const createNewInvoice = () => {
+  if (invoice.paid_at) {
+    return `Paid ${moment(invoice.paid_at).format('YYYY-MM-DD')}`;
+  }
 
+  const now = moment();
+  const dueDate = moment(invoice.due_date);
+  if (dueDate.isAfter(now)) {
+    const due = dueDate.subtract(now);
+    return `Due ${due.toNow()}`;
+  }
+
+  const due = now.subtract(dueDate);
+  return `Due ${due.fromNow()}`;
 };

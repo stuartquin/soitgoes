@@ -8,6 +8,7 @@ export const Row = styled(Grid)`
   cursor: pointer;
   background: white;
   align-items: center;
+  box-sizing: border-box;
 
   &:nth-child(odd) {
     background: #f4f6fa;
@@ -26,4 +27,5 @@ export const Header = styled(Grid)`
   text-transform: uppercase;
   padding: 12px 16px;
   font-weight: bold;
+  box-sizing: border-box;
 `;

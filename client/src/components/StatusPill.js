@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 
 const STATUS = {
   success: { color: '#163514', background: '#ccedc9' },
@@ -13,6 +13,8 @@ const StatusPill = styled.div`
   text-align: center;
   padding: 4px 8px;
   font-weight: bold;
+  box-shadow: 0 2px 1px hsla(0,0%,40%,.2);
+  text-transform: uppercase;
 
   background: ${
     props => STATUS[props.status] ? STATUS[props.status].background : '#f5f3f5'
@@ -20,6 +22,11 @@ const StatusPill = styled.div`
   color: ${
     props => STATUS[props.status] ? STATUS[props.status].color : '#555355'
   };
+
+  ${props => props.size === 'lg' && css`
+    font-size: 14px;
+    padding: 16px 22px;
+  `}
 `;
 
 export default StatusPill;

@@ -15,10 +15,10 @@ const InvoiceSummaryRow = styled.div`
 `;
 
 const Styled = styled.div`
-  border-radius: 6px;
-  box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
   background: white;
   color: #4e5767;
+  height: 100%;
+  width: 290px;
 `;
 
 const Actions = styled.div`
@@ -28,7 +28,6 @@ const Actions = styled.div`
   font-size: 16px;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
-  background: #f5f3f5;
   color: #464d59;
   padding: 12px 16px;
   text-align: center;
@@ -51,6 +50,13 @@ const Settings = (props) => {
 
   return (
     <Styled>
+      <Actions>
+        <ActionLink size="sm" type="danger">Delete</ActionLink>
+        <Button type="success" onClick={() => onUpdateStatus('ISSUED')}>
+          Issue
+        </Button>
+      </Actions>
+
       <InvoiceSummaryRow>
         <div>
           <span>Time</span>
@@ -102,12 +108,6 @@ const Settings = (props) => {
         <span>{asCurrency(invoice.total_due, project.currency)}</span>
       </InvoiceSummaryRow>
 
-      <Actions>
-        <ActionLink type="danger">Delete</ActionLink>
-        <Button type="success" onClick={() => onUpdateStatus('ISSUED')}>
-          Issue
-        </Button>
-      </Actions>
     </Styled>
   );
 };

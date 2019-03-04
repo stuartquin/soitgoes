@@ -47,17 +47,15 @@ class Invoices extends React.Component {
         </NavMenu>
 
         <Container>
-          <div>
-            <Heading size="h2">Upcoming Invoices</Heading>
-            <UpcomingSummary
-              timeslips={timeslips}
-            />
+          <Heading size="h2">Upcoming Invoices</Heading>
+          <UpcomingSummary
+            timeslips={timeslips}
+          />
 
-            <Heading size="h2">Issued Invoices</Heading>
-            <InvoiceTable
-              invoices={invoices}
-            />
-          </div>
+          <Heading size="h2">Issued Invoices</Heading>
+          <InvoiceTable
+            invoices={invoices}
+          />
         </Container>
       </React.Fragment>
     );

@@ -1,4 +1,6 @@
 import React from 'react';
+import styled from 'styled-components';
+
 import {connect} from 'react-redux';
 import Immutable from 'immutable';
 
@@ -32,6 +34,18 @@ const getInvoiceTotals = (invoice, project) => {
     total_due: total,
   };
 };
+
+const Styled = styled.div`
+  background: #f5f3f5;
+  border-radius: 6px;
+  box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
+  height: 100%;
+  max-width: 1200px;
+  width: 100%;
+
+  display: flex;
+  flex-wrap: wrap;
+`;
 
 class Invoice extends React.Component {
   constructor(props) {
@@ -68,13 +82,8 @@ class Invoice extends React.Component {
         project: project.id,
       }, project);
 
-      console.log('editableInvoice', editableInvoice);
       this.setState({editableInvoice});
     });
-  }
-
-  componentDidUpdate(prevProps) {
-    const {invoiceId, invoice} = this.props;
   }
 
   setDueDate(dueDate) {
@@ -102,28 +111,9 @@ class Invoice extends React.Component {
     this.props.saveInvoice({...editableInvoice, status});
   }
 
-  handleMarkIssued() {
-    const {timeslips, invoice} = this.props;
-    this.props.updateInvoice(invoice.id, {
-      reference: this.state.reference,
-      due_date: this.state.dueDate || invoice.due_date,
-      timeslips: timeslips.map(t => t.id),
-      status: 'ISSUED'
-    });
-  }
-
-  handleMarkPaid() {
-    const invoice = this.props.invoice;
-    this.props.updateInvoice(invoice.id, {
-      total_paid: invoice.total_due,
-      status: 'PAID'
-    });
-  }
-
   render() {
     const {project} = this.props;
     const {editableInvoice} = this.state;
-    console.log(editableInvoice);
     if (!editableInvoice) {
       return (<Loading />);
     }
@@ -139,43 +129,40 @@ class Invoice extends React.Component {
           <Grid>
             <Cell sm="12">
               <InvoiceHeader
-                editableInvoice={editableInvoice}
-                project={project}
-                onDelete={() => this.setState({confirmDelete: true})}
-                onMarkAsPaid={() => this.handleMarkPaid()}
-              />
-            </Cell>
-            <Cell sm="9">
-              <Generator
                 invoice={editableInvoice}
                 project={project}
-                timeslips={this.props.timeslips}
-                tasks={this.props.tasks}
-                isEditable={isEditable}
-                onDeleteInvoiceTimeslip={(id) =>
-                  this.props.updateTimeslip(id, {editableInvoice: null})
-                }
-                onDeleteInvoiceTask={(id) =>
-                  this.props.updateTask(id, {editableInvoice: null})
-                }
-              />
-            </Cell>
-            <Cell sm="3">
-              <Settings
-                invoice={editableInvoice}
-                project={project}
-                timeslips={this.props.timeslips}
-                tasks={this.props.tasks}
-                modifiers={modifiers}
-                isEditable={isEditable}
-                dueDate={dueDate}
-                onRemoveModifier={this.handleRemoveModifier}
-                onSetDueDate={(date) => this.setDueDate(date)}
-                onSetReference={(reference) => this.setReference(reference)}
-                onUpdateStatus={this.handleUpdateStatus}
               />
             </Cell>
           </Grid>
+
+          <Styled gap="0">
+            <Generator
+              invoice={editableInvoice}
+              project={project}
+              timeslips={this.props.timeslips}
+              tasks={this.props.tasks}
+              isEditable={isEditable}
+              onDeleteInvoiceTimeslip={(id) =>
+                this.props.updateTimeslip(id, {editableInvoice: null})
+              }
+              onDeleteInvoiceTask={(id) =>
+                this.props.updateTask(id, {editableInvoice: null})
+              }
+            />
+            <Settings
+              invoice={editableInvoice}
+              project={project}
+              timeslips={this.props.timeslips}
+              tasks={this.props.tasks}
+              modifiers={modifiers}
+              isEditable={isEditable}
+              dueDate={dueDate}
+              onRemoveModifier={this.handleRemoveModifier}
+              onSetDueDate={(date) => this.setDueDate(date)}
+              onSetReference={(reference) => this.setReference(reference)}
+              onUpdateStatus={this.handleUpdateStatus}
+            />
+          </Styled>
         </Container>
       </React.Fragment>
     );

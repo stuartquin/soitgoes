@@ -9,10 +9,10 @@ import StatusPill from 'components/StatusPill';
 import {Row} from 'components/DataTable';
 
 const STATUS_MAP = {
-  Draft: 'draft',
-  Pending: 'warning',
-  Overdue: 'danger',
-  Paid: 'success',
+  DRAFT: 'draft',
+  PENDING: 'warning',
+  OVERDUE: 'danger',
+  PAID: 'success',
 };
 
 const getIssuedDate = (invoice) => {

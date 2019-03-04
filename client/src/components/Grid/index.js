@@ -14,6 +14,11 @@ export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-gap: 20px;
+  width: 100%;
+
+  ${props => props.gap && css`
+    grid-gap: ${props.gap};
+  `}
 
   max-width: 1200px;
   flex-grow: 1;
