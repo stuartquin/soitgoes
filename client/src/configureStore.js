@@ -13,7 +13,7 @@ import project from 'modules/project';
 import invoice from 'modules/invoice';
 import timeslip from 'modules/timeslip';
 import flashMessage from 'modules/flashmessage';
-import tasks from 'modules/task';
+import task from 'modules/task';
 import nav from 'modules/nav';
 
 const configureStore = () => {
@@ -32,9 +32,9 @@ const configureStore = () => {
     timeslip,
     project,
     invoice,
+    task,
     user,
     dash,
-    tasks,
     nav,
     contact,
     modifier,

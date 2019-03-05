@@ -5,26 +5,18 @@ import { combineReducers } from 'redux';
 import getById from 'services/getById';
 import * as api from 'services/api';
 import { addFlashMessage } from 'modules/flashmessage';
+import reduxHelper from 'services/reduxHelper';
 
 const GET_TASKS_START = 'GET_TASKS_START';
 const GET_TASKS_SUCCESS = 'GET_TASKS_SUCCESS';
 const UPDATE_TASK_START = 'UPDATE_TASK_START';
 
-export const fetchTasks = (id=null, project=null, invoice=null) => (dispatch) => {
-  dispatch({
-    type: GET_TASKS_START
-  });
+const NS = 'TASK';
 
-  const path = id === null ? 'tasks/' : `tasks/${id}`;
-  const params = {project, invoice};
-
-  api.get(path, params).then(res => {
-    dispatch({
-      type: GET_TASKS_SUCCESS,
-      items: res.results ? res.results : [res]
-    });
-  });
-};
+export const fetchTasks = reduxHelper.fetch(
+  NS,
+  (project = null, invoice = null) => api.get('tasks/', {invoice, project})
+);
 
 export const completeTask = (id) => (dispatch) => {
   dispatch({
@@ -74,26 +66,10 @@ export const addTask = (form) => (dispatch) => {
   });
 };
 
+const items = reduxHelper.items(NS);
+const results = reduxHelper.results(NS);
 
-const view = (state = Immutable.Map({}), action) => {
-  switch (action.type) {
-  default:
-    return state;
-  }
-};
-
-const items = (state = Immutable.OrderedMap({}), action) => {
-  switch(action.type) {
-  case GET_TASKS_SUCCESS:
-    return state.merge(getById(action.items));
-  default:
-    return state;
-  }
-};
-
-const tasks = combineReducers({
+export default combineReducers({
   items,
-  view
+  results,
 });
-
-export default tasks;

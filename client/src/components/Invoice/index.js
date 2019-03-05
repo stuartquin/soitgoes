@@ -16,13 +16,14 @@ import {getModifierImpact} from 'services/modifier';
 
 import {fetchInvoice, deleteInvoice, saveInvoice} from 'modules/invoice';
 import {fetchModifiers} from 'modules/modifier';
-import { fetchTasks, updateTask } from 'modules/task';
-import { fetchTimeslips, updateTimeslip } from 'modules/timeslip';
+import {fetchTasks} from 'modules/task';
+import {fetchTimeslips} from 'modules/timeslip';
 
-const getInvoiceTotals = (invoice, project) => {
-  const {timeslips, modifiers} = invoice;
-  const totalHours = timeslips.reduce((prev, {hours}) =>prev + hours, 0);
-  const subTotal = totalHours * project.hourly_rate;
+const getInvoiceTotals = (invoice) => {
+  const {project, timeslips, modifiers, tasks} = invoice;
+  const totalHours = timeslips.reduce((prev, {hours}) => prev + hours, 0);
+  const totalTask = tasks.reduce((prev, {cost}) => prev + cost, 0);
+  const subTotal = totalTask + (totalHours * project.hourly_rate);
   const total = modifiers.reduce((prev, mod) => (
     prev + getModifierImpact(mod, subTotal)
   ), subTotal);
@@ -61,25 +62,25 @@ class Invoice extends React.Component {
   }
 
   componentDidMount() {
-    const {
-      project, invoiceId, fetchModifiers, fetchInvoice, fetchTimeslips
-    } = this.props;
+    const {invoiceId, projectId} = this.props;
     const promises = invoiceId ? [
-      fetchInvoice(invoiceId),
-      fetchTimeslips(invoiceId),
-      fetchModifiers(),
+      this.props.fetchInvoice(invoiceId),
+      this.props.fetchTimeslips(invoiceId),
+      this.props.fetchTasks(projectId, invoiceId),
+      this.props.fetchModifiers(),
     ] : [
-      fetchTimeslips('none', null, null, project.id),
-      fetchModifiers(),
+      this.props.fetchTimeslips('none', null, null, projectId),
+      this.props.fetchTasks(projectId, 'none'),
+      this.props.fetchModifiers(),
     ];
 
     Promise.all(promises).then(() => {
       const editableInvoice = getInvoiceTotals({
-        ...this.props.invoice || {},
+        ...this.props.invoice,
         timeslips: [...this.props.timeslips],
         modifiers: [...this.props.modifiers],
-        project: project.id,
-      }, project);
+        tasks: [...this.props.tasks],
+      });
 
       this.setState({editableInvoice});
     });
@@ -94,14 +95,13 @@ class Invoice extends React.Component {
   }
 
   handleRemoveModifier(modifier) {
-    const {project} = this.props;
     const {editableInvoice} = this.state;
     const modifiers = editableInvoice.modifiers.filter(m => (
       m.id !== modifier.id
     ));
 
     this.setState({
-      editableInvoice: getInvoiceTotals({...editableInvoice, modifiers}, project)
+      editableInvoice: getInvoiceTotals({...editableInvoice, modifiers})
     });
   }
 
@@ -111,12 +111,10 @@ class Invoice extends React.Component {
   }
 
   render() {
-    const {project} = this.props;
     const {editableInvoice} = this.state;
     if (!editableInvoice) {
       return (<Loading />);
     }
-    const {modifiers} = editableInvoice;
     const isEditable = !Boolean(editableInvoice.issued_at);
     const dueDate = this.state.dueDate || editableInvoice.due_date;
 
@@ -127,20 +125,13 @@ class Invoice extends React.Component {
         <Container>
           <Grid>
             <Cell sm="12">
-              <InvoiceHeader
-                invoice={editableInvoice}
-                project={project}
-              />
+              <InvoiceHeader invoice={editableInvoice}/>
             </Cell>
           </Grid>
 
           <Styled>
             <Settings
               invoice={editableInvoice}
-              project={project}
-              timeslips={this.props.timeslips}
-              tasks={this.props.tasks}
-              modifiers={modifiers}
               isEditable={isEditable}
               dueDate={dueDate}
               onRemoveModifier={this.handleRemoveModifier}
@@ -150,16 +141,9 @@ class Invoice extends React.Component {
             />
             <Generator
               invoice={editableInvoice}
-              project={project}
-              timeslips={this.props.timeslips}
-              tasks={this.props.tasks}
               isEditable={isEditable}
-              onDeleteInvoiceTimeslip={(id) =>
-                this.props.updateTimeslip(id, {editableInvoice: null})
-              }
-              onDeleteInvoiceTask={(id) =>
-                this.props.updateTask(id, {editableInvoice: null})
-              }
+              onDeleteInvoiceTimeslip={(id) => console.log(id)}
+              onDeleteInvoiceTask={(id) => console.log(id)}
             />
           </Styled>
         </Container>
@@ -171,44 +155,35 @@ class Invoice extends React.Component {
 const mapStateToProps = (state, { match }) => {
   const projects = selectJoined(state.project.items, state);
   const params = match.params;
-  let project = null;
+  const projectId = parseInt(params.projectId, 10);
   let invoiceId = null;
   let invoice = null;
-  let projectId = null;
 
   if (params.invoiceId) {
+    const invoices = selectJoined(state.invoice.items, state);
     invoiceId = parseInt(params.invoiceId, 10);
-    invoice = state.invoice.items[invoiceId] || {};
-    project = projects[invoice.project] || {}
-    projectId = project.id;
+    invoice = invoices[invoiceId] || {};
   } else {
-    projectId = parseInt(params.projectId, 10);
-    project = projects[projectId] || {}
+    invoice = {
+      project: projects[projectId] || {}
+    };
   }
 
   return {
     invoiceId,
-    invoice,
     projectId,
-    project,
+    invoice,
     modifiers: Object.values(state.modifier.items, state.modifier.results),
     timeslips: selectResults(state.timeslip.items, state.timeslip.results),
-    tasks: [],
+    tasks: selectResults(state.task.items, state.task.results),
   };
 };
 
-const actions = {
-  fetchInvoice,
+export default connect(mapStateToProps, {
   saveInvoice,
   deleteInvoice,
-
+  fetchInvoice,
   fetchModifiers,
-
   fetchTasks,
-  updateTask,
-
   fetchTimeslips,
-  updateTimeslip
-};
-
-export default connect(mapStateToProps, actions)(Invoice);
+})(Invoice);

@@ -20,8 +20,9 @@ const STATUS_MAP = {
   PAID: 'success',
 };
 
-const InvoiceHeader = ({invoice, project}) => {
+const InvoiceHeader = ({invoice}) => {
   const status = STATUS_MAP[getInvoiceStatus(invoice)];
+  const {project} = invoice;
 
   return (
     <Styled>

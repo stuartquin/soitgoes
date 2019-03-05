@@ -6,25 +6,6 @@ import {Header} from 'components/DataTable';
 import {Cell, CellMd} from 'components/Grid';
 import InvoiceItem from './InvoiceItem';
 
-const timeslipInvoiceItem = (timeslip, project) => {
-  const subTotal = project.hourly_rate * timeslip.hours;
-  return {
-    id: timeslip.id,
-    details: `${timeslip.hours} hours on ${timeslip.date}`,
-    unitPrice: project.hourly_rate,
-    subTotal: subTotal
-  }
-};
-
-const taskInvoiceItem = (task) => {
-  return {
-    id: task.id,
-    details: task.name,
-    unitPrice: task.cost,
-    subTotal: task.cost,
-  }
-};
-
 const Styled = styled.div`
   min-height: 600px;
   flex-grow: 1;
@@ -33,13 +14,15 @@ const Styled = styled.div`
 
 class Generator extends React.Component {
   render() {
-    const {timeslips, project} = this.props;
+    const {invoice} = this.props;
+    const {project, timeslips, tasks} = invoice;
     const isEditable = this.props.isEditable;
     const timeslipItems = Object.values(timeslips).sort((a, b) => {
       return a.date > b.date ? 1 : -1;
-    }).filter(t =>
-      t.hours > 0
-    );
+    }).filter(t => t.hours > 0);
+    const taskItems = Object.values(tasks).sort((a, b) => {
+      return a.completed_at > b.completed_at ? 1 : -1;
+    });
 
     return (
       <Styled>
@@ -56,6 +39,17 @@ class Generator extends React.Component {
             subTitle={moment(timeslip.date).format('MMM. DD, YYYY')}
             unitPrice={project.hourly_rate}
             subTotal={timeslip.hours * project.hourly_rate}
+          />
+        ))}
+
+        {taskItems.map((task) => (
+          <InvoiceItem
+            key={task.id}
+            project={project}
+            title={task.name}
+            subTitle={moment(task.due_date).format('MMM. DD, YYYY')}
+            unitPrice={task.cost}
+            subTotal={task.cost}
           />
         ))}
       </Styled>

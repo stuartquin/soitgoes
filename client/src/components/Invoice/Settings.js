@@ -41,10 +41,9 @@ const Actions = styled.div`
 
 const Settings = (props) => {
   const {
-    invoice, timeslips, project, modifiers, tasks, reference,
-    onSetReference, onRemoveModifier, onUpdateStatus
+    invoice, reference, onSetReference, onRemoveModifier, onUpdateStatus
   } = props;
-  const {modifier = []} = invoice;
+  const {modifiers, tasks, timeslips, project} = invoice;
   const isEditable = !Boolean(invoice.issued_at);
   const totalHours = timeslips.reduce((prev, current) =>
     prev + current.hours
