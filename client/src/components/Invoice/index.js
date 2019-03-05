@@ -57,7 +57,7 @@ class Invoice extends React.Component {
       confirmDelete: false
     };
 
-    this.handleRemoveModifier = this.handleRemoveModifier.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
     this.handleUpdateStatus = this.handleUpdateStatus.bind(this);
   }
 
@@ -94,14 +94,14 @@ class Invoice extends React.Component {
     this.setState({reference});
   }
 
-  handleRemoveModifier(modifier) {
+  handleRemove(field, id) {
     const {editableInvoice} = this.state;
-    const modifiers = editableInvoice.modifiers.filter(m => (
-      m.id !== modifier.id
-    ));
-
+    const items = editableInvoice[field].filter(t => t.id !== id);
     this.setState({
-      editableInvoice: getInvoiceTotals({...editableInvoice, modifiers})
+      editableInvoice: {
+        ...editableInvoice,
+        [field]: items
+      }
     });
   }
 
@@ -131,10 +131,10 @@ class Invoice extends React.Component {
 
           <Styled>
             <Settings
-              invoice={editableInvoice}
+              invoice={getInvoiceTotals(editableInvoice)}
               isEditable={isEditable}
               dueDate={dueDate}
-              onRemoveModifier={this.handleRemoveModifier}
+              onRemoveModifier={(id) => this.handleRemove('modifiers', id)}
               onSetDueDate={(date) => this.setDueDate(date)}
               onSetReference={(reference) => this.setReference(reference)}
               onUpdateStatus={this.handleUpdateStatus}
@@ -142,8 +142,8 @@ class Invoice extends React.Component {
             <Generator
               invoice={editableInvoice}
               isEditable={isEditable}
-              onDeleteInvoiceTimeslip={(id) => console.log(id)}
-              onDeleteInvoiceTask={(id) => console.log(id)}
+              onRemoveTimeslip={(id) => this.handleRemove('timeslips', id)}
+              onRemoveTask={(id) => this.handleRemove('tasks', id)}
             />
           </Styled>
         </Container>

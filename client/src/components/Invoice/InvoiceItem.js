@@ -12,9 +12,8 @@ const Actions = styled.div`
   width: 100%;
 `;
 
-
 const InvoiceItem = ({
-  title, subTitle, unitPrice, subTotal, project
+  title, subTitle, unitPrice, subTotal, project, isEditable, onRemove
 }) => {
   return (
     <Row>
@@ -29,7 +28,9 @@ const InvoiceItem = ({
         {asCurrency(subTotal, project.currency)}
       </Cell>
       <Actions as={Cell} xs="2">
-        <ActionLink>Remove</ActionLink>
+        {isEditable && (
+          <ActionLink onClick={onRemove}>Remove</ActionLink>
+        )}
       </Actions>
     </Row>
   );

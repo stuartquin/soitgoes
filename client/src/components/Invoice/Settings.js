@@ -93,7 +93,7 @@ const Settings = (props) => {
                 <span>{getModifierDisplayName(modifier)}</span>
                 {isEditable && (
                   <div>
-                    <ActionLink size="sm" onClick={() => onRemoveModifier(modifier)}>
+                    <ActionLink size="sm" onClick={() => onRemoveModifier(modifier.id)}>
                       Remove
                     </ActionLink>
                   </div>

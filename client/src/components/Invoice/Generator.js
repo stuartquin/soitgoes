@@ -14,9 +14,8 @@ const Styled = styled.div`
 
 class Generator extends React.Component {
   render() {
-    const {invoice} = this.props;
+    const {invoice, isEditable, onRemoveTask, onRemoveTimeslip} = this.props;
     const {project, timeslips, tasks} = invoice;
-    const isEditable = this.props.isEditable;
     const timeslipItems = Object.values(timeslips).sort((a, b) => {
       return a.date > b.date ? 1 : -1;
     }).filter(t => t.hours > 0);
@@ -39,6 +38,8 @@ class Generator extends React.Component {
             subTitle={moment(timeslip.date).format('MMM. DD, YYYY')}
             unitPrice={project.hourly_rate}
             subTotal={timeslip.hours * project.hourly_rate}
+            isEditable={isEditable}
+            onRemove={() => onRemoveTimeslip(timeslip.id)}
           />
         ))}
 
@@ -50,6 +51,8 @@ class Generator extends React.Component {
             subTitle={moment(task.due_date).format('MMM. DD, YYYY')}
             unitPrice={task.cost}
             subTotal={task.cost}
+            isEditable={isEditable}
+            onRemove={() => onRemoveTask(task.id)}
           />
         ))}
       </Styled>
