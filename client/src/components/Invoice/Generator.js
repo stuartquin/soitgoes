@@ -44,7 +44,7 @@ class Generator extends React.Component {
     return (
       <Styled>
         <Header>
-          <Cell xs="8" sm="6">Time</Cell>
+          <Cell xs="8" sm="6">Item</Cell>
           <CellMd sm="2">Unit</CellMd>
           <CellMd sm="2">Total</CellMd>
         </Header>
@@ -63,4 +63,4 @@ class Generator extends React.Component {
   }
 }
 
-export {Generator}
+export default Generator;

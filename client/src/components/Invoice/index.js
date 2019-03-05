@@ -6,11 +6,10 @@ import Immutable from 'immutable';
 
 import NavMenu from 'components/nav/navmenu';
 import {Container, Grid, Cell} from 'components/Grid';
-import {Generator} from './generator';
 import {Loading} from '../loading';
-import {Confirm} from '../confirm';
-import InvoiceHeader from './invoiceheader';
-import Settings from './settings';
+import InvoiceHeader from 'components/Invoice/InvoiceHeader';
+import Generator from 'components/Invoice/Generator';
+import Settings from 'components/Invoice/Settings';
 
 import {selectJoined, selectResults} from 'services/selectors';
 import {getModifierImpact} from 'services/modifier';
@@ -212,5 +211,4 @@ const actions = {
   updateTimeslip
 };
 
-const InvoiceContainer = connect(mapStateToProps, actions)(Invoice);
-export {InvoiceContainer};
+export default connect(mapStateToProps, actions)(Invoice);

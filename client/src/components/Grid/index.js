@@ -46,5 +46,9 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+
+  box-sizing: border-box;
+  padding-left: 16px;
+  padding-right: 16px;
 `;
 

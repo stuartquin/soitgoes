@@ -5,8 +5,7 @@ import { Route } from 'react-router-dom';
 
 import { Loading } from 'components/loading';
 
-// import { InvoicesContainer } from 'components/invoices/invoicescontainer';
-import { InvoiceContainer } from 'components/invoices/invoicecontainer';
+import Invoice from 'components/Invoice';
 import Invoices from 'components/Invoices';
 import Timeslips from 'components/Timeslips';
 // import { ProjectsContainer } from 'components/projects/projectscontainer';
@@ -65,15 +64,14 @@ class Nav extends React.Component {
       <Styled>
         <Route path='/timeslips' component={Timeslips} />
         <Route exact path='/invoices' component={Invoices} />
-        <Route path='/invoices/:id' component={InvoiceContainer} />
         <Route
           path='/project/:projectId/invoice'
-          component={InvoiceContainer}
+          component={Invoice}
           exact
         />
         <Route
           path='/project/:projectId/invoice/:invoiceId'
-          component={InvoiceContainer}
+          component={Invoice}
         />
       </Styled>
     );

@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import InvoiceModifiers from './invoicemodifiers';
 import {Button, ActionLink, Divider, SubTitle} from 'components/GUI';
-import { asCurrency } from 'services/currency';
-import { getModifierImpact, getModifierDisplayName } from 'services/modifier';
-import { BREAKPOINTS } from 'components/Grid';
+import {asCurrency} from 'services/currency';
+import {getModifierImpact, getModifierDisplayName} from 'services/modifier';
+import {BREAKPOINTS} from 'components/Grid';
 
 const InvoiceSummaryRow = styled.div`
   display: flex;
