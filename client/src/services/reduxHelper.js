@@ -23,7 +23,6 @@ export const save = (
 ) => (...args) => (dispatch) => {
   dispatch({type: constant(moduleName, 'SAVE', 'start')});
 
-  console.log('saveFN', saveFn);
   return saveFn(...args).then((res) => {
     dispatch({
       type: constant(moduleName, 'SAVE', 'success'),

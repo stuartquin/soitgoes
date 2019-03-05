@@ -1,5 +1,6 @@
 import json
 import zipfile
+import datetime
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
@@ -129,6 +130,10 @@ class InvoiceListCreate(generics.ListCreateAPIView):
         return models.Invoice.objects.all().order_by('-issued_at')
 
     def perform_create(self, serializer):
+        sequence_num = models.Invoice.get_next_sequence_num(
+            serializer.validated_data['project']
+        )
+        serializer.validated_data['sequence_num'] = sequence_num
         invoice = serializer.save()
         ids = [t.get('id') for t in self.request.data.get('timeslips')]
         models.TimeSlip.set_invoice(

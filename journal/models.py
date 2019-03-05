@@ -102,7 +102,7 @@ class Invoice(models.Model):
     sequence_num = models.IntegerField(default=0)
     project = models.ForeignKey(Project)
     created_at = models.DateTimeField(auto_now_add=True)
-    issued_at = models.DateTimeField(default=None, blank=True, null=True)
+    issued_at = models.DateTimeField(auto_now_add=True)
     paid_at = models.DateTimeField(default=None, blank=True, null=True)
     due_date = models.DateField(default=None, blank=True, null=True)
     total_paid = models.FloatField(default=None, blank=True, null=True)
@@ -115,68 +115,7 @@ class Invoice(models.Model):
         ('PAID', 'PAID')
     ])
     reference = models.CharField(default=None, null=True, blank=True, max_length=256)
-
     modifier = models.ManyToManyField(InvoiceModifier, blank=True)
-
-    def set_total_due(self):
-        item_total = sum(
-            float(item.cost_per_unit) * int(item.qty) for item in self.items.all()
-        )
-        task_total = sum(
-            float(task.cost) for task in self.tasks.all()
-        )
-        total = (self.total_hours * self.project.hourly_rate)
-        total = total + item_total + task_total
-        modifier_impact = self.get_modifier_value(total)
-        self.subtotal_due = total
-        self.total_due = total + modifier_impact
-
-    def _set_default_modifiers(self):
-        DEFAULT_MODIFIERS = [1]
-        for modifier_id in DEFAULT_MODIFIERS:
-            self.modifier.add(InvoiceModifier.objects.get(pk=modifier_id))
-
-    def save(self, *args, **kwargs):
-        # pk = self.pk
-        # if pk is None:
-        #     # Status - New
-        #     if self.sequence_num == 0:
-        #         invoices = Invoice.objects.filter(project=self.project)
-        #         max = invoices.aggregate(
-        #             Max('sequence_num')
-        #         ).get('sequence_num__max')
-        #         self.sequence_num = (max or 0) + 1
-        #     if self.due_date is None:
-        #         self.due_date = (datetime.datetime.now() + datetime.timedelta(
-        #             days=INVOICE_DUE_DAYS
-        #         )).date()
-
-        #     super().save(*args, **kwargs)
-        #     self._set_default_modifiers()
-
-        # if self.issued_at is None:
-        #     # Status - Draft
-        #     TimeSlip.set_invoice(
-        #         TimeSlip.objects.filter(
-        #             project=self.project,
-        #             invoice=None
-        #         ),
-        #         self.pk
-        #     )
-
-        #     Task.set_invoice(
-        #         Task.objects.filter(
-        #             project=self.project,
-        #             invoice=None,
-        #         ).exclude(completed_at=None),
-        #         self.pk
-        #     )
-        # else:
-        #     # Status - Issued
-        #     self.set_total_due()
-
-        super().save(*args, **kwargs)
-        invoicepdf.remove_pdf_file(self)
 
     def get_modifier_value(self, value):
         impact = 0
@@ -204,6 +143,14 @@ class Invoice(models.Model):
     @staticmethod
     def get_bulk_file(invoices, user):
         return invoicepdf.get_bulk_file(invoices, user)
+
+    @staticmethod
+    def get_next_sequence_num(project_id):
+        agg = Invoice.objects.filter(project=project_id).aggregate(
+            Max('sequence_num')
+        )
+        current = agg.get('sequence_num__max', 0)
+        return current + 1 if current else 1
 
     def __str__(self):
         return "[%s] %s" % (self.sequence_num, self.project.name)

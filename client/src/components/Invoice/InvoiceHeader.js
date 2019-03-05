@@ -15,7 +15,7 @@ const Styled = styled.div`
 
 const STATUS_MAP = {
   DRAFT: 'draft',
-  PENDING: 'warning',
+  ISSUED: 'warning',
   OVERDUE: 'danger',
   PAID: 'success',
 };

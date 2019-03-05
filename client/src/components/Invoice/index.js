@@ -13,6 +13,7 @@ import Settings from 'components/Invoice/Settings';
 
 import {selectJoined, selectResults} from 'services/selectors';
 import {getModifierImpact} from 'services/modifier';
+import {getIssuedInvoice} from 'services/invoice';
 
 import {fetchInvoice, deleteInvoice, saveInvoice} from 'modules/invoice';
 import {fetchModifiers} from 'modules/modifier';
@@ -107,7 +108,15 @@ class Invoice extends React.Component {
 
   handleUpdateStatus(status) {
     const {editableInvoice} = this.state;
-    this.props.saveInvoice({...editableInvoice, status});
+    const {project} = editableInvoice;
+    const invoice = status === 'ISSUED' ?
+      getIssuedInvoice(editableInvoice) :
+      {...editableInvoice};
+
+    this.props.saveInvoice(invoice).then(({id}) => {
+      const {history} = this.props;
+      history.push(`/project/${project.id}/invoice/${id}`);
+    });
   }
 
   render() {
@@ -160,7 +169,7 @@ const mapStateToProps = (state, { match }) => {
   let invoice = null;
 
   if (params.invoiceId) {
-    const invoices = selectJoined(state.invoice.items, state);
+    const invoices = selectJoined(state.invoice.items, {project: projects});
     invoiceId = parseInt(params.invoiceId, 10);
     invoice = invoices[invoiceId] || {};
   } else {
