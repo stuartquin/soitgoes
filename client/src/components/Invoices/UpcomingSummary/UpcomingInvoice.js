@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import styled from 'styled-components';
 import moment from 'moment';
 
-import {Grid, Cell} from 'components/Grid';
+import {BREAKPOINTS, Grid, Cell} from 'components/Grid';
 import {asCurrency} from 'services/currency';
 
 const TotalAmount = styled.div`
@@ -47,6 +47,10 @@ const Styled = styled(Cell)`
 
   &:hover ${Issue} {
     text-decoration: underline;
+  }
+
+  @media(max-width: ${BREAKPOINTS.sm}) {
+    width: 100%;
   }
 `;
 

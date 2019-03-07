@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import {Button, ActionLink, Divider, SubTitle} from 'components/GUI';
 import {asCurrency} from 'services/currency';
+import {Input} from 'components/Form';
 import {getModifierImpact, getModifierDisplayName} from 'services/modifier';
 import {BREAKPOINTS} from 'components/Grid';
 
@@ -10,6 +11,15 @@ const InvoiceSummaryRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+
+  padding: 12px 16px;
+`;
+
+const InvoiceInputRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
 
   padding: 12px 16px;
 `;
@@ -39,9 +49,28 @@ const Actions = styled.div`
   text-align: center;
 `;
 
+const getStatusAction = (invoice, onUpdateStatus) => {
+  if (!invoice.status) {
+    return (
+      <Button type="success" onClick={() => onUpdateStatus('ISSUED')}>
+        Issue
+      </Button>
+    );
+  }
+  if (invoice.status === 'ISSUED') {
+    return (
+      <Button type="success" onClick={() => onUpdateStatus('PAID')}>
+        Set Paid
+      </Button>
+    );
+  }
+
+  return null;
+};
+
 const Settings = (props) => {
   const {
-    invoice, reference, onSetReference, onRemoveModifier, onUpdateStatus
+    invoice, reference, onChange, onRemoveModifier, onUpdateStatus
   } = props;
   const {modifiers, tasks, timeslips, project} = invoice;
   const isEditable = !Boolean(invoice.issued_at);
@@ -57,10 +86,30 @@ const Settings = (props) => {
     <Styled>
       <Actions>
         <ActionLink size="sm" type="danger">Delete</ActionLink>
-        <Button type="success" onClick={() => onUpdateStatus('ISSUED')}>
-          Issue
-        </Button>
+        {getStatusAction(invoice, onUpdateStatus)}
       </Actions>
+
+      <InvoiceInputRow>
+        <div>Due Date</div>
+        <Input
+          type="date"
+          name="due_date"
+          value={invoice.due_date}
+          onChange={onChange}
+          disabled={!isEditable}
+        />
+      </InvoiceInputRow>
+
+      <InvoiceInputRow>
+        <div>Reference</div>
+        <Input
+          type="text"
+          name="reference"
+          value={invoice.reference}
+          onChange={onChange}
+          disabled={!isEditable}
+        />
+      </InvoiceInputRow>
 
       <InvoiceSummaryRow>
         <div>

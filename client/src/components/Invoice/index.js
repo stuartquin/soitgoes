@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import moment from 'moment';
 
 import {connect} from 'react-redux';
-import Immutable from 'immutable';
 
 import NavMenu from 'components/nav/navmenu';
-import {Container, Grid, Cell} from 'components/Grid';
+import {BREAKPOINTS, Container, Grid, Cell} from 'components/Grid';
 import {Loading} from '../loading';
 import InvoiceHeader from 'components/Invoice/InvoiceHeader';
 import Generator from 'components/Invoice/Generator';
@@ -46,6 +46,10 @@ const Styled = styled.div`
 
   display: flex;
   flex-wrap: wrap;
+
+  @media(max-width: ${BREAKPOINTS.sm}) {
+    flex-direction: column-reverse;
+  }
 `;
 
 class Invoice extends React.Component {
@@ -59,6 +63,7 @@ class Invoice extends React.Component {
     };
 
     this.handleRemove = this.handleRemove.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.handleUpdateStatus = this.handleUpdateStatus.bind(this);
   }
 
@@ -87,14 +92,6 @@ class Invoice extends React.Component {
     });
   }
 
-  setDueDate(dueDate) {
-    this.setState({dueDate});
-  }
-
-  setReference(reference) {
-    this.setState({reference});
-  }
-
   handleRemove(field, id) {
     const {editableInvoice} = this.state;
     const items = editableInvoice[field].filter(t => t.id !== id);
@@ -102,6 +99,15 @@ class Invoice extends React.Component {
       editableInvoice: {
         ...editableInvoice,
         [field]: items
+      }
+    });
+  }
+
+  handleChange({target}) {
+    this.setState({
+      editableInvoice: {
+        ...this.state.editableInvoice,
+        [target.name]: target.value,
       }
     });
   }
@@ -139,20 +145,19 @@ class Invoice extends React.Component {
           </Grid>
 
           <Styled>
-            <Settings
-              invoice={getInvoiceTotals(editableInvoice)}
-              isEditable={isEditable}
-              dueDate={dueDate}
-              onRemoveModifier={(id) => this.handleRemove('modifiers', id)}
-              onSetDueDate={(date) => this.setDueDate(date)}
-              onSetReference={(reference) => this.setReference(reference)}
-              onUpdateStatus={this.handleUpdateStatus}
-            />
             <Generator
               invoice={editableInvoice}
               isEditable={isEditable}
               onRemoveTimeslip={(id) => this.handleRemove('timeslips', id)}
               onRemoveTask={(id) => this.handleRemove('tasks', id)}
+            />
+            <Settings
+              invoice={getInvoiceTotals(editableInvoice)}
+              isEditable={isEditable}
+              dueDate={dueDate}
+              onSetReference={(reference) => this.setReference(reference)}
+              onUpdateStatus={this.handleUpdateStatus}
+              onChange={this.handleChange}
             />
           </Styled>
         </Container>
@@ -174,7 +179,8 @@ const mapStateToProps = (state, { match }) => {
     invoice = invoices[invoiceId] || {};
   } else {
     invoice = {
-      project: projects[projectId] || {}
+      project: projects[projectId] || {},
+      due_date: moment().add(14, 'days').format('YYYY-MM-DD'),
     };
   }
 
