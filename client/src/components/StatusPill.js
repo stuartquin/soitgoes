@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
+import {BREAKPOINTS} from 'components/Grid';
 
 const STATUS = {
   success: { color: '#163514', background: '#ccedc9' },
@@ -24,9 +25,19 @@ const StatusPill = styled.div`
   };
 
   ${props => props.size === 'lg' && css`
-    font-size: 14px;
-    padding: 16px 22px;
+    font-size: 12px;
+    padding: 14px 20px;
   `}
+
+  @media(max-width: ${BREAKPOINTS.sm}) {
+    overflow: hidden;
+    min-width: 16px;
+    width: 16px;
+    height: 16px;
+    display: block;
+    padding: 0;
+    text-indent: -9999px;
+  }
 `;
 
 export default StatusPill;

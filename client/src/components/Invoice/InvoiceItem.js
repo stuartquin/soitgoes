@@ -21,17 +21,17 @@ const InvoiceItem = ({
         <div>{title}</div>
         <SubTitle>{subTitle}</SubTitle>
       </Cell>
-      <CellMd sm="2">
+      <CellMd numeric sm={isEditable ? '2' : '4'}>
         {asCurrency(unitPrice, project.currency)}
       </CellMd>
-      <Cell xs="2">
+      <Cell numeric xs="2">
         {asCurrency(subTotal, project.currency)}
       </Cell>
-      <Actions as={Cell} xs="2">
-        {isEditable && (
+      {isEditable && (
+        <Actions as={Cell} xs="2">
           <ActionLink onClick={onRemove}>Remove</ActionLink>
-        )}
-      </Actions>
+        </Actions>
+      )}
     </Row>
   );
 }

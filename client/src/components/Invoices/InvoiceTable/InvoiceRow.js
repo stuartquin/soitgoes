@@ -28,11 +28,18 @@ const ContactName = styled.div`
   margin-top: 4px;
 `;
 
+const Total = styled.div`
+  margin-right: 4px;
+`;
+
 const StatusCell = styled(Cell)`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  min-width: 124px;
+  justify-content: flex-end;
+
+  @media(max-width: ${BREAKPOINTS.sm}) {
+    min-width: auto;
+  }
 `;
 
 const StyledLink = styled(Link)`
@@ -59,8 +66,10 @@ class InvoiceRow extends React.Component {
         <CellMd sm="2">
           {moment(invoice.due_date).fromNow()}
         </CellMd>
-        <StatusCell xs="5" sm="3">
-          {asCurrency(invoice.total_due, project.currency || 'GBP')}
+        <StatusCell numeric xs="5" sm="3">
+          <Total>
+            {asCurrency(invoice.total_due, project.currency || 'GBP')}
+          </Total>
           <StatusPill status={STATUS_MAP[status]}>{status}</StatusPill>
         </StatusCell>
       </Row>

@@ -20,7 +20,7 @@ class InvoiceTableHeader extends React.Component {
         <CellMd sm="2">
           Due Date
         </CellMd>
-        <Cell xs="5" sm="3">
+        <Cell numeric xs="5" sm="3">
           Amount
         </Cell>
       </Header>

@@ -28,6 +28,10 @@ export const Grid = styled.div`
 export const Cell = styled.div`
   grid-column: span 12;
 
+  ${props => props.numeric && css`
+    text-align: right;
+  `}
+
   ${props => Object.keys(BREAKPOINTS).map(k => props[k] ? css`
     @media(min-width: ${BREAKPOINTS[k]}) {
       grid-column: span ${props[k]};

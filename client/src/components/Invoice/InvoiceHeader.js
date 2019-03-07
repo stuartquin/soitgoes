@@ -5,6 +5,7 @@ import moment from 'moment';
 import Button from 'components/Button';
 import Heading from 'components/Heading';
 import StatusPill from 'components/StatusPill';
+import {BREAKPOINTS} from 'components/Grid';
 import {getInvoiceStatus, getInvoiceDueMessage} from 'services/invoice';
 
 const Styled = styled.div`
@@ -26,10 +27,7 @@ const InvoiceHeader = ({invoice}) => {
 
   return (
     <Styled>
-      <div className='invoice-header-info'>
-        <Heading size="h2">{project.name}</Heading>
-        <Heading size="h3">{project.contact.name}</Heading>
-      </div>
+      <Heading size="h2">{project.name}</Heading>
 
       <StatusPill size="lg" status={status}>
         {getInvoiceDueMessage(invoice)}
