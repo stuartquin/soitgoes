@@ -81,11 +81,13 @@ const Settings = (props) => {
     prev + current.cost
   , 0);
   const timeTotal = project.hourly_rate * totalHours;
+  const downloadURL = `/api/invoices/${invoice.id}/pdf`;
 
   return (
     <Styled>
       <Actions>
         <ActionLink size="sm" type="danger">Delete</ActionLink>
+        <a href={downloadURL} download>Download</a>
         {getStatusAction(invoice, onUpdateStatus)}
       </Actions>
 

@@ -7,7 +7,6 @@ import {groupByProject, getTotal} from 'services/timeslip';
 
 const UpcomingSummary = ({timeslips}) => {
   const grouped = Object.values(groupByProject(timeslips));
-  console.log('grouped', grouped);
   const summary = grouped.map(items => ({
     project: items[0].project,
     date: items[0].date,

@@ -56,23 +56,10 @@ export const fetchInvoices = reduxHelper.fetch(
   () => api.get(`invoices/`)
 );
 
-export const fetchInvoice = reduxHelper.fetch(
+export const fetchInvoice = reduxHelper.fetchOne(
   NS,
   (id) => api.get(`invoices/${id}`)
 );
-
-export const fetchNext = (next) => (dispatch) => {
-  if (next) {
-    api.paginate(next).then(res => {
-      dispatch({
-        type: GET_INVOICES_SUCCESS,
-        items: res.results,
-        next: res.next,
-        count: res.count
-      });
-    });
-  }
-};
 
 const items = reduxHelper.items(NS);
 const results = reduxHelper.results(NS);

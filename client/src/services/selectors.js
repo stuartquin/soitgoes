@@ -1,6 +1,6 @@
 export const selectResults = (items, results) => results.map(id => items[id]);
 
-const getWithJoined = (item, state) => {
+export const getWithJoined = (item, state) => {
   return Object.keys(item).reduce((agg, key) => {
     const related = state[key] && state[key].items ?
       state[key].items :

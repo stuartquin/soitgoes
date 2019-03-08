@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
 
 from . import serializers, models, summary
+from .cookieauthentication import CookieAuthentication
 
 
 class HasProjectAccess(BasePermission):
@@ -122,6 +123,12 @@ class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
 
         return self.serializer_class(*args, **kwargs)
 
+    def get(self, request, pk=None):
+        # TODO maybe stick this in session
+        response = super().get(request, pk)
+        response.set_cookie('TOKEN', '471dfc9d7fc294269df6f91e15ea2346c4aef79a')
+        return response
+
 
 class InvoiceListCreate(generics.ListCreateAPIView):
     serializer_class = serializers.InvoiceSerializer
@@ -184,6 +191,7 @@ class InvoiceItems(generics.ListCreateAPIView):
 
 class InvoicePDF(APIView):
     permission_classes = (HasInvoiceAccess,)
+    authentication_classes = (CookieAuthentication, )
 
     def get(self, request, pk=None):
         invoice = models.Invoice.objects.get(id=pk)

@@ -18,6 +18,19 @@ export const fetch = (
   });
 };
 
+export const fetchOne = (
+  moduleName, fetchFn
+) => (...args) => (dispatch) => {
+  dispatch({type: constant(moduleName, 'FETCHONE', 'start')});
+
+  return fetchFn(...args).then((res) => {
+    dispatch({
+      type: constant(moduleName, 'FETCHONE', 'success'),
+      items: [res],
+    });
+  });
+};
+
 export const save = (
   moduleName, saveFn
 ) => (...args) => (dispatch) => {
@@ -38,8 +51,9 @@ export const isFetching = (
 ) => (state = false, action) => {
   switch (action.type) {
     case constant(moduleName, 'FETCH', 'start'):
+    case constant(moduleName, 'FETCHONE', 'start'):
       return true;
-    case constant(moduleName, 'FETCH', 'success'):
+    case constant(moduleName, 'FETCHONE', 'success'):
       return false;
     default:
       return state;
@@ -49,7 +63,7 @@ export const isFetching = (
 const items = (moduleName) => (state = {}, action) => {
   switch (action.type) {
     case constant(moduleName, 'FETCH', 'success'):
-      return keyById(action.items || []);
+    case constant(moduleName, 'FETCHONE', 'success'):
     case constant(moduleName, 'SAVE', 'success'):
       return {
         ...state,
@@ -84,6 +98,7 @@ const results = (moduleName) => (state = [], action) => {
 export default {
   constant,
   fetch,
+  fetchOne,
   items,
   save,
   isFetching,

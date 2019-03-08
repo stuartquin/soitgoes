@@ -11,7 +11,7 @@ import InvoiceHeader from 'components/Invoice/InvoiceHeader';
 import Generator from 'components/Invoice/Generator';
 import Settings from 'components/Invoice/Settings';
 
-import {selectJoined, selectResults} from 'services/selectors';
+import {getWithJoined, selectJoined, selectResults} from 'services/selectors';
 import {getModifierImpact} from 'services/modifier';
 import {getIssuedInvoice} from 'services/invoice';
 
@@ -170,19 +170,13 @@ const mapStateToProps = (state, { match }) => {
   const projects = selectJoined(state.project.items, state);
   const params = match.params;
   const projectId = parseInt(params.projectId, 10);
-  let invoiceId = null;
-  let invoice = null;
-
-  if (params.invoiceId) {
-    const invoices = selectJoined(state.invoice.items, {project: projects});
-    invoiceId = parseInt(params.invoiceId, 10);
-    invoice = invoices[invoiceId] || {};
-  } else {
-    invoice = {
-      project: projects[projectId] || {},
-      due_date: moment().add(14, 'days').format('YYYY-MM-DD'),
-    };
-  }
+  const invoiceId = parseInt(params.invoiceId, 10);
+  const invoice = invoiceId ? getWithJoined(
+    state.invoice.items[invoiceId] || {}, {project: projects}
+  ) : {
+    project: projects[projectId] || {},
+    due_date: moment().add(14, 'days').format('YYYY-MM-DD'),
+  };
 
   return {
     invoiceId,
