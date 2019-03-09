@@ -11,16 +11,16 @@ class InvoiceTableHeader extends React.Component {
 
     return (
       <Header>
-        <Cell xs="7" sm="5">
+        <Cell xs="7" sm="6">
           Client
         </Cell>
-        <CellMd sm="2">
+        <CellMd numeric sm="2">
           Issued Date
         </CellMd>
-        <CellMd sm="2">
+        <CellMd numeric sm="2">
           Due Date
         </CellMd>
-        <Cell numeric xs="5" sm="3">
+        <Cell numeric xs="5" sm="2">
           Amount
         </Cell>
       </Header>

@@ -77,22 +77,26 @@ const Settings = (props) => {
         />
       </InvoiceInputRow>
 
-      <InvoiceSummaryRow>
-        <div>
-          <span>Time</span>
-          <SubTitle>{totalHours} Hours</SubTitle>
-        </div>
-        <span>
-          {asCurrency(totalTime, project.currency)}
-        </span>
-      </InvoiceSummaryRow>
+      {totalTime > 0 && (
+        <InvoiceSummaryRow>
+          <div>
+            <span>Time</span>
+            <SubTitle>{totalHours} Hours</SubTitle>
+          </div>
+          <span>
+            {asCurrency(totalTime, project.currency)}
+          </span>
+        </InvoiceSummaryRow>
+      )}
 
-      <InvoiceSummaryRow>
-        <span>Tasks</span>
-        <span>
-          {asCurrency(totalTask, project.currency)}
-        </span>
-      </InvoiceSummaryRow>
+      {totalTask > 0 && (
+        <InvoiceSummaryRow>
+          <span>Tasks</span>
+          <span>
+            {asCurrency(totalTask, project.currency)}
+          </span>
+        </InvoiceSummaryRow>
+      )}
 
       <InvoiceSummaryRow>
         <strong>Subtotal</strong>

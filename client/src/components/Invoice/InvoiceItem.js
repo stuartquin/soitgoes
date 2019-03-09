@@ -1,6 +1,8 @@
 import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faMinusSquare} from '@fortawesome/free-solid-svg-icons'
 
 import {asCurrency} from 'services/currency';
 import {Cell, CellMd} from 'components/Grid';
@@ -17,7 +19,7 @@ const InvoiceItem = ({
 }) => {
   return (
     <Row>
-      <Cell xs="8" sm="6">
+      <Cell xs="9" sm="7">
         <div>{title}</div>
         <SubTitle>{subTitle}</SubTitle>
       </Cell>
@@ -28,8 +30,10 @@ const InvoiceItem = ({
         {asCurrency(subTotal, project.currency)}
       </Cell>
       {isEditable && (
-        <Actions as={Cell} xs="2">
-          <ActionLink onClick={onRemove}>Remove</ActionLink>
+        <Actions as={Cell} xs="1">
+          <ActionLink onClick={onRemove}>
+            <FontAwesomeIcon icon={faMinusSquare} />
+          </ActionLink>
         </Actions>
       )}
     </Row>

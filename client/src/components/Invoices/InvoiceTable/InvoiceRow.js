@@ -29,7 +29,7 @@ const ContactName = styled.div`
 `;
 
 const Total = styled.div`
-  margin-right: 4px;
+  margin-left: 4px;
 `;
 
 const StatusCell = styled(Cell)`
@@ -56,21 +56,21 @@ class InvoiceRow extends React.Component {
         as={StyledLink}
         to={`/project/${project.id}/invoice/${invoice.id}`}
       >
-        <Cell xs="7" sm="5">
+        <Cell xs="7" sm="6">
           <div>#{invoice.sequence_num} {project.name}</div>
           <ContactName>{project.contact.name}</ContactName>
         </Cell>
-        <CellMd sm="2">
+        <CellMd sm="2" numeric>
           {getIssuedDate(invoice)}
         </CellMd>
-        <CellMd sm="2">
+        <CellMd sm="2" numeric>
           {moment(invoice.due_date).fromNow()}
         </CellMd>
-        <StatusCell numeric xs="5" sm="3">
+        <StatusCell numeric xs="5" sm="2">
+          <StatusPill status={STATUS_MAP[status]}>{status}</StatusPill>
           <Total>
             {asCurrency(invoice.total_due, project.currency || 'GBP')}
           </Total>
-          <StatusPill status={STATUS_MAP[status]}>{status}</StatusPill>
         </StatusCell>
       </Row>
     );

@@ -29,7 +29,7 @@ class Generator extends React.Component {
     return (
       <Styled>
         <Header>
-          <Cell xs="8" sm="6">Item</Cell>
+          <Cell xs="9" sm="7">Item</Cell>
           <CellMd numeric sm={isEditable ? '2' : '4'}>Unit</CellMd>
           <CellMd numeric sm="2">Total</CellMd>
         </Header>
