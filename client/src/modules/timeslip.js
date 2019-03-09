@@ -12,8 +12,8 @@ const NS = 'TIMESLIP';
 export const GET_TIMESLIPS_SUCCESS = 'GET_TIMESLIPS_SUCCESS';
 
 export const saveTimeslips = (timeslips) => {
-  const newTimeslips = timeslips.filter(t => t.isNew);
-  const updated = timeslips.filter(t => t.isUpdated);
+  const newTimeslips = timeslips.filter(t => !t.id);
+  const updated = timeslips.filter(t => Boolean(t.id));
   const updates = Promise.all(updated.map((timeslip) =>
     api.update('timeslips/', timeslip.id, {
       hours: timeslip.hours,

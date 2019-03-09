@@ -38,8 +38,6 @@ const TimeslipGrid = (props) => {
     p => p && !p.archived
   );
 
-  //
-
   return (
     <Styled>
       <Scroll>
