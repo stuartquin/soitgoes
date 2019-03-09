@@ -53,10 +53,3 @@ export const getInvoiceDueMessage = (invoice) => {
 
   return `Due ${dueDate.fromNow()}`;
 };
-
-export const getIssuedInvoice = (invoice) => ({
-  ...invoice,
-  status: 'ISSUED',
-  due_date: moment().add(14, 'days').format('YYYY-MM-DD'),
-  project: invoice.project.id,
-});

@@ -42,7 +42,8 @@ const Styled = styled.div`
 
 const Settings = (props) => {
   const {
-    invoice, modifiers, onChange, onRemoveModifier, onUpdateStatus
+    invoice, modifiers, onChange, onRemoveModifier, onUpdateStatus,
+    reference, dueDate
   } = props;
   const {project, totalTime, totalHours, totalTask} = invoice;
   const isEditable = !Boolean(invoice.issued_at);
@@ -60,7 +61,7 @@ const Settings = (props) => {
         <Input
           type="date"
           name="due_date"
-          value={invoice.due_date || ''}
+          value={dueDate || ''}
           onChange={onChange}
           disabled={!isEditable}
         />
@@ -71,7 +72,7 @@ const Settings = (props) => {
         <Input
           type="text"
           name="reference"
-          value={invoice.reference || ''}
+          value={reference || ''}
           onChange={onChange}
           disabled={!isEditable}
         />

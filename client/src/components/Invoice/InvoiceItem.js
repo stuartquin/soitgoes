@@ -23,7 +23,7 @@ const InvoiceItem = ({
         <div>{title}</div>
         <SubTitle>{subTitle}</SubTitle>
       </Cell>
-      <CellMd numeric sm={isEditable ? '2' : '4'}>
+      <CellMd numeric sm={isEditable ? '2' : '3'}>
         {asCurrency(unitPrice, project.currency)}
       </CellMd>
       <Cell numeric xs="2">

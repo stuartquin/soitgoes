@@ -30,7 +30,7 @@ class Generator extends React.Component {
       <Styled>
         <Header>
           <Cell xs="9" sm="7">Item</Cell>
-          <CellMd numeric sm={isEditable ? '2' : '4'}>Unit</CellMd>
+          <CellMd numeric sm={isEditable ? '2' : '3'}>Unit</CellMd>
           <CellMd numeric sm="2">Total</CellMd>
         </Header>
         {timeslipItems.map((timeslip) => (
