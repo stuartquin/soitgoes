@@ -1,33 +1,45 @@
-'use strict';
 import React from 'react';
-import {TimeslipGridCell} from './timeslipgridcell';
+import styled from 'styled-components';
 
-const TimeslipGridRow = (props) => {
-  const dates = props.range.map((m) => m.format('YYYY-MM-DD'));
-  const filledTimeslips = props.timeslips.reduce((result, item) => {
+import TimeslipGridCell from './timeslipgridcell';
+
+const Project = styled.td`
+  height: 40px;
+  display: flex;
+  align-items: center;
+  left: 0;
+  position: absolute;
+  top: auto;
+  width: 116px;
+  justify-content: flex-end;
+`;
+
+const TimeslipGridRow = ({
+  project, range, timeslips, today, isLoading, onHourChanged
+}) => {
+  const dates = range.map((m) => m.format('YYYY-MM-DD'));
+  const filledTimeslips = timeslips.reduce((result, item) => {
     result[item.date] = item;
     return result;
   }, {});
 
   return (
-    <tr className='timeslip-grid-row'>
-      <td className='timeslip-grid-row-project'>
-        {props.project.name}
-      </td>
+    <tr>
+      <Project>{project.name}</Project>
       {dates.map((date) => (
         <TimeslipGridCell
-          isLoading={props.isLoading}
+          isLoading={isLoading}
           key={date}
           date={date}
-          today={props.today.format('YYYY-MM-DD')}
+          today={today.format('YYYY-MM-DD')}
           onHourChanged={(value, timeslip) => {
-            props.onHourChanged(value, date, timeslip);
+            onHourChanged(value, date, timeslip);
           }}
-          timeslip={filledTimeslips[date]} />
+          timeslip={filledTimeslips[date]}
+        />
       ))}
-      <td>{props.project.uninvoiced_hours}</td>
     </tr>
   );
 };
 
-export {TimeslipGridRow};
+export default TimeslipGridRow;

@@ -1,17 +1,32 @@
 import React from 'react';
+import styled from 'styled-components';
 import {connect} from 'react-redux';
 import moment from 'moment';
 
 import Button from 'components/Button';
 import NavMenu from 'components/nav/navmenu';
+import {BREAKPOINTS, Container, Grid, Cell} from 'components/Grid';
 
-import { TimeslipGrid } from './timeslipgrid';
-import { TimeslipDateControls } from './timeslipdatecontrols';
-import { Loading } from '../loading';
-import {
-  fetchTimeslips, saveTimeslips
-} from 'modules/timeslip';
+import {TimeslipGrid} from './timeslipgrid';
+import {TimeslipDateControls} from './timeslipdatecontrols';
+import {Loading} from '../loading';
+import {fetchTimeslips, saveTimeslips} from 'modules/timeslip';
 
+const Styled = styled.div`
+  background: #f5f3f5;
+  margin-top: 12px;
+  border-radius: 6px;
+  box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
+  height: 100%;
+  max-width: 1200px;
+  width: 100%;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  @media(max-width: ${BREAKPOINTS.sm}) {
+  }
+`;
 
 class Timeslips extends React.Component {
   constructor(props) {
@@ -81,39 +96,39 @@ class Timeslips extends React.Component {
     const month = weekStart.format('MMMM Y');
     const displayTimeslips = timeslips.concat(Object.values(updatedTimeslips));
 
-    if (this.props.projects) {
-      return (
-        <React.Fragment>
-          <NavMenu />
-          <TimeslipGrid
-            today={today}
-            isLoading={this.props.isLoading}
-            weekStart={weekStart}
-            timeslips={displayTimeslips}
-            projects={projects}
-            onHourChanged={this.handleSetHour}
-            onInvoice={this.props.onInvoice}
-          />
-          <div className='timeslip-actions'>
-            <TimeslipDateControls
+    return (
+      <React.Fragment>
+        <NavMenu />
+        <Container>
+          <Styled>
+            <TimeslipGrid
               today={today}
-              month={month}
-              weekStart={weekStart}
               isLoading={this.props.isLoading}
-              onSetActiveDate={this.handleSetActiveDate}
+              weekStart={weekStart}
+              timeslips={displayTimeslips}
+              projects={projects}
+              onHourChanged={this.handleSetHour}
+              onInvoice={this.props.onInvoice}
             />
-            <Button
-              onClick={this.handleSave}
-              label='Save'
-              className='btn-success'
-              disabled={this.props.isSaving}
-            />
-          </div>
-        </React.Fragment>
-      );
-    } else {
-      return (<p>No Timeslips</p>);
-    }
+            <div className='timeslip-actions'>
+              <TimeslipDateControls
+                today={today}
+                month={month}
+                weekStart={weekStart}
+                isLoading={this.props.isLoading}
+                onSetActiveDate={this.handleSetActiveDate}
+              />
+              <Button
+                onClick={this.handleSave}
+                label='Save'
+                className='btn-success'
+                disabled={this.props.isSaving}
+              />
+            </div>
+          </Styled>
+        </Container>
+      </React.Fragment>
+    );
   }
 }
 
