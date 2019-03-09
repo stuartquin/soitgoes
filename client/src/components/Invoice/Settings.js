@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import Actions from 'components/Invoice/Actions';
 import {Button, ActionLink, Divider, SubTitle} from 'components/GUI';
 import {asCurrency} from 'services/currency';
 import {Input} from 'components/Form';
@@ -29,74 +30,37 @@ const Styled = styled.div`
   color: #4e5767;
   height: 100%;
   width: 290px;
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
+  border-radius: 6px;
+  box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
 
   @media(max-width: ${BREAKPOINTS.sm}) {
     height: auto;
     width: 100%;
+    margin-bottom: 16px;
   }
 `;
-
-const Actions = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 16px;
-  border-top-left-radius: 6px;
-  color: #464d59;
-  padding: 12px 16px;
-  text-align: center;
-`;
-
-const getStatusAction = (invoice, onUpdateStatus) => {
-  if (!invoice.status) {
-    return (
-      <Button type="success" onClick={() => onUpdateStatus('ISSUED')}>
-        Issue
-      </Button>
-    );
-  }
-  if (invoice.status === 'ISSUED') {
-    return (
-      <Button type="success" onClick={() => onUpdateStatus('PAID')}>
-        Set Paid
-      </Button>
-    );
-  }
-
-  return null;
-};
 
 const Settings = (props) => {
   const {
-    invoice, reference, onChange, onRemoveModifier, onUpdateStatus
+    invoice, modifiers, onChange, onRemoveModifier, onUpdateStatus
   } = props;
-  const {modifiers, tasks, timeslips, project} = invoice;
+  const {project, totalTime, totalHours, totalTask} = invoice;
   const isEditable = !Boolean(invoice.issued_at);
-  const totalHours = timeslips.reduce((prev, current) =>
-    prev + current.hours
-  , 0);
-  const taskTotal = tasks.reduce((prev, current) =>
-    prev + current.cost
-  , 0);
-  const timeTotal = project.hourly_rate * totalHours;
-  const downloadURL = `/api/invoices/${invoice.id}/pdf`;
 
   return (
     <Styled>
-      <Actions>
-        <ActionLink size="sm" type="danger">Delete</ActionLink>
-        <a href={downloadURL} download>Download</a>
-        {getStatusAction(invoice, onUpdateStatus)}
-      </Actions>
+      <Actions
+        invoice={invoice}
+        onUpdateStatus={onUpdateStatus}
+        onDelete={() => console.log('delete')}
+      />
 
       <InvoiceInputRow>
         <div>Due Date</div>
         <Input
           type="date"
           name="due_date"
-          value={invoice.due_date}
+          value={invoice.due_date || ''}
           onChange={onChange}
           disabled={!isEditable}
         />
@@ -107,7 +71,7 @@ const Settings = (props) => {
         <Input
           type="text"
           name="reference"
-          value={invoice.reference}
+          value={invoice.reference || ''}
           onChange={onChange}
           disabled={!isEditable}
         />
@@ -119,14 +83,14 @@ const Settings = (props) => {
           <SubTitle>{totalHours} Hours</SubTitle>
         </div>
         <span>
-          {asCurrency(timeTotal, project.currency)}
+          {asCurrency(totalTime, project.currency)}
         </span>
       </InvoiceSummaryRow>
 
       <InvoiceSummaryRow>
         <span>Tasks</span>
         <span>
-          {asCurrency(taskTotal, project.currency)}
+          {asCurrency(totalTask, project.currency)}
         </span>
       </InvoiceSummaryRow>
 

@@ -39,7 +39,7 @@ export const save = (
   return saveFn(...args).then((res) => {
     dispatch({
       type: constant(moduleName, 'SAVE', 'success'),
-      item: res,
+      items: [res],
     });
 
     return res;
@@ -86,8 +86,8 @@ const items = (moduleName) => (state = {}, action) => {
 const results = (moduleName) => (state = [], action) => {
   switch (action.type) {
     case constant(moduleName, 'FETCH', 'success'):
-      return action.items.map(item => item.id);
     case constant(moduleName, 'SAVE', 'success'):
+      return action.items.map(item => item.id);
     case constant(moduleName, 'DELETE', 'success'):
       return [action.item.id];
     default:

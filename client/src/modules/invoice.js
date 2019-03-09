@@ -50,7 +50,6 @@ const _saveInvoice = (invoice) => (
 
 export const saveInvoice = reduxHelper.save(NS, _saveInvoice);
 
-
 export const fetchInvoices = reduxHelper.fetch(
   NS,
   () => api.get(`invoices/`)

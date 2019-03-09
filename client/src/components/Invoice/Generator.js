@@ -14,14 +14,17 @@ const Styled = styled.div`
 
 class Generator extends React.Component {
   render() {
-    const {invoice, isEditable, onRemoveTask, onRemoveTimeslip} = this.props;
-    const {project, timeslips, tasks} = invoice;
+    const {
+      invoice, timeslips, tasks, onRemoveTask, onRemoveTimeslip
+    } = this.props;
+    const {project} = invoice;
     const timeslipItems = Object.values(timeslips).sort((a, b) => {
       return a.date > b.date ? 1 : -1;
     }).filter(t => t.hours > 0);
     const taskItems = Object.values(tasks).sort((a, b) => {
       return a.completed_at > b.completed_at ? 1 : -1;
     });
+    const isEditable = !Boolean(invoice.issued_at);
 
     return (
       <Styled>
