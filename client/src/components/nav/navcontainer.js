@@ -1,10 +1,10 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, {ThemeProvider} from 'styled-components';
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 
 import { Loading } from 'components/loading';
-
+import {theme} from 'components/GUI';
 import Invoice from 'components/Invoice';
 import Invoices from 'components/Invoices';
 import Timeslips from 'components/Timeslips';
@@ -61,19 +61,22 @@ class Nav extends React.Component {
     }
 
     return (
-      <Styled>
-        <Route path='/timeslips' component={Timeslips} />
-        <Route exact path='/invoices' component={Invoices} />
-        <Route
-          path='/project/:projectId/invoice'
-          component={Invoice}
-          exact
-        />
-        <Route
-          path='/project/:projectId/invoice/:invoiceId'
-          component={Invoice}
-        />
-      </Styled>
+      <ThemeProvider theme={theme}>
+        <Styled>
+          <Route path='/timeslips' component={Timeslips} />
+          <Route exact path='/invoices' component={Invoices} />
+          <Route
+            path='/project/:projectId/invoice'
+            component={Invoice}
+            exact
+          />
+          <Route
+            path='/project/:projectId/invoice/:invoiceId'
+            component={Invoice}
+          />
+
+        </Styled>
+      </ThemeProvider>
     );
   }
 }

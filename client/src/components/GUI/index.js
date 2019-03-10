@@ -1,8 +1,49 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
 
+export const theme = {
+  grey: {
+    darkest: '#12263f',
+    dark: '#617692',
+    main: '#d2ddec',
+    light: '#edf1f5',
+    lightest: '#f5f7fa',
+  },
+  primary: {
+    darkest: '#12283a',
+    dark: '#1a4971',
+    main: '#3183c8',
+    light: '#aad4f5',
+    lightest: '#eff8ff',
+  },
+
+  success: {
+    darkest: '#155239',
+    dark: '#197741',
+    main: '#38c172',
+    light: '#a8eec1',
+    lightest: '#e3fcec',
+  },
+
+  warning: {
+    darkest: '#5c4813',
+    dark: '#8c6d1f',
+    main: '#f4ca64',
+    light: '#fdf3d7',
+    lightest: '#fffcf4',
+  },
+
+  danger: {
+    darkest: '#601818',
+    dark: '#881b1b',
+    main: '#dc3030',
+    light: '#f4a9a9',
+    lightest: '#f9e5e6',
+  },
+};
+
 export const SubTitle = styled.div`
-  color: #828282;
+  color: ${props => props.theme.grey.dark};
   font-size: 0.9em;
   margin-top: 4px;
 `;
@@ -10,25 +51,16 @@ export const SubTitle = styled.div`
 export const Divider = styled.hr`
   border: 0;
   height: 1px;
-  background-color: #f5f3f5;
+  background-color: ${props => props.theme.grey.lightest};
 `;
 
 export const ActionLink = styled.a`
-  color: #464d59;
+  color: ${props => props.theme[props.type || 'primary'].main};
   cursor: pointer;
   text-decoration: underline;
 
   ${props => props.size === 'sm' && css`
     font-size: 0.85em;
-  `}
-
-  ${props => props.type === 'success' && css`
-    background: #38c172;
-    color:  #155239;
-  `}
-
-  ${props => props.type === 'danger' && css`
-    color:  #dc3030;
   `}
 `;
 
@@ -37,17 +69,12 @@ export const Button = styled.button`
   padding: 8px 16px;
   border: none;
   font-weight: bold;
-
-  background: #6cd4d0;
-  color:  #124544;
   cursor: pointer;
 
-  ${props => props.type === 'success' && css`
-    background: #38c172;
-    color:  #155239;
+  background: ${props => props.theme[props.type || 'primary'].main};
+  color: ${props => props.theme[props.type || 'primary'].darkest};
 
-    &:hover {
-      background: #74d99f;
-    }
-  `}
+  &:hover {
+    background: ${props => props.theme[props.type || 'primary'].light};
+  }
 `;
