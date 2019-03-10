@@ -9,7 +9,6 @@ import {BREAKPOINTS, Grid, Cell} from 'components/Grid';
 
 const Styled = styled.div`
   width: 100%;
-  color: #4e5767;
   position: relative;
 `;
 
@@ -18,7 +17,7 @@ const Scroll = styled.div`
   margin-left: 126px;
 `;
 
-const FUTURE_DAYS = 10;
+const FUTURE_DAYS = 7;
 const getDateRange = (today) => {
   const start = moment(today).subtract(1, 'days');
   return Array.from(Array(FUTURE_DAYS).keys()).map(() => {

@@ -6,8 +6,9 @@ import {Cell} from 'components/Grid';
 const StyledInput = styled.input`
   width: 40px;
   height: 40px;
-  border: none;
+  border: solid 1px ${props => props.theme.grey.main};
   text-align: center;
+  cursor: pointer;
 
   &::-webkit-inner-spin-button,
   &::-webkit-outer-spin-button {

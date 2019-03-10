@@ -13,7 +13,7 @@ import {Loading} from '../loading';
 import {fetchTimeslips, saveTimeslips} from 'modules/timeslip';
 
 const Styled = styled.div`
-  background: #f5f3f5;
+  background: white;
   margin-top: 12px;
   border-radius: 6px;
   box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
@@ -83,7 +83,7 @@ class Timeslips extends React.Component {
     const {updatedTimeslips} = this.state;
 
     saveTimeslips(
-      timeslips.concat(Object.values(updatedTimeslips))
+      Object.values(updatedTimeslips)
     ).then(() => {
       this.setState({updatedTimeslips: []});
     });
