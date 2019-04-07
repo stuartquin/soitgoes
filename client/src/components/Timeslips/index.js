@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import {connect} from 'react-redux';
 import moment from 'moment';
 
+import {fetchTimeslips, saveTimeslips} from 'modules/timeslip';
 import Button from 'components/Button';
 import NavMenu from 'components/nav/navmenu';
 import {BREAKPOINTS, Container, Grid, Cell} from 'components/Grid';
-
 import {TimeslipGrid} from './timeslipgrid';
 import TimeslipDateControls from './timeslipdatecontrols';
+import Summary from './Summary';
 import {Loading} from '../loading';
-import {fetchTimeslips, saveTimeslips} from 'modules/timeslip';
 
 const Styled = styled.div`
   background: #f5f3f5;
@@ -29,20 +29,38 @@ const Styled = styled.div`
   }
 `;
 
-const Summary = styled.div`
-  background: white;
-  color: #4e5767;
-  height: 100%;
-  width: 290px;
-  border-radius: 6px;
-  box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
+const getSummary = (timeslips, projects) => {
+  const week = moment().startOf('isoweek').isoWeekday(1);
+  const weekStart = week.format().substr(0, 10);
+  const weekEnd = week.endOf('isoWeek').format().substr(0, 10);
+  const month = moment().startOf('month');
+  const monthStart = month.format().substr(0, 10);
+  const monthEnd = month.endOf('month').format().substr(0, 10);
+  const summary = {
+    'This Week': {hours: 0, total: 0},
+    'This Month': {hours: 0, total: 0},
+  };
 
-  @media(max-width: ${BREAKPOINTS.sm}) {
-    height: auto;
-    width: 100%;
-    margin-bottom: 16px;
-  }
-`;
+  timeslips.forEach(timeslip => {
+    const rate = projects[timeslip.project].hourly_rate;
+
+    if (timeslip.date >= weekStart && timeslip.date <= weekEnd) {
+      summary['This Week'] = {
+        hours: summary['This Week'].hours + timeslip.hours,
+        total: summary['This Week'].total + timeslip.hours * rate,
+      };
+    }
+
+    if (timeslip.date >= monthStart && timeslip.date <= monthEnd) {
+      summary['This Month'] = {
+        hours: summary['This Month'].hours + timeslip.hours,
+        total: summary['This Month'].total + timeslip.hours * rate,
+      };
+    }
+  });
+
+  return summary;
+};
 
 class Timeslips extends React.Component {
   constructor(props) {
@@ -111,6 +129,7 @@ class Timeslips extends React.Component {
     const today = moment();
     const month = weekStart.format('MMMM Y');
     const displayTimeslips = timeslips.concat(Object.values(updatedTimeslips));
+    const summary = getSummary(displayTimeslips, projects) || {};
 
     return (
       <React.Fragment>
@@ -127,14 +146,7 @@ class Timeslips extends React.Component {
               onInvoice={this.props.onInvoice}
               onSetActiveDate={this.handleSetActiveDate}
             />
-            <Summary>
-              <Button
-                onClick={this.handleSave}
-                label='Save'
-                className='btn-success'
-                disabled={this.props.isSaving}
-              />
-            </Summary>
+            <Summary onSave={this.handleSave} summary={summary} />
           </Styled>
         </Container>
       </React.Fragment>

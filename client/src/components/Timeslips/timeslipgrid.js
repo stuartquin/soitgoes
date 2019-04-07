@@ -11,13 +11,16 @@ const Styled = styled.div`
   flex-grow: 1;
   position: relative;
   background: ${props => props.theme.grey.lightest};
-  width: 100%;
+  @media(max-width: ${BREAKPOINTS.sm}) {
+    width: 100%;
+  }
 `;
 
 const Scroll = styled.div`
   overflow-x: auto;
   margin-left: 248px;
   background: #f5f3f5;
+  padding-top: 12px;
   padding-bottom: 12px;
 
   @media(max-width: ${BREAKPOINTS.sm}) {
