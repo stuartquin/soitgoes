@@ -5,16 +5,24 @@ import moment from 'moment';
 import TimeslipGridRow from './timeslipgridrow';
 import TimeslipGridHeader from './timeslipgridheader';
 
-import {BREAKPOINTS, Grid, Cell} from 'components/Grid';
+import {BREAKPOINTS} from 'components/Grid';
 
 const Styled = styled.div`
-  width: 100%;
+  flex-grow: 1;
   position: relative;
+  background: ${props => props.theme.grey.lightest};
+  width: 100%;
 `;
 
 const Scroll = styled.div`
   overflow-x: auto;
-  margin-left: 126px;
+  margin-left: 248px;
+  background: #f5f3f5;
+  padding-bottom: 12px;
+
+  @media(max-width: ${BREAKPOINTS.sm}) {
+    margin-left: 148px;
+  }
 `;
 
 const FUTURE_DAYS = 7;
@@ -31,8 +39,8 @@ const getTimeslipsForProject = (project, timeslips) => {
 };
 
 const TimeslipGrid = (props) => {
-  const range = getDateRange(props.weekStart);
-  const today = props.today;
+  const {onSetActiveDate, today, weekStart} = props;
+  const range = getDateRange(weekStart);
   const projects = Object.values(props.projects).filter(
     p => p && !p.archived
   );
@@ -42,7 +50,11 @@ const TimeslipGrid = (props) => {
       <Scroll>
         <table>
           <thead>
-            <TimeslipGridHeader today={today} range={range} />
+            <TimeslipGridHeader
+              weekStart={weekStart}
+              range={range}
+              onSetActiveDate={onSetActiveDate}
+            />
           </thead>
           <tbody>
             {projects.map(project => (

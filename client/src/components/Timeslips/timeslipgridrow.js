@@ -1,17 +1,32 @@
 import React from 'react';
 import styled from 'styled-components';
+import {BREAKPOINTS} from 'components/Grid';
 
 import TimeslipGridCell from './timeslipgridcell';
 
+const Styled = styled.tr`
+  &:hover {
+    color: ${props => props.theme.primary.main};
+  }
+`;
+
 const Project = styled.td`
-  height: 40px;
+  height: 60px;
   display: flex;
   align-items: center;
   left: 0;
   position: absolute;
   top: auto;
-  width: 116px;
+  width: 240px;
   justify-content: flex-end;
+  font-weight: bold;
+  font-size: 18px;
+
+  @media(max-width: ${BREAKPOINTS.sm}) {
+    width: 140px;
+    height: 40px;
+    font-size: inherit;
+  }
 `;
 
 const TimeslipGridRow = ({
@@ -24,7 +39,7 @@ const TimeslipGridRow = ({
   }, {});
 
   return (
-    <tr>
+    <Styled>
       <Project>{project.name}</Project>
       {dates.map((date) => (
         <TimeslipGridCell
@@ -38,7 +53,7 @@ const TimeslipGridRow = ({
           timeslip={filledTimeslips[date]}
         />
       ))}
-    </tr>
+    </Styled>
   );
 };
 

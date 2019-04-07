@@ -8,12 +8,12 @@ import NavMenu from 'components/nav/navmenu';
 import {BREAKPOINTS, Container, Grid, Cell} from 'components/Grid';
 
 import {TimeslipGrid} from './timeslipgrid';
-import {TimeslipDateControls} from './timeslipdatecontrols';
+import TimeslipDateControls from './timeslipdatecontrols';
 import {Loading} from '../loading';
 import {fetchTimeslips, saveTimeslips} from 'modules/timeslip';
 
 const Styled = styled.div`
-  background: white;
+  background: #f5f3f5;
   margin-top: 12px;
   border-radius: 6px;
   box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
@@ -25,6 +25,22 @@ const Styled = styled.div`
   flex-wrap: wrap;
 
   @media(max-width: ${BREAKPOINTS.sm}) {
+    flex-direction: column-reverse;
+  }
+`;
+
+const Summary = styled.div`
+  background: white;
+  color: #4e5767;
+  height: 100%;
+  width: 290px;
+  border-radius: 6px;
+  box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
+
+  @media(max-width: ${BREAKPOINTS.sm}) {
+    height: auto;
+    width: 100%;
+    margin-bottom: 16px;
   }
 `;
 
@@ -109,22 +125,16 @@ class Timeslips extends React.Component {
               projects={projects}
               onHourChanged={this.handleSetHour}
               onInvoice={this.props.onInvoice}
+              onSetActiveDate={this.handleSetActiveDate}
             />
-            <div className='timeslip-actions'>
-              <TimeslipDateControls
-                today={today}
-                month={month}
-                weekStart={weekStart}
-                isLoading={this.props.isLoading}
-                onSetActiveDate={this.handleSetActiveDate}
-              />
+            <Summary>
               <Button
                 onClick={this.handleSave}
                 label='Save'
                 className='btn-success'
                 disabled={this.props.isSaving}
               />
-            </div>
+            </Summary>
           </Styled>
         </Container>
       </React.Fragment>
@@ -134,7 +144,6 @@ class Timeslips extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    weekStart: moment(),
     isSaving: false,
     isLoading: false,
     timeslips: Object.values(state.timeslip.items),

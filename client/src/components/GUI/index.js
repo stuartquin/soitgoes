@@ -65,14 +65,14 @@ export const ActionLink = styled.a`
 `;
 
 export const Button = styled.button`
-  border-radius: 4px;
+  border-radius: 3px;
   padding: 8px 16px;
   border: none;
   font-weight: bold;
   cursor: pointer;
 
-  background: ${props => props.theme[props.type || 'primary'].main};
-  color: ${props => props.theme[props.type || 'primary'].darkest};
+  background: ${props => props.theme[props.type || 'grey'].main};
+  color: ${props => props.theme[props.type || 'grey'].darkest};
 
   &:hover {
     background: ${props => props.theme[props.type || 'primary'].light};

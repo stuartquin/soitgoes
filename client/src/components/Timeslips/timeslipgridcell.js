@@ -1,14 +1,21 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
-import {Cell} from 'components/Grid';
+import {BREAKPOINTS} from 'components/Grid';
 
 
 const StyledInput = styled.input`
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border: solid 1px ${props => props.theme.grey.main};
   text-align: center;
   cursor: pointer;
+  font-size: 18px;
+
+  @media(max-width: ${BREAKPOINTS.sm}) {
+    width: 40px;
+    height: 40px;
+    font-size: inherit;
+  }
 
   &::-webkit-inner-spin-button,
   &::-webkit-outer-spin-button {
@@ -22,9 +29,14 @@ const StyledInput = styled.input`
     background: #ccedc9;
   }
 
+  ${props => props.isWeekend && css`
+    border-color: ${props.theme.grey.light}
+  `}
+
   ${props => props.isSaved && css`
     background-color: #f4f6fa !important;
   `}
+
 `;
 
 class TimeslipGridCell extends React.Component {
@@ -40,8 +52,12 @@ class TimeslipGridCell extends React.Component {
   };
 
   render () {
-    const {timeslip = {}, isLoading} = this.props;
+    const {
+      timeslip = {}, date, isLoading, onHourChanged
+    } = this.props;
     const isDisabled = Boolean(timeslip.invoice);
+    const day = (new Date(date)).getDay();
+    const isWeekend = day === 0 || day === 6;
 
     return (
       <td>
@@ -52,7 +68,8 @@ class TimeslipGridCell extends React.Component {
           onFocus={(e) => e.target.select()}
           disabled={isDisabled}
           onClick={this.handleInputClick}
-          onChange={(e) => this.props.onHourChanged(e.target.value, timeslip)}
+          onChange={(e) => onHourChanged(e.target.value, timeslip)}
+          isWeekend={isWeekend}
         />
       </td>
     );
