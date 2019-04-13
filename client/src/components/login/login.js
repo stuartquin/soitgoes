@@ -1,4 +1,13 @@
 import React from 'react';
+import styled from 'styled-components';
+import {BREAKPOINTS, Container, Grid, Cell} from 'components/Grid';
+import {Button} from 'components/GUI';
+import {Input} from 'components/Form';
+
+
+const InputRow = styled.div`
+  margin-bottom: 8px;
+`;
 
 class Login extends React.Component {
   constructor(props) {
@@ -18,39 +27,36 @@ class Login extends React.Component {
   }
 
   render() {
-    let errorText = null;
-    if (this.props.loginState.get('error')) {
-      errorText = 'Incorrect username/password';
-    }
+    const {onSubmit} = this.props;
+    const {form} = this.state;
+
     return (
-      <div className='login'>
-        <div>
-          <input
-            placeholder="Username"
-            name="username"
-            value={this.state.form.username}
-            onChange={this.handleChange}
-          />
-        </div>
-        <div>
-          <input
-            placeholder="Password"
-            name="password"
-            type="password"
-            value={this.state.form.password}
-            onChange={this.handleChange}
-          />
-        </div>
-        <button
-          className='btn-success'
-          onClick={(evt) => {
-            evt.preventDefault();
-            this.props.onSubmit(this.state.form);
-          }}
-        >
-          Login
-        </button>
-      </div>
+      <Grid>
+        <Cell xs={2} sm={4} />
+        <Cell xs={8} sm={4}>
+          <InputRow>
+            <Input
+              placeholder="Username"
+              name="username"
+              value={this.state.form.username}
+              onChange={this.handleChange}
+            />
+          </InputRow>
+          <InputRow>
+            <Input
+              placeholder="Password"
+              name="password"
+              type="password"
+              value={this.state.form.password}
+              onChange={this.handleChange}
+            />
+          </InputRow>
+          <Button type="success" onClick={() => onSubmit(form)}>
+            Login
+          </Button>
+        </Cell>
+        <Cell sm={4} />
+      </Grid>
     );
   }
 }

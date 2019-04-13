@@ -1,4 +1,3 @@
-'use strict';
 const getCookies = () => {
   return document.cookie.split('; ').reduce((result, item) => {
     let bits = item.split('=');
@@ -7,12 +6,11 @@ const getCookies = () => {
   }, {});
 };
 
-export const getUserAuth = () => {
-  const cookies = getCookies();
-  return cookies.soitgoes_auth;
-};
-
 export const getCookie = (cookie) => {
   const cookies = getCookies();
   return cookies[cookie];
+};
+
+export const getAuthToken = () => {
+  return getCookie('sig_token');
 };

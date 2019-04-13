@@ -1,57 +1,46 @@
 import React from 'react';
+import styled, {ThemeProvider} from 'styled-components';
 import { Route } from 'react-router-dom'
 import { hot } from 'react-hot-loader/root'
 import { connect } from 'react-redux';
 
-import { Login } from 'components/login/login';
-import { NavContainer } from 'components/nav/navcontainer';
-
-import * as userActions from './actions/user';
-
-
-const isLoggedIn = () => {
-  return window.GLOBAL_IS_AUTHENTICATED;
-};
+import {Login} from 'components/login/login';
+import {NavContainer} from 'components/nav/navcontainer';
+import {theme} from 'components/GUI';
+import {login} from 'services/api';
+import {getAuthToken} from 'services/cookie';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: isLoggedIn()
+      isLoggedIn: Boolean(getAuthToken())
     };
+
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
-  componentDidMount() {
-    this.setState({loggedIn: isLoggedIn()});
+  handleLogin(form) {
+    login(form).then(res => {
+      this.setState({isLoggedIn: true});
+      const {history} = this.props;
+      history.push(`/invoices`);
+    });
   }
 
   render() {
-    if (this.state.loggedIn) {
-      return (<Route component={NavContainer} />);
-    }
+    const {isLoggedIn} = this.state;
 
     return (
-      <Login
-        loginState={this.props.loginState}
-        onSubmit={(form) => {
-          console.log('onSubmit', form);
-          this.props.login(form);
-        }}
-      />
+      <ThemeProvider theme={theme}>
+        {isLoggedIn ? (
+          <Route component={NavContainer} />
+        ) : (
+          <Login onSubmit={this.handleLogin} />
+        )}
+      </ThemeProvider>
     );
   }
 }
 
-const mapStateToProps = (state, props) => {
-  return {
-    loginState: state.user.login
-  };
-};
-
-const actions = {
-  ...userActions,
-};
-
-export default connect(mapStateToProps, actions)(
-  hot(App)
-);
+export default hot(App);

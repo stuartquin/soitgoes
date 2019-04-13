@@ -62,22 +62,19 @@ class Nav extends React.Component {
     }
 
     return (
-      <ThemeProvider theme={theme}>
-        <Styled>
-          <Route path='/timeslips' component={Timeslips} />
-          <Route exact path='/invoices' component={Invoices} />
-          <Route
-            path='/project/:projectId/invoice'
-            component={Invoice}
-            exact
-          />
-          <Route
-            path='/project/:projectId/invoice/:invoiceId'
-            component={Invoice}
-          />
-
-        </Styled>
-      </ThemeProvider>
+      <Styled>
+        <Route path='/timeslips' component={Timeslips} />
+        <Route exact path='/invoices' component={Invoices} />
+        <Route
+          path='/project/:projectId/invoice'
+          component={Invoice}
+          exact
+        />
+        <Route
+          path='/project/:projectId/invoice/:invoiceId'
+          component={Invoice}
+        />
+      </Styled>
     );
   }
 }

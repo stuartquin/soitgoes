@@ -193,6 +193,7 @@ const mapStateToProps = (state, { match }) => {
   const params = match.params;
   const projectId = parseInt(params.projectId, 10);
   const invoiceId = parseInt(params.invoiceId, 10);
+  let modifiers = Object.values(state.modifier.items);
   let invoice = {
     project: projects[projectId] || {},
     due_date: moment().add(14, 'days').format('YYYY-MM-DD'),
@@ -200,15 +201,16 @@ const mapStateToProps = (state, { match }) => {
 
   if (invoiceId && state.invoice.items[invoiceId]) {
     invoice = getWithJoined(
-      state.invoice.items[invoiceId] || {}, {project: projects}
+      state.invoice.items[invoiceId] || {}, {project: projects, modifier: modifiers}
     );
+    modifiers = invoice.modifier;
   }
 
   return {
     invoiceId,
     projectId,
     invoice,
-    modifiers: Object.values(state.modifier.items),
+    modifiers,
     timeslips: selectResults(state.timeslip.items, state.timeslip.results),
     tasks: selectResults(state.task.items, state.task.results),
   };

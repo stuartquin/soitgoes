@@ -45,7 +45,7 @@ urlpatterns = [
     url(r'api/summary/invoices/$', apiviews.SummaryInvoices.as_view()),
     url(r'api/summary/expenses/$', apiviews.SummaryExpenses.as_view()),
 
-    url(r'api/login/$', views.login_user),
+    url(r'api/login/$', apiviews.LoginView.as_view()),
     url(r'api/logout/$', views.logout_user),
 
     # App Routing

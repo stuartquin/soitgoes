@@ -19,23 +19,6 @@ def landing(request):
     return HttpResponse(template.render(context, request))
 
 
-def login_user(request):
-    print('REQUEST', request)
-
-    if request.method == 'POST':
-        data = json.loads(request.read().decode('utf-8'))
-        print('DATA', data)
-        username = data.get('username', None)
-        password = data.get('password', None)
-        user = auth.authenticate(username=username, password=password)
-
-        if user and user.is_active:
-            auth.login(request, user)
-            return HttpResponse()
-
-        raise PermissionDenied()
-
-
 def logout_user(request):
     auth.logout(request)
     return HttpResponse()

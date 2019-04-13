@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Actions from 'components/Invoice/Actions';
-import {Button, ActionLink, Divider, SubTitle} from 'components/GUI';
+import {ActionLink, Divider, SubTitle} from 'components/GUI';
 import {asCurrency} from 'services/currency';
 import {Input} from 'components/Form';
 import {getModifierImpact, getModifierDisplayName} from 'services/modifier';

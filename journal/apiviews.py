@@ -2,6 +2,9 @@ import json
 import zipfile
 import datetime
 
+from django.contrib import auth
+from django.core.exceptions import PermissionDenied
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from rest_framework import generics, viewsets, status
@@ -77,6 +80,26 @@ class UserDetail(APIView):
     def get(self, request, pk=None):
         user = serializers.UserSerializer(self.request.user)
         return Response(user.data)
+
+
+class LoginView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = serializers.UserTokenSerializer
+
+    @csrf_exempt
+    def post(self, request, pk=None):
+        username = request.data.get('username', None)
+        password = request.data.get('password', None)
+        user = auth.authenticate(username=username, password=password)
+
+        if user and user.is_active:
+            auth.login(request, user)
+            response = Response(self.serializer_class(user.auth_token).data)
+            response.set_cookie('sig_token', user.auth_token)
+            return response
+
+        raise PermissionDenied()
 
 
 class ProjectList(generics.ListCreateAPIView):
@@ -268,7 +291,6 @@ class TimeSlipList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         filters = {
-            'user': self.request.user
         }
         if 'project' in self.request.query_params:
             filters['project'] = self.request.query_params['project']

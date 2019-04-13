@@ -1,4 +1,4 @@
-const TOKEN = '471dfc9d7fc294269df6f91e15ea2346c4aef79a';
+import {getAuthToken} from 'services/cookie';
 
 const getRequestParams = (method) => {
   return {
@@ -7,7 +7,7 @@ const getRequestParams = (method) => {
     credentials: 'same-origin',
     headers: new Headers({
       'Content-Type': 'application/json',
-      'Authorization': `Token ${TOKEN}`,
+      'Authorization': `Token ${getAuthToken()}`,
     })
   };
 };
