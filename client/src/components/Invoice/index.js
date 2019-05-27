@@ -201,10 +201,11 @@ const mapStateToProps = (state, { match }) => {
 
   if (invoiceId && state.invoice.items[invoiceId]) {
     invoice = getWithJoined(
-      state.invoice.items[invoiceId] || {}, {project: projects, modifier: modifiers}
+      state.invoice.items[invoiceId] || {}, {project: projects}
     );
-    modifiers = invoice.modifier;
+    modifiers = modifiers.filter(({id}) => invoice.modifier.includes(id));
   }
+
 
   return {
     invoiceId,

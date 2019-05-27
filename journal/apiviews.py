@@ -101,6 +101,12 @@ class LoginView(APIView):
 
         raise PermissionDenied()
 
+    @csrf_exempt
+    def delete(self, request, pk=None):
+        response = Response()
+        response.delete_cookie('sig_token')
+        return response
+
 
 class ProjectList(generics.ListCreateAPIView):
     serializer_class = serializers.ProjectSerializer
@@ -356,7 +362,6 @@ class TaskList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         filters = {
-            'user': self.request.user
         }
         if 'project' in self.request.query_params:
             filters['project'] = self.request.query_params['project']
@@ -365,9 +370,7 @@ class TaskList(generics.ListCreateAPIView):
             invoice = self.request.query_params['invoice']
             filters['invoice'] = invoice if invoice != 'none' else None
 
-        return models.Task.objects.filter(**filters).order_by(
-            'completed_at', 'due_date'
-        )
+        return models.Task.objects.filter(**filters).order_by('-due_date')
 
 
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):

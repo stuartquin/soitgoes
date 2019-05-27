@@ -4,8 +4,8 @@ import {connect} from 'react-redux';
 import moment from 'moment';
 
 import {fetchTimeslips, saveTimeslips} from 'modules/timeslip';
-import Button from 'components/Button';
 import NavMenu from 'components/nav/navmenu';
+import Heading from 'components/Heading';
 import {BREAKPOINTS, Container, Grid, Cell} from 'components/Grid';
 import {TimeslipGrid} from './timeslipgrid';
 import TimeslipDateControls from './timeslipdatecontrols';
@@ -14,7 +14,6 @@ import {Loading} from '../loading';
 
 const Styled = styled.div`
   background: #f5f3f5;
-  margin-top: 12px;
   border-radius: 6px;
   box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
   height: 100%;
@@ -135,6 +134,7 @@ class Timeslips extends React.Component {
       <React.Fragment>
         <NavMenu />
         <Container>
+          <Heading size="h2">Time</Heading>
           <Styled>
             <TimeslipGrid
               today={today}

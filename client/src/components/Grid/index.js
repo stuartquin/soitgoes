@@ -20,7 +20,6 @@ export const Grid = styled.div`
     grid-gap: ${props.gap};
   `}
 
-  max-width: 1200px;
   flex-grow: 1;
 `;
 
@@ -48,8 +47,9 @@ export const CellMd = styled(Cell)`
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 100%;
+  max-width: 1200px;
+  margin: auto;
 
   box-sizing: border-box;
   padding-left: 16px;

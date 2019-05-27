@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import {connect} from 'react-redux';
 
 import NavMenu from 'components/nav/navmenu';
-import ActionButton from 'components/ActionButton';
 import InvoiceTable from 'components/Invoices/InvoiceTable';
 import UpcomingSummary from 'components/Invoices/UpcomingSummary';
 import Heading from 'components/Heading';
 import {Container, Grid, Cell} from 'components/Grid';
+import {Button} from 'components/GUI';
 
 import {fetchInvoices} from 'modules/invoice';
 import {fetchTimeslips} from 'modules/timeslip';
@@ -37,17 +37,21 @@ class Invoices extends React.Component {
 
   render() {
     const {invoices, timeslips} = this.props;
+    const NewButton = (
+      <Button type="success">New Invoice</Button>
+    );
 
     return (
       <React.Fragment>
-        <NavMenu>
-          <ActionButton onClick={this.handleNewInvoice}>
-            New Invoice
-          </ActionButton>
-        </NavMenu>
+        <NavMenu />
 
         <Container>
-          <Heading size="h2">Upcoming Invoices</Heading>
+          <Heading
+            size="h2"
+            action={NewButton}
+          >
+            Upcoming Invoices
+          </Heading>
           <UpcomingSummary
             timeslips={timeslips}
           />

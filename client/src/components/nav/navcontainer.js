@@ -8,13 +8,7 @@ import {theme} from 'components/GUI';
 import Invoice from 'components/Invoice';
 import Invoices from 'components/Invoices';
 import Timeslips from 'components/Timeslips';
-// import { ProjectsContainer } from 'components/projects/projectscontainer';
-// import { ProjectContainer } from 'components/projects/projectcontainer';
-// import { DashContainer } from 'components/dash/dash';
-// import { TasksContainer } from 'components/tasks/taskscontainer';
-// import { TaskContainer } from 'components/tasks/taskcontainer';
-// import { ContactsContainer } from 'components/contact/contactscontainer';
-// import { ContactContainer } from 'components/contact/contactcontainer';
+import Tasks from 'components/Tasks';
 
 import {fetchContacts} from 'modules/contact';
 import {fetchProjects} from 'modules/project';
@@ -65,6 +59,7 @@ class Nav extends React.Component {
       <Styled>
         <Route path='/timeslips' component={Timeslips} />
         <Route exact path='/invoices' component={Invoices} />
+        <Route exact path='/tasks' component={Tasks} />
         <Route
           path='/project/:projectId/invoice'
           component={Invoice}

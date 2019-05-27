@@ -9,6 +9,7 @@ export const theme = {
     light: '#edf1f5',
     lightest: '#f5f7fa',
   },
+
   primary: {
     darkest: '#12283a',
     dark: '#1a4971',
@@ -51,7 +52,7 @@ export const SubTitle = styled.div`
 export const Divider = styled.hr`
   border: 0;
   height: 1px;
-  background-color: ${props => props.theme.grey.lightest};
+  background-color: ${props => props.theme.grey.light};
 `;
 
 export const ActionLink = styled.a`

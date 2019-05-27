@@ -13,8 +13,8 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const MenuItem = ({text, linkTo}) => (
-  <StyledLink to={linkTo}>
+const MenuItem = ({text, linkTo, onClick}) => (
+  <StyledLink to={linkTo} onClick={onClick}>
     {text}
   </StyledLink>
 );

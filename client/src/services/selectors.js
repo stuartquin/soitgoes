@@ -19,3 +19,7 @@ export const selectJoined = (items, state) => {
     [key]: getWithJoined(items[key], state)
   }), {});
 };
+
+export const selectJoinedResults = (items, state, results) => (
+  selectResults(selectJoined(items, state), results)
+);

@@ -1,8 +1,14 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import UpcomingInvoice from './UpcomingInvoice';
 import {Grid, Cell} from 'components/Grid';
 import {groupByProject, getTotal} from 'services/timeslip';
+
+
+const StyledUpcomingSummary = styled(Grid)`
+  min-height: 150px;
+`;
 
 
 const UpcomingSummary = ({timeslips}) => {
@@ -16,14 +22,14 @@ const UpcomingSummary = ({timeslips}) => {
   )).slice(0, 4);
 
   return (
-    <Grid>
+    <StyledUpcomingSummary>
       {summary.map(item => (
         <UpcomingInvoice
           key={item.project.id}
           summary={item}
         />
       ))}
-    </Grid>
+    </StyledUpcomingSummary>
   );
 };
 

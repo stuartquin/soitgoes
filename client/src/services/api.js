@@ -129,7 +129,8 @@ export const login = (form) => {
   return fetch(req);
 };
 
-export const logout = (form) => {
-  const req = buildRequest(`logout/`);
-  return fetch(req);
+export const logout = () => {
+  return fetch(buildRequest(`login/`, 'DELETE')).then(() => {
+    location.href = '/';
+  });
 };
