@@ -40,12 +40,12 @@ const StyledLink = styled(Link)`
 
 class TaskRow extends React.Component {
   render() {
-    const {task} = this.props;
+    const {task, onClick} = this.props;
     const {project} = task;
     const status = 'PAID';
 
     return (
-      <Row>
+      <Row onClick={() => onClick(task)}>
         <Cell xs="7" sm="6">
           <div>{task.name}</div>
           <ContactName>{project.name} - {project.contact.name}</ContactName>

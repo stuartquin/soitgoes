@@ -10,7 +10,7 @@ import useForm from 'services/useForm';
 
 const Task = ({task, projects, onCancel}) => {
   const { values, handleChange } = useForm({ ...task });
-  const action = task ? 'Edit' : 'Add'
+  const action = task.id ? 'Edit' : 'Add'
 
   return (
     <Dialog
@@ -43,7 +43,6 @@ const Task = ({task, projects, onCancel}) => {
           </Grid>
         </FormRow>
 
-
         <FormRow>
           <Grid>
             <Cell xs={8}>
@@ -70,7 +69,7 @@ const Task = ({task, projects, onCancel}) => {
 
         <FormRow>
           <Grid>
-            <Cell xs={6} sm={4}>
+            <Cell xs={4}>
               <Label>Estimated Hours</Label>
               <Input
                 type="number"

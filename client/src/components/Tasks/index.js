@@ -30,13 +30,18 @@ const Styled = styled.div`
 
 const Tasks = ({ tasks, fetchTasks }) => {
   const [showNewDialog, setShowNewDialog] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
   const NewButton = (
-    <Button type="success" onClick={setShowNewDialog}>New Task</Button>
+    <Button type="success" onClick={() => setSelectedTask({})}>
+      New Task
+    </Button>
   );
 
   useEffect(() => {
     fetchTasks();
   }, []);
+
+  console.log('selectedTask', selectedTask);
 
   return (
     <React.Fragment>
@@ -46,14 +51,15 @@ const Tasks = ({ tasks, fetchTasks }) => {
         <Styled>
           <TaskTable
             tasks={tasks}
+            onTaskSelect={setSelectedTask}
           />
         </Styled>
       </Container>
 
-      {showNewDialog && (
+      {selectedTask && (
         <Task
-          task={tasks.length ? tasks[0] : null}
-          onCancel={() => setShowNewDialog(false)}
+          task={selectedTask}
+          onCancel={() => setSelectedTask(null)}
         />
       )}
     </React.Fragment>

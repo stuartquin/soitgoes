@@ -14,7 +14,7 @@ const Styled = styled.div`
 
 class TaskTable extends React.Component {
   render() {
-    const {tasks} = this.props;
+    const {tasks, onTaskSelect} = this.props;
 
     return (
       <Styled>
@@ -23,6 +23,7 @@ class TaskTable extends React.Component {
           <TaskRow
             key={task.id}
             task={task}
+            onClick={onTaskSelect}
           />
         ))}
       </Styled>
