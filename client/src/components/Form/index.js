@@ -16,6 +16,7 @@ export const Select = styled.select`
   padding: 4px;
   border-radius: 6px;
   border: solid 1px #828282;
+  background: white;
   line-height: 24px;
   height: 32px;
 `;

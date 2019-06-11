@@ -26,6 +26,14 @@ export const theme = {
     lightest: '#e3fcec',
   },
 
+  submit: {
+    darkest: '#155239',
+    dark: '#197741',
+    main: '#38c172',
+    light: '#a8eec1',
+    lightest: '#e3fcec',
+  },
+
   warning: {
     darkest: '#5c4813',
     dark: '#8c6d1f',
@@ -52,7 +60,7 @@ export const SubTitle = styled.div`
 export const Divider = styled.hr`
   border: 0;
   height: 1px;
-  background-color: ${props => props.theme.grey.light};
+  background-color: ${props => props.theme.grey.lightest};
 `;
 
 export const ActionLink = styled.a`

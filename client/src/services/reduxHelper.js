@@ -86,7 +86,6 @@ const items = (moduleName) => (state = {}, action) => {
 const results = (moduleName) => (state = [], action) => {
   switch (action.type) {
     case constant(moduleName, 'FETCH', 'success'):
-    case constant(moduleName, 'SAVE', 'success'):
       return action.items.map(item => item.id);
     case constant(moduleName, 'DELETE', 'success'):
       return [action.item.id];

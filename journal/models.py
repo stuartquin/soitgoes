@@ -8,6 +8,17 @@ from libs import invoicepdf
 
 INVOICE_DUE_DAYS = 14
 
+TASK_STATUS_OPEN = 'OPEN'
+TASK_STATUS_PROGRESS = 'PROGRESS'
+TASK_STATUS_DONE = 'DONE'
+TASK_STATUS_REJECTED = 'REJECTED'
+TASK_STATUS = [
+    (TASK_STATUS_OPEN, 'Open'),
+    (TASK_STATUS_PROGRESS, 'In Progress'),
+    (TASK_STATUS_DONE, 'Complete'),
+    (TASK_STATUS_REJECTED, 'Rejected'),
+]
+
 
 class Billing(models.Model):
     bank_name = models.CharField(max_length=512)
@@ -102,7 +113,7 @@ class Invoice(models.Model):
     sequence_num = models.IntegerField(default=0)
     project = models.ForeignKey(Project)
     created_at = models.DateTimeField(auto_now_add=True)
-    issued_at = models.DateTimeField(auto_now_add=True)
+    issued_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     paid_at = models.DateTimeField(default=None, blank=True, null=True)
     due_date = models.DateField(default=None, blank=True, null=True)
     total_paid = models.FloatField(default=None, blank=True, null=True)
@@ -179,6 +190,11 @@ class Task(models.Model):
     due_date = models.DateField(default=None, blank=True, null=True)
     hours_spent = models.FloatField(default=0.0)
     hours_predicted = models.FloatField(default=0.0)
+    state = models.CharField(
+        max_length=256,
+        choices=TASK_STATUS,
+        default=TASK_STATUS_OPEN,
+    )
 
     invoice = models.ForeignKey(
         Invoice, models.SET_NULL,

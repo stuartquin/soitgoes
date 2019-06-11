@@ -133,6 +133,13 @@ class TaskSerializer(serializers.ModelSerializer):
         default=serializers.CurrentUserDefault()
     )
 
+    def update(self, instance, validated_data):
+        status = validated_data.get('status')
+        if status == TASK_STATUS_DONE and instance.status != TASK_STATUS_DONE:
+            validated_data['completed_at'] = datetime.datetime.now()
+
+        return super().update(instance, validated_data)
+
     class Meta:
         model = models.Task
         partial = True

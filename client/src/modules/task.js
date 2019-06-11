@@ -1,5 +1,3 @@
-'use strict';
-import Immutable from 'immutable';
 import { combineReducers } from 'redux';
 
 import getById from 'services/getById';
@@ -65,6 +63,13 @@ export const addTask = (form) => (dispatch) => {
     });
   });
 };
+
+export const saveTask = reduxHelper.save(
+  NS,
+  task => task.id ?
+    api.put(`tasks/${task.id}`, task) :
+    api.post('tasks/', task)
+);
 
 const items = reduxHelper.items(NS);
 const results = reduxHelper.results(NS);

@@ -6,22 +6,32 @@ import Dialog from 'components/Dialog';
 import {Input, Select, FormRow, Label} from 'components/Form';
 import {Grid, Cell} from 'components/Grid';
 import {Divider, Button} from 'components/GUI';
+import {saveTask} from 'modules/task';
 import useForm from 'services/useForm';
 
-const Task = ({task, projects, onCancel}) => {
+const Task = ({task, projects, saveTask, onCancel}) => {
   const { values, handleChange } = useForm({ ...task });
   const action = task.id ? 'Edit' : 'Add'
+
+  const handleSave = () => {
+    console.log('VALUES', values);
+
+    saveTask({
+      ...values,
+      project: values.project.id,
+    });
+    onCancel();
+  };
 
   return (
     <Dialog
       title={`${action} Task`}
       onClose={onCancel}
       actions={[
-        <Button key={0}>Cancel</Button>,
-        <Button key={1} type="success">Save</Button>,
+        <Button key={1} type="submit" onClick={handleSave}>Save</Button>,
       ]}
     >
-      <form>
+      <form onSubmit={handleSave}>
         <FormRow>
           <Grid>
             <Cell xs={8}>
@@ -47,9 +57,14 @@ const Task = ({task, projects, onCancel}) => {
           <Grid>
             <Cell xs={8}>
               <Label>Project</Label>
-              <Select onChange={handleChange} name="project">
+              <Select
+                onChange={handleChange} name="project"
+                value={values.project ? values.project.id : ''}
+              >
                 {projects.map(project => (
-                  <option value={project.id}>{project.name}</option>
+                  <option value={project.id}>
+                    {project.name}
+                  </option>
                 ))}
               </Select>
             </Cell>
@@ -69,7 +84,7 @@ const Task = ({task, projects, onCancel}) => {
 
         <FormRow>
           <Grid>
-            <Cell xs={4}>
+            <Cell xs={6} sm={4}>
               <Label>Estimated Hours</Label>
               <Input
                 type="number"
@@ -124,6 +139,7 @@ const mapStateToProps = (state) => {
 };
 
 const actions = {
+  saveTask
 };
 
 export default connect(mapStateToProps, actions)(Task);
