@@ -49,7 +49,8 @@ class ProjectSerializer(LogActivity):
             'hourly_rate',
             'archived',
             'currency',
-            'account'
+            'account',
+            'default_task',
         ]
 
 

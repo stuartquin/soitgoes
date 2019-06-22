@@ -30,7 +30,8 @@ const Project = styled.td`
 `;
 
 const TimeslipGridRow = ({
-  project, range, timeslips, today, isLoading, onHourChanged
+  project, range, timeslips, today, isLoading,
+  activeCell, onHourChanged, onSetActive
 }) => {
   const dates = range.map((m) => m.format('YYYY-MM-DD'));
   const filledTimeslips = timeslips.reduce((result, item) => {
@@ -44,13 +45,16 @@ const TimeslipGridRow = ({
       {dates.map((date) => (
         <TimeslipGridCell
           isLoading={isLoading}
-          key={date}
+          cellKey={`${project.id}|${date}`}
           date={date}
           today={today.format('YYYY-MM-DD')}
           onHourChanged={(value, timeslip) => {
             onHourChanged(value, date, timeslip);
           }}
           timeslip={filledTimeslips[date]}
+          activeCell={activeCell}
+          onSetActive={onSetActive}
+          project={project}
         />
       ))}
     </Styled>

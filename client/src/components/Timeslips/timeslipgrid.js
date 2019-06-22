@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 
@@ -41,12 +41,15 @@ const getTimeslipsForProject = (project, timeslips) => {
   return timeslips.filter(t => t.project === projectId);
 };
 
-const TimeslipGrid = (props) => {
-  const {onSetActiveDate, today, weekStart} = props;
+const TimeslipGrid = ({
+  onSetActiveDate, projects, today, weekStart, isLoading,
+  timeslips, onHourChanged
+}) => {
   const range = getDateRange(weekStart);
-  const projects = Object.values(props.projects).filter(
+  const filteredProjects = Object.values(projects).filter(
     p => p && !p.archived
   );
+  const [activeCell, setActiveCell] = useState(null);
 
   return (
     <Styled>
@@ -60,20 +63,19 @@ const TimeslipGrid = (props) => {
             />
           </thead>
           <tbody>
-            {projects.map(project => (
+            {filteredProjects.map(project => (
               <TimeslipGridRow
                 key={project.id}
                 project={project}
                 today={today}
                 range={range}
-                isLoading={props.isLoading}
-                timeslips={getTimeslipsForProject(project, props.timeslips)}
-                onInvoice={() => {
-                  props.onInvoice(project);
-                }}
+                activeCell={activeCell}
+                isLoading={isLoading}
+                timeslips={getTimeslipsForProject(project, timeslips)}
                 onHourChanged={(hours, date, timeslip) => {
-                  props.onHourChanged(project, date, hours || 0, timeslip);
+                  onHourChanged(project, date, hours || 0, timeslip);
                 }}
+                onSetActive={setActiveCell}
               />
             ))}
           </tbody>
@@ -83,4 +85,4 @@ const TimeslipGrid = (props) => {
   );
 };
 
-export {TimeslipGrid};
+export default TimeslipGrid;

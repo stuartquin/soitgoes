@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
 import {BREAKPOINTS} from 'components/Grid';
-
+import TimeslipDetail from './TimeslipDetail';
 
 const StyledInput = styled.input`
   width: 60px;
@@ -36,44 +36,44 @@ const StyledInput = styled.input`
   ${props => props.isSaved && css`
     background-color: #f4f6fa !important;
   `}
-
 `;
 
-class TimeslipGridCell extends React.Component {
-  handleInputClick = () => {
-    const {timeslip = {}} = this.props;
+const TimeslipGridCell = ({
+  timeslip = {}, cellKey, date, isLoading, activeCell, project,
+  onHourChanged, onSetActive
+}) => {
+  const isDisabled = Boolean(timeslip.invoice);
+  const day = (new Date(date)).getDay();
+  const isWeekend = day === 0 || day === 6;
+  const handleInputClick = () => {
     const hours = timeslip ? timeslip.hours : null;
-
     if (!hours) {
-      this.props.onHourChanged(8, timeslip);
+      onHourChanged(8, timeslip);
     } else if (hours === 8) {
-      this.props.onHourChanged(4, timeslip);
+      onHourChanged(4, timeslip);
     }
   };
 
-  render () {
-    const {
-      timeslip = {}, date, isLoading, onHourChanged
-    } = this.props;
-    const isDisabled = Boolean(timeslip.invoice);
-    const day = (new Date(date)).getDay();
-    const isWeekend = day === 0 || day === 6;
-
-    return (
-      <td>
-        <StyledInput
-          value={timeslip.hours || ''}
-          isSaved={Boolean(timeslip.id)}
-          type='number'
-          onFocus={(e) => e.target.select()}
-          disabled={isDisabled}
-          onClick={this.handleInputClick}
-          onChange={(e) => onHourChanged(e.target.value, timeslip)}
-          isWeekend={isWeekend}
+  return (
+    <td>
+      <StyledInput
+        value={timeslip.hours || ''}
+        isSaved={Boolean(timeslip.id)}
+        type='number'
+        onFocus={(e) => e.target.select()}
+        disabled={isDisabled}
+        onClick={handleInputClick}
+        onChange={(e) => onHourChanged(e.target.value, timeslip)}
+        onFocus={() => onSetActive(cellKey)}
+        isWeekend={isWeekend}
+      />
+      {activeCell === cellKey && (
+        <TimeslipDetail
+          project={project}
         />
-      </td>
-    );
-  }
-}
+      )}
+    </td>
+  );
+};
 
 export default TimeslipGridCell;

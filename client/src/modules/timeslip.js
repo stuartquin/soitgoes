@@ -33,8 +33,6 @@ export const saveTimeslips = (timeslips) => {
     return Promise.all(calls).then(([updatesRes, created=[]]) => {
       dispatch(fetchProjects());
 
-      console.log('Results', updatesRes, created);
-
       return dispatch({
         type: reduxHelper.constant(NS, 'SAVE', 'success'),
         items: updatesRes.concat(created)

@@ -41,8 +41,6 @@ const Tasks = ({ tasks, fetchTasks }) => {
     fetchTasks();
   }, []);
 
-  console.log('selectedTask', selectedTask);
-
   return (
     <React.Fragment>
       <NavMenu />

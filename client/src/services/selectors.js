@@ -23,3 +23,7 @@ export const selectJoined = (items, state) => {
 export const selectJoinedResults = (items, state, results) => (
   selectResults(selectJoined(items, state), results)
 );
+
+export const selectBy = (items, value, field = 'id') => (
+  Object.values(items).filter(item => item[field] === value)
+);

@@ -7,10 +7,11 @@ import {fetchTimeslips, saveTimeslips} from 'modules/timeslip';
 import NavMenu from 'components/nav/navmenu';
 import Heading from 'components/Heading';
 import {BREAKPOINTS, Container, Grid, Cell} from 'components/Grid';
-import {TimeslipGrid} from './timeslipgrid';
+import TimeslipGrid from './timeslipgrid';
 import TimeslipDateControls from './timeslipdatecontrols';
 import Summary from './Summary';
 import {Loading} from '../loading';
+import {fetchTasks} from 'modules/task';
 
 const Styled = styled.div`
   background: #f5f3f5;
@@ -82,6 +83,7 @@ class Timeslips extends React.Component {
     const {weekStart} = this.state;
     const end = moment(weekStart).add(7, 'days');
 
+    this.props.fetchTasks();
     this.props.fetchTimeslips(
       null, weekStart.format('YYYY-MM-DD'), end.format('YYYY-MM-DD')
     )
@@ -143,7 +145,6 @@ class Timeslips extends React.Component {
               timeslips={displayTimeslips}
               projects={projects}
               onHourChanged={this.handleSetHour}
-              onInvoice={this.props.onInvoice}
               onSetActiveDate={this.handleSetActiveDate}
             />
             <Summary onSave={this.handleSave} summary={summary} />
@@ -167,6 +168,7 @@ const mapStateToProps = (state) => {
 const actions = {
   fetchTimeslips,
   saveTimeslips,
+  fetchTasks,
 };
 
 export default connect(mapStateToProps, actions)(Timeslips);

@@ -43,7 +43,7 @@ const Styled = styled(Cell)`
   background: white;
   cursor: pointer;
   color: #050505;
-  width: 285px;
+  max-width: 285px;
 
   &:hover ${Issue} {
     text-decoration: underline;

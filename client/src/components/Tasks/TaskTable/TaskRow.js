@@ -54,11 +54,11 @@ class TaskRow extends React.Component {
           {task.hours_spent} / {task.hours_predicted}
         </CellMd>
         <CellMd sm="2" numeric>
-          {moment(task.due_date).fromNow()}
+          {task.due_date ?  moment(task.due_date).fromNow() : '-'}
         </CellMd>
         <StatusCell numeric xs="5" sm="2">
           <Total>
-            {asCurrency(task.cost, project.currency || 'GBP')}
+            {task.cost ? asCurrency(task.cost, project.currency || 'GBP') : '-'}
           </Total>
         </StatusCell>
       </Row>

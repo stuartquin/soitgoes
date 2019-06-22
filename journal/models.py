@@ -94,6 +94,10 @@ class Project(models.Model):
     hours_per_day = models.IntegerField(default=0)
     currency = models.CharField(max_length=3, default="GBP")
     archived = models.BooleanField(default=False)
+    default_task = models.ForeignKey(
+        'Task', models.SET_NULL,
+        blank=True, null=True, related_name='project_default'
+    )
 
     def get_uninvoiced_hours(self, *args, **kwargs):
         timeslips = TimeSlip.objects.filter(project=self, invoice=None)
@@ -195,7 +199,6 @@ class Task(models.Model):
         choices=TASK_STATUS,
         default=TASK_STATUS_OPEN,
     )
-
     invoice = models.ForeignKey(
         Invoice, models.SET_NULL,
         blank=True, null=True, related_name='tasks'
@@ -214,30 +217,13 @@ class Task(models.Model):
         tasks.update(invoice_id=invoice_id)
 
 
-class TaskNote(models.Model):
-    user = models.ForeignKey(User)
-    task = models.ForeignKey(Task, related_name='notes')
-    content = models.TextField(blank=True, null=True)
-    content_type = models.CharField(
-        choices=(
-            ('TEXT', 'Text'),
-        ),
-        max_length=4,
-        default='TEXT'
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.content[:100] + '...'
-
-
 class TimeSlip(models.Model):
     user = models.ForeignKey(User)
     project = models.ForeignKey(Project)
     created_at = models.DateTimeField(auto_now_add=True)
     date = models.DateField()
     hours = models.FloatField(default=0.0)
-
+    task = models.ForeignKey(Task, blank=True, null=True)
     comment = models.CharField(max_length=512, blank=True, null=True)
     invoice = models.ForeignKey(
         Invoice, models.SET_NULL,
@@ -261,6 +247,25 @@ class TimeSlip(models.Model):
 
     class Meta:
         unique_together = ('user', 'project', 'date')
+
+
+
+class TaskNote(models.Model):
+    user = models.ForeignKey(User)
+    task = models.ForeignKey(Task, related_name='notes')
+    content = models.TextField(blank=True, null=True)
+    content_type = models.CharField(
+        choices=(
+            ('TEXT', 'Text'),
+        ),
+        max_length=4,
+        default='TEXT'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.content[:100] + '...'
+
 
 
 class Activity(models.Model):
