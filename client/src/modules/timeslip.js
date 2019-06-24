@@ -57,12 +57,12 @@ export const updateTimeslip = (id, form) => (dispatch) =>
   );
 
 const addProjectTimeslip = (action) => {
-  const project = action.project;
-  const key = `${project.id}|${action.date}`;
+  const task = action.task;
+  const key = `${task.id}|${action.date}`;
 
   return {
     [key]: {
-      project: action.project.id,
+      task: action.task.id,
       hours: action.hours,
       date: action.date,
       isNew: true,

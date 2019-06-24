@@ -12,6 +12,7 @@ import TimeslipDateControls from './timeslipdatecontrols';
 import Summary from './Summary';
 import {Loading} from '../loading';
 import {fetchTasks} from 'modules/task';
+import {selectJoinedResults} from 'services/selectors';
 
 const Styled = styled.div`
   background: #f5f3f5;
@@ -93,16 +94,17 @@ class Timeslips extends React.Component {
     this.setState({weekStart}, () => this.fetchData());
   }
 
-  handleSetHour(project, date, hours, timeslip) {
+  handleSetHour(task, date, hours, timeslip) {
     const {updatedTimeslips} = this.state;
     const isUpdated = Boolean(timeslip);
-    const key = `${project.id}_${date}`;
+    const key = `${task.id}_${date}`;
 
     this.setState({
       updatedTimeslips: {
         ...updatedTimeslips,
         [key]: {
-          project: project.id,
+          task: task.id,
+          project: task.project.id,
           isNew: !isUpdated,
           id: isUpdated ? timeslip.id : null,
           isUpdated,
@@ -126,7 +128,7 @@ class Timeslips extends React.Component {
 
   render() {
     const {weekStart, updatedTimeslips} = this.state;
-    const {user, timeslips, projects} = this.props;
+    const {user, timeslips, projects, tasks} = this.props;
     const today = moment();
     const month = weekStart.format('MMMM Y');
     const displayTimeslips = timeslips.concat(Object.values(updatedTimeslips));
@@ -144,6 +146,7 @@ class Timeslips extends React.Component {
               weekStart={weekStart}
               timeslips={displayTimeslips}
               projects={projects}
+              tasks={tasks}
               onHourChanged={this.handleSetHour}
               onSetActiveDate={this.handleSetActiveDate}
             />
@@ -160,6 +163,7 @@ const mapStateToProps = (state) => {
     isSaving: false,
     isLoading: false,
     timeslips: Object.values(state.timeslip.items),
+    tasks: selectJoinedResults(state.task.items, state, state.task.results),
     projects: state.project.items,
     user: state.user.user
   };

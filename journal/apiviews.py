@@ -370,7 +370,7 @@ class TaskList(generics.ListCreateAPIView):
             invoice = self.request.query_params['invoice']
             filters['invoice'] = invoice if invoice != 'none' else None
 
-        return models.Task.objects.filter(**filters).order_by('-created_at')
+        return models.Task.objects.filter(**filters).order_by('-activity_at')
 
 
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):

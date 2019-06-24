@@ -17,8 +17,6 @@ class App extends React.Component {
       isLoggedIn: Boolean(getAuthToken())
     };
 
-    console.log(this.state);
-
     this.handleLogin = this.handleLogin.bind(this);
   }
 

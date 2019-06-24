@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 
-import Button from 'components/Button';
+import Actions from 'components/Invoice/Actions';
 import Heading from 'components/Heading';
 import StatusPill from 'components/StatusPill';
 import {BREAKPOINTS} from 'components/Grid';
@@ -21,7 +21,7 @@ const STATUS_MAP = {
   PAID: 'success',
 };
 
-const InvoiceHeader = ({invoice}) => {
+const InvoiceHeader = ({invoice, onUpdateStatus}) => {
   const status = STATUS_MAP[getInvoiceStatus(invoice)];
   const {project} = invoice;
 
@@ -29,9 +29,11 @@ const InvoiceHeader = ({invoice}) => {
     <Styled>
       <Heading size="h2">{project.name}</Heading>
 
-      <StatusPill size="lg" status={status}>
-        {getInvoiceDueMessage(invoice)}
-      </StatusPill>
+      <Actions
+        invoice={invoice}
+        onUpdateStatus={onUpdateStatus}
+        onDelete={() => console.log('delete')}
+      />
     </Styled>
   );
 }

@@ -29,7 +29,6 @@ const Styled = styled.div`
 `;
 
 const Tasks = ({ tasks, fetchTasks }) => {
-  const [showNewDialog, setShowNewDialog] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const NewButton = (
     <Button type="success" onClick={() => setSelectedTask({})}>

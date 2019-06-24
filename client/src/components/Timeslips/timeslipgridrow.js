@@ -10,17 +10,18 @@ const Styled = styled.tr`
   }
 `;
 
-const Project = styled.td`
+const Task = styled.td`
   height: 60px;
-  display: flex;
-  align-items: center;
   left: 0;
   position: absolute;
   top: auto;
   width: 240px;
   justify-content: flex-end;
-  font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
+
+  margin-top: 4px;
+  margin-left: 8px;
+  border-bottom: ${props => props.theme.grey.main} solid 1px;
 
   @media(max-width: ${BREAKPOINTS.sm}) {
     width: 140px;
@@ -29,9 +30,23 @@ const Project = styled.td`
   }
 `;
 
+const Project = styled.div`
+  font-size: 0.75em;
+  margin-top: 6px;
+  color: ${props => props.theme.grey.dark};
+  text-transform: uppercase;
+`;
+
+const TaskName = styled.div`
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+`;
+
 const TimeslipGridRow = ({
-  project, range, timeslips, today, isLoading,
-  activeCell, onHourChanged, onSetActive
+  task, range, timeslips, today, isLoading,
+  onHourChanged, onSetActive
 }) => {
   const dates = range.map((m) => m.format('YYYY-MM-DD'));
   const filledTimeslips = timeslips.reduce((result, item) => {
@@ -41,20 +56,21 @@ const TimeslipGridRow = ({
 
   return (
     <Styled>
-      <Project>{project.name}</Project>
+      <Task>
+        <TaskName>{task.name}</TaskName>
+        <Project>{task.project.name}</Project>
+      </Task>
       {dates.map((date) => (
         <TimeslipGridCell
           isLoading={isLoading}
-          cellKey={`${project.id}|${date}`}
+          cellKey={`${task.id}|${date}`}
           date={date}
           today={today.format('YYYY-MM-DD')}
           onHourChanged={(value, timeslip) => {
-            onHourChanged(value, date, timeslip);
+            onHourChanged(task, date, value || 0 , timeslip);
           }}
           timeslip={filledTimeslips[date]}
-          activeCell={activeCell}
           onSetActive={onSetActive}
-          project={project}
         />
       ))}
     </Styled>

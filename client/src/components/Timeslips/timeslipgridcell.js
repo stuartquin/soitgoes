@@ -39,8 +39,7 @@ const StyledInput = styled.input`
 `;
 
 const TimeslipGridCell = ({
-  timeslip = {}, cellKey, date, isLoading, activeCell, project,
-  onHourChanged, onSetActive
+  timeslip = {}, cellKey, date, isLoading, onHourChanged, onSetActive
 }) => {
   const isDisabled = Boolean(timeslip.invoice);
   const day = (new Date(date)).getDay();
@@ -67,11 +66,6 @@ const TimeslipGridCell = ({
         onFocus={() => onSetActive(cellKey)}
         isWeekend={isWeekend}
       />
-      {activeCell === cellKey && (
-        <TimeslipDetail
-          project={project}
-        />
-      )}
     </td>
   );
 };

@@ -12,13 +12,13 @@ const Styled = styled.div`
   font-size: 16px;
   border-top-left-radius: 6px;
   color: #464d59;
-  padding: 12px 16px;
   text-align: center;
 `;
 
 const DownloadLink = styled.a`
   color: #464d59;
-  margin-right: 6px;
+  margin-right: 8px;
+  margin-left: 8px;
 `;
 
 const getStatusAction = (invoice, onUpdateStatus) => {

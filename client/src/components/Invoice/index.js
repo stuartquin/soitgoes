@@ -157,7 +157,10 @@ class Invoice extends React.Component {
         <Container>
           <Grid>
             <Cell sm="12">
-              <InvoiceHeader invoice={invoice}/>
+              <InvoiceHeader
+                invoice={invoice}
+                onUpdateStatus={this.handleUpdateStatus}
+              />
             </Cell>
           </Grid>
 
@@ -178,7 +181,6 @@ class Invoice extends React.Component {
               dueDate={editable.due_date}
               onRemoveModifier={(id) => this.handleRemove('modifiers', id)}
               onSetReference={(reference) => this.setReference(reference)}
-              onUpdateStatus={this.handleUpdateStatus}
               onChange={this.handleChange}
             />
           </Styled>

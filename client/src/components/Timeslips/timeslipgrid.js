@@ -41,14 +41,18 @@ const getTimeslipsForProject = (project, timeslips) => {
   return timeslips.filter(t => t.project === projectId);
 };
 
+const getTimeslipsForTask = (task, timeslips) => (
+  timeslips.filter(t => t.task === task.id)
+);
+
 const TimeslipGrid = ({
-  onSetActiveDate, projects, today, weekStart, isLoading,
+  onSetActiveDate, projects, tasks, today, weekStart, isLoading,
   timeslips, onHourChanged
 }) => {
   const range = getDateRange(weekStart);
-  const filteredProjects = Object.values(projects).filter(
-    p => p && !p.archived
-  );
+  const filteredTasks = Object.values(tasks).filter(
+    t => t && t.project && !t.project.archived
+  ).slice(0, 10);
   const [activeCell, setActiveCell] = useState(null);
 
   return (
@@ -63,18 +67,16 @@ const TimeslipGrid = ({
             />
           </thead>
           <tbody>
-            {filteredProjects.map(project => (
+            {filteredTasks.map(task => (
               <TimeslipGridRow
-                key={project.id}
-                project={project}
+                key={task.id}
+                task={task}
                 today={today}
                 range={range}
                 activeCell={activeCell}
                 isLoading={isLoading}
-                timeslips={getTimeslipsForProject(project, timeslips)}
-                onHourChanged={(hours, date, timeslip) => {
-                  onHourChanged(project, date, hours || 0, timeslip);
-                }}
+                timeslips={getTimeslipsForTask(task, timeslips)}
+                onHourChanged={onHourChanged}
                 onSetActive={setActiveCell}
               />
             ))}

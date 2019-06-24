@@ -190,6 +190,7 @@ class Task(models.Model):
     name = models.CharField(max_length=256)
     cost = models.FloatField(default=0.0)
     created_at = models.DateTimeField(auto_now_add=True)
+    activity_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     completed_at = models.DateTimeField(default=None, blank=True, null=True)
     due_date = models.DateField(default=None, blank=True, null=True)
     hours_spent = models.FloatField(default=0.0)
@@ -232,9 +233,11 @@ class TimeSlip(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        self.task.activity_at = datetime.datetime.now()
+        self.task.save()
 
     def __str__(self):
-        return "[%s] %s" % (self.project.name, self.comment)
+        return f'[{self.project.name}] {self.task.name} {self.date}'
 
     @staticmethod
     def set_invoice(timeslips, invoice_id):
@@ -246,7 +249,7 @@ class TimeSlip(models.Model):
         timeslips.update(invoice_id=invoice_id)
 
     class Meta:
-        unique_together = ('user', 'project', 'date')
+        unique_together = ('user', 'task', 'date')
 
 
 

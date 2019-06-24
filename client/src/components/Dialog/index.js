@@ -24,14 +24,22 @@ const DialogContent = styled.div`
   z-index: 1;
 
   width: 100%;
-  height: 100%;
+  max-height: 90%;
+  margin-top: 5%;
+
+  margin-left: 16px;
+  margin-right: 16px;
+
+  border-radius: 4px;
+  box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
+
+  display: flex;
+  flex-direction: column;
 
   @media(min-width: ${BREAKPOINTS.md}) {
     max-width: 570px;
     height: auto;
     margin-top: 100px;
-    box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
-    border-radius: 4px;
   }
 `;
 
@@ -51,10 +59,14 @@ const Header = styled.div`
   padding: 12px 16px;
 
   border-top: solid 6px white;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 `;
 
 const DialogBody = styled.div`
   padding: 12px 16px;
+  flex: 1;
+  overflow-y: auto;
 `
 
 const Footer = styled.div`

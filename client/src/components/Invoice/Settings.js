@@ -1,20 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Actions from 'components/Invoice/Actions';
-import {ActionLink, Divider, SubTitle} from 'components/GUI';
-import {asCurrency} from 'services/currency';
+import Summary from 'components/Invoice/Summary';
+import {Divider} from 'components/GUI';
 import {Input} from 'components/Form';
-import {getModifierImpact, getModifierDisplayName} from 'services/modifier';
 import {BREAKPOINTS} from 'components/Grid';
-
-const InvoiceSummaryRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-
-  padding: 12px 16px;
-`;
 
 const InvoiceInputRow = styled.div`
   display: flex;
@@ -42,19 +32,19 @@ const Styled = styled.div`
 
 const Settings = (props) => {
   const {
-    invoice, modifiers, onChange, onRemoveModifier, onUpdateStatus,
-    reference, dueDate
+    invoice, modifiers, onChange, onRemoveModifier, reference, dueDate
   } = props;
-  const {project, totalTime, totalHours, totalTask} = invoice;
   const isEditable = !Boolean(invoice.issued_at);
 
   return (
     <Styled>
-      <Actions
+      <Summary
+        modifiers={modifiers}
         invoice={invoice}
-        onUpdateStatus={onUpdateStatus}
-        onDelete={() => console.log('delete')}
+        onRemoveModifier={onRemoveModifier}
       />
+
+      <Divider />
 
       <InvoiceInputRow>
         <div>Due Date</div>
@@ -77,62 +67,6 @@ const Settings = (props) => {
           disabled={!isEditable}
         />
       </InvoiceInputRow>
-
-      {totalTime > 0 && (
-        <InvoiceSummaryRow>
-          <div>
-            <span>Time</span>
-            <SubTitle>{totalHours} Hours</SubTitle>
-          </div>
-          <span>
-            {asCurrency(totalTime, project.currency)}
-          </span>
-        </InvoiceSummaryRow>
-      )}
-
-      {totalTask > 0 && (
-        <InvoiceSummaryRow>
-          <span>Tasks</span>
-          <span>
-            {asCurrency(totalTask, project.currency)}
-          </span>
-        </InvoiceSummaryRow>
-      )}
-
-      <InvoiceSummaryRow>
-        <strong>Subtotal</strong>
-        <span>{asCurrency(invoice.subtotal_due, project.currency)}</span>
-      </InvoiceSummaryRow>
-
-      {modifiers.length > 0 && (
-        <React.Fragment>
-          <Divider />
-          {modifiers.map(modifier => (
-            <InvoiceSummaryRow key={modifier.id}>
-              <div>
-                <span>{getModifierDisplayName(modifier)}</span>
-                {isEditable && (
-                  <div>
-                    <ActionLink size="sm" onClick={() => onRemoveModifier(modifier.id)}>
-                      Remove
-                    </ActionLink>
-                  </div>
-                )}
-              </div>
-              <span>
-                {asCurrency(getModifierImpact(modifier, invoice.subtotal_due), project.currency)}
-              </span>
-            </InvoiceSummaryRow>
-          ))}
-        </React.Fragment>
-      )}
-
-      <Divider />
-      <InvoiceSummaryRow>
-        <strong>Total</strong>
-        <span>{asCurrency(invoice.total_due, project.currency)}</span>
-      </InvoiceSummaryRow>
-
     </Styled>
   );
 };
