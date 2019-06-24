@@ -8,6 +8,7 @@ import {Cell, CellMd} from 'components/Grid';
 import {ActionLink} from 'components/GUI';
 import InvoiceItem from './InvoiceItem';
 import DisplaySettings from './DisplaySettings';
+import {groupByTimeslip, groupByTask} from 'services/invoice';
 
 const Styled = styled.div`
   min-height: 600px;
@@ -15,18 +16,25 @@ const Styled = styled.div`
   border-top-right-radius: 6px;
 `;
 
+const DisplaySettingsCell = styled(Cell)`
+  position: relative;
+`;
+
 const Generator = ({
   invoice, timeslips, tasks, onRemoveTask, onRemoveTimeslip
 }) => {
   const [showDisplaySettings, setShowDisplaySettings] = useState(false);
-  const {project} = invoice;
-  const timeslipItems = Object.values(timeslips).sort((a, b) => {
-    return a.date > b.date ? 1 : -1;
-  }).filter(t => t.hours > 0);
-  const taskItems = Object.values(tasks).sort((a, b) => {
-    return a.completed_at > b.completed_at ? 1 : -1;
+  const [displaySettings, setDisplaySettings] = useState({
+    groupBy: 'time',
+    showHours: true,
   });
+
+  const {project} = invoice;
+  const {showHours} = displaySettings;
   const isEditable = !Boolean(invoice.issued_at);
+  const items = displaySettings.groupBy === 'time' ?
+    groupByTimeslip(timeslips, project.hourly_rate, onRemoveTimeslip) :
+    groupByTask(tasks, timeslips, project.hourly_rate, showHours, onRemoveTask);
 
   return (
     <Styled>
@@ -34,46 +42,35 @@ const Generator = ({
         <Cell xs="11" sm="7">Item</Cell>
         <CellMd numeric sm={isEditable ? '2' : '3'}>Unit</CellMd>
         <CellMd numeric sm="2">Total</CellMd>
-        <Cell numeric xs="1">
+        <DisplaySettingsCell numeric xs="1">
           <ActionLink
             title="Display Settings"
             onClick={() => setShowDisplaySettings(true)}
           >
             <FontAwesomeIcon icon={faCog} />
           </ActionLink>
-        </Cell>
+          {showDisplaySettings && (
+            <DisplaySettings
+              displaySettings={displaySettings}
+              onChange={setDisplaySettings}
+              onCancel={() => setShowDisplaySettings(false)}
+            />
+          )}
+        </DisplaySettingsCell>
       </Header>
-      {timeslipItems.map((timeslip) => (
+      {items.map(item => (
         <InvoiceItem
-          key={timeslip.id}
+          key={item.id}
           project={project}
-          title={`${timeslip.hours} hours`}
-          subTitle={moment(timeslip.date).format('MMM. DD, YYYY')}
-          unitPrice={project.hourly_rate}
-          subTotal={timeslip.hours * project.hourly_rate}
+          title={item.title}
+          subTitle={item.subTitle}
+          unitPrice={item.unitPrice}
+          subTotal={item.subTotal}
+          onRemove={() => item.onRemove(item.id)}
           isEditable={isEditable}
-          onRemove={() => onRemoveTimeslip(timeslip.id)}
         />
       ))}
 
-      {taskItems.map((task) => (
-        <InvoiceItem
-          key={task.id}
-          project={project}
-          title={task.name}
-          subTitle={moment(task.due_date).format('MMM. DD, YYYY')}
-          unitPrice={task.cost}
-          subTotal={task.cost}
-          isEditable={isEditable}
-          onRemove={() => onRemoveTask(task.id)}
-        />
-      ))}
-
-      {showDisplaySettings && (
-        <DisplaySettings
-          onCancel={() => setShowDisplaySettings(false)}
-        />
-      )}
     </Styled>
   );
 };

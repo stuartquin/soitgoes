@@ -1,47 +1,34 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
 
-import Dialog from 'components/Dialog';
+import PopOver from 'components/PopOver';
 import {Checkbox, Label, Input, Select} from 'components/Form';
 import {Button} from 'components/GUI';
 
 const Row = styled.div`
   margin-bottom: 16px;
+  min-width: 250px;
 `;
 
-const DisplaySettings = ({ onApply, onCancel }) => {
-  const [form, setForm] = useState({
-    groupBy: 'time',
-    showHours: true,
-  });
-
+const DisplaySettings = ({ displaySettings, onChange, onCancel }) => {
   const handleChange = ({target}) => {
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    setForm({
-      ...form,
+    onChange({
+      ...displaySettings,
       [target.name]: value
     });
   };
 
   return (
-    <Dialog
+    <PopOver
       title="Display Settings"
       onClose={onCancel}
-      actions={[
-        <Button
-          key={1}
-          type="submit"
-          onClick={() => onApply(form)}
-        >
-          Apply
-        </Button>,
-      ]}
     >
       <Row>
         <Label>Group By</Label>
         <Select
           name="groupBy"
-          value={form.groupBy || ''}
+          value={displaySettings.groupBy || ''}
           onChange={handleChange}
         >
           <option value="time">Time</option>
@@ -54,11 +41,11 @@ const DisplaySettings = ({ onApply, onCancel }) => {
         <Checkbox
           name="showHours"
           type="checkbox"
-          checked={form.showHours}
+          checked={displaySettings.showHours}
           onChange={handleChange}
         />
       </Row>
-    </Dialog>
+    </PopOver>
   );
 };
 
