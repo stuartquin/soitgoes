@@ -28,13 +28,16 @@ const Generator = ({
     groupBy: 'time',
     showHours: true,
   });
+  const handleRemoveItem = ({ itemType, id }) => (
+    itemType === 'task' ? onRemoveTask(id) : onRemoveTimeslip(id)
+  );
 
   const {project} = invoice;
   const {showHours} = displaySettings;
   const isEditable = !Boolean(invoice.issued_at);
   const items = displaySettings.groupBy === 'time' ?
-    groupByTimeslip(timeslips, project.hourly_rate, onRemoveTimeslip) :
-    groupByTask(tasks, timeslips, project.hourly_rate, showHours, onRemoveTask);
+    groupByTimeslip(timeslips, project.hourly_rate) :
+    groupByTask(tasks, timeslips, project.hourly_rate, showHours);
 
   return (
     <Styled>
@@ -61,12 +64,9 @@ const Generator = ({
       {items.map(item => (
         <InvoiceItem
           key={item.id}
+          item={item}
           project={project}
-          title={item.title}
-          subTitle={item.subTitle}
-          unitPrice={item.unitPrice}
-          subTotal={item.subTotal}
-          onRemove={() => item.onRemove(item.id)}
+          onAction={handleRemoveItem}
           isEditable={isEditable}
         />
       ))}

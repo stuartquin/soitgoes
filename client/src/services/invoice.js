@@ -54,16 +54,34 @@ export const getInvoiceDueMessage = (invoice) => {
   return `Due ${dueDate.fromNow()}`;
 };
 
+export const groupByTimeslip = (timeslips, rate) => {
+  const items = Object.values(timeslips).sort((a, b) => {
+    return a.date > b.date ? 1 : -1;
+  }).filter(t => t.hours > 0);
+
+  return timeslips.map(timeslip => ({
+    id: timeslip.id,
+    title: moment(timeslip.date).format('MMM. DD, YYYY'),
+    subTitle: `${timeslip.hours} hours`,
+    unitPrice: rate,
+    subTotal: timeslip.hours * rate,
+    itemType: 'timeslip',
+  }));
+};
+
 export const groupByTask = (
-  tasks, timeslips, rate, showHours, onRemove
+  tasks, timeslips, rate, showHours,
 ) => {
   const items = Object.values(tasks).sort((a, b) => {
     return a.completed_at > b.completed_at ? 1 : -1;
   });
 
   return items.map((task) => {
-    const hours = timeslips.reduce((agg, timeslip) => (
-      agg + (timeslip.task === task.id ? timeslip.hours : 0)
+    const filteredTimeslips = timeslips.filter(timeslip => (
+      timeslip.task === task.id && timeslip.hours
+    ));
+    const hours = filteredTimeslips.reduce((agg, timeslip) => (
+      agg + (timeslip.hours || 0)
     ), 0);
 
     return {
@@ -72,24 +90,8 @@ export const groupByTask = (
       unitPrice: hours * rate,
       subTotal: hours * rate,
       id: task.id,
-      onRemove
+      subItems: groupByTimeslip(filteredTimeslips, rate),
+      itemType: 'task',
     };
   }).filter(task => task.subTotal > 0);
-};
-
-export const groupByTimeslip = (
-  timeslips, rate, onRemove
-) => {
-  const items = Object.values(timeslips).sort((a, b) => {
-    return a.date > b.date ? 1 : -1;
-  }).filter(t => t.hours > 0);
-
-  return timeslips.map(timeslip => ({
-    id: timeslip.id,
-    title: moment(timeslip.date).format('MMM. DD, YYYY'),
-    subTitle: `${timeslip.hours} hours ${timeslip.task}`,
-    unitPrice: rate,
-    subTotal: timeslip.hours * rate,
-    onRemove: onRemove,
-  }));
 };
