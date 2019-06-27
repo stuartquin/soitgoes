@@ -19,6 +19,13 @@ TASK_STATUS = [
     (TASK_STATUS_REJECTED, 'Rejected'),
 ]
 
+BILLING_TYPE_TIME = 'TIME'
+BILLING_TYPE_FIXED = 'FIXED'
+BILLING_TYPE_OPTIONS = [
+  (BILLING_TYPE_TIME, 'Time'),
+  (BILLING_TYPE_FIXED, 'Fixed Cost'),
+];
+
 
 class Billing(models.Model):
     bank_name = models.CharField(max_length=512)
@@ -195,6 +202,11 @@ class Task(models.Model):
     due_date = models.DateField(default=None, blank=True, null=True)
     hours_spent = models.FloatField(default=0.0)
     hours_predicted = models.FloatField(default=0.0)
+    billing_type = models.CharField(
+        max_length=256,
+        choices=BILLING_TYPE_OPTIONS,
+        default=BILLING_TYPE_TIME,
+    )
     state = models.CharField(
         max_length=256,
         choices=TASK_STATUS,

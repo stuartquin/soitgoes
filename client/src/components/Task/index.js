@@ -16,8 +16,13 @@ const STATUS_OPTIONS = [
   ['REJECTED', 'Rejected'],
 ];
 
+const BILLING_TYPE_OPTIONS = [
+  ['TIME', 'Time'],
+  ['FIXED', 'Fixed Cost'],
+];
+
 const Task = ({task, projects, saveTask, onCancel}) => {
-  const { values, handleChange } = useForm({ ...task });
+  const { values, handleChange } = useForm({ billing_type: 'TIME', ...task });
   const action = task.id ? 'Edit' : 'Add'
 
   const handleSave = () => {
@@ -27,6 +32,8 @@ const Task = ({task, projects, saveTask, onCancel}) => {
     });
     onCancel();
   };
+  const activeProject = values.project || {};
+  const cost = values.cost || activeProject.cost || '';
 
   return (
     <Dialog
@@ -79,19 +86,49 @@ const Task = ({task, projects, saveTask, onCancel}) => {
                 ))}
               </Select>
             </Cell>
-            <Cell xs={4}>
-              <Label>Cost</Label>
-              <Input
-                type="number"
-                name="cost"
-                value={values.cost || ''}
-                onChange={handleChange}
-              />
-            </Cell>
           </Grid>
         </FormRow>
 
         <Divider />
+
+        <FormRow>
+          <Grid>
+            <Cell xs={6} sm={4}>
+              <Label>Billing Type</Label>
+              <Select
+                onChange={handleChange}
+                name="billing_type"
+                value={values.billing_type || BILLING_TYPE_OPTIONS[0][0]}
+              >
+                {BILLING_TYPE_OPTIONS.map(([type, title]) => (
+                  <option key={type} value={type}>{title}</option>
+                ))}
+              </Select>
+            </Cell>
+            {values.billing_type === 'TIME' && (
+              <Cell xs={6} sm={4}>
+                <Label>Estimated Hours</Label>
+                <Input
+                  type="number"
+                  name="hours_predicted"
+                  value={values.hours_predicted || ''}
+                  onChange={handleChange}
+                />
+              </Cell>
+            )}
+            {values.billing_type === 'FIXED' && (
+              <Cell xs={6} sm={4}>
+                <Label>Cost</Label>
+                <Input
+                  type="number"
+                  name="cost"
+                  value={cost}
+                  onChange={handleChange}
+                />
+              </Cell>
+            )}
+          </Grid>
+        </FormRow>
 
         <FormRow>
           <Grid>
@@ -116,28 +153,6 @@ const Task = ({task, projects, saveTask, onCancel}) => {
           </Grid>
         </FormRow>
 
-        <FormRow>
-          <Grid>
-            <Cell xs={6} sm={4}>
-              <Label>Estimated Hours</Label>
-              <Input
-                type="number"
-                name="hours_predicted"
-                value={values.hours_predicted || ''}
-                onChange={handleChange}
-              />
-            </Cell>
-            <Cell xs={6} sm={4}>
-              <Label>Actual Hours</Label>
-              <Input
-                type="number"
-                name="hours_spent"
-                value={values.hours_spent || ''}
-                onChange={handleChange}
-              />
-            </Cell>
-          </Grid>
-        </FormRow>
 
      </form>
     </Dialog>
