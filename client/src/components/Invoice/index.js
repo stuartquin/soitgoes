@@ -13,32 +13,30 @@ import Settings from 'components/Invoice/Settings';
 
 import {getWithJoined, selectJoined, selectResults} from 'services/selectors';
 import {getModifierImpact} from 'services/modifier';
+import {groupByTimeslip, groupByTask} from 'services/invoice';
 
 import {fetchInvoice, deleteInvoice, saveInvoice} from 'modules/invoice';
 import {fetchModifiers} from 'modules/modifier';
 import {fetchTasks} from 'modules/task';
 import {fetchTimeslips} from 'modules/timeslip';
 
-const getInvoiceTotals = (invoice, timeslips, modifiers, tasks) => {
+const getInvoiceTotals = (invoice, items, modifiers) => {
   const {project} = invoice;
-  const totalHours = timeslips.reduce((prev, {hours}) => prev + hours, 0);
-  const totalTask = tasks.reduce((prev, {cost}) => prev + cost, 0);
-  const totalTime = (totalHours * project.hourly_rate);
-  const subTotal = totalTask + totalTime;
+  const [totalHours, subTotal] = items.reduce(([h, s], {hours, subTotal}) => (
+    [h + hours, s + subTotal]
+  ), [0, 0]);
   const total = modifiers.reduce((prev, mod) => (
     prev + getModifierImpact(mod, subTotal)
   ), subTotal);
+
+  console.log('TOTALS', totalHours, subTotal, total);
 
   return {
     ...invoice,
     subtotal_due: subTotal,
     total_due: total,
-    totalTask,
-    totalTime,
     totalHours,
-    timeslips,
     modifiers,
-    tasks,
   };
 };
 
@@ -69,6 +67,10 @@ class Invoice extends React.Component {
       tasks: [],
       modifiers: [],
       timeslips: [],
+      displaySettings: {
+        groupBy: 'time',
+        showHours: true,
+      }
     };
 
     this.handleRemove = this.handleRemove.bind(this);
@@ -128,7 +130,7 @@ class Invoice extends React.Component {
     const {editable, timeslips, tasks, modifiers} = this.state;
     const {project} = invoice;
     const totalInvoice = getInvoiceTotals(
-      invoice, timeslips, modifiers, tasks
+      invoice, items, modifiers
     );
     const saveInvoice = {
       ...totalInvoice,
@@ -143,12 +145,23 @@ class Invoice extends React.Component {
     });
   }
 
+  handleSetDisplaySettings = (displaySettings) => {
+    this.setState({ displaySettings });
+  }
+
   render() {
     const {invoice} = this.props;
-    const {editable, tasks, timeslips, modifiers} = this.state;
+    const {project} = invoice;
+    const {
+      editable, tasks, timeslips, modifiers, displaySettings
+    } = this.state;
     if (!invoice) {
       return (<Loading />);
     }
+
+    const items = displaySettings.groupBy === 'time' ?
+      groupByTimeslip(timeslips, project.hourly_rate) :
+      groupByTask(tasks, timeslips, project.hourly_rate, displaySettings.showHours);
 
     return (
       <React.Fragment>
@@ -167,14 +180,14 @@ class Invoice extends React.Component {
           <Styled>
             <Generator
               invoice={invoice}
-              tasks={tasks}
-              onRemoveTimeslip={(id) => this.handleRemove('timeslips', id)}
-              onRemoveTask={(id) => this.handleRemove('tasks', id)}
-              timeslips={timeslips}
+              items={items}
+              displaySettings={displaySettings}
+              onSetDisplaySettings={this.handleSetDisplaySettings}
+              onRemove={({ itemType, id }) => this.handleRemove(itemType, id)}
             />
             <Settings
               invoice={
-                getInvoiceTotals(invoice, timeslips, modifiers, tasks)
+                getInvoiceTotals(invoice, items, modifiers)
               }
               modifiers={modifiers}
               reference={editable.reference}

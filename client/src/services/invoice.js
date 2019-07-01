@@ -65,7 +65,8 @@ export const groupByTimeslip = (timeslips, rate) => {
     subTitle: `${timeslip.hours} hours`,
     unitPrice: rate,
     subTotal: timeslip.hours * rate,
-    itemType: 'timeslip',
+    itemType: 'timeslips',
+    hours: timeslip.hours,
   }));
 };
 
@@ -91,7 +92,8 @@ export const groupByTask = (
       subTotal: hours * rate,
       id: task.id,
       subItems: groupByTimeslip(filteredTimeslips, rate),
-      itemType: 'task',
+      itemType: 'tasks',
+      hours,
     };
   }).filter(task => task.subTotal > 0);
 };

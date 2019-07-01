@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faEdit, faMinusSquare} from '@fortawesome/free-solid-svg-icons'
+import {faMinusSquare} from '@fortawesome/free-solid-svg-icons'
 
 import {asCurrency} from 'services/currency';
 import {Cell, CellMd} from 'components/Grid';
@@ -25,7 +25,6 @@ const InvoiceItem = ({
   const {
     title, subTitle, unitPrice, subTotal, itemType, subItems = []
   } = item;
-  const icon = itemType === 'task' ? faEdit : faMinusSquare;
 
   return (
     <Row>
@@ -42,7 +41,7 @@ const InvoiceItem = ({
       <Actions as={Cell} xs="1">
         {isEditable && (
           <ActionLink onClick={() => onAction(item)}>
-            <FontAwesomeIcon icon={icon} />
+            <FontAwesomeIcon icon={faMinusSquare} />
           </ActionLink>
         )}
       </Actions>

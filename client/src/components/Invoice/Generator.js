@@ -8,7 +8,6 @@ import {Cell, CellMd} from 'components/Grid';
 import {ActionLink} from 'components/GUI';
 import InvoiceItem from './InvoiceItem';
 import DisplaySettings from './DisplaySettings';
-import {groupByTimeslip, groupByTask} from 'services/invoice';
 
 const Styled = styled.div`
   min-height: 600px;
@@ -21,23 +20,13 @@ const DisplaySettingsCell = styled(Cell)`
 `;
 
 const Generator = ({
-  invoice, timeslips, tasks, onRemoveTask, onRemoveTimeslip
+  invoice, items, displaySettings, onRemove, onSetDisplaySettings
 }) => {
   const [showDisplaySettings, setShowDisplaySettings] = useState(false);
-  const [displaySettings, setDisplaySettings] = useState({
-    groupBy: 'time',
-    showHours: true,
-  });
-  const handleRemoveItem = ({ itemType, id }) => (
-    itemType === 'task' ? onRemoveTask(id) : onRemoveTimeslip(id)
-  );
 
   const {project} = invoice;
   const {showHours} = displaySettings;
   const isEditable = !Boolean(invoice.issued_at);
-  const items = displaySettings.groupBy === 'time' ?
-    groupByTimeslip(timeslips, project.hourly_rate) :
-    groupByTask(tasks, timeslips, project.hourly_rate, showHours);
 
   return (
     <Styled>
@@ -55,7 +44,7 @@ const Generator = ({
           {showDisplaySettings && (
             <DisplaySettings
               displaySettings={displaySettings}
-              onChange={setDisplaySettings}
+              onChange={onSetDisplaySettings}
               onCancel={() => setShowDisplaySettings(false)}
             />
           )}
@@ -66,7 +55,7 @@ const Generator = ({
           key={item.id}
           item={item}
           project={project}
-          onAction={handleRemoveItem}
+          onAction={onRemove}
           isEditable={isEditable}
         />
       ))}
