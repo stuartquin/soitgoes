@@ -29,8 +29,6 @@ const getInvoiceTotals = (invoice, items, modifiers) => {
     prev + getModifierImpact(mod, subTotal)
   ), subTotal);
 
-  console.log('TOTALS', totalHours, subTotal, total);
-
   return {
     ...invoice,
     subtotal_due: subTotal,
@@ -125,9 +123,9 @@ class Invoice extends React.Component {
     });
   }
 
-  handleUpdateStatus(status) {
+  handleUpdateStatus(status, items) {
     const {invoice} = this.props;
-    const {editable, timeslips, tasks, modifiers} = this.state;
+    const {editable, modifiers} = this.state;
     const {project} = invoice;
     const totalInvoice = getInvoiceTotals(
       invoice, items, modifiers
@@ -137,6 +135,7 @@ class Invoice extends React.Component {
       ...editable,
       project: project.id,
       status,
+      items,
     };
 
     this.props.saveInvoice(saveInvoice).then(({id}) => {
@@ -172,7 +171,7 @@ class Invoice extends React.Component {
             <Cell sm="12">
               <InvoiceHeader
                 invoice={invoice}
-                onUpdateStatus={this.handleUpdateStatus}
+                onUpdateStatus={(status) => this.handleUpdateStatus(status, items)}
               />
             </Cell>
           </Grid>

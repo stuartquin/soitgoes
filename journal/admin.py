@@ -110,3 +110,7 @@ class TaskNote(admin.StackedInline):
 class Task(admin.ModelAdmin):
     list_display = ('project', 'name', 'invoice', 'due_date')
     inlines = [TaskNote]
+
+@admin.register(models.TaskInvoice)
+class TaskInvoiceAdmin(admin.ModelAdmin):
+    list_display = ('task', 'invoice', 'cost', 'created_at')

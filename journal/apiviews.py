@@ -14,6 +14,7 @@ from rest_framework.permissions import BasePermission
 
 from . import serializers, models, summary
 from .cookieauthentication import CookieAuthentication
+from journal.invoices import save_invoice_items
 
 
 class HasProjectAccess(BasePermission):
@@ -179,11 +180,7 @@ class InvoiceListCreate(generics.ListCreateAPIView):
         )
         serializer.validated_data['sequence_num'] = sequence_num
         invoice = serializer.save()
-        ids = [t.get('id') for t in self.request.data.get('timeslips')]
-        models.TimeSlip.set_invoice(
-            models.TimeSlip.objects.filter(id__in=ids),
-            invoice.pk
-        )
+        save_invoice_items(invoice, self.request.data.get('items'))
 
 
 class InvoiceModifierList(generics.ListAPIView):

@@ -130,7 +130,6 @@ class Invoice(models.Model):
     total_paid = models.FloatField(default=None, blank=True, null=True)
     total_due = models.FloatField(default=None, blank=True, null=True)
     subtotal_due = models.FloatField(default=None, blank=True, null=True)
-    subtotal_due = models.FloatField(default=None, blank=True, null=True)
     status = models.CharField(default='DRAFT', max_length=128, choices=[
         ('DRAFT', 'DRAFT'),
         ('ISSUED', 'ISSUED'),
@@ -150,10 +149,6 @@ class Invoice(models.Model):
         account = self.project.account.company.name.replace(' ', '_')
         project = self.project.name.replace(' ', '_')
         return 'Invoice_%s_%s_%s.pdf' % (account, project, self.sequence_num)
-
-    @property
-    def total_hours(self):
-        return sum([t.hours for t in self.timeslips.all()])
 
     def get_pdf_file(self, user, path=''):
         pdf_file = invoicepdf.get_pdf_file(self, user, path)
@@ -212,10 +207,12 @@ class Task(models.Model):
         choices=TASK_STATUS,
         default=TASK_STATUS_OPEN,
     )
+    # TODO deprecated
     invoice = models.ForeignKey(
         Invoice, models.SET_NULL,
         blank=True, null=True, related_name='tasks'
     )
+    invoices = models.ManyToManyField(Invoice, through='TaskInvoice')
 
     def __str__(self):
         return self.name
@@ -228,6 +225,13 @@ class Task(models.Model):
         """
         Task.objects.filter(invoice_id=invoice_id).update(invoice_id=None)
         tasks.update(invoice_id=invoice_id)
+
+
+class TaskInvoice(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    cost = models.DecimalField(max_digits=6, decimal_places=2)
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
 
 class TimeSlip(models.Model):
@@ -245,8 +249,9 @@ class TimeSlip(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.task.activity_at = datetime.datetime.now()
-        self.task.save()
+        if self.task:
+            self.task.activity_at = datetime.datetime.now()
+            self.task.save()
 
     def __str__(self):
         return f'[{self.project.name}] {self.task.name} {self.date}'
