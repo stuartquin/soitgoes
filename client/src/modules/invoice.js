@@ -27,17 +27,6 @@ export const deleteInvoice = (invoiceId) => (dispatch) => (
   })
 );
 
-export const deleteInvoiceModifier = (id, modifierId) => (dispatch) => {
-  const path = `invoices/${id}/modifiers/`;
-  api.remove(path, modifierId).then(() => dispatch(fetchInvoice(id)));
-}
-
-export const addInvoiceModifier = (id, modifierId) => (dispatch) => {
-  api.update('invoices/', id, {modifier: [modifierId]}).then(() => {
-    dispatch(fetchInvoice(id));
-  });
-};
-
 export const createInvoice = (projectId) => (dispatch) => (
   api.add('invoices/', {project: projectId})
 );
@@ -57,7 +46,7 @@ export const fetchInvoices = reduxHelper.fetch(
 
 export const fetchInvoice = reduxHelper.fetchOne(
   NS,
-  (id) => api.get(`invoices/${id}`)
+  (id, params = {}) => api.get(`invoices/${id}`, params)
 );
 
 const items = reduxHelper.items(NS);

@@ -13,8 +13,8 @@ const InvoiceSummaryRow = styled.div`
   padding: 12px 16px;
 `;
 
-const Summary = ({invoice, modifiers, onRemoveModifier}) => {
-  const {project, totalTime, totalHours, totalTask} = invoice;
+const Summary = ({invoice, project, modifiers, onRemoveModifier}) => {
+  const {totalTime, totalHours, totalTask} = invoice;
   const isEditable = !Boolean(invoice.issued_at);
 
   return (

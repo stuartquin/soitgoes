@@ -28,6 +28,7 @@ export const fetchOne = (
       type: constant(moduleName, 'FETCHONE', 'success'),
       items: [res],
     });
+    return res;
   });
 };
 

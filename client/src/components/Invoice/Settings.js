@@ -32,7 +32,7 @@ const Styled = styled.div`
 
 const Settings = (props) => {
   const {
-    invoice, modifiers, onChange, onRemoveModifier, reference, dueDate
+    invoice, project, modifiers, onChange, onRemoveModifier, reference, dueDate
   } = props;
   const isEditable = !Boolean(invoice.issued_at);
 
@@ -41,6 +41,7 @@ const Settings = (props) => {
       <Summary
         modifiers={modifiers}
         invoice={invoice}
+        project={project}
         onRemoveModifier={onRemoveModifier}
       />
 

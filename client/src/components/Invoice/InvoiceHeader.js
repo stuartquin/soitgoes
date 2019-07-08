@@ -21,13 +21,12 @@ const STATUS_MAP = {
   PAID: 'success',
 };
 
-const InvoiceHeader = ({invoice, onUpdateStatus}) => {
+const InvoiceHeader = ({invoice, project, onUpdateStatus}) => {
   const status = STATUS_MAP[getInvoiceStatus(invoice)];
-  const {project} = invoice;
 
   return (
     <Styled>
-      <Heading size="h2">{project.name}</Heading>
+      <Heading size="h2">{project.name} #{invoice.sequence_num}</Heading>
 
       <Actions
         invoice={invoice}

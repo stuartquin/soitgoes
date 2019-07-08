@@ -55,7 +55,7 @@ export const getInvoiceDueMessage = (invoice) => {
 };
 
 export const groupByTimeslip = (timeslips, rate) => {
-  const items = Object.values(timeslips).sort((a, b) => {
+  const items = timeslips.sort((a, b) => {
     return a.date > b.date ? 1 : -1;
   }).filter(t => t.hours > 0);
 
@@ -96,4 +96,31 @@ export const groupByTask = (
       hours,
     };
   }).filter(task => task.subTotal > 0);
+};
+
+
+export const getDisplayItems = (
+  invoice, rate, timeslips = [], tasks = [],
+) => {
+  const { groupBy, showHours } = invoice;
+  const taskIds = invoice.tasks || [];
+  const timeslipIds = invoice.timeslips || [];
+  const displayTasks = tasks.filter(({ id }) => taskIds.indexOf(id) > -1);
+  const displayTimeslips = timeslips.filter(({ id }) => timeslipIds.indexOf(id) > -1);
+
+  console.log(timeslips, tasks);
+  return groupBy === 'tasks' ?
+    groupByTask(displayTasks, displayTimeslips, rate, showHours) :
+    groupByTimeslip(displayTimeslips, rate);
+};
+
+
+export const getNewInvoice = (project) => {
+  return {
+    project,
+    due_date: moment().add(14, 'days').format('YYYY-MM-DD'),
+    timeslips: [],
+    tasks: [],
+    modifiers: [],
+  };
 };

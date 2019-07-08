@@ -74,17 +74,6 @@ class UserTokenSerializer(serializers.ModelSerializer):
         fields = ['key']
 
 
-class InvoiceItemSerializer(serializers.ModelSerializer):
-    def save(self, *args, **kwargs):
-        invoice = models.Invoice.objects.filter(
-            id=self.context['request'].data['invoice']
-        ).first()
-        return super().save(invoice=invoice)
-
-    class Meta:
-        model = models.InvoiceItem
-
-
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Company
@@ -146,8 +135,10 @@ class TaskSerializer(serializers.ModelSerializer):
         partial = True
 
 
-class InvoiceSerializer(LogActivity):
+class InvoiceSerializer(serializers.ModelSerializer):
     ACTIVITY_CODE = 'INV'
+    timeslips = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    tasks = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     def update(self, instance, validated_data):
         request_data = self.context['request'].data
@@ -163,3 +154,24 @@ class InvoiceSerializer(LogActivity):
     class Meta:
         model = models.Invoice
         partial = True
+
+
+class TaskInvoiceSerializer(serializers.ModelSerializer):
+    timeslips = serializers.SerializerMethodField()
+
+    def get_timeslips(self, obj):
+        return [t[0] for t in obj.task.timeslip_set.values_list('pk')]
+
+    class Meta:
+        model = models.TaskInvoice
+
+
+class InvoiceDetailSerializer(InvoiceSerializer):
+    items = TaskInvoiceSerializer(
+        source='taskinvoice_set',
+        many=True,
+        read_only=True,
+    )
+
+    class Meta:
+        model = models.Invoice

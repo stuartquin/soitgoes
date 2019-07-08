@@ -14,7 +14,7 @@ from rest_framework.permissions import BasePermission
 
 from . import serializers, models, summary
 from .cookieauthentication import CookieAuthentication
-from journal.invoices import save_invoice_items
+from journal.invoices import save_invoice_items, get_new_invoice
 
 
 class HasProjectAccess(BasePermission):
@@ -22,12 +22,6 @@ class HasProjectAccess(BasePermission):
         project_id = request.parser_context['kwargs']['pk']
         project = models.Project.objects.filter(id=project_id).first()
         return len(project.account.users.filter(id=request.user.id)) > 0
-
-
-# TODO Not yet implemented
-class HasInvoiceItemAccess(BasePermission):
-    def has_permission(self, request, view):
-        return True
 
 
 class HasBulkInvoiceAccess(BasePermission):
@@ -144,7 +138,7 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
 class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (HasInvoiceAccess,)
     queryset = models.Invoice.objects.all()
-    serializer_class = serializers.InvoiceSerializer
+    serializer_class = serializers.InvoiceDetailSerializer
 
     def get_serializer(self, *args, **kwargs):
         kwargs['context'] = self.get_serializer_context()
@@ -154,9 +148,9 @@ class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
         return self.serializer_class(*args, **kwargs)
 
     def get(self, request, pk=None):
-        # TODO maybe stick this in session
         response = super().get(request, pk)
         response.set_cookie('TOKEN', '471dfc9d7fc294269df6f91e15ea2346c4aef79a')
+
         return response
 
     def perform_update(self, serializer, *args, **kwargs):
@@ -166,6 +160,11 @@ class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
             serializer.validated_data['paid_at'] = datetime.datetime.now()
 
         serializer.save()
+
+
+class InvoiceCreateNew(APIView):
+    def get(self, request, format=None):
+        return Response(get_new_invoice(request.GET.get('project')))
 
 
 class InvoiceListCreate(generics.ListCreateAPIView):
@@ -204,23 +203,6 @@ class InvoiceModifierDetail(generics.RetrieveUpdateDestroyAPIView):
         )
         invoice.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class InvoiceItem(generics.DestroyAPIView):
-    serializer_class = serializers.InvoiceItemSerializer
-    queryset = models.InvoiceItem.objects.all()
-    permission_classes = (HasInvoiceItemAccess,)
-
-
-class InvoiceItems(generics.ListCreateAPIView):
-    serializer_class = serializers.InvoiceItemSerializer
-    queryset = models.InvoiceItem.objects.all()
-    permission_classes = (HasInvoiceAccess,)
-
-    def get_queryset(self):
-        return models.InvoiceItem.objects.filter(
-            **self.request.query_params.dict()
-        )
 
 
 class InvoicePDF(APIView):

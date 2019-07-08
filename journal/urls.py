@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'api/timeslips/$', apiviews.TimeSlipList.as_view()),
     url(r'api/timeslips/(?P<pk>[0-9]+)$', apiviews.TimeSlipDetail.as_view()),
 
+    url(r'api/invoices/new$', apiviews.InvoiceCreateNew.as_view()),
     url(r'api/invoices/(?P<pk>[0-9]+)$', apiviews.InvoiceDetail.as_view()),
     url(r'api/invoices/(?P<pk>[0-9]+)/pdf$', apiviews.InvoicePDF.as_view()),
     url(r'api/invoices/zip$', apiviews.BulkInvoicePDF.as_view()),
@@ -18,9 +19,6 @@ urlpatterns = [
         r'api/invoices/(?P<pk>[0-9]+)/modifiers/(?P<modifier>[0-9]+)$',
         apiviews.InvoiceModifierDetail.as_view()
     ),
-
-    url(r'api/invoices/items/$', apiviews.InvoiceItems.as_view()),
-    url(r'api/invoices/items/(?P<pk>[0-9]+)$', apiviews.InvoiceItem.as_view()),
 
     url(r'api/expenses/$', apiviews.ExpenseList.as_view()),
 

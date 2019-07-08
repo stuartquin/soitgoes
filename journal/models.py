@@ -173,19 +173,6 @@ class Invoice(models.Model):
         return "[%s] %s" % (self.sequence_num, self.project.name)
 
 
-class InvoiceItem(models.Model):
-    name = models.CharField(max_length=128)
-    units = models.CharField(max_length=128)
-    qty = models.IntegerField(default=0)
-    cost_per_unit = models.FloatField(default=0.0)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    invoice = models.ForeignKey(Invoice, related_name='items')
-
-    def __str__(self):
-        return self.name
-
-
 class Task(models.Model):
     user = models.ForeignKey(User)
     project = models.ForeignKey(Project)
@@ -207,12 +194,11 @@ class Task(models.Model):
         choices=TASK_STATUS,
         default=TASK_STATUS_OPEN,
     )
-    # TODO deprecated
-    invoice = models.ForeignKey(
-        Invoice, models.SET_NULL,
-        blank=True, null=True, related_name='tasks'
+    invoices = models.ManyToManyField(
+        Invoice,
+        through='TaskInvoice',
+        related_name='tasks',
     )
-    invoices = models.ManyToManyField(Invoice, through='TaskInvoice')
 
     def __str__(self):
         return self.name
@@ -254,7 +240,7 @@ class TimeSlip(models.Model):
             self.task.save()
 
     def __str__(self):
-        return f'[{self.project.name}] {self.task.name} {self.date}'
+        return f'[{self.project.name}] {self.date}'
 
     @staticmethod
     def set_invoice(timeslips, invoice_id):

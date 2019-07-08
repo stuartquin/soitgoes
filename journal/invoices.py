@@ -1,4 +1,7 @@
-from journal.models import Task, Invoice, TaskInvoice, TimeSlip
+from datetime import date, timedelta
+from journal.models import (
+    Task, Invoice, TaskInvoice, TimeSlip, TASK_STATUS_OPEN
+)
 
 def _save_invoice_timeslip(invoice, item):
     timeslip = TimeSlip.objects.get(pk=item.get('id'))
@@ -30,3 +33,28 @@ def save_invoice_items(invoice, items):
             _save_invoice_timeslip(invoice, item)
 
     invoice.save()
+
+
+def get_new_invoice(project_id):
+    due_date = date.today() + timedelta(days=14)
+    timeslips = [
+        t[0] for t in TimeSlip.objects.filter(
+            project_id=project_id,
+            invoice=None
+        ).values_list('pk')
+    ]
+    tasks = [
+        t[0] for t in Task.objects.filter(
+            project_id=project_id,
+            state=TASK_STATUS_OPEN,
+        ).values_list('pk')
+    ]
+
+    return {
+        'project': project_id,
+        'tasks': tasks,
+        'timeslips': timeslips,
+        'items': [],
+        'modifiers': [],
+        'due_date': due_date.strftime('%Y-%m-%d')
+    }

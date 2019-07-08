@@ -31,8 +31,8 @@ const DisplaySettings = ({ displaySettings, onChange, onCancel }) => {
           value={displaySettings.groupBy || ''}
           onChange={handleChange}
         >
-          <option value="time">Time</option>
-          <option value="task">Task</option>
+          <option value="timeslips">Time</option>
+          <option value="tasks">Task</option>
         </Select>
       </Row>
 

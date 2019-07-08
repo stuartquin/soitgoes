@@ -20,12 +20,10 @@ const DisplaySettingsCell = styled(Cell)`
 `;
 
 const Generator = ({
-  invoice, items, displaySettings, onRemove, onSetDisplaySettings
+  invoice, items, onRemove, onSetDisplaySettings
 }) => {
   const [showDisplaySettings, setShowDisplaySettings] = useState(false);
-
   const {project} = invoice;
-  const {showHours} = displaySettings;
   const isEditable = !Boolean(invoice.issued_at);
 
   return (
@@ -34,21 +32,23 @@ const Generator = ({
         <Cell xs="11" sm="7">Item</Cell>
         <CellMd numeric sm={isEditable ? '2' : '3'}>Unit</CellMd>
         <CellMd numeric sm="2">Total</CellMd>
-        <DisplaySettingsCell numeric xs="1">
-          <ActionLink
-            title="Display Settings"
-            onClick={() => setShowDisplaySettings(true)}
-          >
-            <FontAwesomeIcon icon={faCog} />
-          </ActionLink>
-          {showDisplaySettings && (
-            <DisplaySettings
-              displaySettings={displaySettings}
-              onChange={onSetDisplaySettings}
-              onCancel={() => setShowDisplaySettings(false)}
-            />
-          )}
-        </DisplaySettingsCell>
+        {isEditable && (
+          <DisplaySettingsCell numeric xs="1">
+            <ActionLink
+              title="Display Settings"
+              onClick={() => setShowDisplaySettings(true)}
+            >
+              <FontAwesomeIcon icon={faCog} />
+            </ActionLink>
+            {showDisplaySettings && (
+              <DisplaySettings
+                displaySettings={invoice}
+                onChange={onSetDisplaySettings}
+                onCancel={() => setShowDisplaySettings(false)}
+              />
+            )}
+            </DisplaySettingsCell>
+        )}
       </Header>
       {items.map(item => (
         <InvoiceItem

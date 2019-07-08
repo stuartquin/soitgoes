@@ -86,14 +86,6 @@ class InvoiceModifierAdmin(admin.ModelAdmin):
         return obj
 
 
-@admin.register(models.InvoiceItem)
-class InvoiceItem(admin.ModelAdmin):
-    list_display = ('name', 'created_at')
-
-    def name(self, obj):
-        return obj
-
-
 @admin.register(models.TimeSlip)
 class TimeSlipAdmin(admin.ModelAdmin):
     list_display = ('name', 'hours', 'invoice', 'date')
@@ -108,7 +100,7 @@ class TaskNote(admin.StackedInline):
 
 @admin.register(models.Task)
 class Task(admin.ModelAdmin):
-    list_display = ('project', 'name', 'invoice', 'due_date')
+    list_display = ('project', 'name', 'due_date')
     inlines = [TaskNote]
 
 @admin.register(models.TaskInvoice)

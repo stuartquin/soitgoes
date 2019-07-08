@@ -13,7 +13,7 @@ const NS = 'TASK';
 
 export const fetchTasks = reduxHelper.fetch(
   NS,
-  (project = null, invoice = null) => api.get('tasks/', {invoice, project})
+  (project = null) => api.get('tasks/', {project})
 );
 
 export const completeTask = (id) => (dispatch) => {
