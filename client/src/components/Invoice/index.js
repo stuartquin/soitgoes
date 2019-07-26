@@ -120,19 +120,10 @@ class Invoice extends React.Component {
   }
 
   handleUpdateStatus(status, items) {
-    const {invoice} = this.props;
+    const {project} = this.props;
     const {editable, modifiers} = this.state;
-    const {project} = invoice;
-    const totalInvoice = getInvoiceTotals(
-      project, invoice, items
-    );
-    const saveInvoice = {
-      ...totalInvoice,
-      ...editable,
-      status,
-    };
 
-    this.props.saveInvoice(saveInvoice).then(({id}) => {
+    this.props.saveInvoice({...editable, status}).then(({id}) => {
       const {history} = this.props;
       history.push(`/project/${project.id}/invoice/${id}`);
     });

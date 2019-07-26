@@ -137,6 +137,11 @@ class Invoice(models.Model):
     ])
     reference = models.CharField(default=None, null=True, blank=True, max_length=256)
     modifier = models.ManyToManyField(InvoiceModifier, blank=True)
+    group_by = models.CharField(default='timeslips', max_length=128, choices=[
+        ('tasks', 'Task'),
+        ('timeslips', 'Timeslip'),
+    ])
+    show_hours = models.BooleanField(default=True)
 
     def get_modifier_value(self, value):
         impact = 0

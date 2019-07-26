@@ -1,6 +1,8 @@
 from datetime import date, timedelta
+from django.db.models import Q
 from journal.models import (
-    Task, Invoice, TaskInvoice, TimeSlip, TASK_STATUS_OPEN
+    Task, Invoice, TaskInvoice, TimeSlip, TASK_STATUS_REJECTED,
+    BILLING_TYPE_FIXED
 )
 
 def _save_invoice_timeslip(invoice, item):
@@ -37,24 +39,29 @@ def save_invoice_items(invoice, items):
 
 def get_new_invoice(project_id):
     due_date = date.today() + timedelta(days=14)
-    timeslips = [
-        t[0] for t in TimeSlip.objects.filter(
+    timeslip_ids, timeslip_task_ids = zip(*
+        TimeSlip.objects.filter(
             project_id=project_id,
             invoice=None
-        ).values_list('pk')
-    ]
-    tasks = [
+        ).values_list('pk', 'task_id')
+    )
+    task_ids = [
         t[0] for t in Task.objects.filter(
             project_id=project_id,
-            state=TASK_STATUS_OPEN,
+        ).filter(
+            Q(billing_type=BILLING_TYPE_FIXED) | Q(pk__in=timeslip_task_ids)
+        ).exclude(
+            state=TASK_STATUS_REJECTED,
         ).values_list('pk')
     ]
 
     return {
         'project': project_id,
-        'tasks': tasks,
-        'timeslips': timeslips,
+        'tasks': task_ids,
+        'timeslips': timeslip_ids,
         'items': [],
         'modifiers': [],
-        'due_date': due_date.strftime('%Y-%m-%d')
+        'due_date': due_date.strftime('%Y-%m-%d'),
+        'group_by': 'timeslips',
+        'show_hours': True,
     }

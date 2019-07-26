@@ -137,8 +137,13 @@ class TaskSerializer(serializers.ModelSerializer):
 
 class InvoiceSerializer(serializers.ModelSerializer):
     ACTIVITY_CODE = 'INV'
-    timeslips = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    tasks = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    # TODO restrict this to matching project
+    timeslips = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=models.TimeSlip.objects.all()
+    )
+    tasks = serializers.PrimaryKeyRelatedField(
+        many=True,  queryset=models.Task.objects.all()
+    )
 
     def update(self, instance, validated_data):
         request_data = self.context['request'].data
