@@ -19,6 +19,9 @@ def _get_column_def(model_class, model_admin):
             'headerName': text,
             'field': field_name,
             'editable': True,
+            'sortable': True,
+            'filter': True,
+            'floatingFilter': True,
         })
 
     return column_def

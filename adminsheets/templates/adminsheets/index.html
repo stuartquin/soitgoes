@@ -19,10 +19,12 @@
 <body>
   <div id="myGrid" style="height: 600px;width:100%;" class="ag-theme-balham"></div>
 
+  <button id="editBtn">Edit Multiple</button>
   <button id="saveBtn">Save</button>
   <script type="text/javascript" charset="utf-8"> // specify the columns
 
   var selectedColId = null;
+  var selectedRowIds = [];
 
   var onSelectionChanged = function(event, other) {
     var col = event.api.focusedCellController.focusedCellPosition.column;
@@ -36,11 +38,15 @@
     var selector = '.ag-row-focus [col-id="' + colId +'"]';
     if (colId === selectedColId) {
       selector = '.ag-row-selected [col-id="' + colId +'"]';
+    } else {
+      selectedRowIds = [];
     }
+
     var cells = document.querySelectorAll(selector);
 
     cells.forEach(function(cell) {
       cell.classList.add('selected-cell');
+      selectedRowIds.push(cell.parentNode.getAttribute('row-id'));
     });
 
     selectedColId = colId;
@@ -55,12 +61,28 @@
     rowData: rowData,
     rowSelection: 'multiple',
     onSelectionChanged: onSelectionChanged,
+    floatingFilter: true,
   };
   // lookup the container we want the Grid to use
   var eGridDiv = document.querySelector('#myGrid'); // create the grid passing in the div to use together with the columns & data we want to use
   new agGrid.Grid(eGridDiv, gridOptions);
 
   console.log(gridOptions);
+
+  document.getElementById('editBtn').addEventListener('click', function() {
+    if (!selectedColId) {
+      return;
+    }
+
+    var value = prompt('Set new value for selected ' + selectedColId + ':');
+    var updates = gridOptions.api.getSelectedNodes().map(function(node) {
+      var data = node.data;
+      data[selectedColId] = value;
+      return data;
+    });
+
+    gridOptions.api.updateRowData({update: updates});
+  });
   </script>
 </body>
 </html> 
