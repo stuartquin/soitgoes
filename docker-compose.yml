@@ -30,6 +30,7 @@ services:
      - nodejs
     volumes:
       - ./journal:/app/journal
+      - ./adminsheets:/app/adminsheets
       - ./soitgoes:/app/soitgoes
       - ./libs:/app/libs
       - ./assets:/app/assets

@@ -1,0 +1,66 @@
+{% load static %}
+<html>
+<head>
+  <script src="{% static "adminsheets/ag-grid-community.min.noStyle.js" %}">
+  </script>
+  <link rel="stylesheet" href="{% static "adminsheets/ag-grid.css" %}">
+  <link rel="stylesheet" href="{% static "adminsheets/ag-theme-balham.css" %}">
+
+
+  <style>
+    .selected-cell {
+      background-color: #b7e4ff;
+    }
+    .ag-theme-balham .ag-row-selected {
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+  <div id="myGrid" style="height: 600px;width:100%;" class="ag-theme-balham"></div>
+
+  <button id="saveBtn">Save</button>
+  <script type="text/javascript" charset="utf-8"> // specify the columns
+
+  var selectedColId = null;
+
+  var onSelectionChanged = function(event, other) {
+    var col = event.api.focusedCellController.focusedCellPosition.column;
+    var colId = col.colId;
+    console.log(event, other);
+
+    document.querySelectorAll('.selected-cell').forEach(function(cell) {
+      cell.classList.remove('selected-cell');
+    });
+
+    var selector = '.ag-row-focus [col-id="' + colId +'"]';
+    if (colId === selectedColId) {
+      selector = '.ag-row-selected [col-id="' + colId +'"]';
+    }
+    var cells = document.querySelectorAll(selector);
+
+    cells.forEach(function(cell) {
+      cell.classList.add('selected-cell');
+    });
+
+    selectedColId = colId;
+  };
+
+  var columnDefs = {{ column_def|safe }}
+  // specify the data
+  var rowData = {{ row_data|safe }}
+  // let the grid know which columns and what data to use
+  var gridOptions = {
+    columnDefs: columnDefs,
+    rowData: rowData,
+    rowSelection: 'multiple',
+    onSelectionChanged: onSelectionChanged,
+  };
+  // lookup the container we want the Grid to use
+  var eGridDiv = document.querySelector('#myGrid'); // create the grid passing in the div to use together with the columns & data we want to use
+  new agGrid.Grid(eGridDiv, gridOptions);
+
+  console.log(gridOptions);
+  </script>
+</body>
+</html> 

@@ -34,8 +34,9 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'jet',
+    # 'jet',
     'journal.apps.JournalConfig',
+    'adminsheets',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',

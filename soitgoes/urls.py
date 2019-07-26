@@ -18,7 +18,8 @@ from django.contrib import admin
 
 
 urlpatterns = [
-    url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
+    # url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('journal.urls'))
+    url(r'^sheets/', include('adminsheets.urls')),
+    url(r'^', include('journal.urls')),
 ]

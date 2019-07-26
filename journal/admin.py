@@ -5,12 +5,16 @@ from django.http import HttpResponse
 from . import models
 from .filters import ExpensePaidFilter
 
+from adminsheets.decorators import register_sheet
 
+
+@register_sheet(models.Contact)
 @admin.register(models.Contact)
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'created_at')
+    list_display = ('name', 'email', 'vat_number', 'created_at')
 
 
+@register_sheet(models.Billing)
 @admin.register(models.Billing)
 class BillingAdmin(admin.ModelAdmin):
     list_display = ('bank_name', 'created_at')
