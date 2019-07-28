@@ -20,9 +20,10 @@ class BillingAdmin(admin.ModelAdmin):
     list_display = ('bank_name', 'created_at')
 
 
+@register_sheet(models.Project)
 @admin.register(models.Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created_at')
+    list_display = ('name', 'created_at', 'currency', 'archived', 'default_task')
 
 
 @admin.register(models.Account)
