@@ -11,7 +11,7 @@ from adminsheets.decorators import register_sheet
 @register_sheet(models.Contact)
 @admin.register(models.Contact)
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'vat_number', 'created_at')
+    list_display = ('name', 'email', 'vat_number', 'created_at', 'account')
 
 
 @register_sheet(models.Billing)
@@ -75,9 +75,10 @@ class ExpenseAdmin(admin.ModelAdmin):
         )
 
 
+@register_sheet(models.Invoice)
 @admin.register(models.Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created_at')
+    list_display = ('name', 'created_at', 'project', 'status', 'total_due')
 
     def name(self, obj):
         return obj

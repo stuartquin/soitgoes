@@ -19,6 +19,7 @@ def _update(request, model_admin):
         if form.is_valid():
             form.save()
 
+
 def _get_list_display(model_admin):
     return ['id'] + list(model_admin.list_display)
 
