@@ -1,4 +1,28 @@
 var ADMIN_SHEETS = (function() {
+  class SelectCellEditor {
+    init({value, options = []}) {
+      this.select = document.createElement('select');
+      this.select.classList.add('ag-cell-edit-input');
+      this.select.value = value;
+
+      this.select.innerHTML = options.map(val => (
+        `<option value=${val.value}>${val.label}</option>`
+      )).join('');
+    }
+
+    getGui() {
+      return this.select;
+    }
+
+    afterGuiAttached() {
+      this.select.focus();
+    }
+
+    getValue() {
+      return this.select.value;
+    }
+  }
+
   var gridOptions = {};
   var selectedColId = null;
   var selectedRowIds = [];
@@ -89,10 +113,36 @@ var ADMIN_SHEETS = (function() {
     document.getElementById('saveBtn').addEventListener('click', save);
   };
 
+  const getCellEditor = (field) => {
+    if (field.field_type === 'select') {
+      const { options = [] } = field;
+      return {
+        cellEditor: 'selectCellEditor',
+        cellEditorParams: {
+          options,
+        }
+      };
+    }
 
-  var init = function(columnDefs, rowData) {
+    return {};
+  };
+
+  // Transform field def to AG-Grid col def
+  const getColumnsDef = fieldsDef =>  fieldsDef.map((f) => ({
+    headerName: f.label,
+    field: f.field,
+    editable: !f.read_only,
+    sortable: true,
+    filter: true,
+    ...getCellEditor(f),
+  }));
+
+  const init = (fieldsDef, rowData) => {
     gridOptions = {
-      columnDefs: columnDefs,
+      components:{
+        selectCellEditor: SelectCellEditor,
+      },
+      columnDefs: getColumnsDef(fieldsDef),
       rowData: rowData,
       rowSelection: 'multiple',
       floatingFilter: true,
@@ -100,9 +150,11 @@ var ADMIN_SHEETS = (function() {
       onCellValueChanged: onCellValueChanged,
     };
 
+    console.log(gridOptions);
+
     // let the grid know which columns and what data to use
     // lookup the container we want the Grid to use
-    var eGridDiv = document.querySelector('#myGrid'); // create the grid passing in the div to use together with the columns & data we want to use
+    const eGridDiv = document.querySelector('#myGrid');
     new agGrid.Grid(eGridDiv, gridOptions);
     attachListeners();
   };
@@ -110,5 +162,4 @@ var ADMIN_SHEETS = (function() {
   return {
     init,
   };
-
 })();

@@ -5,6 +5,7 @@ from django.contrib.admin.utils import (
 )
 
 from adminsheets.sites import admin_sheets
+from adminsheets.api import get_fields_definition
 
 
 def _update(request, model_admin):
@@ -24,27 +25,10 @@ def _get_list_display(model_admin):
     return ['id'] + list(model_admin.list_display)
 
 
-def _get_column_def(model_class, model_admin):
-    column_def = []
-
-    for i, field_name in enumerate(_get_list_display(model_admin)):
-        text, attr = label_for_field(
-            field_name, model_class,
-            model_admin=model_admin,
-            return_attr=True
-        )
-        column_def.append({
-            'headerName': text,
-            'field': field_name,
-            'editable': field_name != 'id',
-            'sortable': True,
-            'filter': True,
-        })
-
-    return column_def
-
-
 def _get_display_value(value, f, empty_value_display):
+    if f is None or f.auto_created:
+        return display_for_value(value, empty_value_display, False)
+
     if f.get_internal_type() == 'BooleanField':
         return str(value)
 
@@ -74,9 +58,10 @@ def sheet(request, path):
     if request.method == 'PUT':
         _update(request, model_admin)
 
-    column_def = _get_column_def(model_class, model_admin)
     context = {}
-    context['column_def'] = json.dumps(column_def)
+    context['fields_def'] = json.dumps(
+        get_fields_definition(model_class, model_admin)
+    )
     context['row_data'] = json.dumps(
         _get_results(
             model_class,

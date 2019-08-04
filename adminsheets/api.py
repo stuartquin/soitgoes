@@ -8,11 +8,21 @@ from django.contrib.admin.utils import (
 from adminsheets.sites import admin_sheets
 
 
+TYPE_MAP = {
+    'CharField': 'string',
+    'TextField': 'string',
+    'FloatField': 'number',
+    'IntegerField': 'number',
+    'ForeignKey': 'select',
+    'DateTimeField': 'date'
+}
+
+
 def _get_list_display(model_admin):
     return ['id'] + list(model_admin.list_display)
 
 
-def _get_choices(field):
+def _get_options(field):
     try:
         # TODO Think about making this async
         choices = field.get_choices()
@@ -21,8 +31,21 @@ def _get_choices(field):
         return None
 
 
-def fields(request, path):
-    model_class, model_admin = admin_sheets.registry.get(path, (None, None))
+def _get_field_type(db_type, options):
+    if options is not None:
+        return 'select'
+
+    return TYPE_MAP.get(db_type, 'string')
+
+
+def _is_read_only(field_name, model_admin, db_type):
+    return (
+        field_name in model_admin.readonly_fields or
+        db_type == 'AutoField'
+    )
+
+
+def get_fields_definition(model_class, model_admin):
     model_meta = model_class._meta
     fields = []
 
@@ -33,25 +56,33 @@ def fields(request, path):
             return_attr=True
         )
 
-        read_only = field_name in model_admin.readonly_fields
         try:
-            field_type = model_meta.get_field(field_name).get_internal_type()
+            db_type = model_meta.get_field(field_name).get_internal_type()
+            read_only = _is_read_only(field_name, model_admin, db_type)
         except FieldDoesNotExist:
-            field_type = 'CharField'
+            db_type = 'CharField'
             read_only = True
 
         if not read_only:
-            choices = _get_choices(model_meta.get_field(field_name))
+            options = _get_options(model_meta.get_field(field_name))
+        else:
+            options = None
 
         fields.append({
             'label': label,
             'field': field_name,
-            'type': field_type,
+            'field_type': _get_field_type(db_type, options),
             'read_only': read_only,
-            'choices': choices,
+            'options': options,
         })
 
+    return fields
+
+
+def fields(request, path):
+    model_class, model_admin = admin_sheets.registry.get(path, (None, None))
+
     return HttpResponse(
-        json.dumps(fields),
+        json.dumps(get_fields_definition(model_class, model_admin)),
         content_type='application/json'
     )
