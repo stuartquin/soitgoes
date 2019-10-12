@@ -21,11 +21,11 @@ import {fetchTimeslips} from 'modules/timeslip';
 import {fetchModifiers} from 'services/modifier';
 
 const getInvoiceTotals = (invoice, items) => {
-  const {modifiers = []} = invoice;
+  const {modifier = []} = invoice;
   const [totalHours, subTotal] = items.reduce(([h, s], {hours, subTotal}) => (
     [h + hours, s + subTotal]
   ), [0, 0]);
-  const total = modifiers.reduce((prev, mod) => (
+  const total = modifier.reduce((prev, mod) => (
     prev + getModifierImpact(mod, subTotal)
   ), subTotal);
 
@@ -34,7 +34,7 @@ const getInvoiceTotals = (invoice, items) => {
     subtotal_due: subTotal,
     total_due: total,
     totalHours,
-    modifiers,
+    modifier,
   };
 };
 
@@ -75,10 +75,10 @@ class Invoice extends React.Component {
 
   componentDidMount() {
     const {invoiceId, project} = this.props;
-    this.fetchData().then(([invoice, modifiers]) => {
+    this.fetchData().then(([invoice, modifier]) => {
       const editable = invoice.id ?
         {...invoice} :
-        {...invoice, modifiers: modifiers.results};
+        {...invoice, modifier: modifier.results};
 
       this.setState({ editable });
     });
@@ -89,7 +89,7 @@ class Invoice extends React.Component {
     const promises = invoiceId ? [
       this.props.fetchInvoice(invoiceId, { project: project.id }),
       fetchModifiers(),
-      this.props.fetchTimeslips(null, null, null, project.id),
+      this.props.fetchTimeslips(invoiceId, null, null, project.id),
       this.props.fetchTasks(project.id),
     ] : [
       this.props.fetchInvoice('new', { project: project.id }),
@@ -125,7 +125,7 @@ class Invoice extends React.Component {
     const {editable} = this.state;
     const saveable = {
       ...editable,
-      modifier: editable.modifiers.map(m => m.id),
+      modifier: editable.modifier.map(m => m.id),
     };
 
     this.props.saveInvoice({...saveable, status}).then(({id}) => {
@@ -144,7 +144,7 @@ class Invoice extends React.Component {
   }
 
   render() {
-    const {invoice, modifiers, project, tasks, timeslips} = this.props;
+    const {invoice, project, tasks, timeslips} = this.props;
     const {
       editable, displaySettings
     } = this.state;
@@ -183,10 +183,10 @@ class Invoice extends React.Component {
                 getInvoiceTotals(editable, items)
               }
               project={project}
-              modifiers={editable.modifiers || []}
+              modifiers={editable.modifier || []}
               reference={editable.reference}
               dueDate={editable.due_date}
-              onRemoveModifier={(id) => this.handleRemove('modifiers', id)}
+              onRemoveModifier={(id) => this.handleRemove('modifier', id)}
               onSetReference={(reference) => this.setReference(reference)}
               onChange={this.handleChange}
             />

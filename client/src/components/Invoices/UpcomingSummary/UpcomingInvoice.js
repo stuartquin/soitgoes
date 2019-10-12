@@ -9,6 +9,7 @@ import {asCurrency} from 'services/currency';
 const TotalAmount = styled.div`
   font-size: 28px;
   color: #050505;
+  margin-bottom: 8px;
 `;
 
 const Heading = styled.div`
@@ -32,25 +33,28 @@ const Issue = styled(Link)`
 const Info = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
   color: #626264;
   padding: 24px 16px;
 `;
 
-const Styled = styled(Cell)`
+const Styled = styled.div`
   border-radius: 6px;
   box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
   background: white;
   cursor: pointer;
   color: #050505;
-  max-width: 285px;
+  width: 285px;
+  min-width: 230px;
+  margin-right: 20px;
+
+  &:last-child {
+    margin-right: 0;
+  }
 
   &:hover ${Issue} {
     text-decoration: underline;
-  }
-
-  @media(max-width: ${BREAKPOINTS.sm}) {
-    width: 100%;
   }
 `;
 

@@ -6,10 +6,13 @@ import {Grid, Cell} from 'components/Grid';
 import {groupByProject, getTotal} from 'services/timeslip';
 
 
-const StyledUpcomingSummary = styled(Grid)`
+const StyledUpcomingSummary = styled.div`
   min-height: 150px;
+  display: flex;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  width: 100%;
 `;
-
 
 const UpcomingSummary = ({timeslips}) => {
   const grouped = Object.values(groupByProject(timeslips));

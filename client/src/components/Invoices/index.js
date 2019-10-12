@@ -38,7 +38,7 @@ class Invoices extends React.Component {
   render() {
     const {invoices, timeslips} = this.props;
     const NewButton = (
-      <Button type="success">New Invoice</Button>
+      <Button type="success">New</Button>
     );
 
     return (
