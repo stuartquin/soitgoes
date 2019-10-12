@@ -1,3 +1,7 @@
+import * as api from 'services/api';
+
+export const fetchModifiers = () => api.get('modifiers/');
+
 export const getModifierDisplayName = (modifier) => {
   return modifier.percent ?
     `${modifier.name} ${modifier.percent}%` :

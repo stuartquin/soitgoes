@@ -1,0 +1,45 @@
+{% load invoice_extras %}
+<table>
+  <tr class='table-header'>
+    <th>Details</th>
+    <th class="number">Unit Price</th>
+    <th class="number">Subtotal ({{ currency }})</th>
+  </tr>
+  {% for timeslip in timeslips %}
+    {% if timeslip.hours %}
+      <tr>
+        <td>{{ timeslip.hours }} Hours on {{ timeslip.date }}: {{ timeslip.project.name }}</td>
+        <td class="number">{{ timeslip.hourly_rate }}</td>
+        <td class="number">{{ timeslip.hourly_rate|multiply:timeslip.hours|floatformat:2 }}</td>
+      </tr>
+    {% endif %}
+  {% endfor %}
+
+  {% for task in tasks %}
+    {% if not task.time_billing %}
+      <tr>
+        <td>{{ task.name }} </td>
+        <td class="number">{{ task.cost }}</td>
+        <td class="number">{{ task.cost }}</td>
+      </tr>
+    {% endif %}
+  {% endfor %}
+  <tr class='total'>
+    <td></td>
+    <td class="number"><strong>Subtotal</strong></td>
+    <td class="number"><strong>{{ invoice.subtotal_due|floatformat:2 }}</strong></td>
+  </tr>
+  <tr class='spacer'></tr>
+  {% for item in modifiers %}
+  <tr>
+    <td>{{ item.name }}</td>
+    <td class="number">{{ item.percent }}%</td>
+    <td class="number">{{ item.impact|floatformat:2  }}</td>
+  </tr>
+  {% endfor %}
+  <tr class='total'>
+    <td></td>
+    <td class="number"><strong>Total</strong></td>
+    <td class="number"><strong>{{ invoice.total_due|floatformat:2}}</strong></td>
+  </tr>
+</table>

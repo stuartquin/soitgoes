@@ -146,7 +146,7 @@ class Invoice(models.Model):
     def get_modifier_value(self, value):
         impact = 0
         for mod in self.modifier.all():
-            impact += (value / 100) * mod.percent
+            impact += float(value / 100) * mod.percent
         return impact
 
     @property
@@ -156,11 +156,8 @@ class Invoice(models.Model):
         return 'Invoice_%s_%s_%s.pdf' % (account, project, self.sequence_num)
 
     def get_pdf_file(self, user, path=''):
-        pdf_file = invoicepdf.get_pdf_file(self, user, path)
-        if pdf_file is None:
-            invoicepdf.render(self, user, path)
-            return invoicepdf.get_pdf_file(self, user, path)
-        return pdf_file
+        invoicepdf.render(self, user, path)
+        return invoicepdf.get_pdf_file(self, user, path)
 
     @staticmethod
     def get_bulk_file(invoices, user):
@@ -208,6 +205,10 @@ class Task(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def time_billing(self):
+        return self.billing_type == BILLING_TYPE_TIME
+
     @staticmethod
     def set_invoice(tasks, invoice_id):
         """
@@ -231,6 +232,7 @@ class TimeSlip(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     date = models.DateField()
     hours = models.FloatField(default=0.0)
+    hourly_rate = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     task = models.ForeignKey(Task, blank=True, null=True)
     comment = models.CharField(max_length=512, blank=True, null=True)
     invoice = models.ForeignKey(
@@ -238,7 +240,14 @@ class TimeSlip(models.Model):
         blank=True, null=True, related_name='timeslips'
     )
 
+    @property
+    def cost(self):
+        return float(self.hourly_rate) * self.hours
+
     def save(self, *args, **kwargs):
+        if not self.hourly_rate:
+            self.hourly_rate = self.project.hourly_rate
+
         super().save(*args, **kwargs)
         if self.task:
             self.task.activity_at = datetime.datetime.now()

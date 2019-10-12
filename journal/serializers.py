@@ -142,7 +142,10 @@ class InvoiceSerializer(serializers.ModelSerializer):
         many=True, queryset=models.TimeSlip.objects.all()
     )
     tasks = serializers.PrimaryKeyRelatedField(
-        many=True,  queryset=models.Task.objects.all()
+        many=True, queryset=models.Task.objects.all()
+    )
+    modifier = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=models.InvoiceModifier.objects.all()
     )
 
     def update(self, instance, validated_data):

@@ -108,7 +108,6 @@ export const getDisplayItems = (
   const displayTasks = tasks.filter(({ id }) => taskIds.indexOf(id) > -1);
   const displayTimeslips = timeslips.filter(({ id }) => timeslipIds.indexOf(id) > -1);
 
-  console.log(timeslips, tasks);
   return groupBy === 'tasks' ?
     groupByTask(displayTasks, displayTimeslips, rate, showHours) :
     groupByTimeslip(displayTimeslips, rate);

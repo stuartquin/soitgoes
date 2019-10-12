@@ -90,7 +90,6 @@ def render(invoice, user, path=''):
         'currency': CURRENCY_LOOKUP.get(project.currency, 'GBP'),
         'company': project.account.company,
         'timeslips': timeslips,
-        'items': invoice.items.all(),
         'modifiers': modifiers,
         'sent_date': invoice.issued_at.strftime('%d %B %Y'),
         'due_date': due_date,

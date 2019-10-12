@@ -161,53 +161,11 @@ tr.total td {
       </section>
 
       <section class='price-list'>
-        <table>
-          <tr class='table-header'>
-            <th>Details</th>
-            <th class="number">Unit Price</th>
-            <th class="number">Subtotal ({{ currency }})</th>
-          </tr>
-          {% for timeslip in timeslips %}
-          <tr>
-            <td>{{ timeslip.hours }} Hours on {{ timeslip.date }}: {{ timeslip.project.name }}</td>
-            <td class="number">{{ timeslip.project.hourly_rate }}</td>
-            <td class="number">{{ timeslip.project.hourly_rate|multiply:timeslip.hours|floatformat:2 }}</td>
-          </tr>
-          {% endfor %}
-          {% for item in items %}
-          <tr>
-            <td>
-              {{ item.name }} ({{ item.qty }}{%if item.unit %} x {{item.unit}}{% endif %}) </td>
-            <td class="number">{{ item.cost_per_unit }}</td>
-            <td class="number">{{ item.qty|multiply:item.cost_per_unit|floatformat:2}}</td>
-          </tr>
-          {% endfor %}
-          {% for task in tasks %}
-          <tr>
-            <td>{{ task.name }} </td>
-            <td class="number">{{ task.cost }}</td>
-            <td class="number">{{ task.cost }}</td>
-          </tr>
-          {% endfor %}
-          <tr class='total'>
-            <td></td>
-            <td class="number"><strong>Subtotal</strong></td>
-            <td class="number"><strong>{{ invoice.subtotal_due|floatformat:2 }}</strong></td>
-          </tr>
-          <tr class='spacer'></tr>
-          {% for item in modifiers %}
-          <tr>
-            <td>{{ item.name }}</td>
-            <td class="number">{{ item.percent }}%</td>
-            <td class="number">{{ item.impact|floatformat:2  }}</td>
-          </tr>
-          {% endfor %}
-          <tr class='total'>
-            <td></td>
-            <td class="number"><strong>Total</strong></td>
-            <td class="number"><strong>{{ invoice.total_due|floatformat:2}}</strong></td>
-          </tr>
-        </table>
+        {% if invoice.group_by == 'timeslips' %}
+          {% include "_invoice_time.html" %}
+        {% else %}
+          {% include "_invoice_time.html" %}
+        {% endif %}
       </section>
 
       <hr />

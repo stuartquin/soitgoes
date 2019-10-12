@@ -5,7 +5,7 @@ from rest_framework import exceptions
 
 class CookieAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
-        key = request.COOKIES.get('TOKEN')
+        key = request.COOKIES.get('sig_token')
         if not key:
             raise exceptions.AuthenticationFailed('No such user')
 

@@ -11,29 +11,29 @@ def _save_invoice_timeslip(invoice, item):
     timeslip.save()
 
 
-def _save_invoice_task(invoice, item):
+def _save_invoice_task(invoice, task):
+    cost = 0
+    if task.billing_type == BILLING_TYPE_FIXED:
+        cost = task.cost
+    else:
+        cost = sum([ts.cost for ts in invoice.timeslips.filter(task=task)])
+
     task_invoice = TaskInvoice.objects.create(
-        task=Task.objects.get(pk=item.get('id')),
+        task=task,
         invoice=invoice,
-        cost=item.get('subTotal')
+        cost=cost
     )
     task_invoice.save()
 
-    for sub_item in item.get('subItems', []):
-        _save_invoice_timeslip(invoice, sub_item)
+
+def save_invoice_tasks(invoice, tasks):
+    for task in tasks:
+        _save_invoice_task(invoice, task)
 
 
-
-def save_invoice_items(invoice, items):
-    for item in items:
-        item_type = item.get('itemType')
-
-        if item_type == 'tasks':
-            _save_invoice_task(invoice, item)
-
-        if item_type == 'timeslips':
-            _save_invoice_timeslip(invoice, item)
-
+def set_invoice_totals(invoice):
+    invoice.subtotal_due = float(sum([ti.cost for ti in invoice.taskinvoice_set.all()]))
+    invoice.total_due = invoice.subtotal_due + invoice.get_modifier_value(invoice.subtotal_due)
     invoice.save()
 
 
