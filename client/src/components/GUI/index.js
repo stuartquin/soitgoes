@@ -57,6 +57,10 @@ export const SubTitle = styled.div`
   margin-top: 4px;
 `;
 
+export const Error = styled.div`
+  color: ${props => props.theme.danger.main};
+`;
+
 export const Divider = styled.hr`
   border: 0;
   height: 1px;

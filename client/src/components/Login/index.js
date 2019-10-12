@@ -1,14 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import {BREAKPOINTS, Container, Grid, Cell} from 'components/Grid';
-import {Button} from 'components/GUI';
+import {Button, Error} from 'components/GUI';
 import {Input} from 'components/Form';
-
+import {login} from 'services/api';
 
 const InputRow = styled.div`
   margin-bottom: 8px;
 `;
-
 
 const Page = styled.div`
   min-height: 100vh;
@@ -25,12 +24,14 @@ const Card = styled(Cell)`
   margin-top: 32px;
 `;
 
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      form: {}
+      form: {},
+      error: null,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -42,9 +43,19 @@ class Login extends React.Component {
     this.setState({form});
   }
 
+
+  handleLogin = (form) => {
+    login(form).then(res => {
+      if (res.status === 200) {
+        location.reload();
+      } else {
+        this.setState({error: 'Error logging in'});
+      }
+    })
+  }
+
   render() {
-    const {onSubmit} = this.props;
-    const {form} = this.state;
+    const {form, error} = this.state;
 
     return (
       <Page>
@@ -52,12 +63,12 @@ class Login extends React.Component {
           <Grid>
             <Cell xs={1} sm={4} />
             <Card xs={10} sm={4}>
-              <form onSubmit={(e) => {e.preventDefault(); onSubmit(form)}}>
+              <form onSubmit={(e) => {e.preventDefault(); this.handleLogin(form)}}>
                 <InputRow>
                   <Input
                     placeholder="Username"
                     name="username"
-                    value={this.state.form.username}
+                    value={this.state.form.username || ''}
                     onChange={this.handleChange}
                   />
                 </InputRow>
@@ -66,14 +77,17 @@ class Login extends React.Component {
                     placeholder="Password"
                     name="password"
                     type="password"
-                    value={this.state.form.password}
+                    value={this.state.form.password || ''}
                     onChange={this.handleChange}
                   />
                 </InputRow>
-                <Button type="success" onClick={() => onSubmit(form)}>
+                <Button type="success" onClick={() => this.handleLogin(form)}>
                   Login
                 </Button>
               </form>
+              {error && (
+                <Error>{error}</Error>
+              )}
             </Card>
             <Cell sm={4} />
           </Grid>
@@ -83,4 +97,4 @@ class Login extends React.Component {
   }
 }
 
-export {Login};
+export default Login;

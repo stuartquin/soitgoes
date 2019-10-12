@@ -9,11 +9,11 @@ import Invoice from 'components/Invoice';
 import Invoices from 'components/Invoices';
 import Timeslips from 'components/Timeslips';
 import Tasks from 'components/Tasks';
+import Login from 'components/Login';
 
 import {fetchContacts} from 'modules/contact';
+import {fetchUser} from 'modules/user';
 import {fetchProjects} from 'modules/project';
-import {setIsLoaded} from 'modules/nav';
-import * as userActions from '../../actions/user';
 
 const Styled = styled.div`
   height: 100%;
@@ -28,30 +28,48 @@ class Nav extends React.Component {
     super(props);
     this.state = {
       isLoaded: false,
+      isLoggedIn: true,
     };
   }
 
   componentDidMount() {
-    this.fetchBase().then(() => this.setState({isLoaded: true}));
+    this.props.fetchUser().then(this.fetchBase).then(() => {
+      this.setState({isLoaded: true, isLoggedIn: true})
+    }).catch(() => {
+      this.setState({isLoaded: true, isLoggedIn: false})
+    });
   }
 
-  fetchBase() {
+  fetchBase = () => {
     return Promise.all([
-      this.props.fetchVersion(),
-      this.props.fetchAccounts(),
       this.props.fetchProjects(),
       this.props.fetchContacts()
     ]);
   }
 
+  handleLogin = (form) => {
+    login(form).then(res => {
+      const {history} = this.props;
+      history.push(`/invoices`);
+    });
+  }
+
   render() {
-    const {isLoaded} = this.state;
+    const {isLoaded, isLoggedIn} = this.state;
 
     if (!isLoaded) {
       return (
         <div className='wrapper'>
           <Loading />
         </div>
+      );
+    }
+
+    if (!isLoggedIn) {
+      return (
+        <Styled>
+          <Login />
+        </Styled>
       );
     }
 
@@ -79,10 +97,9 @@ const mapStateToProps = () => {
 };
 
 const actions = {
-  ...userActions,
+  fetchUser,
   fetchProjects,
   fetchContacts,
-  setIsLoaded,
 };
 
 const NavContainer = connect(mapStateToProps, actions)(Nav);

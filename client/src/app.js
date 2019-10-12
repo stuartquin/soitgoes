@@ -10,37 +10,10 @@ import {theme} from 'components/GUI';
 import {login} from 'services/api';
 import {getAuthToken} from 'services/cookie';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoggedIn: Boolean(getAuthToken())
-    };
-
-    this.handleLogin = this.handleLogin.bind(this);
-  }
-
-  handleLogin(form) {
-    login(form).then(res => {
-      this.setState({isLoggedIn: true});
-      const {history} = this.props;
-      history.push(`/invoices`);
-    });
-  }
-
-  render() {
-    const {isLoggedIn} = this.state;
-
-    return (
-      <ThemeProvider theme={theme}>
-        {isLoggedIn ? (
-          <Route component={NavContainer} />
-        ) : (
-          <Login onSubmit={this.handleLogin} />
-        )}
-      </ThemeProvider>
-    );
-  }
-}
+const App = () => (
+  <ThemeProvider theme={theme}>
+    <Route component={NavContainer} />
+  </ThemeProvider>
+);
 
 export default hot(App);

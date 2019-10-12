@@ -147,12 +147,6 @@ class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
 
         return self.serializer_class(*args, **kwargs)
 
-    def get(self, request, pk=None):
-        response = super().get(request, pk)
-        response.set_cookie('TOKEN', '471dfc9d7fc294269df6f91e15ea2346c4aef79a')
-
-        return response
-
     def perform_update(self, serializer, *args, **kwargs):
         validated = serializer.validated_data
         if validated['paid_at'] is None and validated['status'] == 'PAID':

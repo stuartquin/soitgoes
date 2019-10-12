@@ -35,6 +35,10 @@ const Project = styled.div`
   margin-top: 6px;
   color: ${props => props.theme.grey.dark};
   text-transform: uppercase;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 `;
 
 const TaskName = styled.div`
