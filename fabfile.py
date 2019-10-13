@@ -12,7 +12,7 @@ def deploy_client():
     operations.local('docker exec -it soitgoes_nodejs_1 npm run build')
     operations.put(
         'client/dist/bundle.js',
-        '{}/journal/static/journal/dist/bundle.js'.format(APP_PATH)
+        '{}/client/dist/bundle.js'.format(APP_PATH)
     )
 
 def migrate():
