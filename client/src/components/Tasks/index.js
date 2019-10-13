@@ -7,8 +7,8 @@ import NavMenu from 'components/nav/navmenu';
 import Heading from 'components/Heading';
 import {BREAKPOINTS, Container, Grid, Cell} from 'components/Grid';
 import {Button} from 'components/GUI';
-import {selectJoinedResults, selectJoined} from 'services/selectors';
-import {fetchTasks} from 'modules/task';
+import {selectWithProject, selectJoined} from 'services/selectors';
+import {fetchTasks} from 'services/task';
 
 import TaskTable from './TaskTable';
 
@@ -28,17 +28,25 @@ const Styled = styled.div`
   }
 `;
 
-const Tasks = ({ tasks, fetchTasks }) => {
+const Tasks = ({ projects }) => {
   const [selectedTask, setSelectedTask] = useState(null);
+  const [tasks, setTasks] = useState([]);
   const NewButton = (
     <Button type="success" onClick={() => setSelectedTask({})}>
       New Task
     </Button>
   );
 
+  const load = async () => {
+    const response = await fetchTasks();
+    setTasks(selectWithProject(response.results, projects));
+  };
+
   useEffect(() => {
-    fetchTasks();
+    load();
   }, []);
+
+  console.log('Tasks', tasks);
 
   return (
     <React.Fragment>
@@ -56,6 +64,7 @@ const Tasks = ({ tasks, fetchTasks }) => {
       {selectedTask && (
         <Task
           task={selectedTask}
+          projects={projects}
           onCancel={() => setSelectedTask(null)}
         />
       )}
@@ -64,13 +73,9 @@ const Tasks = ({ tasks, fetchTasks }) => {
 }
 
 const mapStateToProps = (state, { match }) => {
-  const project = selectJoined(state.project.items, state);
-
   return {
-    tasks: selectJoinedResults(state.task.items, {project}, state.task.results)
+    projects: selectJoined(state.project.items, state)
   };
 };
 
-export default connect(mapStateToProps, {
-  fetchTasks,
-})(Tasks);
+export default connect(mapStateToProps, {})(Tasks);

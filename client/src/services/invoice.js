@@ -102,14 +102,13 @@ export const groupByTask = (
 export const getDisplayItems = (
   invoice, rate, timeslips = [], tasks = [],
 ) => {
-  const { groupBy, showHours } = invoice;
   const taskIds = invoice.tasks || [];
   const timeslipIds = invoice.timeslips || [];
   const displayTasks = tasks.filter(({ id }) => taskIds.indexOf(id) > -1);
   const displayTimeslips = timeslips.filter(({ id }) => timeslipIds.indexOf(id) > -1);
 
-  return groupBy === 'tasks' ?
-    groupByTask(displayTasks, displayTimeslips, rate, showHours) :
+  return invoice.group_by === 'tasks' ?
+    groupByTask(displayTasks, displayTimeslips, rate, invoice.show_hours) :
     groupByTimeslip(displayTimeslips, rate);
 };
 

@@ -1,7 +1,6 @@
 import json
 import zipfile
 import datetime
-
 from django.contrib import auth
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.csrf import csrf_exempt

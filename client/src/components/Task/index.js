@@ -25,6 +25,8 @@ const Task = ({task, projects, saveTask, onCancel}) => {
   const { values, handleChange } = useForm({ billing_type: 'TIME', ...task });
   const action = task.id ? 'Edit' : 'Add'
 
+  console.log('Task', values);
+
   const handleSave = () => {
     saveTask({
       ...values,
@@ -58,11 +60,11 @@ const Task = ({task, projects, saveTask, onCancel}) => {
               <Label>Status</Label>
               <Select
                 onChange={handleChange}
-                name="status"
-                value={values.status || ''}
+                name="state"
+                value={values.state || ''}
               >
-                {STATUS_OPTIONS.map(([status, title]) => (
-                  <option key={status} value={status}>{title}</option>
+                {STATUS_OPTIONS.map(([state, title]) => (
+                  <option key={state} value={state}>{title}</option>
                 ))}
               </Select>
             </Cell>

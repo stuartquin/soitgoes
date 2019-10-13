@@ -27,8 +27,8 @@ const DisplaySettings = ({ displaySettings, onChange, onCancel }) => {
       <Row>
         <Label>Group By</Label>
         <Select
-          name="groupBy"
-          value={displaySettings.groupBy || ''}
+          name="group_by"
+          value={displaySettings.group_by || ''}
           onChange={handleChange}
         >
           <option value="timeslips">Time</option>
@@ -39,9 +39,9 @@ const DisplaySettings = ({ displaySettings, onChange, onCancel }) => {
       <Row>
         <Label>Show Hours</Label>
         <Checkbox
-          name="showHours"
+          name="show_hours"
           type="checkbox"
-          checked={displaySettings.showHours}
+          checked={displaySettings.show_hours}
           onChange={handleChange}
         />
       </Row>

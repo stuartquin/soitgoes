@@ -224,6 +224,7 @@ class TaskInvoice(models.Model):
     cost = models.DecimalField(max_digits=6, decimal_places=2)
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    hours_spent = models.FloatField(default=0.0)
 
 
 class TimeSlip(models.Model):

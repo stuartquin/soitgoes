@@ -27,3 +27,8 @@ export const selectJoinedResults = (items, state, results) => (
 export const selectBy = (items, value, field = 'id') => (
   Object.values(items).filter(item => item[field] === value)
 );
+
+export const selectWithProject = (results, project) => {
+  const state = { project };
+  return results.map(result => getWithJoined(result, state));
+};

@@ -12,16 +12,18 @@ def _save_invoice_timeslip(invoice, item):
 
 
 def _save_invoice_task(invoice, task):
-    cost = 0
     if task.billing_type == BILLING_TYPE_FIXED:
         cost = task.cost
+        hours = 0
     else:
         cost = sum([ts.cost for ts in invoice.timeslips.filter(task=task)])
+        hours = sum([ts.hours for ts in invoice.timeslips.filter(task=task)])
 
     task_invoice = TaskInvoice.objects.create(
         task=task,
         invoice=invoice,
-        cost=cost
+        cost=cost,
+        hours_spent=hours
     )
     task_invoice.save()
 
@@ -60,7 +62,7 @@ def get_new_invoice(project_id):
         'tasks': task_ids,
         'timeslips': timeslip_ids,
         'items': [],
-        'modifiers': [],
+        'modifier': [],
         'due_date': due_date.strftime('%Y-%m-%d'),
         'group_by': 'timeslips',
         'show_hours': True,

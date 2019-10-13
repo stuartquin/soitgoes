@@ -124,8 +124,8 @@ class TaskSerializer(serializers.ModelSerializer):
     )
 
     def update(self, instance, validated_data):
-        status = validated_data.get('status')
-        if status == TASK_STATUS_DONE and instance.status != TASK_STATUS_DONE:
+        state = validated_data.get('state')
+        if state == models.TASK_STATUS_DONE:
             validated_data['completed_at'] = datetime.datetime.now()
 
         return super().update(instance, validated_data)
@@ -144,7 +144,9 @@ class InvoiceSerializer(serializers.ModelSerializer):
     tasks = serializers.PrimaryKeyRelatedField(
         many=True, queryset=models.Task.objects.all()
     )
-    modifier = InvoiceModifierSerializer(many=True, read_only=True)
+    modifier = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=models.InvoiceModifier.objects.all()
+    )
 
     def update(self, instance, validated_data):
         request_data = self.context['request'].data

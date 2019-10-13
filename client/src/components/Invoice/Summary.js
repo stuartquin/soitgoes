@@ -16,6 +16,9 @@ const InvoiceSummaryRow = styled.div`
 const Summary = ({invoice, project, modifiers, onRemoveModifier}) => {
   const {totalTime, totalHours, totalTask} = invoice;
   const isEditable = !Boolean(invoice.issued_at);
+  const displayModifiers = invoice.modifier.map(
+    id => modifiers.find(m => m.id === id)
+  ).filter(m => m);
 
   return (
     <React.Fragment>
@@ -45,10 +48,10 @@ const Summary = ({invoice, project, modifiers, onRemoveModifier}) => {
         <span>{asCurrency(invoice.subtotal_due, project.currency)}</span>
       </InvoiceSummaryRow>
 
-      {modifiers.length > 0 && (
+      {displayModifiers.length > 0 && (
         <React.Fragment>
           <Divider />
-          {modifiers.map(modifier => (
+          {displayModifiers.map(modifier => (
             <InvoiceSummaryRow key={modifier.id}>
               <div>
                 <span>{getModifierDisplayName(modifier)}</span>

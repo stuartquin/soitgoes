@@ -75,6 +75,7 @@ class Nav extends React.Component {
 
     return (
       <Styled>
+        <Route exact path='' component={Invoices} />
         <Route path='/timeslips' component={Timeslips} />
         <Route exact path='/invoices' component={Invoices} />
         <Route exact path='/tasks' component={Tasks} />
