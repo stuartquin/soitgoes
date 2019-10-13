@@ -138,7 +138,6 @@ class Timeslips extends React.Component {
       <React.Fragment>
         <NavMenu />
         <Container>
-          <Heading size="h2">Time</Heading>
           <Styled>
             <TimeslipGrid
               today={today}

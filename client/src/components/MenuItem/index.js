@@ -1,20 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(NavLink)`
   margin-right: 12px;
   font-weight: bold;
   text-decoration: none;
-  color: #38547d;
+  color: ${props => props.theme.primary.darkest};
+  padding-bottom: 11px;
+
+  font-size: 12px;
+  text-transform: uppercase;
 
   &:hover {
-    text-decoration: underline;
+    color: ${props => props.theme.primary.main};
   }
 `;
 
-const MenuItem = ({text, linkTo, onClick}) => (
-  <StyledLink to={linkTo} onClick={onClick}>
+const ACTIVE_STYLE = {
+  borderBottom: 'solid 2px',
+};
+
+const MenuItem = ({text, linkTo}) => (
+  <StyledLink to={linkTo} activeStyle={ACTIVE_STYLE}>
     {text}
   </StyledLink>
 );

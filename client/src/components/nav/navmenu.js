@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 
-import {Container, Grid, Cell} from 'components/Grid';
+import {Container, Grid, Cell, BREAKPOINTS} from 'components/Grid';
 import MenuItem from 'components/MenuItem';
 import {logout} from 'services/api';
 
@@ -11,7 +11,11 @@ const Wrapper = styled.div`
   background: white;
   padding-top: 12px;
   padding-bottom: 12px;
-  box-shadow: 0 2px 4px hsla(0,0%,40%,0.14)
+  box-shadow: 0 2px 4px hsla(0,0%,40%,0.14);
+
+  @media(min-width: ${BREAKPOINTS.sm}) {
+    margin-bottom: 32px;
+  }
 `;
 
 const Menu = styled.div`
@@ -22,10 +26,6 @@ const NavMenu = ({children}) => {
     <Wrapper>
       <Container>
         <Menu>
-          <MenuItem
-            text="Projects"
-            linkTo="/projects"
-          />
           <MenuItem
             text="Invoices"
             linkTo="/invoices"
@@ -39,9 +39,8 @@ const NavMenu = ({children}) => {
             linkTo="/tasks"
           />
           <MenuItem
-            text="Logout"
-            linkTo="/"
-            onClick={() => logout()}
+            text="Projects"
+            linkTo="/projects"
           />
         </Menu>
         {children}

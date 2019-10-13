@@ -16,11 +16,17 @@ const Styled = styled.div`
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
+    box-shadow: 0 2px 4px hsla(0,0%,40%,0.14);
 
     box-shadow: none;
     width: auto;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin-left: -16px;
+    border-radius: 0;
   }
 `;
 

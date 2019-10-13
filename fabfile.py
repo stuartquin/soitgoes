@@ -1,39 +1,19 @@
-from fabric.api import run
+from fabric.api import run, env
+from fabric.decorators import hosts
 from fabric import operations, context_managers
 
-APP_PATH = '/var/app/soitgoes'
+APP_PATH = '/var/app/soitgoesdev'
+HOST_NAME = 'dev.stuartquin.com'
 
 def letsencrypt():
-    cmd = '/opt/letsencrypt/letsencrypt-auto'
-    params = 'certonly -a webroot --webroot-path=/usr/share/nginx/html -d books.stuartquin.com'
+    run('certbot --nginx -d {}'.format(HOST_NAME))
 
-    run('%s %s' % (cmd, params))
-
-def deploy_js():
-    # with context_managers.lcd('journal/static/journal/'):
-    #     operations.local('webpack -p')
-    #     operations.local("""
-    #     ./node_modules/node-sass/bin/node-sass scss -r -o dist/
-    #     """)
-    docker = 'docker exec soitgoes_nodejs_1'
-    operations.local(
-        '%s ./node_modules/webpack/bin/webpack.js -p' % docker
-    )
-
-# ./node_modules/webpack/bin/webpack.js --optimize-minimize --define process.env.NODE_ENV="'production'"
-    # operations.local(
-    #     '%s ./node_modules/node-sass/bin/node-sass scss -r -o dist' % docker
-    # )
-
+def deploy_client():
+    operations.local('docker exec -it soitgoes_nodejs_1 npm run build')
     operations.put(
-        'journal/static/journal/dist/bundle.js',
-        '/var/app/soitgoes/journal/static/journal/dist/bundle.js'
+        'client/dist/bundle.js',
+        '{}/journal/static/journal/dist/bundle.js'.format(APP_PATH)
     )
-    operations.put(
-        'journal/static/journal/dist/main.css',
-        '/var/app/soitgoes/journal/static/journal/dist/main.css'
-    )
-
 
 def migrate():
     with context_managers.cd(APP_PATH):
@@ -58,17 +38,42 @@ def status():
     run('service soitgoes status')
 
 
-def deploy(branch='master'):
-    deploy_js()
-
+def deploy_server(branch):
     with context_managers.cd(APP_PATH):
         run('git fetch')
         run('git checkout %s' % branch)
         run('git pull --rebase')
+        run('docker restart soitgoes-web')
 
-        with context_managers.prefix('source ~/venvs/soitgoes/bin/activate'):
-            run('python manage.py collectstatic --no-input -i node_modules')
-            run('python manage.py showmigrations')
 
-        run('git rev-parse HEAD > version.txt')
-        run('service soitgoes restart')
+@hosts('root@{}'.format(HOST_NAME))
+def docker():
+    with context_managers.cd(APP_PATH):
+        run('docker stop soitgoes-web')
+        run('docker rm soitgoes-web')
+        cmd = ' '.join([
+            'docker run -d',
+            '-e DEV=true -p 8889:8889',
+            '-v {}/journal:/app/journal'.format(APP_PATH),
+            '-v {}/soitgoes:/app/soitgoes'.format(APP_PATH),
+            '-v {}/libs:/app/libs'.format(APP_PATH),
+            '-v {}/assets:/app/assets'.format(APP_PATH),
+            '-v {}/client/dist:/app/journal/static/journal/dist'.format(APP_PATH),
+            '-v {}/db.sqlite3:/app/db.sqlite3'.format(APP_PATH),
+            '--name soitgoes-web soitgoes-web',
+            'python manage.py runserver 0.0.0.0:8889'
+        ])
+        run(cmd)
+
+
+@hosts('root@{}'.format(HOST_NAME))
+def deploy(app=None, branch='master'):
+    if not app:
+        deploy_server(branch)
+        deploy_client()
+
+    if app == 'server':
+        deploy_server(branch)
+
+    if app == 'client':
+        deploy_client()
