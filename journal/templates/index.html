@@ -13,10 +13,20 @@
     <link rel="icon" sizes="192x192" href="{% static "journal/assets/icon-highres.png" %}">
     <link rel="manifest" href="{% static "journal/manifest.json" %}?{{ cachebust }}">
     <style>
-      input[type=number]::-webkit-inner-spin-button, 
-      input[type=number]::-webkit-outer-spin-button { 
-        -webkit-appearance: none; 
-        margin: 0; 
+      body {
+        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      input[type=number]::-webkit-inner-spin-button,
+      input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        margin: 0;
+      }
+
+      input[type=number] {
+        -moz-appearance:textfield; /* Firefox */
       }
     </style>
   </head>

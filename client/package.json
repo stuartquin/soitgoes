@@ -4,6 +4,7 @@
   "description": "Time management",
   "scripts": {
     "start": "webpack --watch --progress",
+    "build": "webpack --progress",
     "start:dev": "webpack-dev-server",
     "lint": "eslint src",
     "test": "jest"
@@ -51,7 +52,6 @@
     "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "16.8.0",
     "react-redux": "^5.0.7",
-    "react-chartjs": "^0.8.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
