@@ -27,6 +27,7 @@ DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
     'books.stuartquin.com',
+    'dev.stuartquin.com',
     'local.books.stuartquin.com'
 ]
 
