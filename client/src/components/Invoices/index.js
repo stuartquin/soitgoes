@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import {connect} from 'react-redux';
+import { Text, Flex } from 'rebass/styled-components';
 
 import NavMenu from 'components/nav/navmenu';
 import InvoiceTable from 'components/Invoices/InvoiceTable';
 import UpcomingSummary from 'components/Invoices/UpcomingSummary';
-import Heading from 'components/Heading';
 import {Container, Grid, Cell} from 'components/Grid';
 import {Button} from 'components/GUI';
 
@@ -37,26 +37,16 @@ class Invoices extends React.Component {
 
   render() {
     const {invoices, timeslips} = this.props;
-    const NewButton = (
-      <Button type="success">New</Button>
-    );
 
     return (
       <React.Fragment>
         <NavMenu />
 
         <Container>
-          <Heading
-            size="h2"
-            action={NewButton}
-          >
-            Upcoming Invoices
-          </Heading>
-          <UpcomingSummary
-            timeslips={timeslips}
-          />
+          <Flex alignItems="center" justifyContent="flex-end" mb={12}>
+            <Button ml={2}>New</Button>
+          </Flex>
 
-          <Heading size="h2">Issued Invoices</Heading>
           <InvoiceTable
             invoices={invoices}
           />

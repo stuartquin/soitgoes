@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faDownload} from '@fortawesome/free-solid-svg-icons'
 
 import Summary from 'components/Invoice/Summary';
 import {Divider} from 'components/GUI';
@@ -26,8 +28,26 @@ const Styled = styled.div`
   @media(max-width: ${BREAKPOINTS.sm}) {
     height: auto;
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: 0;
+    box-shadow: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
+`;
+
+const Heading = styled.h3`
+  margin-top: 12px;
+  margin-bottom: 12px;
+  padding-left: 16px;
+  padding-right: 16px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const DownloadLink = styled.a`
+  color: #464d59;
+  margin-right: 8px;
+  margin-left: 8px;
 `;
 
 const Settings = (props) => {
@@ -35,17 +55,19 @@ const Settings = (props) => {
     invoice, project, modifiers, onChange, onRemoveModifier, reference, dueDate
   } = props;
   const isEditable = !Boolean(invoice.issued_at);
+  const downloadURL = `/api/invoices/${invoice.id}/pdf`;
 
   return (
     <Styled>
-      <Summary
-        modifiers={modifiers}
-        invoice={invoice}
-        project={project}
-        onRemoveModifier={onRemoveModifier}
-      />
+      <Heading>
+        {project.name} #{invoice.sequence_num}
 
-      <Divider />
+        {!isEditable && (
+          <DownloadLink download href={downloadURL} title="Download PDF">
+            <FontAwesomeIcon icon={faDownload} />
+          </DownloadLink>
+        )}
+      </Heading>
 
       <InvoiceInputRow>
         <div>Due Date</div>
@@ -68,6 +90,15 @@ const Settings = (props) => {
           disabled={!isEditable}
         />
       </InvoiceInputRow>
+
+      <Divider />
+
+      <Summary
+        modifiers={modifiers}
+        invoice={invoice}
+        project={project}
+        onRemoveModifier={onRemoveModifier}
+      />
     </Styled>
   );
 };

@@ -6,14 +6,18 @@ const StyledLink = styled(NavLink)`
   margin-right: 12px;
   font-weight: bold;
   text-decoration: none;
-  color: ${props => props.theme.primary.darkest};
+  color: ${props => props.theme.colors.brand_dark};
   padding-bottom: 11px;
 
   font-size: 12px;
   text-transform: uppercase;
 
+  &:visited {
+    color: ${props => props.theme.colors.brand_dark};
+  }
+
   &:hover {
-    color: ${props => props.theme.primary.main};
+    color: ${props => props.theme.colors.brand_main};
   }
 `;
 

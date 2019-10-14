@@ -54,7 +54,7 @@ class InvoiceRow extends React.Component {
     return (
       <Row
         as={StyledLink}
-        to={`/project/${project.id}/invoice/${invoice.id}`}
+        to={`/invoices/${project.id}/invoice/${invoice.id}`}
       >
         <Cell xs="7" sm="6">
           <div>#{invoice.sequence_num} {project.name}</div>

@@ -12,10 +12,7 @@ const Wrapper = styled.div`
   padding-top: 12px;
   padding-bottom: 12px;
   box-shadow: 0 2px 4px hsla(0,0%,40%,0.14);
-
-  @media(min-width: ${BREAKPOINTS.sm}) {
-    margin-bottom: 32px;
-  }
+  margin-bottom: 16px;
 `;
 
 const Menu = styled.div`

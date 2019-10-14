@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Text } from 'rebass';
 
 import {BREAKPOINTS} from 'components/Grid';
 import TimeslipDateControls from './timeslipdatecontrols';
@@ -26,18 +27,11 @@ const Controls = styled.th`
   }
 `;
 
-const Month = styled.div`
-  @media(max-width: ${BREAKPOINTS.sm}) {
-    width: 50px;
-    text-align: center;
-  }
-`;
-
 const TimeslipGridHeader = ({weekStart, range, onSetActiveDate}) => {
   return (
     <tr>
       <Controls>
-        <Month>{weekStart.format('MMM YYYY')}</Month>
+        <Text width={50} fontSize={14}>{weekStart.format('MMM YYYY')}</Text>
         <TimeslipDateControls
           weekStart={weekStart}
           onSetActiveDate={onSetActiveDate}

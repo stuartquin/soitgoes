@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import {connect} from 'react-redux';
 import moment from 'moment';
 
+import { Flex } from 'rebass';
+
 import {fetchTimeslips, saveTimeslips} from 'modules/timeslip';
 import NavMenu from 'components/nav/navmenu';
 import Heading from 'components/Heading';
@@ -12,6 +14,7 @@ import TimeslipDateControls from './timeslipdatecontrols';
 import Summary from './Summary';
 import {Loading} from '../loading';
 import {fetchTasks} from 'modules/task';
+import {Button} from 'components/GUI';
 import {selectJoinedResults} from 'services/selectors';
 
 const Styled = styled.div`
@@ -138,6 +141,11 @@ class Timeslips extends React.Component {
       <React.Fragment>
         <NavMenu />
         <Container>
+          <Flex mb={12} alignItems="flex-start" justifyContent="flex-end">
+            <Button type="success" onClick={this.handleSave}>
+              Save
+            </Button>
+          </Flex>
           <Styled>
             <TimeslipGrid
               today={today}
@@ -149,7 +157,7 @@ class Timeslips extends React.Component {
               onHourChanged={this.handleSetHour}
               onSetActiveDate={this.handleSetActiveDate}
             />
-            <Summary onSave={this.handleSave} summary={summary} />
+            <Summary summary={summary} />
           </Styled>
         </Container>
       </React.Fragment>

@@ -6,7 +6,7 @@ import TimeslipGridCell from './timeslipgridcell';
 
 const Styled = styled.tr`
   &:hover {
-    color: ${props => props.theme.primary.main};
+    color: ${props => props.theme.colors.primary_main};
   }
 `;
 
@@ -21,7 +21,7 @@ const Task = styled.td`
 
   margin-top: 4px;
   margin-left: 8px;
-  border-bottom: ${props => props.theme.grey.main} solid 1px;
+  border-bottom: ${props => props.theme.colors.grey_main} solid 1px;
 
   @media(max-width: ${BREAKPOINTS.sm}) {
     width: 140px;
@@ -33,7 +33,7 @@ const Task = styled.td`
 const Project = styled.div`
   font-size: 0.75em;
   margin-top: 6px;
-  color: ${props => props.theme.grey.dark};
+  color: ${props => props.theme.colors.grey_dark};
   text-transform: uppercase;
   white-space: nowrap;
   text-overflow: ellipsis;

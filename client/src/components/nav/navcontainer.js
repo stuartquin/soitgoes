@@ -19,8 +19,8 @@ const Styled = styled.div`
   height: 100%;
   min-height: 100vh;
   width: 100%;
-  color: ${props => props.theme.grey.darkest};
-  background: ${props => props.theme.grey.light};
+  color: ${props => props.theme.colors.grey_darkest};
+  background: ${props => props.theme.colors.grey_light};
 `;
 
 class Nav extends React.Component {
@@ -80,12 +80,12 @@ class Nav extends React.Component {
         <Route exact path='/invoices' component={Invoices} />
         <Route exact path='/tasks' component={Tasks} />
         <Route
-          path='/project/:projectId/invoice'
+          path='/invoices/:projectId/invoice'
           component={Invoice}
           exact
         />
         <Route
-          path='/project/:projectId/invoice/:invoiceId'
+          path='/invoices/:projectId/invoice/:invoiceId'
           component={Invoice}
         />
       </Styled>

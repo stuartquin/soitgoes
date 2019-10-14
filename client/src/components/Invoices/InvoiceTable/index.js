@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useContext } from 'react';
+import styled, { ThemeContext } from 'styled-components';
 
 import {Grid, Cell} from 'components/Grid';
 import InvoiceTableHeader from './InvoiceTableHeader';
@@ -12,22 +12,16 @@ const Styled = styled.div`
   width: 100%;
 `;
 
-class InvoiceTable extends React.Component {
-  render() {
-    const {invoices} = this.props;
-
-    return (
-      <Styled>
-        <InvoiceTableHeader />
-        {invoices.map(invoice => (
-          <InvoiceRow
-            key={invoice.id}
-            invoice={invoice}
-          />
-        ))}
-      </Styled>
-    );
-  }
-}
+const InvoiceTable = ({ invoices }) => (
+  <Styled>
+    <InvoiceTableHeader />
+    {invoices.map(invoice => (
+      <InvoiceRow
+        key={invoice.id}
+        invoice={invoice}
+      />
+    ))}
+  </Styled>
+);
 
 export default InvoiceTable;

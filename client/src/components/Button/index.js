@@ -1,9 +1,9 @@
 import React from 'react';
+import { Button } from 'rebass';
 
 const Button = ({label, onClick, disabled=false, className=''}) => {
   return (
     <button
-      className={className}
       disabled={disabled}
       onClick={onClick}
     >

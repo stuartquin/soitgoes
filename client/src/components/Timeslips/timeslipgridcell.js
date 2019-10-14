@@ -6,7 +6,7 @@ import TimeslipDetail from './TimeslipDetail';
 const StyledInput = styled.input`
   width: 60px;
   height: 60px;
-  border: solid 1px ${props => props.theme.grey.main};
+  border: solid 1px ${props => props.theme.colors.grey_main};
   text-align: center;
   cursor: pointer;
   font-size: 18px;
@@ -30,7 +30,7 @@ const StyledInput = styled.input`
   }
 
   ${props => props.isWeekend && css`
-    border-color: ${props.theme.grey.light}
+    border-color: ${props.theme.colors.grey_light}
   `}
 
   ${props => props.isSaved && css`

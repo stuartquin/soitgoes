@@ -1,74 +1,65 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
+import * as rebass from 'rebass/styled-components';
+
+export const colors = {
+  grey_darkest: '#12263f',
+  grey_dark: '#617692',
+  grey_main: '#d2ddec',
+  grey_light: '#edf1f5',
+  grey_lightest: '#f5f7fa',
+
+  brand_darkest: '#12283a',
+  brand_dark: '#1a4971',
+  brand_main: '#3183c8',
+  brand_light: '#aad4f5',
+  brand_lightest: '#eff8ff',
+
+  brand_dark: '#1a4971',
+
+  success_darkest: '#155239',
+  success_dark: '#197741',
+  success_main: '#38c172',
+  success_light: '#a8eec1',
+  success_lightest: '#e3fcec',
+
+  warning_darkest: '#5c4813',
+  warning_dark: '#8c6d1f',
+  warning_main: '#f4ca64',
+  warning_light: '#fdf3d7',
+  warning_lightest: '#fffcf4',
+
+  danger_darkest: '#601818',
+  danger_dark: '#881b1b',
+  danger_main: '#dc3030',
+  danger_light: '#f4a9a9',
+  danger_lightest: '#f9e5e6',
+
+  primary: '#3183c8',
+};
 
 export const theme = {
-  grey: {
-    darkest: '#12263f',
-    dark: '#617692',
-    main: '#d2ddec',
-    light: '#edf1f5',
-    lightest: '#f5f7fa',
-  },
-
-  primary: {
-    darkest: '#12283a',
-    dark: '#1a4971',
-    main: '#3183c8',
-    light: '#aad4f5',
-    lightest: '#eff8ff',
-  },
-
-  success: {
-    darkest: '#155239',
-    dark: '#197741',
-    main: '#38c172',
-    light: '#a8eec1',
-    lightest: '#e3fcec',
-  },
-
-  submit: {
-    darkest: '#155239',
-    dark: '#197741',
-    main: '#38c172',
-    light: '#a8eec1',
-    lightest: '#e3fcec',
-  },
-
-  warning: {
-    darkest: '#5c4813',
-    dark: '#8c6d1f',
-    main: '#f4ca64',
-    light: '#fdf3d7',
-    lightest: '#fffcf4',
-  },
-
-  danger: {
-    darkest: '#601818',
-    dark: '#881b1b',
-    main: '#dc3030',
-    light: '#f4a9a9',
-    lightest: '#f9e5e6',
-  },
+  colors,
 };
 
 export const SubTitle = styled.div`
-  color: ${props => props.theme.grey.dark};
+  color: ${props => props.theme.colors.grey_dark};
   font-size: 0.9em;
   margin-top: 4px;
 `;
 
 export const Error = styled.div`
-  color: ${props => props.theme.danger.main};
+  color: ${props => props.theme.colors.danger_main};
 `;
 
 export const Divider = styled.hr`
   border: 0;
   height: 1px;
-  background-color: ${props => props.theme.grey.lightest};
+  background-color: ${props => props.theme.colors.grey_lightest};
 `;
 
 export const ActionLink = styled.a`
-  color: ${props => props.theme[props.type || 'primary'].main};
+  color: ${props => props.theme.colors.primary_main};
   cursor: pointer;
   text-decoration: underline;
 
@@ -77,17 +68,6 @@ export const ActionLink = styled.a`
   `}
 `;
 
-export const Button = styled.button`
-  border-radius: 3px;
-  padding: 8px 16px;
-  border: none;
-  font-weight: bold;
+export const Button = styled(rebass.Button)`
   cursor: pointer;
-
-  background: ${props => props.theme[props.type || 'grey'].main};
-  color: ${props => props.theme[props.type || 'grey'].darkest};
-
-  &:hover {
-    background: ${props => props.theme[props.type || 'primary'].light};
-  }
 `;

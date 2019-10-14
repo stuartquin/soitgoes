@@ -10,7 +10,7 @@ import {BREAKPOINTS} from 'components/Grid';
 const Styled = styled.div`
   flex-grow: 1;
   position: relative;
-  background: ${props => props.theme.grey.lightest};
+  background: ${props => props.theme.colors.grey_lightest};
   @media(max-width: ${BREAKPOINTS.sm}) {
     width: 100%;
   }
