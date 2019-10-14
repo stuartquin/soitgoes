@@ -1,5 +1,5 @@
-/* eslint-disable */
 import React from 'react';
+import {Box} from 'rebass/styled-components';
 import styled, {css} from 'styled-components';
 
 export const BREAKPOINTS = {
@@ -24,7 +24,7 @@ export const Grid = styled.div`
 `;
 
 
-export const Cell = styled.div`
+export const Cell = styled(Box)`
   grid-column: span 12;
 
   ${props => props.numeric && css`

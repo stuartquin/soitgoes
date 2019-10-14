@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
+import { Text } from 'rebass/styled-components';
 import {BREAKPOINTS} from 'components/Grid';
 
 const STATUS = {
@@ -8,12 +9,11 @@ const STATUS = {
   danger: { color: '#642220', background: '#fedbdd' },
 };
 
-const StatusPill = styled.div`
+const StatusPill = styled(Text)`
   border-radius: 90px;
   min-width: 40px;
   text-align: center;
-  padding: 4px 8px;
-  font-weight: bold;
+  padding: 8px 12px;
   box-shadow: 0 2px 1px hsla(0,0%,40%,.2);
   text-transform: uppercase;
 
@@ -28,16 +28,6 @@ const StatusPill = styled.div`
     font-size: 12px;
     padding: 14px 20px;
   `}
-
-  @media(max-width: ${BREAKPOINTS.sm}) {
-    overflow: hidden;
-    min-width: 16px;
-    width: 16px;
-    height: 16px;
-    display: block;
-    padding: 0;
-    text-indent: -9999px;
-  }
 `;
 
 export default StatusPill;

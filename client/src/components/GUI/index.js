@@ -40,6 +40,7 @@ export const colors = {
 
 export const theme = {
   colors,
+  breakpoints: ['768px', '992px'],
 };
 
 export const SubTitle = styled.div`

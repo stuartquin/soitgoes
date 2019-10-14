@@ -41,17 +41,14 @@ export const getInvoiceStatus = (invoice) => {
 
 export const getInvoiceDueMessage = (invoice) => {
   if (!invoice.issued_at) {
-    return 'Draft';
+    return '--';
   }
 
   if (invoice.paid_at) {
-    return `Paid ${moment(invoice.paid_at).format('YYYY-MM-DD')}`;
+    return moment(invoice.paid_at).format('YYYY-MM-DD');
   }
 
-  const now = moment();
-  const dueDate = moment(invoice.due_date, 'YYYY-MM-DD');
-
-  return `Due ${dueDate.fromNow()}`;
+  return invoice.due_date;
 };
 
 export const groupByTimeslip = (timeslips, rate) => {
