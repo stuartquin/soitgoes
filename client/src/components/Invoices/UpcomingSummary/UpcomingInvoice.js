@@ -1,75 +1,26 @@
 import React from 'react';
+import { Card, Text } from 'rebass/styled-components';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components';
 import moment from 'moment';
 
 import {BREAKPOINTS, Grid, Cell} from 'components/Grid';
+import {ActionLink, Divider} from 'components/GUI';
 import {asCurrency} from 'services/currency';
 
-const TotalAmount = styled.div`
-  font-size: 28px;
-  color: #050505;
-  margin-bottom: 8px;
-`;
-
-const Heading = styled.div`
-  font-size: 16px;
-  font-weight: bold;
-  padding: 12px 16px;
-  padding-bottom: 0;
-`;
-
-const Issue = styled(Link)`
-  display: block;
-  font-size: 16px;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-  background: #f5f3f5;
-  color: #464d59;
-  padding: 12px 16px;
-  text-align: center;
-`;
-
-const Info = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  align-items: center;
-  color: #626264;
-  padding: 24px 16px;
-`;
-
-const Styled = styled.div`
-  border-radius: 6px;
-  box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
-  background: white;
-  cursor: pointer;
-  color: #050505;
-  width: 285px;
-  min-width: 230px;
-  margin-right: 20px;
-
-  &:last-child {
-    margin-right: 0;
-  }
-
-  &:hover ${Issue} {
-    text-decoration: underline;
-  }
-`;
 
 const UpcomingInvoice = ({summary}) => {
   const {project, total, date} = summary;
-  const url = `/project/${project.id}/invoice`;
+  const url = `/invoices/${project.id}/invoice`;
   return (
-    <Styled sm="3">
-      <Heading>{project.name}</Heading>
-      <Info>
-        <TotalAmount>{asCurrency(total, project.currency)}</TotalAmount>
-        <div>Since {moment(date).format('MMM. DD')}</div>
-      </Info>
-      <Issue to={url}>Issue &raquo;</Issue>
-    </Styled>
+    <Card px={16} py="12px" minWidth={200}>
+      <Text>{project.name}</Text>
+      <Text fontSize={22} color="grey_dark" py="8px">
+        {asCurrency(total, project.currency)}
+      </Text>
+      <ActionLink as={Link} to={url}>Issue &raquo;</ActionLink>
+      <Divider mt="16px" display={['none', 'block']} />
+    </Card>
   );
 };
 

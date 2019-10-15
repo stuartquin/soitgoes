@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Card } from 'rebass';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faDownload} from '@fortawesome/free-solid-svg-icons'
 
 import Summary from 'components/Invoice/Summary';
-import {Divider} from 'components/GUI';
+import {Divider, SettingsCard} from 'components/GUI';
 import {Input} from 'components/Form';
 import {BREAKPOINTS} from 'components/Grid';
 
@@ -15,24 +16,6 @@ const InvoiceInputRow = styled.div`
   flex-direction: column;
 
   padding: 12px 16px;
-`;
-
-const Styled = styled.div`
-  background: white;
-  color: #4e5767;
-  height: 100%;
-  width: 290px;
-  border-radius: 6px;
-  box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
-
-  @media(max-width: ${BREAKPOINTS.sm}) {
-    height: auto;
-    width: 100%;
-    margin-bottom: 0;
-    box-shadow: none;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
 `;
 
 const Heading = styled.h3`
@@ -58,7 +41,7 @@ const Settings = (props) => {
   const downloadURL = `/api/invoices/${invoice.id}/pdf`;
 
   return (
-    <Styled>
+    <SettingsCard>
       <Heading>
         {project.name} #{invoice.sequence_num}
 
@@ -99,7 +82,7 @@ const Settings = (props) => {
         project={project}
         onRemoveModifier={onRemoveModifier}
       />
-    </Styled>
+    </SettingsCard>
   );
 };
 

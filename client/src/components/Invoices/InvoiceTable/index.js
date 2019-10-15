@@ -1,15 +1,20 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 
-import {Grid, Cell} from 'components/Grid';
+import {BREAKPOINTS, Grid, Cell} from 'components/Grid';
 import InvoiceTableHeader from './InvoiceTableHeader';
 import InvoiceRow from './InvoiceRow';
 
 const Styled = styled.div`
   border-radius: 6px;
-  box-shadow: 0 4px 6px hsla(0, 0%, 40%, 0.74);
-  max-width: 1200px;
-  width: 100%;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  flex-grow: 1;
+
+  @media(max-width: ${BREAKPOINTS.sm}) {
+    border-top-left-radius: 0;
+    border-bottom-right-radius: 6px;
+  }
 `;
 
 const InvoiceTable = ({ invoices }) => (

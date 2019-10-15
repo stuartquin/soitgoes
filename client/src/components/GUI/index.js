@@ -7,7 +7,7 @@ export const colors = {
   grey_dark: '#617692',
   grey_main: '#d2ddec',
   grey_light: '#edf1f5',
-  grey_lightest: '#f5f7fa',
+  grey_lightest: '#f5f3f5',
 
   brand_darkest: '#12283a',
   brand_dark: '#1a4971',
@@ -41,6 +41,32 @@ export const colors = {
 export const theme = {
   colors,
   breakpoints: ['768px', '992px'],
+
+  text: {
+    label: {
+      fontWeight: 800,
+      color: 'grey_darkest',
+    },
+    link: {
+      color: 'brand_dark'
+    }
+  },
+
+  shadows: {
+    container: '0 6px 4px hsla(0,0%,40%,.2)',
+    settings: '0 6px 4px hsla(0,0%,40%,.2)',
+  },
+
+  variants: {
+    shadow: {
+      boxShadow: '0 6px 4px hsla(0,0%,40%,.2)',
+    },
+    divider: {
+      borderBottomStyle: 'solid',
+      borderBottomColor: 'grey_lightest',
+      borderBottomWidth: '1px',
+    },
+  },
 };
 
 export const SubTitle = styled.div`
@@ -53,16 +79,25 @@ export const Error = styled.div`
   color: ${props => props.theme.colors.danger_main};
 `;
 
-export const Divider = styled.hr`
+export const Divider = styled(rebass.Box)`
   border: 0;
   height: 1px;
   background-color: ${props => props.theme.colors.grey_lightest};
 `;
 
-export const ActionLink = styled.a`
-  color: ${props => props.theme.colors.primary_main};
+
+export const ActionLink = styled(rebass.Link)`
+  color: ${props => props.theme.colors.brand_main};
   cursor: pointer;
-  text-decoration: underline;
+  text-decoration: none;
+
+  &:visited {
+    color: ${props => props.theme.colors.brand_main};
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
 
   ${props => props.size === 'sm' && css`
     font-size: 0.85em;
@@ -71,4 +106,23 @@ export const ActionLink = styled.a`
 
 export const Button = styled(rebass.Button)`
   cursor: pointer;
+`;
+
+export const SettingsCard = styled(rebass.Card)`
+  box-shadow: ${props => props.theme.shadows.settings};
+  background: white;
+  color: #4e5767;
+  height: 100%;
+  width: 290px;
+  border-radius: 6px;
+  box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
+
+  @media(max-width: ${props => props.theme.breakpoints[0]}) {
+    height: auto;
+    width: 100%;
+    margin-bottom: 0;
+    box-shadow: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 `;

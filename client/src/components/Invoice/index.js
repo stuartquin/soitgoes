@@ -145,12 +145,11 @@ class Invoice extends React.Component {
       editable, displaySettings, modifiers
     } = this.state;
 
-    if (!editable || !project) {
-      return (<Loading />);
-    }
-    const items = getDisplayItems(
+    const items = editable ? getDisplayItems(
       editable, project.hourly_rate, timeslips.filter(({hours}) => hours), tasks
-    );
+    ) : [];
+
+    console.log(editable);
 
     return (
       <React.Fragment>
@@ -159,33 +158,39 @@ class Invoice extends React.Component {
         <Container>
           <Grid>
             <Cell sm="12">
-              <InvoiceHeader
-                project={project}
-                invoice={editable}
-                onUpdateStatus={(status) => this.handleUpdateStatus(status, editable)}
-              />
+              {editable && (
+                <InvoiceHeader
+                  project={project}
+                  invoice={editable}
+                  onUpdateStatus={(status) => this.handleUpdateStatus(status, editable)}
+                />
+              )}
             </Cell>
           </Grid>
 
           <Styled>
-            <Generator
-              invoice={editable}
-              items={items}
-              onSetDisplaySettings={this.handleSetDisplaySettings}
-              onRemove={({ itemType, id }) => this.handleRemove(itemType, id)}
-            />
-            <Settings
-              invoice={
-                getInvoiceTotals(editable, items, modifiers)
-              }
-              project={project}
-              modifiers={modifiers}
-              reference={editable.reference}
-              dueDate={editable.due_date}
-              onRemoveModifier={(id) => this.handleRemove('modifier', id)}
-              onSetReference={(reference) => this.setReference(reference)}
-              onChange={this.handleChange}
-            />
+            {editable && (
+              <React.Fragment>
+                <Generator
+                  invoice={editable}
+                  items={items}
+                  onSetDisplaySettings={this.handleSetDisplaySettings}
+                  onRemove={({ itemType, id }) => this.handleRemove(itemType, id)}
+                />
+                <Settings
+                  invoice={
+                    getInvoiceTotals(editable, items, modifiers)
+                  }
+                  project={project}
+                  modifiers={modifiers}
+                  reference={editable.reference}
+                  dueDate={editable.due_date}
+                  onRemoveModifier={(id) => this.handleRemove('modifier', id)}
+                  onSetReference={(reference) => this.setReference(reference)}
+                  onChange={this.handleChange}
+                />
+              </React.Fragment>
+            )}
           </Styled>
         </Container>
       </React.Fragment>

@@ -6,6 +6,7 @@ import { Text, Flex } from 'rebass/styled-components';
 import NavMenu from 'components/nav/navmenu';
 import InvoiceTable from 'components/Invoices/InvoiceTable';
 import UpcomingSummary from 'components/Invoices/UpcomingSummary';
+import Settings from 'components/Invoices/Settings';
 import {Container, Grid, Cell} from 'components/Grid';
 import {Button} from 'components/GUI';
 
@@ -47,9 +48,18 @@ class Invoices extends React.Component {
             <Button ml={2}>New</Button>
           </Flex>
 
-          <InvoiceTable
-            invoices={invoices}
-          />
+          <Flex
+            width="100%"
+            variant="shadow"
+            background="grey_lightest"
+            flexWrap="wrap"
+            flexDirection={['column-reverse', 'row']}
+          >
+            <InvoiceTable
+              invoices={invoices}
+            />
+            <UpcomingSummary timeslips={timeslips} />
+          </Flex>
         </Container>
       </React.Fragment>
     );
