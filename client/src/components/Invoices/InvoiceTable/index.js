@@ -10,6 +10,7 @@ const Styled = styled.div`
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   flex-grow: 1;
+  background: white;
 
   @media(max-width: ${BREAKPOINTS.sm}) {
     border-top-left-radius: 0;

@@ -1,4 +1,5 @@
 import moment from 'moment';
+import * as api from 'services/api';
 
 export const getTotal = (invoices, status = null) => {
   const filterFn = status ? (inv) => inv.status === status : (inv) => true;
@@ -119,3 +120,5 @@ export const getNewInvoice = (project) => {
     modifiers: [],
   };
 };
+
+export const fetchInvoices = (params = {}) => api.get(`invoices/`, params);

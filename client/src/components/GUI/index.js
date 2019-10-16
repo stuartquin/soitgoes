@@ -36,6 +36,8 @@ export const colors = {
   danger_lightest: '#f9e5e6',
 
   primary: '#3183c8',
+
+  text: '#4e5767',
 };
 
 export const theme = {
@@ -49,7 +51,10 @@ export const theme = {
     },
     link: {
       color: 'brand_dark'
-    }
+    },
+    uppercase: {
+      textTransform: 'uppercase',
+    },
   },
 
   shadows: {
@@ -58,6 +63,9 @@ export const theme = {
   },
 
   variants: {
+    smallShadow: {
+      boxShadow: '0 2px 1px hsla(0,0%,40%,.1)',
+    },
     shadow: {
       boxShadow: '0 6px 4px hsla(0,0%,40%,.2)',
     },
@@ -106,6 +114,7 @@ export const ActionLink = styled(rebass.Link)`
 
 export const Button = styled(rebass.Button)`
   cursor: pointer;
+  line-height: 22px;
 `;
 
 export const SettingsCard = styled(rebass.Card)`

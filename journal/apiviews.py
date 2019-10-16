@@ -163,9 +163,6 @@ class InvoiceCreateNew(APIView):
 class InvoiceListCreate(generics.ListCreateAPIView):
     serializer_class = serializers.InvoiceSerializer
 
-    def get_queryset(self):
-        return models.Invoice.objects.all().order_by('-issued_at')
-
     def perform_create(self, serializer):
         sequence_num = models.Invoice.get_next_sequence_num(
             serializer.validated_data['project']
@@ -179,6 +176,14 @@ class InvoiceListCreate(generics.ListCreateAPIView):
         invoice = serializer.save()
         save_invoice_tasks(invoice, tasks)
         set_invoice_totals(invoice)
+
+    def get_queryset(self):
+        filters = {
+        }
+        if 'project' in self.request.query_params:
+            filters['project'] = self.request.query_params['project']
+
+        return models.Invoice.objects.filter(**filters).order_by('-issued_at')
 
 
 class InvoiceModifierList(generics.ListAPIView):

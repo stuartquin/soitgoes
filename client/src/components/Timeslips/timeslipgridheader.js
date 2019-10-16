@@ -1,5 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import moment from 'moment';
 import { Text } from 'rebass';
 
 import {BREAKPOINTS} from 'components/Grid';
@@ -7,6 +8,11 @@ import TimeslipDateControls from './timeslipdatecontrols';
 
 const Date = styled.th`
   height: 40px;
+  font-weight: 400;
+
+  ${props => props.today && css`
+    font-weight: 900;
+  `}
 `;
 
 const Controls = styled.th`
@@ -28,6 +34,7 @@ const Controls = styled.th`
 `;
 
 const TimeslipGridHeader = ({weekStart, range, onSetActiveDate}) => {
+  const today = moment().format('YYYY-MM-DD');
   return (
     <tr>
       <Controls>
@@ -38,7 +45,7 @@ const TimeslipGridHeader = ({weekStart, range, onSetActiveDate}) => {
         />
       </Controls>
       {range.map((date, index) => (
-        <Date xs="1">
+        <Date xs="1" today={today === date.format('YYYY-MM-DD')}>
           <div>{date.format('D')}</div>
           <div>{date.format('ddd')}</div>
         </Date>

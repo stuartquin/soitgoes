@@ -7,7 +7,7 @@ const StyledLink = styled(NavLink)`
   font-weight: bold;
   text-decoration: none;
   color: ${props => props.theme.colors.brand_dark};
-  padding-bottom: 11px;
+  padding-bottom: 12px;
 
   font-size: 12px;
   text-transform: uppercase;

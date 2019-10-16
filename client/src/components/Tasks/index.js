@@ -46,8 +46,6 @@ const Tasks = ({ projects }) => {
     load();
   }, []);
 
-  console.log('Tasks', tasks);
-
   return (
     <React.Fragment>
       <NavMenu />

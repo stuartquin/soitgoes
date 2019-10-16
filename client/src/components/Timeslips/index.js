@@ -123,7 +123,7 @@ class Timeslips extends React.Component {
     const {updatedTimeslips} = this.state;
 
     saveTimeslips(
-      Object.values(updatedTimeslips)
+      Object.values(updatedTimeslips).filter(({ hours }) => hours)
     ).then(() => {
       this.setState({updatedTimeslips: []});
     });
