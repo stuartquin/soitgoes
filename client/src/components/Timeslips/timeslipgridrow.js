@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {BREAKPOINTS} from 'components/Grid';
 
 import TimeslipGridCell from './timeslipgridcell';
@@ -19,9 +19,14 @@ const Task = styled.td`
   justify-content: flex-end;
   font-size: 16px;
 
-  margin-top: 4px;
-  margin-left: 8px;
+  padding-top: 4px;
+  padding-left: 8px;
   border-bottom: ${props => props.theme.colors.grey_main} solid 1px;
+
+  ${props => props.fixed && css`
+    background: ${props => props.theme.colors.warning_lightest};
+    border-bottom: ${props => props.theme.colors.warning_light} solid 1px;
+  `}
 
   @media(max-width: ${BREAKPOINTS.sm}) {
     width: 140px;
@@ -60,7 +65,7 @@ const TimeslipGridRow = ({
 
   return (
     <Styled>
-      <Task>
+      <Task fixed={task.billing_type === 'FIXED'}>
         <TaskName>{task.name}</TaskName>
         <Project>{task.project.name}</Project>
       </Task>

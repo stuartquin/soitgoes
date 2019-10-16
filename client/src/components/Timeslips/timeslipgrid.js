@@ -51,7 +51,7 @@ const TimeslipGrid = ({
 }) => {
   const range = getDateRange(weekStart);
   const filteredTasks = Object.values(tasks).filter(
-    t => !t.project.archived && t.billing_type === 'TIME' && t.state === 'OPEN'
+    t => !t.project.archived && t.state === 'OPEN'
   );
   const [activeCell, setActiveCell] = useState(null);
 
