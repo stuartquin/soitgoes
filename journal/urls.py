@@ -20,8 +20,6 @@ urlpatterns = [
         apiviews.InvoiceModifierDetail.as_view()
     ),
 
-    url(r'api/expenses/$', apiviews.ExpenseList.as_view()),
-
     url(r'api/accounts/$', apiviews.AccountList.as_view()),
 
     url(r'api/user/$', apiviews.UserDetail.as_view()),
@@ -38,16 +36,12 @@ urlpatterns = [
     url(r'api/companies/$', apiviews.CompanyList.as_view()),
     url(r'api/companies/(?P<pk>[0-9]+)$', apiviews.CompanyDetail.as_view()),
 
-    url(r'api/version/$', apiviews.Version.as_view()),
-
     url(r'api/summary/invoices/$', apiviews.SummaryInvoices.as_view()),
-    url(r'api/summary/expenses/$', apiviews.SummaryExpenses.as_view()),
 
     url(r'api/login/$', apiviews.LoginView.as_view()),
     url(r'api/logout/$', views.logout_user),
 
     # App Routing
-    url(r'monzo/$', views.monzo_webhook),
     url(r'^$', views.landing),
     url(r'^', views.landing)
 ]

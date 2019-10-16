@@ -329,21 +329,3 @@ class Activity(models.Model):
     @staticmethod
     def update(user, id, type, status=None):
         Activity._insert(user, id, type, 'UPD', status)
-
-
-class Expense(models.Model):
-    user = models.ForeignKey(User)
-    date = models.DateField()
-    value = models.FloatField(default=0.0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    paid_at = models.DateTimeField(default=None, blank=True, null=True)
-    monzo_id = models.CharField(max_length=255, blank=True, null=True)
-    type = models.CharField(max_length=255, blank=True, null=True)
-    reference = models.CharField(max_length=512, blank=True, null=True)
-    notes = models.CharField(max_length=1024, blank=True, null=True)
-    project = models.ForeignKey(
-        Project,
-        models.SET_NULL,
-        blank=True,
-        null=True
-    )

@@ -245,20 +245,6 @@ class TimeSlipDetail(generics.UpdateAPIView):
         return self.serializer_class(*args, **kwargs)
 
 
-class ExpenseList(generics.ListCreateAPIView):
-    queryset = models.Expense.objects.all()
-    serializer_class = serializers.ExpenseSerializer
-
-    def get_queryset(self):
-        filters = {}
-        if 'start' in self.request.query_params:
-            filters['date__gte'] = self.request.query_params['start']
-
-        if 'end' in self.request.query_params:
-            filters['date__lte'] = self.request.query_params['end']
-        return models.Expense.objects.filter(**filters).order_by('date')
-
-
 class TimeSlipList(generics.ListCreateAPIView):
     queryset = models.TimeSlip.objects.all()
     permission_classes = (HasTimeslipAccess,)
@@ -310,29 +296,6 @@ class SummaryInvoices(APIView):
             content_type='application/json'
         )
         return response
-
-
-class SummaryExpenses(APIView):
-    def get(self, request, pk=None):
-        if 'start' in request.query_params:
-            start = request.query_params['start']
-
-        if 'end' in request.query_params:
-            end = request.query_params['end']
-
-        dates = summary.expense_summary_monthly(start, end)
-        response = HttpResponse(
-            json.dumps(dates),
-            content_type='application/json'
-        )
-        return response
-
-
-class Version(APIView):
-    def get(self, request, pk=None):
-        return Response({
-            'hash': '0.0.0'
-        })
 
 
 class TaskList(generics.ListCreateAPIView):
