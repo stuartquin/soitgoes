@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Box } from 'rebass/styled-components';
 
-import {Grid, Cell, CellMd} from 'components/Grid';
 import {Header} from 'components/DataTable';
 
 
@@ -11,18 +11,12 @@ class InvoiceTableHeader extends React.Component {
 
     return (
       <Header>
-        <Cell xs="9" sm="6">
+        <Box flexGrow={2}>
           Client
-        </Cell>
-        <CellMd numeric sm="2">
-          Issued
-        </CellMd>
-        <CellMd numeric sm="2">
+        </Box>
+        <Box>
           Status
-        </CellMd>
-        <CellMd numeric sm="2">
-          Amount
-        </CellMd>
+        </Box>
       </Header>
     );
   }

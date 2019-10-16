@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
+import { Text, Box, Flex } from 'rebass/styled-components';
 import { Link } from 'react-router-dom'
 
 import {BREAKPOINTS, Grid, Cell, CellMd} from 'components/Grid';
@@ -20,11 +21,8 @@ const ContactName = styled.div`
   margin-top: 4px;
 `;
 
-const Total = styled.div`
-  margin-left: 4px;
-`;
 
-const StatusCell = styled(Cell)`
+const StatusCell = styled(Box)`
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -45,21 +43,21 @@ class TaskRow extends React.Component {
     const status = 'PAID';
 
     return (
-      <Row onClick={() => onClick(task)}>
-        <Cell xs="7" sm="6">
+      <Row onClick={() => onClick(task)} justifyContent="flexEnd">
+        <Box flexGrow="1">
           <div>{task.name}</div>
           <ContactName>{project.name} - {project.contact.name}</ContactName>
-        </Cell>
-        <CellMd sm="2" numeric>
+        </Box>
+        <Box display={['none', 'initial']} ml={4}>
           {task.hours_spent} / {task.hours_predicted}
-        </CellMd>
-        <CellMd sm="2" numeric>
+        </Box>
+        <Box display={['none', 'initial']} ml={4}>
           {task.due_date ?  moment(task.due_date).fromNow() : '-'}
-        </CellMd>
+        </Box>
         <StatusCell numeric xs="5" sm="2">
-          <Total>
-            {task.cost ? asCurrency(task.cost, project.currency || 'GBP') : '-'}
-          </Total>
+          <Text variant="amount" fontWeight={2} width="64px" ml={4}>
+            {task.cost ? asCurrency(task.cost, project.currency || 'GBP', 0) : '-'}
+          </Text>
         </StatusCell>
       </Row>
     );

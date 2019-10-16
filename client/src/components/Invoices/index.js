@@ -60,7 +60,6 @@ const Invoices = ({ projects }) => {
           width="100%"
           variant="shadow"
           background="grey_lightest"
-          flexWrap="wrap"
           flexDirection={['column-reverse', 'row']}
         >
           <InvoiceTable

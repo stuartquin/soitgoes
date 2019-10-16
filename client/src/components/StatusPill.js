@@ -11,7 +11,7 @@ const STATUS = {
 
 const StatusPill = styled(Text)`
   border-radius: 90px;
-  min-width: 40px;
+  min-width: 86px;
   text-align: center;
   padding: 8px 12px;
   box-shadow: 0 2px 1px hsla(0,0%,40%,.2);

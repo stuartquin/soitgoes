@@ -44,9 +44,21 @@ export const theme = {
   colors,
   breakpoints: ['768px', '992px'],
 
+  fontSizes: [
+    12, 14, 16, 20, 24, 32, 48, 64
+  ],
+
+  fontWeights: [
+    400, 600, 800
+  ],
+
+  space: [
+    0, 4, 8, 12, 16, 32, 64, 128, 256
+  ],
+
   text: {
     label: {
-      fontWeight: 800,
+      fontWeight: 2,
       color: 'grey_darkest',
     },
     link: {
@@ -55,6 +67,15 @@ export const theme = {
     uppercase: {
       textTransform: 'uppercase',
     },
+    amount: {
+      fontSize: [1, 2],
+      textAlign: 'right',
+    },
+    subTitle: {
+      color: 'grey_dark',
+      fontSize: [0, 1],
+      marginTop: 1,
+    }
   },
 
   shadows: {
@@ -74,12 +95,17 @@ export const theme = {
       borderBottomColor: 'grey_lightest',
       borderBottomWidth: '1px',
     },
+    ellipsis: {
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+    },
   },
 };
 
-export const SubTitle = styled.div`
+export const SubTitle = styled(rebass.Text)`
   color: ${props => props.theme.colors.grey_dark};
-  font-size: 0.9em;
+  font-size: ${props => props.theme.colors.grey_dark};
   margin-top: 4px;
 `;
 
@@ -123,6 +149,7 @@ export const SettingsCard = styled(rebass.Card)`
   color: #4e5767;
   height: 100%;
   width: 290px;
+  min-width: 290px;
   border-radius: 6px;
   box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
 

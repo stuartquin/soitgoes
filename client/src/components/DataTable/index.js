@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import {Flex} from 'rebass/styled-components';
 import {BREAKPOINTS, Grid} from 'components/Grid';
 
-export const Row = styled(Grid)`
+export const Row = styled(Flex)`
   color: #4e5767;
   padding: 12px 16px;
   cursor: pointer;
@@ -19,7 +20,7 @@ export const Row = styled(Grid)`
   }
 `;
 
-export const Header = styled(Grid)`
+export const Header = styled(Flex)`
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   background: #f5f3f5;

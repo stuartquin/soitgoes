@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Flex } from 'rebass/styled-components';
 import moment from 'moment';
 
 import {connect} from 'react-redux';
@@ -37,16 +38,13 @@ const getInvoiceTotals = (invoice, items, modifiers) => {
   };
 };
 
-const Styled = styled.div`
+const Styled = styled(Flex)`
   background: #f5f3f5;
   border-radius: 6px;
   box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
   height: 100%;
   max-width: 1200px;
   width: 100%;
-
-  display: flex;
-  flex-wrap: wrap;
 
   @media(max-width: ${BREAKPOINTS.sm}) {
     flex-direction: column-reverse;
@@ -126,7 +124,7 @@ class Invoice extends React.Component {
 
     this.props.saveInvoice({...editable, status}).then(({id}) => {
       const {history} = this.props;
-      history.push(`/project/${project.id}/invoice/${id}`);
+      history.push(`/invoices/${project.id}/invoice/${id}`);
     });
   }
 
@@ -148,8 +146,6 @@ class Invoice extends React.Component {
     const items = editable ? getDisplayItems(
       editable, project.hourly_rate, timeslips.filter(({hours}) => hours), tasks
     ) : [];
-
-    console.log(editable);
 
     return (
       <React.Fragment>
@@ -173,6 +169,7 @@ class Invoice extends React.Component {
               <React.Fragment>
                 <Generator
                   invoice={editable}
+                  project={project}
                   items={items}
                   onSetDisplaySettings={this.handleSetDisplaySettings}
                   onRemove={({ itemType, id }) => this.handleRemove(itemType, id)}

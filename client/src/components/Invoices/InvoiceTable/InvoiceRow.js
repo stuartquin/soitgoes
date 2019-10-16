@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
-import { Text } from 'rebass/styled-components';
+import { Box, Flex, Text } from 'rebass/styled-components';
 import { Link } from 'react-router-dom'
 
 import {BREAKPOINTS, Grid, Cell, CellMd} from 'components/Grid';
@@ -23,12 +23,6 @@ const getIssuedDate = (invoice) => {
     '';
 }
 
-
-const Total = styled.div`
-  margin-left: 4px;
-`;
-
-
 const StyledLink = styled(Link)`
   text-decoration: none;
 `;
@@ -42,24 +36,31 @@ class InvoiceRow extends React.Component {
       <Row
         as={StyledLink}
         to={`/invoices/${project.id}/invoice/${invoice.id}`}
+        sx={{ justifyContent: 'flexEnd' }}
       >
-        <Cell xs="5" sm="6">
+        <Box flexGrow="1" variant="ellipsis">
           <div>#{invoice.sequence_num} {project.name}</div>
-          <Text display={['none', 'block']}>{project.contact.name}</Text>
-        </Cell>
-        <CellMd sm="2" numeric>
-          {getIssuedDate(invoice)}
-        </CellMd>
-        <Cell xs="4" sm="2" textAlign="right">
-          <StatusPill status={STATUS_MAP[status]} fontSize={[12, 14]} display="inline">
-            {getInvoiceDueMessage(invoice)}
-          </StatusPill>
-        </Cell>
-        <Cell numeric xs="3" sm="2">
-          <Text textAlign="right" width="100%">
+          <Text variant="subTitle">{project.contact.name}</Text>
+        </Box>
+        <Box width="64px">
+          <Text variant="amount" fontWeight={2}>
             {asCurrency(invoice.total_due, project.currency || 'GBP', 0)}
           </Text>
-        </Cell>
+        </Box>
+        <Flex alignItems="center" justifyContent="flex-end">
+          <Box display={['none', 'initial']} ml={4}>
+            {getIssuedDate(invoice)}
+          </Box>
+          <StatusPill
+            minWidth="87px"
+            status={STATUS_MAP[status]}
+            fontSize={[12, 14]}
+            display="inline"
+            ml={4}
+          >
+            {getInvoiceDueMessage(invoice)}
+          </StatusPill>
+        </Flex>
       </Row>
     );
   }
