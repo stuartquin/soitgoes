@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {connect} from 'react-redux';
+import { Text, Flex } from 'rebass/styled-components';
 
 import Task from 'components/Task';
 import NavMenu from 'components/nav/navmenu';
 import Heading from 'components/Heading';
+import Filter from 'components/Filter';
 import {BREAKPOINTS, Container, Grid, Cell} from 'components/Grid';
 import {Button} from 'components/GUI';
 import {selectWithProject, selectJoined} from 'services/selectors';
@@ -31,26 +33,37 @@ const Styled = styled.div`
 const Tasks = ({ projects }) => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [tasks, setTasks] = useState([]);
-  const NewButton = (
-    <Button type="success" onClick={() => setSelectedTask({})}>
-      New Task
-    </Button>
-  );
-
-  const load = async () => {
-    const response = await fetchTasks();
+  const projectOptions = [{
+    value: null,
+    label: 'All Projects',
+  }].concat(Object.values(projects).map(p => ({
+    value: p.id,
+    label: p.name,
+  })));
+  const loadTasks = async (projectId = null) => {
+    const response = await fetchTasks({ project: projectId });
     setTasks(selectWithProject(response.results, projects));
   };
 
   useEffect(() => {
-    load();
+    loadTasks();
   }, []);
 
   return (
     <React.Fragment>
       <NavMenu />
       <Container>
-        <Heading size="h2" action={NewButton}>Tasks</Heading>
+        <Flex alignItems="center" justifyContent="space-between" mb={12}>
+          <Filter
+            label="Project"
+            options={projectOptions}
+            onChange={({ value }) => loadTasks(value)}
+          />
+          <Button onClick={() => setSelectedTask({})}>
+            New
+          </Button>
+        </Flex>
+
         <Styled>
           <TaskTable
             tasks={tasks}

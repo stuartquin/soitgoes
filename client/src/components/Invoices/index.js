@@ -11,14 +11,14 @@ import Filter from 'components/Filter';
 import {Container, Grid, Cell} from 'components/Grid';
 import {Button} from 'components/GUI';
 
-import {fetchInvoices} from 'services/invoice';
-import {fetchTimeslips} from 'modules/timeslip';
+import {fetchInvoices, fetchUpcoming} from 'services/invoice';
 import {getTotal, getOverdue} from 'services/invoice';
 import {getHourlyTotal} from 'services/timeslip';
-import {selectWithProject, selectJoined, selectResults} from 'services/selectors';
+import {selectWithProject, selectJoined} from 'services/selectors';
 
-const Invoices = ({ timeslips, projects, fetchTimeslips }) => {
+const Invoices = ({ projects }) => {
   const [invoices, setInvoices] = useState([]);
+  const [upcoming, setUpcoming] = useState([]);
   const projectOptions = [{
     value: null,
     label: 'All Projects',
@@ -32,8 +32,13 @@ const Invoices = ({ timeslips, projects, fetchTimeslips }) => {
     setInvoices(selectWithProject(response.results, projects));
   };
 
+  const loadUpcoming = async () => {
+    const response = await fetchUpcoming();
+    setUpcoming(selectWithProject(response.results, projects));
+  };
+
   useEffect(() => {
-    fetchTimeslips('none');
+    loadUpcoming();
     loadInvoices();
   }, []);
 
@@ -61,7 +66,7 @@ const Invoices = ({ timeslips, projects, fetchTimeslips }) => {
           <InvoiceTable
             invoices={invoices}
           />
-          <UpcomingSummary timeslips={timeslips} />
+          <UpcomingSummary upcoming={upcoming} />
         </Flex>
       </Container>
     </React.Fragment>
@@ -69,18 +74,9 @@ const Invoices = ({ timeslips, projects, fetchTimeslips }) => {
 }
 
 const mapStateToProps = (state) => {
-  const project = selectJoined(state.project.items, state);
   return {
-    projects: project,
-    timeslips: selectResults(
-      selectJoined(state.timeslip.items, {project}),
-      state.timeslip.results,
-    ),
+    projects: selectJoined(state.project.items, state),
   };
 };
 
-const actions = {
-  fetchTimeslips,
-};
-
-export default connect(mapStateToProps, actions)(Invoices);
+export default connect(mapStateToProps, {})(Invoices);

@@ -13,7 +13,10 @@ from rest_framework.permissions import BasePermission
 
 from . import serializers, models, summary
 from .cookieauthentication import CookieAuthentication
-from journal.invoices import save_invoice_tasks, get_new_invoice, set_invoice_totals
+from journal.invoices import (
+    save_invoice_tasks, get_new_invoice, set_invoice_totals,
+    get_upcoming_invoices
+)
 
 
 class HasProjectAccess(BasePermission):
@@ -287,21 +290,17 @@ class TimeSlipList(generics.ListCreateAPIView):
         return models.TimeSlip.objects.filter(**filters).order_by('date')
 
 
-class SummaryInvoices(APIView):
+class UpcomingInvoices(APIView):
     def get(self, request, pk=None):
-        if 'start' in request.query_params:
-            start = request.query_params['start']
+        upcoming = get_upcoming_invoices()
+        response = []
+        for project in upcoming:
+            response.append({
+                'project': project,
+                'total': upcoming[project]
+            })
 
-        if 'end' in request.query_params:
-            end = request.query_params['end']
-
-        dates = summary.invoice_summary_monthly(start, end)
-        response = HttpResponse(
-            json.dumps(dates),
-            content_type='application/json'
-        )
-        return response
-
+        return Response({ 'results': response })
 
 class TaskList(generics.ListCreateAPIView):
     serializer_class = serializers.TaskSerializer

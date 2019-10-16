@@ -121,4 +121,5 @@ export const getNewInvoice = (project) => {
   };
 };
 
-export const fetchInvoices = (params = {}) => api.get(`invoices/`, params);
+export const fetchInvoices = (params = {}) => api.get('invoices/', params);
+export const fetchUpcoming = () => api.get('invoices/upcoming/');

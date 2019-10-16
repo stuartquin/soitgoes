@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Grid} from 'components/Grid';
+import {BREAKPOINTS, Grid} from 'components/Grid';
 
 export const Row = styled(Grid)`
   color: #4e5767;
@@ -28,4 +28,9 @@ export const Header = styled(Grid)`
   padding: 12px 16px;
   font-weight: bold;
   box-sizing: border-box;
+
+  @media(max-width: ${BREAKPOINTS.sm}) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
 `;

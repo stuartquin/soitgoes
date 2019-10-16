@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'api/invoices/(?P<pk>[0-9]+)$', apiviews.InvoiceDetail.as_view()),
     url(r'api/invoices/(?P<pk>[0-9]+)/pdf$', apiviews.InvoicePDF.as_view()),
     url(r'api/invoices/zip$', apiviews.BulkInvoicePDF.as_view()),
+    url(r'api/invoices/upcoming/$', apiviews.UpcomingInvoices.as_view()),
 
     url(
         r'api/invoices/(?P<pk>[0-9]+)/modifiers/(?P<modifier>[0-9]+)$',
@@ -36,7 +37,6 @@ urlpatterns = [
     url(r'api/companies/$', apiviews.CompanyList.as_view()),
     url(r'api/companies/(?P<pk>[0-9]+)$', apiviews.CompanyDetail.as_view()),
 
-    url(r'api/summary/invoices/$', apiviews.SummaryInvoices.as_view()),
 
     url(r'api/login/$', apiviews.LoginView.as_view()),
     url(r'api/logout/$', views.logout_user),

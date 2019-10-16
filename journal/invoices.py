@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from django.db.models import Q
+from django.db.models import Q, F, Sum
 from journal.models import (
     Task, Invoice, TaskInvoice, TimeSlip, TASK_STATUS_REJECTED,
     BILLING_TYPE_FIXED
@@ -67,3 +67,28 @@ def get_new_invoice(project_id):
         'group_by': 'timeslips',
         'show_hours': True,
     }
+
+
+def get_upcoming_invoices():
+    task_costs = Task.objects.filter(
+        billing_type=BILLING_TYPE_FIXED,
+        invoices=None
+    ).values('project').annotate(cost=Sum('cost'))
+    time_costs = TimeSlip.objects.filter(
+        invoice=None
+    ).values('project').annotate(
+        cost=Sum(F('hours') * F('hourly_rate'))
+    )
+
+    grouped = {}
+    for item in task_costs:
+        cost = item['cost']
+        if cost > 0:
+            grouped[item['project']] = grouped.get(item['project'], 0) + cost
+
+        for item in time_costs:
+            cost = item['cost']
+            if cost > 0:
+                grouped[item['project']] = grouped.get(item['project'], 0) + cost
+
+    return grouped

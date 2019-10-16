@@ -10,7 +10,7 @@ import {asCurrency} from 'services/currency';
 
 
 const UpcomingInvoice = ({summary}) => {
-  const {project, total, date} = summary;
+  const {project, total} = summary;
   const url = `/invoices/${project.id}/invoice`;
   return (
     <Card px={16} py="12px" minWidth={200}>
