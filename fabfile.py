@@ -67,8 +67,8 @@ def docker():
 
 
 @hosts('root@{}'.format(HOST_NAME))
-def deploy(app=None, branch='master'):
-    if not app:
+def deploy(app='all', branch='master'):
+    if app=='all':
         deploy_server(branch)
         deploy_client()
 

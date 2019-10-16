@@ -86,9 +86,9 @@ def get_upcoming_invoices():
         if cost > 0:
             grouped[item['project']] = grouped.get(item['project'], 0) + cost
 
-        for item in time_costs:
-            cost = item['cost']
-            if cost > 0:
-                grouped[item['project']] = grouped.get(item['project'], 0) + cost
+    for item in time_costs:
+        cost = item['cost']
+        if cost > 0:
+            grouped[item['project']] = grouped.get(item['project'], 0) + cost
 
     return grouped
