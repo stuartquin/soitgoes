@@ -71,6 +71,9 @@ export const theme = {
       fontSize: [1, 2],
       textAlign: 'right',
     },
+    title: {
+      fontSize: [1, 2],
+    },
     subTitle: {
       color: 'grey_dark',
       fontSize: [0, 1],

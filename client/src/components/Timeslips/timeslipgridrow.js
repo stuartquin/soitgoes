@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { Text, Box } from 'rebass/styled-components';
 import {BREAKPOINTS} from 'components/Grid';
 
 import TimeslipGridCell from './timeslipgridcell';
@@ -16,12 +17,15 @@ const Task = styled.td`
   position: absolute;
   top: auto;
   width: 240px;
-  justify-content: flex-end;
   font-size: 16px;
 
   padding-top: 4px;
   padding-left: 8px;
   border-bottom: ${props => props.theme.colors.grey_main} solid 1px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   ${props => props.fixed && css`
     background: ${props => props.theme.colors.warning_lightest};
@@ -46,7 +50,7 @@ const Project = styled.div`
 }
 `;
 
-const TaskName = styled.div`
+const TaskName = styled(Text)`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -66,11 +70,14 @@ const TimeslipGridRow = ({
   return (
     <Styled>
       <Task fixed={task.billing_type === 'FIXED'}>
-        <TaskName>{task.name}</TaskName>
-        <Project>{task.project.name}</Project>
+        <Box variant="ellipsis">
+          <TaskName variant="title">{task.name}</TaskName>
+          <Text variant="subTitle">{task.project.name}</Text>
+        </Box>
       </Task>
       {dates.map((date) => (
         <TimeslipGridCell
+          key={date}
           isLoading={isLoading}
           cellKey={`${task.id}|${date}`}
           date={date}

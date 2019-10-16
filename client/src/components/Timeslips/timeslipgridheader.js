@@ -45,7 +45,7 @@ const TimeslipGridHeader = ({weekStart, range, onSetActiveDate}) => {
         />
       </Controls>
       {range.map((date, index) => (
-        <Date xs="1" today={today === date.format('YYYY-MM-DD')}>
+        <Date key={date} xs="1" today={today === date.format('YYYY-MM-DD')}>
           <div>{date.format('D')}</div>
           <div>{date.format('ddd')}</div>
         </Date>
