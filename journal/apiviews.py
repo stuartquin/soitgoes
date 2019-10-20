@@ -155,6 +155,9 @@ class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
             serializer.validated_data['total_paid'] = validated['total_due']
             serializer.validated_data['paid_at'] = datetime.datetime.now()
 
+        if 'tasks' in serializer.validated_data:
+            del serializer.validated_data['tasks']
+
         serializer.save()
 
 

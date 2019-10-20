@@ -170,11 +170,5 @@ class TaskInvoiceSerializer(serializers.ModelSerializer):
 
 
 class InvoiceDetailSerializer(InvoiceSerializer):
-    items = TaskInvoiceSerializer(
-        source='taskinvoice_set',
-        many=True,
-        read_only=True,
-    )
-
     class Meta:
         model = models.Invoice
