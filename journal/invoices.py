@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from django.db.models import Q, F, Sum
 from journal.models import (
     Task, Invoice, TaskInvoice, TimeSlip, TASK_STATUS_REJECTED,
-    BILLING_TYPE_FIXED
+    BILLING_TYPE_FIXED, BILLING_TYPE_TIME
 )
 
 def _save_invoice_timeslip(invoice, item):
@@ -44,7 +44,8 @@ def get_new_invoice(project_id):
     timeslip_ids, timeslip_task_ids = zip(*
         TimeSlip.objects.filter(
             project_id=project_id,
-            invoice=None
+            invoice=None,
+            task__billing_type=BILLING_TYPE_TIME,
         ).values_list('pk', 'task_id')
     )
     task_ids = [

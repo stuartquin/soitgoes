@@ -96,18 +96,38 @@ export const groupByTask = (
   }).filter(task => task.subTotal > 0);
 };
 
+export const getFixedTasks = (
+  displayTasks
+) => {
+  return displayTasks.filter(
+    task => task.billing_type === 'FIXED'
+  ).map(task => ({
+    title: task.name,
+    subTitle: null,
+    unitPrice: task.cost,
+    subTotal: task.cost,
+    id: task.id,
+    itemType: 'tasks',
+  }));
+};
+
 
 export const getDisplayItems = (
   invoice, rate, timeslips = [], tasks = [],
 ) => {
+  const timeTaskIds = tasks.filter(task => task.billing_type === 'TIME').map(t => t.id);
   const taskIds = invoice.tasks || [];
   const timeslipIds = invoice.timeslips || [];
   const displayTasks = tasks.filter(({ id }) => taskIds.indexOf(id) > -1);
-  const displayTimeslips = timeslips.filter(({ id }) => timeslipIds.indexOf(id) > -1);
+  const displayTimeslips = timeslips.filter((ts) => (
+    timeTaskIds.indexOf(ts.task) > -1 && timeslipIds.indexOf(ts.id) > -1
+  ));
 
-  return invoice.group_by === 'tasks' ?
+  const items =  invoice.group_by === 'tasks' ?
     groupByTask(displayTasks, displayTimeslips, rate, invoice.show_hours) :
     groupByTimeslip(displayTimeslips, rate);
+
+  return items.concat(getFixedTasks(displayTasks));
 };
 
 
