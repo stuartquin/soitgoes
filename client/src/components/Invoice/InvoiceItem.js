@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Flex, Box, Text } from 'rebass/styled-components';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faMinusSquare} from '@fortawesome/free-solid-svg-icons'
+import {faPlusSquare} from '@fortawesome/free-solid-svg-icons'
 
 import {asCurrency} from 'services/currency';
 import {Cell, CellMd} from 'components/Grid';
@@ -20,11 +21,11 @@ const InvoiceItem = ({
   item, project, isEditable, onAction,
 }) => {
   const {
-    title, subTitle, unitPrice, subTotal, itemType, subItems = []
+    title, subTitle, unitPrice, subTotal, itemType, isActive, subItems = []
   } = item;
 
   return (
-    <Row justifyContent="flexEnd" flexWrap="wrap">
+    <Row justifyContent="flexEnd" flexWrap="wrap" removed={!isActive}>
       <Box flexGrow="1">
         <Text fontSize={2}>{title}</Text>
         <Text variant="subTitle">{subTitle}</Text>
@@ -38,7 +39,7 @@ const InvoiceItem = ({
       {isEditable && (
         <Box ml={3}>
           <ActionLink onClick={() => onAction(item)}>
-            <FontAwesomeIcon icon={faMinusSquare} />
+            <FontAwesomeIcon icon={isActive ? faMinusSquare : faPlusSquare} />
           </ActionLink>
         </Box>
       )}
@@ -52,11 +53,11 @@ const InvoiceItem = ({
           py={2}
         >
           <Box xs="10" flexGrow="1">
-            <Text pl={2} variant="subTitle">
+            <Text variant="subTitle">
               {subItem.title} - {subItem.subTitle}
             </Text>
           </Box>
-          <Box minWidth={['80px', '120px']} mr={isEditable ? 5 : null}>
+          <Box minWidth={['80px', '120px']} mr={isEditable ? "26px" : null}>
             <Text variant="amount" fontSize={1} color="grey_dark">
               {asCurrency(subItem.subTotal, project.currency)}
             </Text>

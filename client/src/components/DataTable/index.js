@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {Flex} from 'rebass/styled-components';
 import {BREAKPOINTS, Grid} from 'components/Grid';
 
@@ -18,6 +18,11 @@ export const Row = styled(Flex)`
   &:hover {
     background: #f5fcff;
   }
+
+  ${props => props.removed && css`
+    opacity: 0.4;
+    background: white;
+  `}
 `;
 
 export const Header = styled(Flex)`

@@ -52,7 +52,7 @@ export const getInvoiceDueMessage = (invoice) => {
   return invoice.due_date;
 };
 
-export const groupByTimeslip = (timeslips, rate) => {
+export const groupByTimeslip = (timeslips) => {
   const items = timeslips.sort((a, b) => {
     return a.date > b.date ? 1 : -1;
   }).filter(t => t.hours > 0);
@@ -61,36 +61,38 @@ export const groupByTimeslip = (timeslips, rate) => {
     id: timeslip.id,
     title: moment(timeslip.date).format('MMM. DD, YYYY'),
     subTitle: `${timeslip.hours} hours`,
-    unitPrice: rate,
-    subTotal: timeslip.hours * rate,
+    unitPrice: timeslip.hourly_rate,
+    subTotal: timeslip.hours * timeslip.hourly_rate,
     itemType: 'timeslips',
     hours: timeslip.hours,
+    isActive: timeslip.isActive,
   }));
 };
 
 export const groupByTask = (
-  tasks, timeslips, rate, showHours,
+  tasks, rate, showHours,
 ) => {
-  const items = Object.values(tasks).sort((a, b) => {
+  const items = tasks.filter(t => t.billing_type === 'TIME').sort((a, b) => {
     return a.completed_at > b.completed_at ? 1 : -1;
   });
 
   return items.map((task) => {
-    const filteredTimeslips = timeslips.filter(timeslip => (
-      timeslip.task === task.id && timeslip.hours
-    ));
-    const hours = filteredTimeslips.reduce((agg, timeslip) => (
-      agg + (timeslip.hours || 0)
-    ), 0);
+    const filteredTimeslips = task.timeslips.filter(
+      timeslip => timeslip.isActive && timeslip.hours
+    );
+    const [subTotal, hours] = filteredTimeslips.reduce(([t, h], timeslip) => (
+      [t + (timeslip.hourly_rate * timeslip.hours), h + timeslip.hours]
+    ), [0, 0]);
 
     return {
       title: task.name,
       subTitle: showHours ? `${hours} hours` : null,
-      unitPrice: hours * rate,
-      subTotal: hours * rate,
+      unitPrice: subTotal,
       id: task.id,
-      subItems: groupByTimeslip(filteredTimeslips, rate),
+      subItems: groupByTimeslip(filteredTimeslips),
       itemType: 'tasks',
+      isActive: task.isActive,
+      subTotal,
       hours,
     };
   }).filter(task => task.subTotal > 0);
@@ -108,26 +110,28 @@ export const getFixedTasks = (
     subTotal: task.cost,
     id: task.id,
     itemType: 'tasks',
+    isActive: task.isActive,
   }));
 };
 
 
 export const getDisplayItems = (
-  invoice, rate, timeslips = [], tasks = [],
+  invoice, rate, tasks = [],
 ) => {
-  const timeTaskIds = tasks.filter(task => task.billing_type === 'TIME').map(t => t.id);
+
   const taskIds = invoice.tasks || [];
   const timeslipIds = invoice.timeslips || [];
-  const displayTasks = tasks.filter(({ id }) => taskIds.indexOf(id) > -1);
-  const displayTimeslips = timeslips.filter((ts) => (
-    timeTaskIds.indexOf(ts.task) > -1 && timeslipIds.indexOf(ts.id) > -1
-  ));
+  const displayTimeslips = tasks.reduce((all, task) => (
+    task.billing_type === 'TIME' ?
+      all.concat(task.timeslips) :
+      all
+  ), []);
 
   const items =  invoice.group_by === 'tasks' ?
-    groupByTask(displayTasks, displayTimeslips, rate, invoice.show_hours) :
-    groupByTimeslip(displayTimeslips, rate);
+    groupByTask(tasks, invoice.show_hours) :
+    groupByTimeslip(displayTimeslips);
 
-  return items.concat(getFixedTasks(displayTasks));
+  return items.concat(getFixedTasks(tasks));
 };
 
 

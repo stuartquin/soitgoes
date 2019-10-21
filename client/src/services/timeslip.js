@@ -1,3 +1,7 @@
+import * as api from 'services/api';
+
+export const fetchTimeslips = (params={}) => api.get('timeslips/', params);
+
 export const getTotal = (timeslips) => {
   return timeslips.reduce((total, t) => {
     return total + (t.hours * t.project.hourly_rate);
