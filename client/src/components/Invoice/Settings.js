@@ -35,7 +35,14 @@ const DownloadLink = styled.a`
 
 const Settings = (props) => {
   const {
-    invoice, project, modifiers, onChange, onRemoveModifier, reference, dueDate
+    invoice,
+    project,
+    modifiers,
+    reference,
+    dueDate,
+    tasks,
+    onChange,
+    onRemoveModifier,
   } = props;
   const isEditable = !Boolean(invoice.issued_at);
   const downloadURL = `/api/invoices/${invoice.id}/pdf`;
@@ -80,6 +87,7 @@ const Settings = (props) => {
         modifiers={modifiers}
         invoice={invoice}
         project={project}
+        tasks={tasks}
         onRemoveModifier={onRemoveModifier}
       />
     </SettingsCard>

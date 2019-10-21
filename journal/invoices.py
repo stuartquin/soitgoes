@@ -41,13 +41,18 @@ def set_invoice_totals(invoice):
 
 def get_new_invoice(project_id):
     due_date = date.today() + timedelta(days=14)
-    timeslip_ids, timeslip_task_ids = zip(*
-        TimeSlip.objects.filter(
-            project_id=project_id,
-            invoice=None,
-            task__billing_type=BILLING_TYPE_TIME,
-        ).values_list('pk', 'task_id')
-    )
+    timeslips = TimeSlip.objects.filter(
+        project_id=project_id,
+        invoice=None,
+        task__billing_type=BILLING_TYPE_TIME,
+    ).values_list('pk', 'task_id')
+
+    if len(timeslips):
+        timeslip_ids, timeslip_task_ids = zip(*timeslips)
+    else:
+        timeslip_ids = []
+        timeslip_task_ids = []
+
     task_ids = [
         t[0] for t in Task.objects.filter(
             project_id=project_id,

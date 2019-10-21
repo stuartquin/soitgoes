@@ -155,19 +155,15 @@ class Invoice extends React.Component {
     const {
       editable, displaySettings, modifiers, timeslips = [], tasks = []
     } = this.state;
-
     const tasksWithTime = tasks.map(task => {
       task.timeslips = timeslips.filter(t => t.task === task.id);
       task.isActive = editable.tasks.includes(task.id);
       task.timeslips.forEach(ts => ts.isActive = editable.timeslips.includes(ts.id));
       return task;
     });
-
-    console.log(tasksWithTime);
     const items = editable ? getDisplayItems(
       editable, project.hourly_rate, tasksWithTime
     ) : [];
-
 
     return (
       <React.Fragment>
@@ -200,6 +196,7 @@ class Invoice extends React.Component {
                   invoice={
                     getInvoiceTotals(editable, items, modifiers)
                   }
+                  tasks={tasksWithTime}
                   project={project}
                   modifiers={modifiers}
                   reference={editable.reference}
