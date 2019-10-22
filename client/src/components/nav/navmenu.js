@@ -35,10 +35,6 @@ const NavMenu = ({children}) => {
             text="Tasks"
             linkTo="/tasks"
           />
-          <MenuItem
-            text="Projects"
-            linkTo="/projects"
-          />
         </Menu>
         {children}
       </Container>
