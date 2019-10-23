@@ -5,7 +5,6 @@ import moment from 'moment';
 
 import { Flex } from 'rebass';
 
-import {fetchTimeslips, saveTimeslips} from 'modules/timeslip';
 import NavMenu from 'components/nav/navmenu';
 import Heading from 'components/Heading';
 import {BREAKPOINTS, Container, Grid, Cell} from 'components/Grid';
@@ -16,6 +15,7 @@ import {Loading} from '../loading';
 import {fetchTasks} from 'modules/task';
 import {Button} from 'components/GUI';
 import {selectJoinedResults} from 'services/selectors';
+import {fetchTimeslips, saveTimeslips} from 'services/timeslip';
 
 const Styled = styled.div`
   background: #f5f3f5;
@@ -72,6 +72,7 @@ class Timeslips extends React.Component {
     this.state = {
       weekStart: moment().startOf('isoweek').isoWeekday(1),
       updatedTimeslips: {}, // keyed by project_date
+      timeslips: [],
     };
 
     this.handleSetActiveDate = this.handleSetActiveDate.bind(this);
@@ -83,14 +84,20 @@ class Timeslips extends React.Component {
     this.fetchData();
   }
 
-  fetchData() {
+  async fetchData() {
     const {weekStart} = this.state;
     const end = moment(weekStart).add(7, 'days');
 
     this.props.fetchTasks();
-    this.props.fetchTimeslips(
-      null, weekStart.format('YYYY-MM-DD'), end.format('YYYY-MM-DD')
-    )
+    const response = await fetchTimeslips({
+      invoice: 'none',
+      start: weekStart.format('YYYY-MM-DD'),
+      end: end.format('YYYY-MM-DD')
+    });
+
+    this.setState({
+      timeslips: response.results,
+    });
   }
 
   handleSetActiveDate(weekStart) {
@@ -118,20 +125,22 @@ class Timeslips extends React.Component {
     });
   }
 
-  handleSave() {
-    const {saveTimeslips, timeslips} = this.props;
-    const {updatedTimeslips} = this.state;
+  async handleSave() {
+    const {updatedTimeslips, timeslips} = this.state;
+    const updated = await saveTimeslips(
+      Object.values(updatedTimeslips).filter(({ hours }) => hours),
+      timeslips,
+    );
 
-    saveTimeslips(
-      Object.values(updatedTimeslips).filter(({ hours }) => hours)
-    ).then(() => {
-      this.setState({updatedTimeslips: []});
+    this.setState({
+      timeslips: updated,
+      updatedTimeslips: [],
     });
   }
 
   render() {
-    const {weekStart, updatedTimeslips} = this.state;
-    const {user, timeslips, projects, tasks} = this.props;
+    const {weekStart, updatedTimeslips, timeslips} = this.state;
+    const {user, projects, tasks} = this.props;
     const today = moment();
     const month = weekStart.format('MMMM Y');
     const displayTimeslips = timeslips.concat(Object.values(updatedTimeslips));
@@ -169,7 +178,6 @@ const mapStateToProps = (state) => {
   return {
     isSaving: false,
     isLoading: false,
-    timeslips: Object.values(state.timeslip.items),
     tasks: selectJoinedResults(state.task.items, state, state.task.results),
     projects: state.project.items,
     user: state.user.user
@@ -177,8 +185,6 @@ const mapStateToProps = (state) => {
 };
 
 const actions = {
-  fetchTimeslips,
-  saveTimeslips,
   fetchTasks,
 };
 

@@ -1,6 +1,6 @@
 import * as api from 'services/api';
 
-export const fetchTimeslips = (params={}) => api.get('timeslips/', params);
+export const fetchTimeslips = async (params={}) => api.get('timeslips/', params);
 
 export const getTotal = (timeslips) => {
   return timeslips.reduce((total, t) => {
@@ -19,3 +19,26 @@ export const groupByProject = (timeslips) => {
     }
   }, {});
 };
+
+export const saveTimeslips = (updatedTimeslips, timeslips) => {
+  const newTimeslips = updatedTimeslips.filter(t => !t.id);
+  const updated = updatedTimeslips.filter(t => Boolean(t.id));
+  const updates = Promise.all(updated.map((timeslip) =>
+    api.update('timeslips/', timeslip.id, {
+      hours: timeslip.hours,
+    })
+  ));
+  let calls = [updates];
+
+  if (newTimeslips.length) {
+    calls = calls.concat(api.add('timeslips/', newTimeslips));
+  }
+
+  return Promise.all(calls).then(([results, created=[]]) => {
+    const updatedIds = results.map(r => r.id);
+    return timeslips.filter(t => !updatedIds.includes(t.id)).concat(
+      results
+    ).concat(created);
+  });
+};
+

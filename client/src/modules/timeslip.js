@@ -11,36 +11,6 @@ const NS = 'TIMESLIP';
 
 export const GET_TIMESLIPS_SUCCESS = 'GET_TIMESLIPS_SUCCESS';
 
-export const saveTimeslips = (timeslips) => {
-  const newTimeslips = timeslips.filter(t => !t.id);
-  const updated = timeslips.filter(t => Boolean(t.id));
-  const updates = Promise.all(updated.map((timeslip) =>
-    api.update('timeslips/', timeslip.id, {
-      hours: timeslip.hours,
-    })
-  ));
-  let calls = [updates];
-
-  if (newTimeslips.length) {
-    calls = calls.concat(api.add('timeslips/', newTimeslips));
-  }
-
-  return (dispatch) => {
-    dispatch({
-      type: reduxHelper.constant(NS, 'SAVE', 'start')
-    });
-
-    return Promise.all(calls).then(([updatesRes, created=[]]) => {
-      dispatch(fetchProjects());
-
-      return dispatch({
-        type: reduxHelper.constant(NS, 'SAVE', 'success'),
-        items: updatesRes.concat(created)
-      });
-    });
-  };
-};
-
 export const fetchTimeslips = reduxHelper.fetch(
   NS,
   (invoice, start = null, end = null, project = null) => (
