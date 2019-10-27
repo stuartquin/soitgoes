@@ -50,7 +50,7 @@ const TimeslipGrid = ({
   timeslips, onHourChanged
 }) => {
   const range = getDateRange(weekStart);
-  const filteredTasks = Object.values(tasks).filter(
+  const filteredTasks = tasks.filter(
     t => !t.project.archived && t.state === 'OPEN'
   );
   const [activeCell, setActiveCell] = useState(null);

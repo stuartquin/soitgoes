@@ -23,7 +23,7 @@ const Controls = styled.th`
   height: 42px;
   width: 240px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
 
   @media(max-width: ${BREAKPOINTS.sm}) {
@@ -38,7 +38,7 @@ const TimeslipGridHeader = ({weekStart, range, onSetActiveDate}) => {
   return (
     <tr>
       <Controls>
-        <Text width={50} fontSize={14}>{weekStart.format('MMM YYYY')}</Text>
+        <Text pl={2} fontSize={14}>{weekStart.format('MMM YYYY')}</Text>
         <TimeslipDateControls
           weekStart={weekStart}
           onSetActiveDate={onSetActiveDate}
