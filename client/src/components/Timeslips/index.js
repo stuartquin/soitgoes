@@ -98,9 +98,7 @@ class Timeslips extends React.Component {
     const {weekStart} = this.state;
     const start = moment(weekStart).subtract(40, 'days');
     const end = moment(weekStart).add(7, 'days');
-
     const response = await fetchTimeslips({
-      invoice: 'none',
       start: weekStart.format('YYYY-MM-DD'),
       end: end.format('YYYY-MM-DD'),
       project: project,
