@@ -81,7 +81,8 @@ def get_upcoming_invoices():
         invoices=None
     ).values('project').annotate(cost=Sum('cost'))
     time_costs = TimeSlip.objects.filter(
-        invoice=None
+        invoice=None,
+        task__billing_type=BILLING_TYPE_TIME,
     ).values('project').annotate(
         cost=Sum(F('hours') * F('hourly_rate'))
     )
