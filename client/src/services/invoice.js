@@ -37,7 +37,7 @@ export const getInvoiceStatus = (invoice) => {
     return 'OVERDUE';
   }
 
-  return 'Unknown';
+  return null;
 };
 
 export const getInvoiceDueMessage = (invoice) => {

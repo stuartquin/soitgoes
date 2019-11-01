@@ -1,18 +1,22 @@
-import React from 'react';
-import { Flex, Text } from 'rebass/styled-components';
-import Select from 'react-select';
+import React from "react";
+import { Flex, Text } from "rebass/styled-components";
+import Select from "react-select";
 
 const SELECT_STYLE = {
-  control: (provided) => ({
+  container: provided => ({
+    ...provided,
+    minWidth: 170,
+    flexGrow: 1
+  }),
+  control: provided => ({
     ...provided,
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
-    border: 'none',
-    width: 170,
+    border: "none"
   })
 };
 
-const Filter = ({ label, options, onChange }) => {
+const Filter = ({ label, options, onChange, ...props }) => {
   return (
     <Flex
       backgroundColor="grey_lightest"
@@ -20,8 +24,11 @@ const Filter = ({ label, options, onChange }) => {
       variant="smallShadow"
       sx={{ borderRadius: 6 }}
       fontSize="12px"
+      {...props}
     >
-      <Text p="12px" variant="uppercase">{label}</Text>
+      <Text p="12px" variant="uppercase" minWidth="80px">
+        {label}
+      </Text>
       <Select
         styles={SELECT_STYLE}
         options={options}
