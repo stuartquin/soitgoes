@@ -1,19 +1,20 @@
-import React from 'react';
-import styled, {ThemeProvider} from 'styled-components';
-import { connect } from 'react-redux';
-import { Route } from 'react-router-dom';
+import React from "react";
+import styled, { ThemeProvider } from "styled-components";
+import { connect } from "react-redux";
+import { Route } from "react-router-dom";
 
-import { Loading } from 'components/loading';
-import {theme} from 'components/GUI';
-import Invoice from 'components/Invoice';
-import Invoices from 'components/Invoices';
-import Timeslips from 'components/Timeslips';
-import Tasks from 'components/Tasks';
-import Login from 'components/Login';
+import Loading from "components/Loading";
+import { theme } from "components/GUI";
+import Invoice from "components/Invoice";
+import Invoices from "components/Invoices";
+import Timeslips from "components/Timeslips";
+import Tasks from "components/Tasks";
+import Login from "components/Login";
+import NavMenu from "components/nav/navmenu";
 
-import {fetchContacts} from 'modules/contact';
-import {fetchUser} from 'modules/user';
-import {fetchProjects} from 'modules/project';
+import { fetchContacts } from "modules/contact";
+import { fetchUser } from "modules/user";
+import { fetchProjects } from "modules/project";
 
 const Styled = styled.div`
   height: 100%;
@@ -28,16 +29,20 @@ class Nav extends React.Component {
     super(props);
     this.state = {
       isLoaded: false,
-      isLoggedIn: true,
+      isLoggedIn: true
     };
   }
 
   componentDidMount() {
-    this.props.fetchUser().then(this.fetchBase).then(() => {
-      this.setState({isLoaded: true, isLoggedIn: true})
-    }).catch(() => {
-      this.setState({isLoaded: true, isLoggedIn: false})
-    });
+    this.props
+      .fetchUser()
+      .then(this.fetchBase)
+      .then(() => {
+        this.setState({ isLoaded: true, isLoggedIn: true });
+      })
+      .catch(() => {
+        this.setState({ isLoaded: true, isLoggedIn: false });
+      });
   }
 
   fetchBase = () => {
@@ -45,25 +50,17 @@ class Nav extends React.Component {
       this.props.fetchProjects(),
       this.props.fetchContacts()
     ]);
-  }
+  };
 
-  handleLogin = (form) => {
+  handleLogin = form => {
     login(form).then(res => {
-      const {history} = this.props;
+      const { history } = this.props;
       history.push(`/invoices`);
     });
-  }
+  };
 
   render() {
-    const {isLoaded, isLoggedIn} = this.state;
-
-    if (!isLoaded) {
-      return (
-        <div className='wrapper'>
-          <Loading />
-        </div>
-      );
-    }
+    const { isLoaded, isLoggedIn } = this.state;
 
     if (!isLoggedIn) {
       return (
@@ -75,19 +72,26 @@ class Nav extends React.Component {
 
     return (
       <Styled>
-        <Route exact path='' component={Invoices} />
-        <Route path='/timeslips' component={Timeslips} />
-        <Route exact path='/invoices' component={Invoices} />
-        <Route exact path='/tasks' component={Tasks} />
-        <Route
-          path='/invoices/:projectId/invoice'
-          component={Invoice}
-          exact
-        />
-        <Route
-          path='/invoices/:projectId/invoice/:invoiceId'
-          component={Invoice}
-        />
+        <NavMenu />
+        {isLoaded ? (
+          <React.Fragment>
+            <Route exact path="" component={Invoices} />
+            <Route path="/timeslips" component={Timeslips} />
+            <Route exact path="/invoices" component={Invoices} />
+            <Route exact path="/tasks" component={Tasks} />
+            <Route
+              path="/invoices/:projectId/invoice"
+              component={Invoice}
+              exact
+            />
+            <Route
+              path="/invoices/:projectId/invoice/:invoiceId"
+              component={Invoice}
+            />
+          </React.Fragment>
+        ) : (
+          <Loading />
+        )}
       </Styled>
     );
   }
@@ -100,8 +104,11 @@ const mapStateToProps = () => {
 const actions = {
   fetchUser,
   fetchProjects,
-  fetchContacts,
+  fetchContacts
 };
 
-const NavContainer = connect(mapStateToProps, actions)(Nav);
+const NavContainer = connect(
+  mapStateToProps,
+  actions
+)(Nav);
 export { NavContainer };

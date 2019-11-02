@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { Text, Flex } from "rebass/styled-components";
 
-import NavMenu from "components/nav/navmenu";
 import InvoiceTable from "components/Invoices/InvoiceTable";
 import UpcomingSummary from "components/Invoices/UpcomingSummary";
 import Settings from "components/Invoices/Settings";
@@ -68,41 +67,37 @@ const Invoices = ({ projects }) => {
     : invoices;
 
   return (
-    <React.Fragment>
-      <NavMenu />
+    <Container>
+      <Flex alignItems="center" justifyContent="flex-start" flexWrap="wrap">
+        <Filter
+          label="Project"
+          options={projectOptions}
+          onChange={({ value }) => loadInvoices(value)}
+          mr={[0, 2]}
+          mb={12}
+          flexGrow="1"
+          maxWidth={["100%", "300px"]}
+        />
+        <Filter
+          label="Status"
+          options={stateOptions}
+          onChange={({ value }) => setStateFilter(value)}
+          mb={12}
+          flexGrow="1"
+          maxWidth={["100%", "300px"]}
+        />
+      </Flex>
 
-      <Container>
-        <Flex alignItems="center" justifyContent="flex-start" flexWrap="wrap">
-          <Filter
-            label="Project"
-            options={projectOptions}
-            onChange={({ value }) => loadInvoices(value)}
-            mr={[0, 2]}
-            mb={12}
-            flexGrow="1"
-            maxWidth={["100%", "300px"]}
-          />
-          <Filter
-            label="Status"
-            options={stateOptions}
-            onChange={({ value }) => setStateFilter(value)}
-            mb={12}
-            flexGrow="1"
-            maxWidth={["100%", "300px"]}
-          />
-        </Flex>
-
-        <Flex
-          width="100%"
-          variant="shadow"
-          background="grey_lightest"
-          flexDirection={["column-reverse", "row"]}
-        >
-          <InvoiceTable invoices={filteredInvoices} />
-          <UpcomingSummary upcoming={upcoming} />
-        </Flex>
-      </Container>
-    </React.Fragment>
+      <Flex
+        width="100%"
+        variant="shadow"
+        background="grey_lightest"
+        flexDirection={["column-reverse", "row"]}
+      >
+        <InvoiceTable invoices={filteredInvoices} />
+        <UpcomingSummary upcoming={upcoming} />
+      </Flex>
+    </Container>
   );
 };
 
