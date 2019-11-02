@@ -42,6 +42,7 @@ const Styled = styled(Flex)`
   border-radius: 6px;
   box-shadow: 0 6px 4px hsla(0, 0%, 40%, 0.2);
   height: 100%;
+  min-height: 400px;
   max-width: 1200px;
   width: 100%;
 
@@ -171,20 +172,14 @@ class Invoice extends React.Component {
       : [];
 
     return (
-      <Container>
-        <Grid>
-          <Cell sm="12">
-            {editable && (
-              <InvoiceHeader
-                project={project}
-                invoice={editable}
-                onUpdateStatus={status =>
-                  this.handleUpdateStatus(status, editable)
-                }
-              />
-            )}
-          </Cell>
-        </Grid>
+      <React.Fragment>
+        {editable && (
+          <InvoiceHeader
+            project={project}
+            invoice={editable}
+            onUpdateStatus={status => this.handleUpdateStatus(status, editable)}
+          />
+        )}
 
         <Styled>
           {editable && (
@@ -212,7 +207,7 @@ class Invoice extends React.Component {
             </React.Fragment>
           )}
         </Styled>
-      </Container>
+      </React.Fragment>
     );
   }
 }
