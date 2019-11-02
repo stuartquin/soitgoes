@@ -54,20 +54,18 @@ const Tasks = ({ projects }) => {
 
   return (
     <React.Fragment>
-      <Container>
-        <Flex alignItems="center" justifyContent="space-between" mb={12}>
-          <Filter
-            label="Project"
-            options={projectOptions}
-            onChange={({ value }) => loadTasks(value)}
-          />
-          <Button onClick={() => setSelectedTask({})}>New</Button>
-        </Flex>
+      <Flex alignItems="center" justifyContent="space-between" mb={12}>
+        <Filter
+          label="Project"
+          options={projectOptions}
+          onChange={({ value }) => loadTasks(value)}
+        />
+        <Button onClick={() => setSelectedTask({})}>New</Button>
+      </Flex>
 
-        <Styled>
-          <TaskTable tasks={tasks} onTaskSelect={setSelectedTask} />
-        </Styled>
-      </Container>
+      <Styled>
+        <TaskTable tasks={tasks} onTaskSelect={setSelectedTask} />
+      </Styled>
 
       {selectedTask && (
         <Task

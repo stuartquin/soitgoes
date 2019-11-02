@@ -11,6 +11,7 @@ import Timeslips from "components/Timeslips";
 import Tasks from "components/Tasks";
 import Login from "components/Login";
 import NavMenu from "components/nav/navmenu";
+import { Container } from "components/Grid";
 
 import { fetchContacts } from "modules/contact";
 import { fetchUser } from "modules/user";
@@ -74,7 +75,7 @@ class Nav extends React.Component {
       <Styled>
         <NavMenu />
         {isLoaded ? (
-          <React.Fragment>
+          <Container minHeight="400px">
             <Route exact path="" component={Invoices} />
             <Route path="/timeslips" component={Timeslips} />
             <Route exact path="/invoices" component={Invoices} />
@@ -88,9 +89,11 @@ class Nav extends React.Component {
               path="/invoices/:projectId/invoice/:invoiceId"
               component={Invoice}
             />
-          </React.Fragment>
+          </Container>
         ) : (
-          <Loading />
+          <Container>
+            <Loading minHeight="600px" />
+          </Container>
         )}
       </Styled>
     );

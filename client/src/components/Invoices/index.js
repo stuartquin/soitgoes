@@ -7,7 +7,6 @@ import InvoiceTable from "components/Invoices/InvoiceTable";
 import UpcomingSummary from "components/Invoices/UpcomingSummary";
 import Settings from "components/Invoices/Settings";
 import Filter from "components/Filter";
-import { Container, Grid, Cell } from "components/Grid";
 import { Button } from "components/GUI";
 
 import {
@@ -67,7 +66,7 @@ const Invoices = ({ projects }) => {
     : invoices;
 
   return (
-    <Container>
+    <React.Fragment>
       <Flex alignItems="center" justifyContent="flex-start" flexWrap="wrap">
         <Filter
           label="Project"
@@ -97,7 +96,7 @@ const Invoices = ({ projects }) => {
         <InvoiceTable invoices={filteredInvoices} />
         <UpcomingSummary upcoming={upcoming} />
       </Flex>
-    </Container>
+    </React.Fragment>
   );
 };
 

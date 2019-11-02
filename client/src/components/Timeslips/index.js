@@ -21,6 +21,7 @@ const Styled = styled.div`
   border-radius: 6px;
   box-shadow: 0 6px 4px hsla(0, 0%, 40%, 0.2);
   height: 100%;
+  min-height: 400px;
   max-width: 1200px;
   width: 100%;
 
@@ -189,7 +190,7 @@ class Timeslips extends React.Component {
     );
 
     return (
-      <Container>
+      <React.Fragment>
         <Flex mb={12} alignItems="center" justifyContent="space-between">
           <Filter
             label="Project"
@@ -213,7 +214,7 @@ class Timeslips extends React.Component {
           />
           <Summary summary={summary} />
         </Styled>
-      </Container>
+      </React.Fragment>
     );
   }
 }
