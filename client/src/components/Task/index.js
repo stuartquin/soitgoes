@@ -6,7 +6,7 @@ import Dialog from "components/Dialog";
 import { Input, Select, FormRow, Label } from "components/Form";
 import { Grid, Cell } from "components/Grid";
 import { Divider, Button } from "components/GUI";
-import { saveTask } from "modules/task";
+import { saveTask } from "services/task";
 import useForm from "services/useForm";
 
 const STATUS_OPTIONS = [
@@ -21,14 +21,7 @@ const formatDate = date => {
   return date ? new Date(date).toISOString() : null;
 };
 
-const Task = ({
-  task,
-  projects,
-  selectedProject,
-  saveTask,
-  onCancel,
-  onSave
-}) => {
+const Task = ({ task, projects, selectedProject, onCancel, onSave }) => {
   const { values, handleChange } = useForm({
     billing_type: "TIME",
     project: selectedProject,
@@ -36,8 +29,8 @@ const Task = ({
   });
   const action = task.id ? "Edit" : "Add";
 
-  const handleSave = () => {
-    saveTask({
+  const handleSave = async () => {
+    await saveTask({
       ...values,
       completed_at: formatDate(values.completed_at),
       project: values.project.id ? values.project.id : values.project
@@ -181,11 +174,7 @@ const mapStateToProps = state => {
   };
 };
 
-const actions = {
-  saveTask
-};
-
 export default connect(
   mapStateToProps,
-  actions
+  {}
 )(Task);
