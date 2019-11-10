@@ -94,13 +94,13 @@ class Invoice extends React.Component {
           this.props.fetchInvoice(invoiceId, { project: project.id }),
           fetchModifiers(),
           fetchTimeslips({ invoice: invoiceId, project: project.id }),
-          fetchTasks({ project: project.id })
+          fetchTasks({ project: project.id, invoice: invoiceId })
         ]
       : [
           this.props.fetchInvoice("new", { project: project.id }),
           fetchModifiers(),
           fetchTimeslips({ invoice: "none", project: project.id }),
-          fetchTasks({ project: project.id })
+          fetchTasks({ project: project.id, invoice: "none" })
         ];
 
     return Promise.all(promises);

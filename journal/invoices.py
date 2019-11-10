@@ -1,8 +1,8 @@
 from datetime import date, timedelta
 from django.db.models import Q, F, Sum
 from journal.models import (
-    Task, Invoice, TaskInvoice, TimeSlip, TASK_STATUS_REJECTED,
-    BILLING_TYPE_FIXED, BILLING_TYPE_TIME
+    Task, Invoice, TaskInvoice, TimeSlip,
+    BILLING_TYPE_FIXED, BILLING_TYPE_TIME, TASK_STATUS_DONE
 )
 
 def _save_invoice_timeslip(invoice, item):
@@ -58,8 +58,6 @@ def get_new_invoice(project_id):
             project_id=project_id,
         ).filter(
             Q(billing_type=BILLING_TYPE_FIXED) | Q(pk__in=timeslip_task_ids)
-        ).exclude(
-            state=TASK_STATUS_REJECTED,
         ).values_list('pk')
     ]
 
@@ -79,6 +77,8 @@ def get_upcoming_invoices():
     task_costs = Task.objects.filter(
         billing_type=BILLING_TYPE_FIXED,
         invoices=None
+    ).exclude(
+        state=TASK_STATUS_DONE
     ).values('project').annotate(cost=Sum('cost'))
     time_costs = TimeSlip.objects.filter(
         invoice=None,

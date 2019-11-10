@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+from django.db.models import Q
 from rest_framework import generics, viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -309,16 +310,23 @@ class TaskList(generics.ListCreateAPIView):
     serializer_class = serializers.TaskSerializer
 
     def get_queryset(self):
-        filters = {
-        }
+        queryset = models.Task.objects
         if 'project' in self.request.query_params:
-            filters['project'] = self.request.query_params['project']
+            queryset = queryset.filter(project=self.request.query_params['project'])
 
         if 'invoice' in self.request.query_params:
             invoice = self.request.query_params['invoice']
-            filters['invoice'] = invoice if invoice != 'none' else None
 
-        return models.Task.objects.filter(**filters).order_by('-project__name')
+            if invoice == 'none':
+                queryset = queryset.filter(
+                    Q(invoices=None, billing_type=models.BILLING_TYPE_FIXED) |
+                    Q(billing_type=models.BILLING_TYPE_TIME)
+                )
+                queryset = queryset.exclude(state=models.TASK_STATUS_DONE)
+            else:
+                queryset = queryset.filter(invoices=invoice)
+
+        return queryset.order_by('-project__name')
 
 
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
