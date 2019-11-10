@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
-import styled, { ThemeContext } from "styled-components";
+import React, { useContext } from 'react';
+import styled, { ThemeContext } from 'styled-components';
 
-import { BREAKPOINTS, Grid, Cell } from "components/Grid";
-import InvoiceTableHeader from "./InvoiceTableHeader";
-import InvoiceRow from "./InvoiceRow";
+import { BREAKPOINTS, Grid, Cell } from 'components/Grid';
+import RouterPagination from 'components/RouterPagination';
+import InvoiceTableHeader from './InvoiceTableHeader';
+import InvoiceRow from './InvoiceRow';
 
 const Styled = styled.div`
   border-radius: 6px;
@@ -19,12 +20,13 @@ const Styled = styled.div`
   }
 `;
 
-const InvoiceTable = ({ invoices }) => (
+const InvoiceTable = ({ invoices, page, total }) => (
   <Styled>
     <InvoiceTableHeader />
     {invoices.map(invoice => (
       <InvoiceRow key={invoice.id} invoice={invoice} />
     ))}
+    <RouterPagination path="/invoices" total={total} page={page} />
   </Styled>
 );
 
