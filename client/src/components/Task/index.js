@@ -17,18 +17,32 @@ const STATUS_OPTIONS = [
 
 const BILLING_TYPE_OPTIONS = [["TIME", "Time"], ["FIXED", "Fixed Cost"]];
 
-const Task = ({ task, projects, saveTask, onCancel }) => {
-  const { values, handleChange } = useForm({ billing_type: "TIME", ...task });
-  const action = task.id ? "Edit" : "Add";
+const formatDate = date => {
+  return date ? new Date(date).toISOString() : null;
+};
 
-  console.log("Task", values);
+const Task = ({
+  task,
+  projects,
+  selectedProject,
+  saveTask,
+  onCancel,
+  onSave
+}) => {
+  const { values, handleChange } = useForm({
+    billing_type: "TIME",
+    project: selectedProject,
+    ...task
+  });
+  const action = task.id ? "Edit" : "Add";
 
   const handleSave = () => {
     saveTask({
       ...values,
+      completed_at: formatDate(values.completed_at),
       project: values.project.id ? values.project.id : values.project
     });
-    onCancel();
+    onSave();
   };
   const activeProject = values.project || {};
   const cost = values.cost || activeProject.cost || "";

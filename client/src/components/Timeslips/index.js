@@ -97,7 +97,10 @@ class Timeslips extends React.Component {
 
   async loadTasks(project) {
     const { projects } = this.props;
-    const response = await fetchTasks({ project: project });
+    const response = await fetchTasks({
+      project: project,
+      sort: "-project__name"
+    });
     this.setState({
       tasks: selectWithProject(response.results, projects)
     });

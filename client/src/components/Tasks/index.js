@@ -31,6 +31,7 @@ const Styled = styled.div`
 
 const Tasks = ({ projects }) => {
   const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [tasks, setTasks] = useState([]);
   const projectOptions = [
     {
@@ -43,14 +44,15 @@ const Tasks = ({ projects }) => {
       label: p.name
     }))
   );
-  const loadTasks = async (projectId = null) => {
+  const loadTasks = async projectId => {
     const response = await fetchTasks({ project: projectId });
     setTasks(selectWithProject(response.results, projects));
+    setSelectedTask(null);
   };
 
   useEffect(() => {
-    loadTasks();
-  }, []);
+    loadTasks(selectedProjectId);
+  }, [selectedProjectId]);
 
   return (
     <React.Fragment>
@@ -58,7 +60,7 @@ const Tasks = ({ projects }) => {
         <Filter
           label="Project"
           options={projectOptions}
-          onChange={({ value }) => loadTasks(value)}
+          onChange={({ value }) => setSelectedProjectId(value)}
         />
         <Button onClick={() => setSelectedTask({})}>New</Button>
       </Flex>
@@ -71,7 +73,9 @@ const Tasks = ({ projects }) => {
         <Task
           task={selectedTask}
           projects={projects}
+          selectedProject={projects[selectedProjectId]}
           onCancel={() => setSelectedTask(null)}
+          onSave={() => loadTasks(selectedProjectId)}
         />
       )}
     </React.Fragment>

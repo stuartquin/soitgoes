@@ -311,6 +311,11 @@ class TaskList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = models.Task.objects
+
+        order_by = '-activity_at'
+        if 'sort' in self.request.query_params:
+            order_by = self.request.query_params['sort']
+
         if 'project' in self.request.query_params:
             queryset = queryset.filter(project=self.request.query_params['project'])
 
@@ -326,7 +331,7 @@ class TaskList(generics.ListCreateAPIView):
             else:
                 queryset = queryset.filter(invoices=invoice)
 
-        return queryset.order_by('-project__name')
+        return queryset.order_by(order_by)
 
 
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
