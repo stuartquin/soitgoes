@@ -2,8 +2,8 @@ from fabric.api import run, env
 from fabric.decorators import hosts
 from fabric import operations, context_managers
 
-APP_PATH = '/var/app/soitgoesdev'
-HOST_NAME = 'dev.stuartquin.com'
+APP_PATH = '/var/app/soitgoes'
+HOST_NAME = 'tracking.stuartquin.com'
 
 def letsencrypt():
     run('certbot --nginx -d {}'.format(HOST_NAME))
