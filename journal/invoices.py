@@ -57,7 +57,7 @@ def get_new_invoice(project_id):
         t[0] for t in Task.objects.filter(
             project_id=project_id,
         ).filter(
-            Q(billing_type=BILLING_TYPE_FIXED) | Q(pk__in=timeslip_task_ids)
+            Q(billing_type=BILLING_TYPE_FIXED, completed_at=None) | Q(pk__in=timeslip_task_ids)
         ).values_list('pk')
     ]
 
