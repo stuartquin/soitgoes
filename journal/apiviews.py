@@ -316,6 +316,9 @@ class TaskList(generics.ListCreateAPIView):
         if 'sort' in self.request.query_params:
             order_by = self.request.query_params['sort']
 
+        if 'state' in self.request.query_params:
+            queryset = queryset.filter(state=self.request.query_params['state'])
+
         if 'project' in self.request.query_params:
             queryset = queryset.filter(project=self.request.query_params['project'])
 

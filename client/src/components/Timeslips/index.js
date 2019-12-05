@@ -1,20 +1,20 @@
-import React from "react";
-import styled from "styled-components";
-import { connect } from "react-redux";
-import moment from "moment";
+import React from 'react';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
+import moment from 'moment';
 
-import { Flex } from "rebass";
+import { Flex } from 'rebass';
 
-import Heading from "components/Heading";
-import Filter from "components/Filter";
-import { BREAKPOINTS, Container, Grid, Cell } from "components/Grid";
-import TimeslipGrid from "./timeslipgrid";
-import TimeslipDateControls from "./timeslipdatecontrols";
-import Summary from "./Summary";
-import { Button } from "components/GUI";
-import { selectWithProject } from "services/selectors";
-import { fetchTimeslips, saveTimeslips } from "services/timeslip";
-import { fetchTasks } from "services/task";
+import Heading from 'components/Heading';
+import Filter from 'components/Filter';
+import { BREAKPOINTS, Container, Grid, Cell } from 'components/Grid';
+import TimeslipGrid from './timeslipgrid';
+import TimeslipDateControls from './timeslipdatecontrols';
+import Summary from './Summary';
+import { Button } from 'components/GUI';
+import { selectWithProject } from 'services/selectors';
+import { fetchTimeslips, saveTimeslips } from 'services/timeslip';
+import { fetchTasks } from 'services/task';
 
 const Styled = styled.div`
   background: #f5f3f5;
@@ -35,38 +35,38 @@ const Styled = styled.div`
 
 const getSummary = (timeslips, projects) => {
   const week = moment()
-    .startOf("isoweek")
+    .startOf('isoweek')
     .isoWeekday(1);
   const weekStart = week.format().substr(0, 10);
   const weekEnd = week
-    .endOf("isoWeek")
+    .endOf('isoWeek')
     .format()
     .substr(0, 10);
-  const month = moment().startOf("month");
+  const month = moment().startOf('month');
   const monthStart = month.format().substr(0, 10);
   const monthEnd = month
-    .endOf("month")
+    .endOf('month')
     .format()
     .substr(0, 10);
   const summary = {
-    "This Week": { hours: 0, total: 0 },
-    "This Month": { hours: 0, total: 0 }
+    'This Week': { hours: 0, total: 0 },
+    'This Month': { hours: 0, total: 0 },
   };
 
   timeslips.forEach(timeslip => {
     const rate = projects[timeslip.project].hourly_rate;
 
     if (timeslip.date >= weekStart && timeslip.date <= weekEnd) {
-      summary["This Week"] = {
-        hours: summary["This Week"].hours + timeslip.hours,
-        total: summary["This Week"].total + timeslip.hours * rate
+      summary['This Week'] = {
+        hours: summary['This Week'].hours + timeslip.hours,
+        total: summary['This Week'].total + timeslip.hours * rate,
       };
     }
 
     if (timeslip.date >= monthStart && timeslip.date <= monthEnd) {
-      summary["This Month"] = {
-        hours: summary["This Month"].hours + timeslip.hours,
-        total: summary["This Month"].total + timeslip.hours * rate
+      summary['This Month'] = {
+        hours: summary['This Month'].hours + timeslip.hours,
+        total: summary['This Month'].total + timeslip.hours * rate,
       };
     }
   });
@@ -79,11 +79,11 @@ class Timeslips extends React.Component {
     super(props);
     this.state = {
       weekStart: moment()
-        .startOf("isoweek")
+        .startOf('isoweek')
         .isoWeekday(1),
       updatedTimeslips: {}, // keyed by project_date
       timeslips: [],
-      selectedProjectId: null
+      selectedProjectId: null,
     };
 
     this.handleSetActiveDate = this.handleSetActiveDate.bind(this);
@@ -99,25 +99,26 @@ class Timeslips extends React.Component {
     const { projects } = this.props;
     const response = await fetchTasks({
       project: project,
-      sort: "-project__name"
+      sort: '-project__name',
+      state: 'OPEN',
     });
     this.setState({
-      tasks: selectWithProject(response.results, projects)
+      tasks: selectWithProject(response.results, projects),
     });
   }
 
   async loadTimeslips(project) {
     const { weekStart } = this.state;
-    const start = moment(weekStart).subtract(40, "days");
-    const end = moment(weekStart).add(7, "days");
+    const start = moment(weekStart).subtract(40, 'days');
+    const end = moment(weekStart).add(7, 'days');
     const response = await fetchTimeslips({
-      start: weekStart.format("YYYY-MM-DD"),
-      end: end.format("YYYY-MM-DD"),
-      project: project
+      start: weekStart.format('YYYY-MM-DD'),
+      end: end.format('YYYY-MM-DD'),
+      project: project,
     });
 
     this.setState({
-      timeslips: response.results
+      timeslips: response.results,
     });
   }
 
@@ -151,9 +152,9 @@ class Timeslips extends React.Component {
           id: isUpdated ? timeslip.id : null,
           isUpdated,
           hours,
-          date
-        }
-      }
+          date,
+        },
+      },
     });
   }
 
@@ -166,7 +167,7 @@ class Timeslips extends React.Component {
 
     this.setState({
       timeslips: updated,
-      updatedTimeslips: []
+      updatedTimeslips: [],
     });
   }
 
@@ -174,21 +175,21 @@ class Timeslips extends React.Component {
     const { weekStart, updatedTimeslips, timeslips, tasks } = this.state;
     const { projects } = this.props;
     const today = moment();
-    const month = weekStart.format("MMMM Y");
+    const month = weekStart.format('MMMM Y');
     const displayTimeslips = timeslips.concat(Object.values(updatedTimeslips));
     const summary = getSummary(displayTimeslips, projects) || {};
 
     const projectOptions = [
       {
         value: null,
-        label: "All Projects"
-      }
+        label: 'All Projects',
+      },
     ].concat(
       Object.values(projects)
         .filter(p => !p.archived)
         .map(p => ({
           value: p.id,
-          label: p.name
+          label: p.name,
         }))
     );
 
@@ -225,7 +226,7 @@ class Timeslips extends React.Component {
 const mapStateToProps = state => {
   return {
     isLoading: false,
-    projects: state.project.items
+    projects: state.project.items,
   };
 };
 
