@@ -1,23 +1,23 @@
-import React from "react";
-import styled from "styled-components";
-import { Flex } from "rebass/styled-components";
-import moment from "moment";
+import React from 'react';
+import styled from 'styled-components';
+import { Flex } from 'rebass/styled-components';
+import moment from 'moment';
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import { BREAKPOINTS, Container, Grid, Cell } from "components/Grid";
-import InvoiceHeader from "components/Invoice/InvoiceHeader";
-import Generator from "components/Invoice/Generator";
-import Settings from "components/Invoice/Settings";
+import { BREAKPOINTS, Container, Grid, Cell } from 'components/Grid';
+import InvoiceHeader from 'components/Invoice/InvoiceHeader';
+import Generator from 'components/Invoice/Generator';
+import Settings from 'components/Invoice/Settings';
 
-import { getWithJoined, selectJoined, selectResults } from "services/selectors";
-import { getModifierImpact } from "services/modifier";
-import { getDisplayItems, getNewInvoice } from "services/invoice";
+import { getWithJoined, selectJoined, selectResults } from 'services/selectors';
+import { getModifierImpact } from 'services/modifier';
+import { getDisplayItems, getNewInvoice } from 'services/invoice';
 
-import { fetchInvoice, deleteInvoice, saveInvoice } from "modules/invoice";
-import { fetchTasks } from "services/task";
-import { fetchTimeslips } from "services/timeslip";
-import { fetchModifiers } from "services/modifier";
+import { fetchInvoice, deleteInvoice, saveInvoice } from 'modules/invoice';
+import { fetchTasks } from 'services/task';
+import { fetchTimeslips } from 'services/timeslip';
+import { fetchModifiers } from 'services/modifier';
 
 const getInvoiceTotals = (invoice, items, modifiers) => {
   const modifier = invoice.modifier.map(id => modifiers.find(m => id === m.id));
@@ -33,7 +33,7 @@ const getInvoiceTotals = (invoice, items, modifiers) => {
     ...invoice,
     subtotal_due: invoice.subtotal_due || subTotal,
     total_due: invoice.total_due || total,
-    totalHours
+    totalHours,
   };
 };
 
@@ -59,12 +59,12 @@ class Invoice extends React.Component {
       timeslips: [],
       editable: null,
       dueDate: null,
-      reference: "",
+      reference: '',
       confirmDelete: false,
       displaySettings: {
-        groupBy: "time",
-        showHours: true
-      }
+        groupBy: 'time',
+        showHours: true,
+      },
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -82,7 +82,7 @@ class Invoice extends React.Component {
         editable,
         modifiers: modifier.results,
         timeslips: timeslips.results,
-        tasks: tasks.results
+        tasks: tasks.results,
       });
     });
   }
@@ -94,13 +94,13 @@ class Invoice extends React.Component {
           this.props.fetchInvoice(invoiceId, { project: project.id }),
           fetchModifiers(),
           fetchTimeslips({ invoice: invoiceId, project: project.id }),
-          fetchTasks({ project: project.id, invoice: invoiceId })
+          fetchTasks({ project: project.id, invoice: invoiceId }),
         ]
       : [
-          this.props.fetchInvoice("new", { project: project.id }),
+          this.props.fetchInvoice('new', { project: project.id }),
           fetchModifiers(),
-          fetchTimeslips({ invoice: "none", project: project.id }),
-          fetchTasks({ project: project.id, invoice: "none" })
+          fetchTimeslips({ invoice: 'none', project: project.id }),
+          fetchTasks({ project: project.id, invoice: 'none' }),
         ];
 
     return Promise.all(promises);
@@ -114,8 +114,8 @@ class Invoice extends React.Component {
     this.setState({
       editable: {
         ...this.state.editable,
-        [field]: items
-      }
+        [field]: items,
+      },
     });
   };
 
@@ -123,8 +123,8 @@ class Invoice extends React.Component {
     this.setState({
       editable: {
         ...this.state.editable,
-        [target.name]: target.value
-      }
+        [target.name]: target.value,
+      },
     });
   }
 
@@ -135,7 +135,7 @@ class Invoice extends React.Component {
     this.props.saveInvoice({ ...editable, status }).then(invoice => {
       const { history } = this.props;
       this.setState({
-        editable: { ...invoice }
+        editable: { ...invoice },
       });
       history.push(`/invoices/${project.id}/invoice/${invoice.id}`);
     });
@@ -145,8 +145,8 @@ class Invoice extends React.Component {
     this.setState({
       editable: {
         ...this.state.editable,
-        ...displaySettings
-      }
+        ...displaySettings,
+      },
     });
   };
 
@@ -157,7 +157,7 @@ class Invoice extends React.Component {
       displaySettings,
       modifiers,
       timeslips = [],
-      tasks = []
+      tasks = [],
     } = this.state;
     const tasksWithTime = tasks.map(task => {
       task.timeslips = timeslips.filter(t => t.task === task.id);
@@ -200,7 +200,7 @@ class Invoice extends React.Component {
                 modifiers={modifiers}
                 reference={editable.reference}
                 dueDate={editable.due_date}
-                onRemoveModifier={id => this.handleToggleItem("modifier", id)}
+                onRemoveModifier={id => this.handleToggleItem('modifier', id)}
                 onSetReference={reference => this.setReference(reference)}
                 onChange={this.handleChange}
               />
@@ -223,7 +223,7 @@ const mapStateToProps = (state, { match }) => {
   return {
     invoiceId,
     invoice,
-    project
+    project,
   };
 };
 
@@ -233,6 +233,6 @@ export default connect(
     saveInvoice,
     deleteInvoice,
     fetchInvoice,
-    fetchTasks
+    fetchTasks,
   }
 )(Invoice);
