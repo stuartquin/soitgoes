@@ -254,7 +254,7 @@ class TimeSlip(models.Model):
             self.task.save()
 
     def __str__(self):
-        return f'[{self.project.name}] {self.date}'
+        return '[{}] {}'.format(self.project.name, self.date)
 
     @staticmethod
     def set_invoice(timeslips, invoice_id):
