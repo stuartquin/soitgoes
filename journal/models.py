@@ -96,6 +96,7 @@ class Project(models.Model):
     name = models.CharField(max_length=512)
     created_at = models.DateTimeField(auto_now_add=True)
     hourly_rate = models.FloatField(default=0.0)
+    daily_rate = models.DecimalField(max_digits=6, decimal_places=3, blank=True, null=True)
     hours_per_day = models.IntegerField(default=0)
     currency = models.CharField(max_length=3, default="GBP")
     archived = models.BooleanField(default=False)
@@ -231,7 +232,7 @@ class TimeSlip(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     date = models.DateField()
     hours = models.FloatField(default=0.0)
-    hourly_rate = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    hourly_rate = models.DecimalField(max_digits=6, decimal_places=3, default=0)
     task = models.ForeignKey(Task, blank=True, null=True)
     comment = models.CharField(max_length=512, blank=True, null=True)
     invoice = models.ForeignKey(
