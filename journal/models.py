@@ -220,7 +220,7 @@ class Task(models.Model):
 
 class TaskInvoice(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    cost = models.DecimalField(max_digits=6, decimal_places=2)
+    cost = models.DecimalField(max_digits=12, decimal_places=2)
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     hours_spent = models.FloatField(default=0.0)
