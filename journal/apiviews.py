@@ -324,15 +324,15 @@ class TaskList(generics.ListCreateAPIView):
 
         if 'invoice' in self.request.query_params:
             invoice = self.request.query_params['invoice']
-
-            if invoice == 'none':
-                queryset = queryset.filter(
-                    Q(invoices=None, billing_type=models.BILLING_TYPE_FIXED) |
-                    Q(billing_type=models.BILLING_TYPE_TIME)
-                )
-                queryset = queryset.exclude(state=models.TASK_STATUS_DONE)
-            else:
+            if invoice != 'none':
                 queryset = queryset.filter(invoices=invoice)
+            # TODO this is broken
+            #else:
+            #    queryset = queryset.filter(
+            #        Q(invoices=None, billing_type=models.BILLING_TYPE_FIXED) |
+            #        Q(billing_type=models.BILLING_TYPE_TIME)
+            #    )
+            #    queryset = queryset.exclude(state=models.TASK_STATUS_DONE)
 
         return queryset.order_by(order_by)
 
