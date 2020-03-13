@@ -2,15 +2,15 @@ import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 import { Flex, Box, Text } from 'rebass/styled-components';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faMinusSquare} from '@fortawesome/free-solid-svg-icons'
-import {faPlusSquare} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinusSquare } from '@fortawesome/free-solid-svg-icons';
+import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 
-import {asCurrency} from 'services/currency';
-import {Cell, CellMd} from 'components/Grid';
-import {Row} from 'components/DataTable';
-import {ActionLink} from 'components/GUI';
-import {Input} from 'components/Form';
+import { asCurrency } from 'services/currency';
+import { Cell, CellMd } from 'components/Grid';
+import { Row } from 'components/DataTable';
+import { ActionLink } from 'components/GUI';
+import { Checkbox } from 'components/Form';
 
 const Actions = styled(Box)`
   text-align: right;
@@ -18,14 +18,33 @@ const Actions = styled(Box)`
 `;
 
 const InvoiceItem = ({
-  item, project, isEditable, onAction,
+  item,
+  project,
+  isSelected,
+  isEditable,
+  onAction,
+  onChange,
 }) => {
   const {
-    title, subTitle, unitPrice, subTotal, itemType, isActive, subItems = []
+    title,
+    subTitle,
+    unitPrice,
+    subTotal,
+    itemType,
+    isActive,
+    subItems = [],
   } = item;
 
   return (
     <Row justifyContent="flexEnd" flexWrap="wrap" removed={!isActive}>
+      <Flex>
+        <Checkbox
+          name="show_hours"
+          type="checkbox"
+          checked={isSelected}
+          onChange={() => onChange(item)}
+        />
+      </Flex>
       <Box flexGrow="1">
         <Text fontSize={2}>{title}</Text>
         <Text variant="subTitle">{subTitle}</Text>
@@ -57,7 +76,7 @@ const InvoiceItem = ({
               {subItem.title} - {subItem.subTitle}
             </Text>
           </Box>
-          <Box minWidth={['80px', '120px']} mr={isEditable ? "26px" : null}>
+          <Box minWidth={['80px', '120px']} mr={isEditable ? '26px' : null}>
             <Text variant="amount" fontSize={1} color="grey_dark">
               {asCurrency(subItem.subTotal, project.currency)}
             </Text>
@@ -66,6 +85,6 @@ const InvoiceItem = ({
       ))}
     </Row>
   );
-}
+};
 
 export default InvoiceItem;
