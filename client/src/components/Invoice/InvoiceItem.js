@@ -12,78 +12,32 @@ import { Row } from 'components/DataTable';
 import { ActionLink } from 'components/GUI';
 import { Checkbox } from 'components/Form';
 
-const Actions = styled(Box)`
-  text-align: right;
-  width: 100%;
-`;
-
 const InvoiceItem = ({
-  item,
-  project,
-  isSelected,
+  timeslip,
+  isActive,
+  currency,
   isEditable,
-  onAction,
-  onChange,
+  onToggle,
 }) => {
-  const {
-    title,
-    subTitle,
-    unitPrice,
-    subTotal,
-    itemType,
-    isActive,
-    subItems = [],
-  } = item;
-
   return (
-    <Row justifyContent="flexEnd" flexWrap="wrap" removed={!isActive}>
-      <Flex>
-        <Checkbox
-          name="show_hours"
-          type="checkbox"
-          checked={isSelected}
-          onChange={() => onChange(item)}
-        />
-      </Flex>
-      <Box flexGrow="1">
-        <Text fontSize={2}>{title}</Text>
-        <Text variant="subTitle">{subTitle}</Text>
+    <Flex variant="card" sx={{ opacity: isActive ? 1 : 0.5 }} py={3}>
+      <Box flexGrow="1" ml={[0, 2]}>
+        <Text fontSize={1}>{timeslip.date}</Text>
       </Box>
       <Box minWidth="80px" display={['none', 'initial']}>
-        <Text variant="amount">{asCurrency(unitPrice, project.currency)}</Text>
+        <Text variant="amount">
+          {asCurrency(timeslip.hourly_rate, currency)} x {timeslip.hours}
+        </Text>
       </Box>
       <Box minWidth={['80px', '120px']}>
-        <Text variant="amount">{asCurrency(subTotal, project.currency)}</Text>
+        <Text variant="amount">{asCurrency(timeslip.cost, currency)}</Text>
       </Box>
       {isEditable && (
-        <Box ml={3}>
-          <ActionLink onClick={() => onAction(item)}>
-            <FontAwesomeIcon icon={isActive ? faMinusSquare : faPlusSquare} />
-          </ActionLink>
-        </Box>
+        <Text variant="link" onClick={onToggle} ml={3}>
+          <FontAwesomeIcon icon={isActive ? faMinusSquare : faPlusSquare} />
+        </Text>
       )}
-
-      {subItems.map(subItem => (
-        <Flex
-          key={subItem.id}
-          width="100%"
-          justifyContent="flexEnd"
-          alignItems="center"
-          py={2}
-        >
-          <Box xs="10" flexGrow="1">
-            <Text variant="subTitle">
-              {subItem.title} - {subItem.subTitle}
-            </Text>
-          </Box>
-          <Box minWidth={['80px', '120px']} mr={isEditable ? '26px' : null}>
-            <Text variant="amount" fontSize={1} color="grey_dark">
-              {asCurrency(subItem.subTotal, project.currency)}
-            </Text>
-          </Box>
-        </Flex>
-      ))}
-    </Row>
+    </Flex>
   );
 };
 

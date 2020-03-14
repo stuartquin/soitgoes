@@ -1,48 +1,48 @@
-import React from "react";
-import styled, { css } from "styled-components";
-import * as rebass from "rebass/styled-components";
+import React from 'react';
+import styled, { css } from 'styled-components';
+import * as rebass from 'rebass/styled-components';
 
 export const colors = {
-  grey_darkest: "#12263f",
-  grey_dark: "#617692",
-  grey_main: "#d2ddec",
-  grey_light: "#edf1f5",
-  grey_lightest: "#f5f3f5",
+  grey_darkest: '#12263f',
+  grey_dark: '#617692',
+  grey_main: '#d2ddec',
+  grey_light: '#edf1f5',
+  grey_lightest: '#f5f3f5',
 
-  brand_darkest: "#12283a",
-  brand_dark: "#1a4971",
-  brand_main: "#3183c8",
-  brand_light: "#aad4f5",
-  brand_lightest: "#eff8ff",
+  brand_darkest: '#12283a',
+  brand_dark: '#1a4971',
+  brand_main: '#3183c8',
+  brand_light: '#aad4f5',
+  brand_lightest: '#eff8ff',
 
-  brand_dark: "#1a4971",
+  brand_dark: '#1a4971',
 
-  success_darkest: "#155239",
-  success_dark: "#197741",
-  success_main: "#38c172",
-  success_light: "#a8eec1",
-  success_lightest: "#e3fcec",
+  success_darkest: '#155239',
+  success_dark: '#197741',
+  success_main: '#38c172',
+  success_light: '#a8eec1',
+  success_lightest: '#e3fcec',
 
-  warning_darkest: "#5c4813",
-  warning_dark: "#8c6d1f",
-  warning_main: "#f4ca64",
-  warning_light: "#fdf3d7",
-  warning_lightest: "#fffcf4",
+  warning_darkest: '#5c4813',
+  warning_dark: '#8c6d1f',
+  warning_main: '#f4ca64',
+  warning_light: '#fdf3d7',
+  warning_lightest: '#fffcf4',
 
-  danger_darkest: "#601818",
-  danger_dark: "#881b1b",
-  danger_main: "#dc3030",
-  danger_light: "#f4a9a9",
-  danger_lightest: "#f9e5e6",
+  danger_darkest: '#601818',
+  danger_dark: '#881b1b',
+  danger_main: '#dc3030',
+  danger_light: '#f4a9a9',
+  danger_lightest: '#f9e5e6',
 
-  primary: "#3183c8",
+  primary: '#3183c8',
 
-  text: "#4e5767"
+  text: '#4e5767',
 };
 
 export const theme = {
   colors,
-  breakpoints: ["768px", "992px"],
+  breakpoints: ['768px', '992px'],
 
   fontSizes: [12, 14, 16, 20, 24, 32, 48, 64],
 
@@ -53,55 +53,65 @@ export const theme = {
   text: {
     label: {
       fontWeight: 2,
-      color: "grey_darkest"
+      color: 'grey_darkest',
     },
     link: {
-      color: "brand_dark"
+      color: 'brand_dark',
+      cursor: 'pointer',
     },
     uppercase: {
-      textTransform: "uppercase"
+      textTransform: 'uppercase',
     },
     amount: {
       fontSize: [1, 2],
-      textAlign: "right"
+      textAlign: 'right',
     },
     title: {
-      fontSize: [1, 2]
+      fontSize: [1, 2],
+    },
+    h2: {
+      fontSize: [2, 3],
+      fontWeight: 1,
     },
     subTitle: {
-      color: "grey_dark",
+      color: 'grey_dark',
       fontSize: [0, 1],
-      marginTop: 1
-    }
+      marginTop: 1,
+    },
   },
 
   shadows: {
-    container: "0 6px 4px hsla(0,0%,40%,.2)",
-    settings: "0 6px 4px hsla(0,0%,40%,.2)"
+    container: '0 6px 4px hsla(0,0%,40%,.2)',
+    settings: '0 6px 4px hsla(0,0%,40%,.2)',
   },
 
   variants: {
     smallShadow: {
-      boxShadow: "0 2px 1px hsla(0,0%,40%,.1)"
+      boxShadow: '0 2px 1px hsla(0,0%,40%,.1)',
     },
     shadow: {
-      boxShadow: "0 6px 4px hsla(0,0%,40%,.2)"
+      boxShadow: '0 6px 4px hsla(0,0%,40%,.2)',
     },
     loading: {
-      boxShadow: "0 6px 4px hsla(0,0%,40%,.2)",
-      borderRadius: "2px"
+      boxShadow: '0 6px 4px hsla(0,0%,40%,.2)',
+      borderRadius: '2px',
     },
     divider: {
-      borderBottomStyle: "solid",
-      borderBottomColor: "grey_lightest",
-      borderBottomWidth: "1px"
+      borderBottomStyle: 'solid',
+      borderBottomColor: 'grey_lightest',
+      borderBottomWidth: '1px',
     },
     ellipsis: {
-      overflow: "hidden",
-      whiteSpace: "nowrap",
-      textOverflow: "ellipsis"
-    }
-  }
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+    },
+    card: {
+      color: 'text',
+      px: [3, 4],
+      py: [1, 2],
+    },
+  },
 };
 
 export const SubTitle = styled(rebass.Text)`
@@ -134,7 +144,7 @@ export const ActionLink = styled(rebass.Link)`
   }
 
   ${props =>
-    props.size === "sm" &&
+    props.size === 'sm' &&
     css`
       font-size: 0.85em;
     `}

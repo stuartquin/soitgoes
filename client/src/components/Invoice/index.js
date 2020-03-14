@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Flex } from 'rebass/styled-components';
+import { Box, Flex } from 'rebass/styled-components';
 import moment from 'moment';
 
 import { connect } from 'react-redux';
@@ -15,25 +15,36 @@ import { getModifierImpact } from 'services/modifier';
 import { getDisplayItems, getNewInvoice } from 'services/invoice';
 
 import { fetchInvoice, deleteInvoice, saveInvoice } from 'modules/invoice';
-import { fetchTasks } from 'services/task';
+import { fetchTasks, getTaskTotal } from 'services/task';
 import { fetchTimeslips } from 'services/timeslip';
 import { fetchModifiers } from 'services/modifier';
 
-const getInvoiceTotals = (invoice, items, modifiers) => {
+import TaskOverview from './TaskOverview';
+
+const getInvoiceTotals = (invoice, tasks, timeslips, modifiers) => {
   const modifier = invoice.modifier.map(id => modifiers.find(m => id === m.id));
-  const [totalHours, subTotal] = items
-    .filter(({ isActive }) => isActive)
-    .reduce(([h, s], { hours, subTotal }) => [h + hours, s + subTotal], [0, 0]);
+  const taskIds = invoice ? invoice.tasks : [];
+  const timeslipIds = invoice ? invoice.timeslips : [];
+  const activeTimeslips = timeslips.filter(ts => timeslipIds.includes(ts.id));
+  const subTotal = tasks
+    .filter(task => taskIds.includes(task.id))
+    .reduce(
+      (total, task) =>
+        (total += getTaskTotal(
+          task,
+          activeTimeslips.filter(ts => ts.task === task.id)
+        )),
+      0
+    );
+
   const total = modifier.reduce(
     (prev, mod) => prev + getModifierImpact(mod, subTotal),
     subTotal
   );
-
   return {
     ...invoice,
     subtotal_due: invoice.subtotal_due || subTotal,
     total_due: invoice.total_due || total,
-    totalHours,
   };
 };
 
@@ -155,21 +166,13 @@ class Invoice extends React.Component {
     const {
       editable,
       displaySettings,
-      modifiers,
+      modifiers = [],
       timeslips = [],
       tasks = [],
     } = this.state;
-    const tasksWithTime = tasks.map(task => {
-      task.timeslips = timeslips.filter(t => t.task === task.id);
-      task.isActive = editable.tasks.includes(task.id);
-      task.timeslips.forEach(
-        ts => (ts.isActive = editable.timeslips.includes(ts.id))
-      );
-      return task;
-    });
-    const items = editable
-      ? getDisplayItems(editable, project.hourly_rate, tasksWithTime)
-      : [];
+
+    const getTaskTimeslips = task =>
+      timeslips.filter(ts => ts.task === task.id);
 
     return (
       <React.Fragment>
@@ -184,18 +187,24 @@ class Invoice extends React.Component {
         <Styled>
           {editable && (
             <React.Fragment>
-              <Generator
-                invoice={editable}
-                project={project}
-                items={items}
-                onSetDisplaySettings={this.handleSetDisplaySettings}
-                onRemove={({ itemType, id }) =>
-                  this.handleToggleItem(itemType, id)
-                }
-              />
+              <Box flexGrow="1">
+                {tasks.map(task => (
+                  <TaskOverview
+                    invoice={editable}
+                    task={task}
+                    timeslips={getTaskTimeslips(task)}
+                    onToggle={this.handleToggleItem}
+                  />
+                ))}
+              </Box>
               <Settings
-                invoice={getInvoiceTotals(editable, items, modifiers)}
-                tasks={tasksWithTime}
+                invoice={getInvoiceTotals(
+                  editable,
+                  tasks,
+                  timeslips,
+                  modifiers
+                )}
+                tasks={tasks}
                 project={project}
                 modifiers={modifiers}
                 reference={editable.reference}

@@ -1,12 +1,13 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Box, Text } from 'rebass/styled-components';
-import moment from 'moment'; import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCog} from '@fortawesome/free-solid-svg-icons'
+import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
 
-import {Header} from 'components/DataTable';
-import {Cell, CellMd} from 'components/Grid';
-import {ActionLink} from 'components/GUI';
+import { Header } from 'components/DataTable';
+import { Cell, CellMd } from 'components/Grid';
+import { ActionLink } from 'components/GUI';
 import InvoiceItem from './InvoiceItem';
 import DisplaySettings from './DisplaySettings';
 
@@ -21,7 +22,11 @@ const DisplaySettingsCell = styled(Box)`
 `;
 
 const Generator = ({
-  invoice, items, project, onRemove, onSetDisplaySettings
+  invoice,
+  items,
+  project,
+  onRemove,
+  onSetDisplaySettings,
 }) => {
   const [showDisplaySettings, setShowDisplaySettings] = useState(false);
   const isEditable = !Boolean(invoice.issued_at);
@@ -51,19 +56,18 @@ const Generator = ({
                 onCancel={() => setShowDisplaySettings(false)}
               />
             )}
-            </DisplaySettingsCell>
+          </DisplaySettingsCell>
         )}
       </Header>
       {items.map(item => (
         <InvoiceItem
           key={item.id}
           item={item}
-          project={project}
+          currency={project.currency}
           onAction={onRemove}
           isEditable={isEditable}
         />
       ))}
-
     </Styled>
   );
 };
