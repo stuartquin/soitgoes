@@ -12,9 +12,8 @@ import Settings from 'components/Invoice/Settings';
 
 import { getWithJoined, selectJoined, selectResults } from 'services/selectors';
 import { getModifierImpact } from 'services/modifier';
-import { getDisplayItems, getNewInvoice } from 'services/invoice';
+import { fetchInvoice, saveInvoice } from 'services/invoice';
 
-import { fetchInvoice, deleteInvoice, saveInvoice } from 'modules/invoice';
 import { fetchTasks, getTaskTotal } from 'services/task';
 import { fetchTimeslips } from 'services/timeslip';
 import { fetchModifiers } from 'services/modifier';
@@ -102,13 +101,13 @@ class Invoice extends React.Component {
     const { invoiceId, project } = this.props;
     const promises = invoiceId
       ? [
-          this.props.fetchInvoice(invoiceId, { project: project.id }),
+          fetchInvoice(invoiceId, { project: project.id }),
           fetchModifiers(),
           fetchTimeslips({ invoice: invoiceId, project: project.id }),
           fetchTasks({ project: project.id, invoice: invoiceId }),
         ]
       : [
-          this.props.fetchInvoice('new', { project: project.id }),
+          fetchInvoice('new', { project: project.id }),
           fetchModifiers(),
           fetchTimeslips({ invoice: 'none', project: project.id }),
           fetchTasks({ project: project.id, invoice: 'none' }),
@@ -141,9 +140,16 @@ class Invoice extends React.Component {
 
   handleUpdateStatus(status, items) {
     const { project } = this.props;
-    const { editable } = this.state;
+    const { editable, timeslips } = this.state;
+    const isActiveTimeslip = ts =>
+      editable.tasks.includes(ts.task) && editable.timeslips.includes(ts.id);
+    const saveable = {
+      ...editable,
+      status,
+      timeslips: timeslips.filter(isActiveTimeslip).map(ts => ts.id),
+    };
 
-    this.props.saveInvoice({ ...editable, status }).then(invoice => {
+    saveInvoice(saveable).then(invoice => {
       const { history } = this.props;
       this.setState({
         editable: { ...invoice },
@@ -238,10 +244,5 @@ const mapStateToProps = (state, { match }) => {
 
 export default connect(
   mapStateToProps,
-  {
-    saveInvoice,
-    deleteInvoice,
-    fetchInvoice,
-    fetchTasks,
-  }
+  {}
 )(Invoice);

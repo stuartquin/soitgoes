@@ -150,3 +150,9 @@ export const getNewInvoice = project => {
 
 export const fetchInvoices = (params = {}) => api.get('invoices/', params);
 export const fetchUpcoming = () => api.get('invoices/upcoming/');
+export const fetchInvoice = (id, params = {}) =>
+  api.get(`invoices/${id}`, params);
+export const saveInvoice = async invoice =>
+  invoice.id
+    ? api.put(`invoices/${invoice.id}`, invoice)
+    : api.post('invoices/', invoice);
