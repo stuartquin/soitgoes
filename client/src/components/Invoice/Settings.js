@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Card } from 'rebass';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faDownload} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 import Summary from 'components/Invoice/Summary';
-import {Divider, SettingsCard} from 'components/GUI';
-import {Input} from 'components/Form';
-import {BREAKPOINTS} from 'components/Grid';
+import { Divider, SettingsCard } from 'components/GUI';
+import { Input } from 'components/Form';
+import { BREAKPOINTS } from 'components/Grid';
 
 const InvoiceInputRow = styled.div`
   display: flex;
@@ -18,22 +18,7 @@ const InvoiceInputRow = styled.div`
   padding: 12px 16px;
 `;
 
-const Heading = styled.h3`
-  margin-top: 12px;
-  margin-bottom: 12px;
-  padding-left: 16px;
-  padding-right: 16px;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const DownloadLink = styled.a`
-  color: #464d59;
-  margin-right: 8px;
-  margin-left: 8px;
-`;
-
-const Settings = (props) => {
+const Settings = props => {
   const {
     invoice,
     project,
@@ -44,21 +29,10 @@ const Settings = (props) => {
     onChange,
     onRemoveModifier,
   } = props;
-  const isEditable = !Boolean(invoice.issued_at);
-  const downloadURL = `/api/invoices/${invoice.id}/pdf`;
+  const isIssued = Boolean(invoice.issued_at);
 
   return (
     <SettingsCard>
-      <Heading>
-        {project.name} #{invoice.sequence_num}
-
-        {!isEditable && (
-          <DownloadLink download href={downloadURL} title="Download PDF">
-            <FontAwesomeIcon icon={faDownload} />
-          </DownloadLink>
-        )}
-      </Heading>
-
       <InvoiceInputRow>
         <div>Due Date</div>
         <Input
@@ -66,7 +40,7 @@ const Settings = (props) => {
           name="due_date"
           value={dueDate || ''}
           onChange={onChange}
-          disabled={!isEditable}
+          disabled={isIssued}
         />
       </InvoiceInputRow>
 
@@ -77,7 +51,7 @@ const Settings = (props) => {
           name="reference"
           value={reference || ''}
           onChange={onChange}
-          disabled={!isEditable}
+          disabled={isIssued}
         />
       </InvoiceInputRow>
 

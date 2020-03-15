@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Box, Flex } from 'rebass/styled-components';
+import { Card, Box, Flex } from 'rebass/styled-components';
 import moment from 'moment';
 
 import { connect } from 'react-redux';
@@ -15,7 +15,7 @@ import { getModifierImpact } from 'services/modifier';
 import { fetchInvoice, saveInvoice } from 'services/invoice';
 
 import { fetchTasks, getTaskTotal } from 'services/task';
-import { fetchTimeslips } from 'services/timeslip';
+import { fetchTimeslips, saveTimeslip } from 'services/timeslip';
 import { fetchModifiers } from 'services/modifier';
 
 import TaskOverview from './TaskOverview';
@@ -167,6 +167,16 @@ class Invoice extends React.Component {
     });
   };
 
+  handleMoveTimeslip = async (task, timeslipId) => {
+    const { invoiceId, project } = this.props;
+    const timeslip = this.state.timeslips.find(({ id }) => id === timeslipId);
+    await saveTimeslip({ ...timeslip, task: task.id });
+    const res = await fetchTimeslips({ invoice: 'none', project: project.id });
+    this.setState({
+      timeslips: res.results,
+    });
+  };
+
   render() {
     const { invoice, project } = this.props;
     const {
@@ -190,19 +200,21 @@ class Invoice extends React.Component {
           />
         )}
 
-        <Styled>
+        <Flex flexWrap="wrap" flexDirection={['column-reverse', 'row']}>
           {editable && (
             <React.Fragment>
-              <Box flexGrow="1">
+              <Card flexGrow="1" mr={[0, 16]} backgroundColor="white">
+                <h3>Invoice Items</h3>
                 {tasks.map(task => (
                   <TaskOverview
                     invoice={editable}
                     task={task}
                     timeslips={getTaskTimeslips(task)}
                     onToggle={this.handleToggleItem}
+                    onMoveTimeslip={this.handleMoveTimeslip}
                   />
                 ))}
-              </Box>
+              </Card>
               <Settings
                 invoice={getInvoiceTotals(
                   editable,
@@ -221,7 +233,7 @@ class Invoice extends React.Component {
               />
             </React.Fragment>
           )}
-        </Styled>
+        </Flex>
       </React.Fragment>
     );
   }

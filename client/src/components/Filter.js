@@ -1,19 +1,19 @@
-import React from "react";
-import { Flex, Text } from "rebass/styled-components";
-import Select from "react-select";
+import React from 'react';
+import { Flex, Text } from 'rebass/styled-components';
+import Select from 'react-select';
 
 const SELECT_STYLE = {
   container: provided => ({
     ...provided,
     minWidth: 170,
-    flexGrow: 1
+    flexGrow: 1,
   }),
   control: provided => ({
     ...provided,
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
-    border: "none"
-  })
+    border: 'none',
+  }),
 };
 
 const Filter = ({ label, options, onChange, ...props }) => {
@@ -34,6 +34,7 @@ const Filter = ({ label, options, onChange, ...props }) => {
         options={options}
         onChange={onChange}
         defaultValue={null}
+        isMulti
       />
     </Flex>
   );

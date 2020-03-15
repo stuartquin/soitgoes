@@ -108,8 +108,9 @@ export const theme = {
     },
     card: {
       color: 'text',
-      px: [3, 4],
+      px: 2,
       py: [1, 2],
+      boxShadow: 'container',
     },
   },
 };
@@ -162,7 +163,6 @@ export const SettingsCard = styled(rebass.Card)`
   height: 100%;
   width: 290px;
   min-width: 290px;
-  border-radius: 6px;
   box-shadow: 0 6px 4px hsla(0, 0%, 40%, 0.2);
 
   @media (max-width: ${props => props.theme.breakpoints[0]}) {

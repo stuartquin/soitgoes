@@ -3,8 +3,8 @@ import { Flex } from 'rebass';
 
 import Actions from 'components/Invoice/Actions';
 import StatusPill from 'components/StatusPill';
-import {BREAKPOINTS} from 'components/Grid';
-import {getInvoiceStatus, getInvoiceDueMessage} from 'services/invoice';
+import { BREAKPOINTS } from 'components/Grid';
+import { getInvoiceStatus, getInvoiceDueMessage } from 'services/invoice';
 
 const STATUS_MAP = {
   DRAFT: 'draft',
@@ -13,11 +13,19 @@ const STATUS_MAP = {
   PAID: 'success',
 };
 
-const InvoiceHeader = ({invoice, project, onUpdateStatus}) => {
+const InvoiceHeader = ({ invoice, project, onUpdateStatus }) => {
   const status = STATUS_MAP[getInvoiceStatus(invoice)];
 
   return (
-    <Flex justifyContent="flex-end" alignItems="center" mb={12}>
+    <Flex
+      justifyContent="space-between"
+      flexWrap="wrap"
+      alignItems="center"
+      mb={12}
+    >
+      <h2>
+        {project.name} #{invoice.sequence_num}
+      </h2>
       <Actions
         invoice={invoice}
         onUpdateStatus={onUpdateStatus}
@@ -25,6 +33,6 @@ const InvoiceHeader = ({invoice, project, onUpdateStatus}) => {
       />
     </Flex>
   );
-}
+};
 
 export default InvoiceHeader;

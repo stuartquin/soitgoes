@@ -5,12 +5,22 @@ import { Flex, Box, Text } from 'rebass/styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinusSquare } from '@fortawesome/free-solid-svg-icons';
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
 
 import { asCurrency } from 'services/currency';
 import { Cell, CellMd } from 'components/Grid';
-import { Row } from 'components/DataTable';
 import { ActionLink } from 'components/GUI';
 import { Checkbox } from 'components/Form';
+
+const Row = styled(Flex)``;
+const Grip = styled(Box)`
+  opacity: 0;
+  width: 20px;
+  cursor: move;
+  ${Row}:hover & {
+    opacity: 1;
+  }
+`;
 
 const InvoiceItem = ({
   timeslip,
@@ -19,9 +29,23 @@ const InvoiceItem = ({
   isEditable,
   onToggle,
 }) => {
+  const handleDragStart = event => {
+    event.dataTransfer.setData('application/id', timeslip.id);
+  };
+
   return (
-    <Flex variant="card" sx={{ opacity: isActive ? 1 : 0.5 }} py={3}>
-      <Box flexGrow="1" ml={[0, 2]}>
+    <Row
+      sx={{ opacity: isActive ? 1 : 0.5 }}
+      py={3}
+      px={2}
+      draggable={isEditable}
+      onDragStart={handleDragStart}
+      htmlId={timeslip.id}
+    >
+      <Grip>
+        <FontAwesomeIcon icon={faGripVertical} />
+      </Grip>
+      <Box flexGrow="1">
         <Text fontSize={1}>{timeslip.date}</Text>
       </Box>
       <Box minWidth="80px" display={['none', 'initial']}>
@@ -37,7 +61,7 @@ const InvoiceItem = ({
           <FontAwesomeIcon icon={isActive ? faMinusSquare : faPlusSquare} />
         </Text>
       )}
-    </Flex>
+    </Row>
   );
 };
 
