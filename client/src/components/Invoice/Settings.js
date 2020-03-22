@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Card } from 'rebass';
+import { Flex } from 'rebass/styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
@@ -8,15 +8,6 @@ import Summary from 'components/Invoice/Summary';
 import { Divider, SettingsCard } from 'components/GUI';
 import { Input } from 'components/Form';
 import { BREAKPOINTS } from 'components/Grid';
-
-const InvoiceInputRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-direction: column;
-
-  padding: 12px 16px;
-`;
 
 const Settings = props => {
   const {
@@ -33,7 +24,12 @@ const Settings = props => {
 
   return (
     <SettingsCard>
-      <InvoiceInputRow>
+      <Flex
+        justifyContent="space-between"
+        flexDirection="column"
+        py={[3, 4]}
+        px={2}
+      >
         <div>Due Date</div>
         <Input
           type="date"
@@ -42,9 +38,14 @@ const Settings = props => {
           onChange={onChange}
           disabled={isIssued}
         />
-      </InvoiceInputRow>
+      </Flex>
 
-      <InvoiceInputRow>
+      <Flex
+        justifyContent="space-between"
+        flexDirection="column"
+        py={[3, 4]}
+        px={2}
+      >
         <div>Reference</div>
         <Input
           type="text"
@@ -53,7 +54,7 @@ const Settings = props => {
           onChange={onChange}
           disabled={isIssued}
         />
-      </InvoiceInputRow>
+      </Flex>
 
       <Divider />
 

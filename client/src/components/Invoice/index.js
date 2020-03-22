@@ -204,7 +204,6 @@ class Invoice extends React.Component {
           {editable && (
             <React.Fragment>
               <Card flexGrow="1" mr={[0, 16]} backgroundColor="white">
-                <h3>Invoice Items</h3>
                 {tasks.map(task => (
                   <TaskOverview
                     invoice={editable}
