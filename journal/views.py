@@ -9,11 +9,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 def landing(request):
-    template = loader.get_template('index.html')
+    template = loader.get_template("index.html")
     user = request.user
-    context = {
-        'is_authenticated': user.is_authenticated() and user.is_active
-    }
+    context = {"is_authenticated": user.is_authenticated and user.is_active}
     return HttpResponse(template.render(context, request))
 
 

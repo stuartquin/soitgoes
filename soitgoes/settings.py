@@ -26,6 +26,7 @@ SECRET_KEY = "!+#^o6)aofo(rux+bs6m4lpq^^4nzs&n670b5ka6bj@67_2%s_"
 DEBUG = "DEV" in os.environ
 
 ALLOWED_HOSTS = [
+    "tracking.stuartquin.com",
     "books.stuartquin.com",
     "dev.stuartquin.com",
     "local.books.stuartquin.com",
