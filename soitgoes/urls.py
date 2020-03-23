@@ -17,8 +17,4 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 
-urlpatterns = [
-    url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
-    url(r'^admin/', admin.site.urls),
-    url(r'^', include('journal.urls'))
-]
+urlpatterns = [url(r"^admin/", admin.site.urls), url(r"^", include("journal.urls"))]

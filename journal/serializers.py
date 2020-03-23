@@ -92,6 +92,15 @@ class ContactSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Contact
+        fields = (
+            "id",
+            "name",
+            "email",
+            "created_at",
+            "account",
+            "address1",
+            "post_code",
+        )
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -112,11 +121,13 @@ class ActivitySerializer(serializers.ModelSerializer):
 class InvoiceModifierSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.InvoiceModifier
+        fields = ["id", "name", "percent", "created_at"]
 
 
 class TaskNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TaskNote
+        fields = ["__all__"]
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -133,6 +144,23 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Task
         partial = True
+        fields = [
+            "id",
+            "user",
+            "project",
+            "name",
+            "cost",
+            "created_at",
+            "activity_at",
+            "completed_at",
+            "due_date",
+            "hours_spent",
+            "hours_predicted",
+            "billing_type",
+            "state",
+            "invoices",
+            "notes",
+        ]
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
@@ -162,6 +190,25 @@ class InvoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Invoice
         partial = True
+        fields = [
+            "id",
+            "sequence_num",
+            "project",
+            "created_at",
+            "issued_at",
+            "paid_at",
+            "due_date",
+            "total_paid",
+            "total_due",
+            "subtotal_due",
+            "status",
+            "reference",
+            "group_by",
+            "show_hours",
+            "timeslips",
+            "tasks",
+            "modifier",
+        ]
 
 
 class TaskInvoiceSerializer(serializers.ModelSerializer):
@@ -172,8 +219,28 @@ class TaskInvoiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.TaskInvoice
+        fields = ["id", "created_at", "invoice", "cost", "task", "hours_spent"]
 
 
 class InvoiceDetailSerializer(InvoiceSerializer):
     class Meta:
         model = models.Invoice
+        fields = [
+            "id",
+            "sequence_num",
+            "project",
+            "created_at",
+            "issued_at",
+            "paid_at",
+            "due_date",
+            "total_paid",
+            "total_due",
+            "subtotal_due",
+            "status",
+            "reference",
+            "group_by",
+            "show_hours",
+            "timeslips",
+            "tasks",
+            "modifier",
+        ]

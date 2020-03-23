@@ -8,21 +8,21 @@ from libs import invoicepdf
 
 INVOICE_DUE_DAYS = 14
 
-TASK_STATUS_OPEN = 'OPEN'
-TASK_STATUS_PROGRESS = 'PROGRESS'
-TASK_STATUS_DONE = 'DONE'
+TASK_STATUS_OPEN = "OPEN"
+TASK_STATUS_PROGRESS = "PROGRESS"
+TASK_STATUS_DONE = "DONE"
 TASK_STATUS = [
-    (TASK_STATUS_OPEN, 'Open'),
-    (TASK_STATUS_PROGRESS, 'In Progress'),
-    (TASK_STATUS_DONE, 'Complete'),
+    (TASK_STATUS_OPEN, "Open"),
+    (TASK_STATUS_PROGRESS, "In Progress"),
+    (TASK_STATUS_DONE, "Complete"),
 ]
 
-BILLING_TYPE_TIME = 'TIME'
-BILLING_TYPE_FIXED = 'FIXED'
+BILLING_TYPE_TIME = "TIME"
+BILLING_TYPE_FIXED = "FIXED"
 BILLING_TYPE_OPTIONS = [
-  (BILLING_TYPE_TIME, 'Time'),
-  (BILLING_TYPE_FIXED, 'Fixed Cost'),
-];
+    (BILLING_TYPE_TIME, "Time"),
+    (BILLING_TYPE_FIXED, "Fixed Cost"),
+]
 
 
 class Billing(models.Model):
@@ -46,9 +46,7 @@ class Company(models.Model):
     vat_number = models.CharField(max_length=128, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    billing = models.ForeignKey(
-        Billing, models.SET_NULL, blank=True, null=True
-    )
+    billing = models.ForeignKey(Billing, models.SET_NULL, blank=True, null=True,)
 
     def __str__(self):
         return "%s, %s" % (self.name, self.city)
@@ -57,9 +55,7 @@ class Company(models.Model):
 class Account(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     users = models.ManyToManyField(User)
-    company = models.ForeignKey(
-        Company, models.SET_NULL, blank=True, null=True
-    )
+    company = models.ForeignKey(Company, models.SET_NULL, blank=True, null=True,)
 
     def __str__(self):
         return "%s" % (self.company.name)
@@ -69,7 +65,7 @@ class Contact(models.Model):
     name = models.CharField(max_length=512)
     email = models.EmailField()
     created_at = models.DateTimeField(auto_now_add=True)
-    account = models.ForeignKey(Account)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
     address1 = models.CharField(max_length=512, blank=True, null=True)
     address2 = models.CharField(max_length=512, blank=True, null=True)
@@ -91,18 +87,19 @@ class InvoiceModifier(models.Model):
 
 
 class Project(models.Model):
-    contact = models.ForeignKey(Contact)
-    account = models.ForeignKey(Account)
+    contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
     name = models.CharField(max_length=512)
     created_at = models.DateTimeField(auto_now_add=True)
     hourly_rate = models.FloatField(default=0.0)
-    daily_rate = models.DecimalField(max_digits=6, decimal_places=3, blank=True, null=True)
+    daily_rate = models.DecimalField(
+        max_digits=6, decimal_places=3, blank=True, null=True
+    )
     hours_per_day = models.IntegerField(default=0)
     currency = models.CharField(max_length=3, default="GBP")
     archived = models.BooleanField(default=False)
     default_task = models.ForeignKey(
-        'Task', models.SET_NULL,
-        blank=True, null=True, related_name='project_default'
+        "Task", models.SET_NULL, blank=True, null=True, related_name="project_default",
     )
 
     def get_uninvoiced_hours(self, *args, **kwargs):
@@ -110,9 +107,7 @@ class Project(models.Model):
         return sum([t.hours for t in timeslips])
 
     def get_total_paid(self, *args, **kwargs):
-        invoices = Invoice.objects.filter(
-            project=self
-        ).exclude(total_paid__isnull=True)
+        invoices = Invoice.objects.filter(project=self).exclude(total_paid__isnull=True)
         return sum([i.total_paid for i in invoices])
 
     def __str__(self):
@@ -121,7 +116,7 @@ class Project(models.Model):
 
 class Invoice(models.Model):
     sequence_num = models.IntegerField(default=0)
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     issued_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     paid_at = models.DateTimeField(default=None, blank=True, null=True)
@@ -129,17 +124,18 @@ class Invoice(models.Model):
     total_paid = models.FloatField(default=None, blank=True, null=True)
     total_due = models.FloatField(default=None, blank=True, null=True)
     subtotal_due = models.FloatField(default=None, blank=True, null=True)
-    status = models.CharField(default='DRAFT', max_length=128, choices=[
-        ('DRAFT', 'DRAFT'),
-        ('ISSUED', 'ISSUED'),
-        ('PAID', 'PAID')
-    ])
+    status = models.CharField(
+        default="DRAFT",
+        max_length=128,
+        choices=[("DRAFT", "DRAFT"), ("ISSUED", "ISSUED"), ("PAID", "PAID")],
+    )
     reference = models.CharField(default=None, null=True, blank=True, max_length=256)
     modifier = models.ManyToManyField(InvoiceModifier, blank=True)
-    group_by = models.CharField(default='timeslips', max_length=128, choices=[
-        ('tasks', 'Task'),
-        ('timeslips', 'Timeslip'),
-    ])
+    group_by = models.CharField(
+        default="timeslips",
+        max_length=128,
+        choices=[("tasks", "Task"), ("timeslips", "Timeslip"),],
+    )
     show_hours = models.BooleanField(default=True)
 
     def get_modifier_value(self, value):
@@ -150,11 +146,11 @@ class Invoice(models.Model):
 
     @property
     def pdf_name(self):
-        account = self.project.account.company.name.replace(' ', '_')
-        project = self.project.name.replace(' ', '_')
-        return 'Invoice_%s_%s_%s.pdf' % (account, project, self.sequence_num)
+        account = self.project.account.company.name.replace(" ", "_")
+        project = self.project.name.replace(" ", "_")
+        return "Invoice_%s_%s_%s.pdf" % (account, project, self.sequence_num)
 
-    def get_pdf_file(self, user, path=''):
+    def get_pdf_file(self, user, path=""):
         invoicepdf.render(self, user, path)
         return invoicepdf.get_pdf_file(self, user, path)
 
@@ -164,10 +160,8 @@ class Invoice(models.Model):
 
     @staticmethod
     def get_next_sequence_num(project_id):
-        agg = Invoice.objects.filter(project=project_id).aggregate(
-            Max('sequence_num')
-        )
-        current = agg.get('sequence_num__max', 0)
+        agg = Invoice.objects.filter(project=project_id).aggregate(Max("sequence_num"))
+        current = agg.get("sequence_num__max", 0)
         return current + 1 if current else 1
 
     def __str__(self):
@@ -175,8 +169,8 @@ class Invoice(models.Model):
 
 
 class Task(models.Model):
-    user = models.ForeignKey(User)
-    project = models.ForeignKey(Project)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
     cost = models.FloatField(default=0.0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -186,19 +180,13 @@ class Task(models.Model):
     hours_spent = models.FloatField(default=0.0)
     hours_predicted = models.FloatField(default=0.0)
     billing_type = models.CharField(
-        max_length=256,
-        choices=BILLING_TYPE_OPTIONS,
-        default=BILLING_TYPE_TIME,
+        max_length=256, choices=BILLING_TYPE_OPTIONS, default=BILLING_TYPE_TIME,
     )
     state = models.CharField(
-        max_length=256,
-        choices=TASK_STATUS,
-        default=TASK_STATUS_OPEN,
+        max_length=256, choices=TASK_STATUS, default=TASK_STATUS_OPEN,
     )
     invoices = models.ManyToManyField(
-        Invoice,
-        through='TaskInvoice',
-        related_name='tasks',
+        Invoice, through="TaskInvoice", related_name="tasks",
     )
 
     def __str__(self):
@@ -227,22 +215,21 @@ class TaskInvoice(models.Model):
 
 
 class TimeSlip(models.Model):
-    user = models.ForeignKey(User)
-    project = models.ForeignKey(Project)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     date = models.DateField()
-    hours = models.FloatField(default=0.0)
+    hours = models.DecimalField(max_digits=6, decimal_places=3, default=0)
     hourly_rate = models.DecimalField(max_digits=6, decimal_places=3, default=0)
-    task = models.ForeignKey(Task, blank=True, null=True)
+    task = models.ForeignKey(Task, blank=True, null=True, on_delete=models.CASCADE)
     comment = models.CharField(max_length=512, blank=True, null=True)
     invoice = models.ForeignKey(
-        Invoice, models.SET_NULL,
-        blank=True, null=True, related_name='timeslips'
+        Invoice, models.SET_NULL, blank=True, null=True, related_name="timeslips",
     )
 
     @property
     def cost(self):
-        return float(self.hourly_rate) * self.hours
+        return float(self.hourly_rate) * float(self.hours)
 
     def save(self, *args, **kwargs):
         if not self.hourly_rate:
@@ -254,7 +241,7 @@ class TimeSlip(models.Model):
             self.task.save()
 
     def __str__(self):
-        return '[{}] {}'.format(self.project.name, self.date)
+        return "[{}] {}".format(self.project.name, self.date)
 
     @staticmethod
     def set_invoice(timeslips, invoice_id):
@@ -266,49 +253,35 @@ class TimeSlip(models.Model):
         timeslips.update(invoice_id=invoice_id)
 
     class Meta:
-        unique_together = ('user', 'task', 'date')
-
+        unique_together = ("user", "task", "date")
 
 
 class TaskNote(models.Model):
-    user = models.ForeignKey(User)
-    task = models.ForeignKey(Task, related_name='notes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, related_name="notes", on_delete=models.CASCADE)
     content = models.TextField(blank=True, null=True)
     content_type = models.CharField(
-        choices=(
-            ('TEXT', 'Text'),
-        ),
-        max_length=4,
-        default='TEXT'
+        choices=(("TEXT", "Text"),), max_length=4, default="TEXT"
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.content[:100] + '...'
-
+        return self.content[:100] + "..."
 
 
 class Activity(models.Model):
     """ Activity feed of some sort """
-    user = models.ForeignKey(User)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     item_id = models.IntegerField()
     status = models.CharField(max_length=255, blank=True, null=True)
     type = models.CharField(
-        choices=(
-            ('TIM', 'TimeSlip'),
-            ('INV', 'Invoice'),
-            ('PRO', 'Project')
-        ),
-        max_length=3
+        choices=(("TIM", "TimeSlip"), ("INV", "Invoice"), ("PRO", "Project")),
+        max_length=3,
     )
     action = models.CharField(
-        choices=(
-            ('CRE', 'Create'),
-            ('UPD', 'Update'),
-            ('DEL', 'Delete')
-        ),
-        max_length=3
+        choices=(("CRE", "Create"), ("UPD", "Update"), ("DEL", "Delete")), max_length=3
     )
 
     @staticmethod
@@ -323,8 +296,8 @@ class Activity(models.Model):
 
     @staticmethod
     def create(user, id, type):
-        Activity._insert(user, id, type, 'CRE')
+        Activity._insert(user, id, type, "CRE")
 
     @staticmethod
     def update(user, id, type, status=None):
-        Activity._insert(user, id, type, 'UPD', status)
+        Activity._insert(user, id, type, "UPD", status)

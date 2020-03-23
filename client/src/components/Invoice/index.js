@@ -187,6 +187,7 @@ class Invoice extends React.Component {
       tasks = [],
     } = this.state;
 
+    console.log(timeslips);
     const getTaskTimeslips = task =>
       timeslips.filter(ts => ts.task === task.id);
 

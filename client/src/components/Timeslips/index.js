@@ -54,19 +54,20 @@ const getSummary = (timeslips, projects) => {
   };
 
   timeslips.forEach(timeslip => {
-    const rate = projects[timeslip.project].hourly_rate;
+    const rate = parseFloat(projects[timeslip.project].hourly_rate);
+    const hours = parseFloat(timeslip.hours);
 
     if (timeslip.date >= weekStart && timeslip.date <= weekEnd) {
       summary['This Week'] = {
-        hours: summary['This Week'].hours + timeslip.hours,
-        total: summary['This Week'].total + timeslip.hours * rate,
+        hours: summary['This Week'].hours + hours,
+        total: summary['This Week'].total + hours * rate,
       };
     }
 
     if (timeslip.date >= monthStart && timeslip.date <= monthEnd) {
       summary['This Month'] = {
-        hours: summary['This Month'].hours + timeslip.hours,
-        total: summary['This Month'].total + timeslip.hours * rate,
+        hours: summary['This Month'].hours + hours,
+        total: summary['This Month'].total + hours * rate,
       };
     }
   });

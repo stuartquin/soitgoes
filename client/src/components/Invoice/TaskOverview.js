@@ -21,6 +21,8 @@ const TaskOverview = ({
     invoice.timeslips.includes(id)
   );
 
+  console.log(task, timeslips);
+
   const isActive = taskIds.includes(task.id);
   const taskTotal =
     task.billing_type === 'TIME'
