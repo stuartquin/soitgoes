@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import { BREAKPOINTS, Container, Grid, Cell } from 'components/Grid';
 import InvoiceHeader from 'components/Invoice/InvoiceHeader';
-import Generator from 'components/Invoice/Generator';
+import DisplaySettings from './DisplaySettings';
 import Settings from 'components/Invoice/Settings';
 
 import { getWithJoined, selectJoined, selectResults } from 'services/selectors';
@@ -146,7 +146,7 @@ class Invoice extends React.Component {
     const saveable = {
       ...editable,
       status,
-      timeslips: timeslips.filter(isActiveTimeslip).map(ts => ts.id),
+      timeslips: timeslips.filter(isActiveTimeslip).map(ts => ts.id && ts.cost),
     };
 
     saveInvoice(saveable).then(invoice => {
@@ -187,10 +187,10 @@ class Invoice extends React.Component {
       tasks = [],
     } = this.state;
 
-    console.log(timeslips);
     const getTaskTimeslips = task =>
-      timeslips.filter(ts => ts.task === task.id);
+      timeslips.filter(ts => ts.task === task.id && ts.cost);
 
+    const isEditable = editable && !editable.id;
     return (
       <React.Fragment>
         {editable && (
@@ -205,6 +205,11 @@ class Invoice extends React.Component {
           {editable && (
             <React.Fragment>
               <Card flexGrow="1" mr={[0, 16]} backgroundColor="white">
+                <DisplaySettings
+                  isEditable={isEditable}
+                  displaySettings={editable}
+                  onChange={this.handleSetDisplaySettings}
+                />
                 {tasks.map(task => (
                   <TaskOverview
                     invoice={editable}

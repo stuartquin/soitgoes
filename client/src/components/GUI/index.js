@@ -54,6 +54,7 @@ export const theme = {
     label: {
       fontWeight: 2,
       color: 'grey_darkest',
+      minWidth: 'auto',
     },
     link: {
       color: 'brand_dark',

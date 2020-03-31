@@ -1,51 +1,47 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import { Card, Text, Flex } from 'rebass/styled-components';
 
-import PopOver from 'components/PopOver';
-import {Checkbox, Label, Input, Select} from 'components/Form';
-import {Button} from 'components/GUI';
+import { Checkbox, Input, Select } from 'components/Form';
+import { Button } from 'components/GUI';
 
-const Row = styled.div`
-  margin-bottom: 16px;
-  min-width: 250px;
-`;
-
-const DisplaySettings = ({ displaySettings, onChange, onCancel }) => {
-  const handleChange = ({target}) => {
+const DisplaySettings = ({ isEditable, displaySettings, onChange }) => {
+  const handleChange = ({ target }) => {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     onChange({
       ...displaySettings,
-      [target.name]: value
+      [target.name]: value,
     });
   };
 
   return (
-    <PopOver
-      title="Display Settings"
-      onClose={onCancel}
-    >
-      <Row>
-        <Label>Group By</Label>
+    <Flex justifyContent="flex-end">
+      <Flex alignItems="center" mr={3}>
+        <Text variant="label" sx={{ whiteSpace: 'nowrap' }} mr={2}>
+          Group By
+        </Text>
         <Select
           name="group_by"
           value={displaySettings.group_by || ''}
           onChange={handleChange}
+          disabled={!isEditable}
         >
           <option value="timeslips">Time</option>
           <option value="tasks">Task</option>
         </Select>
-      </Row>
-
-      <Row>
-        <Label>Show Hours</Label>
+      </Flex>
+      <Flex alignItems="center">
+        <Text variant="label" sx={{ whiteSpace: 'nowrap' }} mr={1}>
+          Show Hours
+        </Text>
         <Checkbox
           name="show_hours"
           type="checkbox"
           checked={displaySettings.show_hours}
           onChange={handleChange}
+          disabled={!isEditable}
         />
-      </Row>
-    </PopOver>
+      </Flex>
+    </Flex>
   );
 };
 

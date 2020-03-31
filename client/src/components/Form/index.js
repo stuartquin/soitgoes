@@ -5,7 +5,7 @@ export const Input = styled.input`
   width: 100%;
   box-sizing: border-box;
   padding: 4px;
-  border-radius: 6px;
+  border-radius: 3px;
   border: solid 1px #828282;
   line-height: 24px;
 `;
@@ -13,7 +13,7 @@ export const Input = styled.input`
 export const Checkbox = styled.input`
   box-sizing: border-box;
   padding: 4px;
-  border-radius: 6px;
+  border-radius: 3px;
   border: solid 1px #828282;
   line-height: 24px;
   width: 16px;
@@ -24,7 +24,7 @@ export const Select = styled.select`
   width: 100%;
   box-sizing: border-box;
   padding: 4px;
-  border-radius: 6px;
+  border-radius: 3px;
   border: solid 1px #828282;
   background: white;
   line-height: 24px;
