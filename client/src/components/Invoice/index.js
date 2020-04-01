@@ -142,11 +142,11 @@ class Invoice extends React.Component {
     const { project } = this.props;
     const { editable, timeslips } = this.state;
     const isActiveTimeslip = ts =>
-      editable.tasks.includes(ts.task) && editable.timeslips.includes(ts.id);
+      editable.tasks.includes(ts.task) && editable.timeslips.includes(ts.id) && ts.cost;
     const saveable = {
       ...editable,
       status,
-      timeslips: timeslips.filter(isActiveTimeslip).map(ts => ts.id && ts.cost),
+      timeslips: timeslips.filter(isActiveTimeslip).map(ts => ts.id),
     };
 
     saveInvoice(saveable).then(invoice => {
