@@ -37,7 +37,9 @@ export const colors = {
 
   primary: '#3183c8',
 
-  text: '#4e5767',
+  text_dark: '#323843',
+  text_main: '#4e5767',
+  text_light: '#637088',
 };
 
 export const theme = {

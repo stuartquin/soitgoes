@@ -3,7 +3,6 @@ backcall==0.1.0
 decorator==4.0.6
 Django==3.0.4
 django-cors-headers==3.2.1
-django-material==0.7.0
 djangorestframework==3.11.0
 ipdb==0.13.2
 ipython==7.13.0

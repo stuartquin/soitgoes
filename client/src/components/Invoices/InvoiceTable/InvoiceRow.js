@@ -2,13 +2,13 @@ import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 import { Box, Flex, Text } from 'rebass/styled-components';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
-import {BREAKPOINTS, Grid, Cell, CellMd} from 'components/Grid';
-import {getInvoiceStatus, getInvoiceDueMessage} from 'services/invoice';
-import {asCurrency} from 'services/currency';
+import { BREAKPOINTS, Grid, Cell, CellMd } from 'components/Grid';
+import { getInvoiceStatus, getInvoiceDueMessage } from 'services/invoice';
+import { asCurrency } from 'services/currency';
 import StatusPill from 'components/StatusPill';
-import {Row} from 'components/DataTable';
+import { Row } from 'components/DataTable';
 
 const STATUS_MAP = {
   DRAFT: 'draft',
@@ -17,11 +17,7 @@ const STATUS_MAP = {
   PAID: 'success',
 };
 
-const getIssuedDate = (invoice) => {
-  return invoice.issued_at ?
-    moment(invoice.issued_at).format('YYYY-MM-DD') :
-    '';
-}
+const getStatusColor = status => `${STATUS_MAP[status]}_dark`;
 
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -29,38 +25,57 @@ const StyledLink = styled(Link)`
 
 class InvoiceRow extends React.Component {
   render() {
-    const {invoice} = this.props;
-    const {project} = invoice;
+    const { invoice } = this.props;
+    const { project } = invoice;
     const status = getInvoiceStatus(invoice);
+    const issuedAt = invoice.issued_at ? moment(invoice.issued_at) : '';
+
     return (
       <Row
         as={StyledLink}
         to={`/invoices/${project.id}/invoice/${invoice.id}`}
-        sx={{ justifyContent: 'flexEnd' }}
+        sx={{ justifyContent: 'flexEnd', alignItems: 'flexStart' }}
       >
         <Box flexGrow="1" variant="ellipsis">
-          <div>#{invoice.sequence_num} {project.name}</div>
+          <div>
+            #{invoice.sequence_num} {project.name}
+          </div>
           <Text variant="subTitle">{project.contact.name}</Text>
         </Box>
-        <Box width="64px">
-          <Text variant="amount" fontWeight={2}>
-            {asCurrency(invoice.total_due, project.currency || 'GBP', 0)}
+
+        <Box
+          textAlign="right"
+          ml={[4, 5]}
+          minWidth="70px"
+          display={['none', 'initial']}
+        >
+          <Text fontSize={2}>{issuedAt.format('YYYY-MM-DD')}</Text>
+          <Text fontSize={[11, 13]} mt={1} color="text_light">
+            {issuedAt.fromNow()}
           </Text>
         </Box>
-        <Flex alignItems="center" justifyContent="flex-end">
-          <Box display={['none', 'initial']} ml={4}>
-            {getIssuedDate(invoice)}
-          </Box>
-          <StatusPill
-            minWidth="87px"
-            status={STATUS_MAP[status]}
-            fontSize={[12, 14]}
-            display="inline"
-            ml={4}
+
+        <Box textAlign="right" ml={[4, 5]} minWidth="70px">
+          <Text variant="amount" fontSize={2}>
+            {asCurrency(invoice.total_due, project.currency || 'GBP', 0)}
+          </Text>
+          <Text fontSize={[11, 13]} mt={1} color="text_light">
+            {asCurrency(invoice.subtotal_due, project.currency || 'GBP', 0)}
+          </Text>
+        </Box>
+
+        <Box minWidth="87px" fontSize={[0, 1]} ml={[4, 5]} textAlign="right">
+          <Text
+            variant="amount"
+            fontSize={2}
+            color={`${STATUS_MAP[status]}_darkest`}
           >
             {getInvoiceDueMessage(invoice)}
-          </StatusPill>
-        </Flex>
+          </Text>
+          <Text fontSize={[11, 13]} mt={1} color={`${STATUS_MAP[status]}_dark`}>
+            {status}
+          </Text>
+        </Box>
       </Row>
     );
   }
