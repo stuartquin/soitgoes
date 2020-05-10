@@ -116,6 +116,20 @@ export const theme = {
       boxShadow: 'container',
     },
   },
+
+  buttons: {
+    success: {
+      backgroundColor: 'success_dark',
+      color: 'success_lightest',
+      cursor: 'pointer',
+    },
+
+    primary: {
+      backgroundColor: 'brand_dark',
+      color: 'brand_lightest',
+      cursor: 'pointer',
+    },
+  },
 };
 
 export const SubTitle = styled(rebass.Text)`

@@ -3,15 +3,15 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-import { Flex } from 'rebass';
+import { Button, Flex } from 'rebass/styled-components';
 
+import Task from 'components/Task';
 import Heading from 'components/Heading';
 import Filter from 'components/Filter';
 import { BREAKPOINTS, Container, Grid, Cell } from 'components/Grid';
 import TimeslipGrid from './timeslipgrid';
 import TimeslipDateControls from './timeslipdatecontrols';
 import Summary from './Summary';
-import { Button } from 'components/GUI';
 import { selectWithProject } from 'services/selectors';
 import { fetchTimeslips, saveTimeslips } from 'services/timeslip';
 import { fetchTasks } from 'services/task';
@@ -85,11 +85,13 @@ class Timeslips extends React.Component {
       updatedTimeslips: {}, // keyed by project_date
       timeslips: [],
       selectedProjectId: null,
+      newTask: null,
     };
 
     this.handleSetActiveDate = this.handleSetActiveDate.bind(this);
     this.handleSetHour = this.handleSetHour.bind(this);
     this.handleSave = this.handleSave.bind(this);
+    this.handleNewTask = this.handleNewTask.bind(this);
   }
 
   componentDidMount() {
@@ -100,7 +102,7 @@ class Timeslips extends React.Component {
     const { projects } = this.props;
     const response = await fetchTasks({
       project: project,
-      sort: '-project__name',
+      sort: '-id',
       state: 'OPEN',
     });
     this.setState({
@@ -126,6 +128,11 @@ class Timeslips extends React.Component {
   async fetchData(project) {
     this.loadTimeslips(project);
     this.loadTasks(project);
+  }
+
+  handleNewTask() {
+    this.loadTasks(null);
+    this.setState({ newTask: null });
   }
 
   handleSetActiveDate(weekStart) {
@@ -173,7 +180,13 @@ class Timeslips extends React.Component {
   }
 
   render() {
-    const { weekStart, updatedTimeslips, timeslips, tasks } = this.state;
+    const {
+      newTask,
+      weekStart,
+      updatedTimeslips,
+      timeslips,
+      tasks,
+    } = this.state;
     const { projects } = this.props;
     const today = moment();
     const month = weekStart.format('MMMM Y');
@@ -202,9 +215,19 @@ class Timeslips extends React.Component {
             options={projectOptions}
             onChange={this.handleSelectProject}
           />
-          <Button type="success" onClick={this.handleSave}>
-            Save
-          </Button>
+          <Flex>
+            <Button
+              mr={2}
+              variant="primary"
+              onClick={() => this.setState({ newTask: {} })}
+            >
+              New task
+            </Button>
+
+            <Button variant="success" onClick={this.handleSave}>
+              Save
+            </Button>
+          </Flex>
         </Flex>
         <Styled>
           <TimeslipGrid
@@ -219,6 +242,14 @@ class Timeslips extends React.Component {
           />
           <Summary summary={summary} />
         </Styled>
+        {newTask && (
+          <Task
+            task={newTask}
+            projects={projects}
+            onCancel={() => this.setState({ newTask: null })}
+            onSave={this.handleNewTask}
+          />
+        )}
       </React.Fragment>
     );
   }
