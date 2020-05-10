@@ -88,10 +88,8 @@ class Timeslips extends React.Component {
       newTask: null,
     };
 
-    this.handleSetActiveDate = this.handleSetActiveDate.bind(this);
     this.handleSetHour = this.handleSetHour.bind(this);
     this.handleSave = this.handleSave.bind(this);
-    this.handleNewTask = this.handleNewTask.bind(this);
   }
 
   componentDidMount() {
@@ -130,17 +128,18 @@ class Timeslips extends React.Component {
     this.loadTasks(project);
   }
 
-  handleNewTask() {
+  handleNewTask = () => {
     this.loadTasks(null);
     this.setState({ newTask: null });
-  }
+  };
 
-  handleSetActiveDate(weekStart) {
+  handleSetActiveDate = weekStart => {
     const { selectedProjectId } = this.state;
     this.setState({ weekStart }, () => this.loadTimeslips(selectedProjectId));
-  }
+  };
 
   handleSelectProject = selectedProject => {
+    console.log(selectedProject);
     this.setState({ selectedProjectId: selectedProject.value });
     this.fetchData(selectedProject.value);
   };

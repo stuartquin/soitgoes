@@ -34,7 +34,6 @@ const Filter = ({ label, options, onChange, ...props }) => {
         options={options}
         onChange={onChange}
         defaultValue={null}
-        isMulti
       />
     </Flex>
   );
