@@ -294,10 +294,12 @@ class TimeSlipList(generics.ListCreateAPIView):
 
 class UpcomingInvoices(APIView):
     def get(self, request, pk=None):
-        upcoming = get_upcoming_invoices()
+        costs, hours = get_upcoming_invoices()
         response = []
-        for project in upcoming:
-            response.append({"project": project, "total": upcoming[project]})
+        for project in costs:
+            response.append(
+                {"project": project, "total": costs[project], "hours": hours[project]}
+            )
 
         return Response({"results": response})
 

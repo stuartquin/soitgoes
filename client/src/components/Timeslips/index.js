@@ -15,6 +15,7 @@ import Summary from './Summary';
 import { selectWithProject } from 'services/selectors';
 import { fetchTimeslips, saveTimeslips } from 'services/timeslip';
 import { fetchTasks } from 'services/task';
+import { fetchUpcoming } from 'services/invoice';
 
 const Styled = styled.div`
   background: #f5f3f5;
@@ -33,48 +34,6 @@ const Styled = styled.div`
   }
 `;
 
-const getSummary = (timeslips, projects) => {
-  const week = moment()
-    .startOf('isoweek')
-    .isoWeekday(1);
-  const weekStart = week.format().substr(0, 10);
-  const weekEnd = week
-    .endOf('isoWeek')
-    .format()
-    .substr(0, 10);
-  const month = moment().startOf('month');
-  const monthStart = month.format().substr(0, 10);
-  const monthEnd = month
-    .endOf('month')
-    .format()
-    .substr(0, 10);
-  const summary = {
-    'This Week': { hours: 0, total: 0 },
-    'This Month': { hours: 0, total: 0 },
-  };
-
-  timeslips.forEach(timeslip => {
-    const rate = parseFloat(projects[timeslip.project].hourly_rate);
-    const hours = parseFloat(timeslip.hours);
-
-    if (timeslip.date >= weekStart && timeslip.date <= weekEnd) {
-      summary['This Week'] = {
-        hours: summary['This Week'].hours + hours,
-        total: summary['This Week'].total + hours * rate,
-      };
-    }
-
-    if (timeslip.date >= monthStart && timeslip.date <= monthEnd) {
-      summary['This Month'] = {
-        hours: summary['This Month'].hours + hours,
-        total: summary['This Month'].total + hours * rate,
-      };
-    }
-  });
-
-  return summary;
-};
-
 class Timeslips extends React.Component {
   constructor(props) {
     super(props);
@@ -86,10 +45,8 @@ class Timeslips extends React.Component {
       timeslips: [],
       selectedProjectId: null,
       newTask: null,
+      upcoming: [],
     };
-
-    this.handleSetHour = this.handleSetHour.bind(this);
-    this.handleSave = this.handleSave.bind(this);
   }
 
   componentDidMount() {
@@ -123,9 +80,18 @@ class Timeslips extends React.Component {
     });
   }
 
+  async loadUpcoming() {
+    const response = await fetchUpcoming();
+    const { projects } = this.props;
+    this.setState({
+      upcoming: selectWithProject(response.results, projects),
+    });
+  }
+
   async fetchData(project) {
     this.loadTimeslips(project);
     this.loadTasks(project);
+    this.loadUpcoming();
   }
 
   handleNewTask = () => {
@@ -144,7 +110,7 @@ class Timeslips extends React.Component {
     this.fetchData(selectedProject.value);
   };
 
-  handleSetHour(task, date, hours, timeslip) {
+  handleSetHour = (task, date, hours, timeslip) => {
     const { updatedTimeslips } = this.state;
     const isUpdated = Boolean(timeslip);
     const key = `${task.id}_${date}`;
@@ -163,9 +129,9 @@ class Timeslips extends React.Component {
         },
       },
     });
-  }
+  };
 
-  async handleSave() {
+  handleSave = async () => {
     const { updatedTimeslips, timeslips } = this.state;
     const updated = await saveTimeslips(
       Object.values(updatedTimeslips).filter(({ hours }) => hours),
@@ -176,7 +142,9 @@ class Timeslips extends React.Component {
       timeslips: updated,
       updatedTimeslips: [],
     });
-  }
+
+    this.loadUpcoming();
+  };
 
   render() {
     const {
@@ -185,12 +153,12 @@ class Timeslips extends React.Component {
       updatedTimeslips,
       timeslips,
       tasks,
+      upcoming,
     } = this.state;
     const { projects } = this.props;
     const today = moment();
     const month = weekStart.format('MMMM Y');
     const displayTimeslips = timeslips.concat(Object.values(updatedTimeslips));
-    const summary = getSummary(displayTimeslips, projects) || {};
 
     const projectOptions = [
       {
@@ -239,7 +207,7 @@ class Timeslips extends React.Component {
             onHourChanged={this.handleSetHour}
             onSetActiveDate={this.handleSetActiveDate}
           />
-          <Summary summary={summary} />
+          <Summary upcomingSummary={upcoming} />
         </Styled>
         {newTask && (
           <Task

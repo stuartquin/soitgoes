@@ -1,43 +1,24 @@
 import React from 'react';
-import styled from 'styled-components';
 
-import { Flex } from 'rebass';
+import { Text, Flex } from 'rebass';
 
-import {Button, ActionLink} from 'components/GUI';
-import {BREAKPOINTS} from 'components/Grid';
+import { SettingsCard } from 'components/GUI';
+import { BREAKPOINTS } from 'components/Grid';
 import SummaryRow from './SummaryRow';
 
-const Styled = styled.div`
-  background: white;
-  color: #4e5767;
-  width: 290px;
-  border-radius: 6px;
-  box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
-  padding: 12px 16px;
-
-  @media(max-width: ${BREAKPOINTS.sm}) {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-between;
-
-    box-shadow: none;
-    width: auto;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-`;
-
-const Summary = ({ summary }) => (
-  <Styled>
-    {Object.keys(summary).map(key => (
-      <SummaryRow
-        key={key}
-        title={key}
-        hours={summary[key].hours}
-        total={summary[key].total}
-      />
-    ))}
-  </Styled>
+const Summary = ({ upcomingSummary }) => (
+  <SettingsCard>
+    <Flex flexDirection={['row', 'column']} sx={{ overflowX: 'auto' }}>
+      {upcomingSummary.map(upcoming => (
+        <SummaryRow
+          key={upcoming.project.id}
+          title={upcoming.project.name}
+          hours={upcoming.hours}
+          total={upcoming.total}
+        />
+      ))}
+    </Flex>
+  </SettingsCard>
 );
 
 export default Summary;

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Text, Box } from 'rebass/styled-components';
-import {BREAKPOINTS} from 'components/Grid';
+import { BREAKPOINTS } from 'components/Grid';
 
 import TimeslipGridCell from './timeslipgridcell';
 
@@ -27,10 +27,12 @@ const Task = styled.td`
   flex-direction: column;
   justify-content: center;
 
-  ${props => props.fixed && css`
-    background: ${props => props.theme.colors.warning_lightest};
-    border-bottom: ${props => props.theme.colors.warning_light} solid 1px;
-  `}
+  ${props =>
+    props.fixed &&
+    css`
+      background: ${props => props.theme.colors.warning_lightest};
+      border-bottom: ${props => props.theme.colors.warning_light} solid 1px;
+    `}
 
   @media(max-width: ${BREAKPOINTS.sm}) {
     width: 140px;
@@ -58,14 +60,24 @@ const TaskName = styled(Text)`
 `;
 
 const TimeslipGridRow = ({
-  task, range, timeslips, today, isLoading,
-  onHourChanged, onSetActive
+  task,
+  range,
+  timeslips,
+  today,
+  isLoading,
+  onHourChanged,
+  onSetActive,
 }) => {
-  const dates = range.map((m) => m.format('YYYY-MM-DD'));
+  const dates = range.map(m => m.format('YYYY-MM-DD'));
   const filledTimeslips = timeslips.reduce((result, item) => {
     result[item.date] = item;
     return result;
   }, {});
+
+  const total = Object.values(filledTimeslips).reduce(
+    (acc, { hours }) => acc + parseInt(hours, 10),
+    0
+  );
 
   return (
     <Styled>
@@ -75,7 +87,7 @@ const TimeslipGridRow = ({
           <Text variant="subTitle">{task.project.name}</Text>
         </Box>
       </Task>
-      {dates.map((date) => (
+      {dates.map(date => (
         <TimeslipGridCell
           key={date}
           isLoading={isLoading}
@@ -83,12 +95,13 @@ const TimeslipGridRow = ({
           date={date}
           today={today.format('YYYY-MM-DD')}
           onHourChanged={(value, timeslip) => {
-            onHourChanged(task, date, value || 0 , timeslip);
+            onHourChanged(task, date, value || 0, timeslip);
           }}
           timeslip={filledTimeslips[date]}
           onSetActive={onSetActive}
         />
       ))}
+      {total > 0 && <td>{total}</td>}
     </Styled>
   );
 };
