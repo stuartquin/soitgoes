@@ -176,13 +176,19 @@ class Timeslips extends React.Component {
 
     return (
       <React.Fragment>
-        <Flex mb={12} alignItems="center" justifyContent="space-between">
+        <Flex
+          alignItems={['flex-end', 'center']}
+          justifyContent="space-between"
+          flexDirection={['column-reverse', 'row']}
+        >
           <Filter
             label="Project"
             options={projectOptions}
             onChange={this.handleSelectProject}
+            width={['100%', 'auto']}
+            mb={12}
           />
-          <Flex>
+          <Flex mb={12}>
             <Button
               mr={2}
               variant="primary"
