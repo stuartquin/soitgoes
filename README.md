@@ -1,6 +1,7 @@
 ## Install
 
 Requires http://wkhtmltopdf.org/downloads.html
+
 ```
 sudo apt-get install xfonts-75dpi
 ```
@@ -8,11 +9,13 @@ sudo apt-get install xfonts-75dpi
 ## Developing
 
 Run the backend:
+
 ```
 DEV=true python manage.py runserver
 ```
 
 Setup JS watching:
+
 ```
 cd journal/static/journal
 webpack --progress --watch

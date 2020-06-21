@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import {Flex} from 'rebass/styled-components';
-import {BREAKPOINTS, Grid} from 'components/Grid';
+import { Flex } from 'rebass/styled-components';
+import { BREAKPOINTS, Grid } from 'components/Grid';
 
 export const Row = styled(Flex)`
   color: #4e5767;
@@ -19,10 +19,12 @@ export const Row = styled(Flex)`
     background: #f5fcff;
   }
 
-  ${props => props.removed && css`
-    opacity: 0.4;
-    background: white;
-  `}
+  ${(props) =>
+    props.removed &&
+    css`
+      opacity: 0.4;
+      background: white;
+    `}
 `;
 
 export const Header = styled(Flex)`
@@ -35,7 +37,7 @@ export const Header = styled(Flex)`
   font-weight: bold;
   box-sizing: border-box;
 
-  @media(max-width: ${BREAKPOINTS.sm}) {
+  @media (max-width: ${BREAKPOINTS.sm}) {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
   }

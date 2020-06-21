@@ -8,16 +8,16 @@ class UserMenu extends React.Component {
     super(props);
 
     this.state = {
-      isMenuVisible: false
+      isMenuVisible: false,
     };
   }
 
   toggleMenu() {
-    this.setState({isMenuVisible: !this.state.isMenuVisible});
+    this.setState({ isMenuVisible: !this.state.isMenuVisible });
   }
 
   hideMenu() {
-    this.setState({isMenuVisible: false});
+    this.setState({ isMenuVisible: false });
   }
 
   render() {
@@ -25,22 +25,23 @@ class UserMenu extends React.Component {
     const hash = this.props.version.get('hash', '').substr(0, 8);
 
     return (
-      <ul className={ className }>
+      <ul className={className}>
         <li className={styles.navItem}>
-          <a onClick={() => this.toggleMenu() }>
-            <span className='glyphicon glyphicon-option-vertical'></span>
+          <a onClick={() => this.toggleMenu()}>
+            <span className="glyphicon glyphicon-option-vertical"></span>
           </a>
-          <Menu isVisible={ this.state.isMenuVisible }
-            onHideMenu={ () => this.hideMenu() }>
+          <Menu
+            isVisible={this.state.isMenuVisible}
+            onHideMenu={() => this.hideMenu()}
+          >
             <button
-              className='btn btn-default btn-block'
-              onClick={this.props.onLogout}>
+              className="btn btn-default btn-block"
+              onClick={this.props.onLogout}
+            >
               Logout
             </button>
             <hr />
-            <span>
-              { hash }
-            </span>
+            <span>{hash}</span>
           </Menu>
         </li>
       </ul>
@@ -48,4 +49,4 @@ class UserMenu extends React.Component {
   }
 }
 
-export {UserMenu};
+export { UserMenu };

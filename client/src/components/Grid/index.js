@@ -1,13 +1,13 @@
-import React from "react";
-import { Box } from "rebass/styled-components";
-import styled, { css } from "styled-components";
+import React from 'react';
+import { Box } from 'rebass/styled-components';
+import styled, { css } from 'styled-components';
 
 export const BREAKPOINTS = {
-  xs: "0px",
-  sm: "768px",
-  md: "768px",
-  lg: "992px",
-  xl: "1200px"
+  xs: '0px',
+  sm: '768px',
+  md: '768px',
+  lg: '992px',
+  xl: '1200px',
 };
 
 export const Grid = styled.div`
@@ -16,7 +16,7 @@ export const Grid = styled.div`
   grid-gap: 20px;
   width: 100%;
 
-  ${props =>
+  ${(props) =>
     props.gap &&
     css`
       grid-gap: ${props.gap};
@@ -28,21 +28,21 @@ export const Grid = styled.div`
 export const Cell = styled(Box)`
   grid-column: span 12;
 
-  ${props =>
+  ${(props) =>
     props.numeric &&
     css`
       text-align: right;
     `}
 
-  ${props =>
-    Object.keys(BREAKPOINTS).map(k =>
+  ${(props) =>
+    Object.keys(BREAKPOINTS).map((k) =>
       props[k]
         ? css`
             @media (min-width: ${BREAKPOINTS[k]}) {
               grid-column: span ${props[k]};
             }
           `
-        : ""
+        : ''
     )}
 `;
 

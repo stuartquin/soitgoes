@@ -5,36 +5,36 @@ const VERSION_INTERVAL = 30 * 1000;
 
 export const fetchUser = () => (dispatch) => {
   dispatch({
-    type: constants.GET_USER_START
+    type: constants.GET_USER_START,
   });
 
-  return api.fetchUser().then(user => {
+  return api.fetchUser().then((user) => {
     dispatch({
       type: constants.GET_USER_SUCCESS,
-      user
+      user,
     });
   });
 };
 
 export const fetchAccounts = () => (dispatch) => {
   dispatch({
-    type: constants.GET_ACCOUNTS_START
+    type: constants.GET_ACCOUNTS_START,
   });
 
-  return api.fetchAccounts().then(res => {
+  return api.fetchAccounts().then((res) => {
     const accounts = res.results;
     dispatch({
       type: constants.GET_ACCOUNTS_SUCCESS,
-      accounts
+      accounts,
     });
   });
 };
 
 const _fetchVersion = (dispatch) => {
-  api.fetchVersion().then(version => {
+  api.fetchVersion().then((version) => {
     dispatch({
       type: constants.GET_VERSION_SUCCESS,
-      version
+      version,
     });
   });
 };
@@ -45,19 +45,19 @@ export const fetchVersion = () => (dispatch) => {
 };
 
 export const login = (form) => (dispatch) => {
-  return api.login(form).then(res => {
+  return api.login(form).then((res) => {
     if (res.ok) {
       location.href = '/';
     } else {
       dispatch({
-        type: constants.LOGIN_USER_ERROR
+        type: constants.LOGIN_USER_ERROR,
       });
     }
   });
 };
 
 export const logout = (form) => (dispatch) => {
-  return api.logout().then(res => {
+  return api.logout().then((res) => {
     location.href = '/';
   });
 };

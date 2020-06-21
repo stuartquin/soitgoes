@@ -27,7 +27,7 @@ const TaskOverview = ({
       : task.cost;
 
   const isEditable = !invoice.id;
-  const handleDrop = event => {
+  const handleDrop = (event) => {
     event.preventDefault();
     const timeslipId = parseInt(
       event.dataTransfer.getData('application/id'),
@@ -39,7 +39,7 @@ const TaskOverview = ({
     }
   };
 
-  const handleDragOver = event => {
+  const handleDragOver = (event) => {
     const timeslipId = parseInt(
       event.dataTransfer.getData('application/id'),
       10
@@ -84,7 +84,7 @@ const TaskOverview = ({
       </Flex>
       {isActive && (
         <Box backgroundColor={isDragOver ? 'brand_lightest' : 'grey_lightest'}>
-          {timeslips.map(ts => (
+          {timeslips.map((ts) => (
             <InvoiceItem
               timeslip={ts}
               currency="GBP"

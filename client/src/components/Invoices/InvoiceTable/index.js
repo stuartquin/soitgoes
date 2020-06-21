@@ -23,7 +23,7 @@ const Styled = styled.div`
 const InvoiceTable = ({ invoices, page, total }) => (
   <Styled>
     <InvoiceTableHeader />
-    {invoices.map(invoice => (
+    {invoices.map((invoice) => (
       <InvoiceRow key={invoice.id} invoice={invoice} />
     ))}
     <RouterPagination path="/invoices" total={total} page={page} />

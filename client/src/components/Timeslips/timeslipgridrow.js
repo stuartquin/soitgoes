@@ -7,7 +7,7 @@ import TimeslipGridCell from './timeslipgridcell';
 
 const Styled = styled.tr`
   &:hover {
-    color: ${props => props.theme.colors.primary_main};
+    color: ${(props) => props.theme.colors.primary_main};
   }
 `;
 
@@ -21,17 +21,17 @@ const Task = styled.td`
 
   padding-top: 4px;
   padding-left: 8px;
-  border-bottom: ${props => props.theme.colors.grey_main} solid 1px;
+  border-bottom: ${(props) => props.theme.colors.grey_main} solid 1px;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
 
-  ${props =>
+  ${(props) =>
     props.fixed &&
     css`
-      background: ${props => props.theme.colors.warning_lightest};
-      border-bottom: ${props => props.theme.colors.warning_light} solid 1px;
+      background: ${(props) => props.theme.colors.warning_lightest};
+      border-bottom: ${(props) => props.theme.colors.warning_light} solid 1px;
     `}
 
   @media(max-width: ${BREAKPOINTS.sm}) {
@@ -44,7 +44,7 @@ const Task = styled.td`
 const Project = styled.div`
   font-size: 0.75em;
   margin-top: 6px;
-  color: ${props => props.theme.colors.grey_dark};
+  color: ${(props) => props.theme.colors.grey_dark};
   text-transform: uppercase;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -68,7 +68,7 @@ const TimeslipGridRow = ({
   onHourChanged,
   onSetActive,
 }) => {
-  const dates = range.map(m => m.format('YYYY-MM-DD'));
+  const dates = range.map((m) => m.format('YYYY-MM-DD'));
   const filledTimeslips = timeslips.reduce((result, item) => {
     result[item.date] = item;
     return result;
@@ -87,7 +87,7 @@ const TimeslipGridRow = ({
           <Text variant="subTitle">{task.project.name}</Text>
         </Box>
       </Task>
-      {dates.map(date => (
+      {dates.map((date) => (
         <TimeslipGridCell
           key={date}
           isLoading={isLoading}

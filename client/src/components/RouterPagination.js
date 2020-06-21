@@ -9,13 +9,13 @@ export const PaginationLink = styled(Link)`
   padding: 12px 16px;
   cursor: pointer;
   text-decoration: none;
-  color: ${props => props.theme.colors.text};
+  color: ${(props) => props.theme.colors.text};
 
-  ${props =>
+  ${(props) =>
     props.selected &&
     css`
       font-weight: bold;
-      color: ${props => props.theme.colors.brand_darkest};
+      color: ${(props) => props.theme.colors.brand_darkest};
     `}
 `;
 
@@ -25,7 +25,7 @@ const RouterPagination = ({ page, total, path, perPage = 20 }) => {
 
   return (
     <Flex justifyContent="flex-end">
-      {pages.map(p => (
+      {pages.map((p) => (
         <PaginationLink
           key={p}
           to={updateQueryParams({ page: p })}

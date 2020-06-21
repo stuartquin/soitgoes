@@ -9,11 +9,10 @@ export const invoices = arrayOf(invoice);
 
 invoice.define({
   project: project,
-  projects: projects
+  projects: projects,
 });
 
 timeslip.define({
   project: project,
-  projects: projects
+  projects: projects,
 });
-

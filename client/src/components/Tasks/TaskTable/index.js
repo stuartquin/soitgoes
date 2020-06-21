@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-import { Grid, Cell } from "components/Grid";
-import TaskRow from "./TaskRow";
-import TaskTableHeader from "./TaskTableHeader";
+import { Grid, Cell } from 'components/Grid';
+import TaskRow from './TaskRow';
+import TaskTableHeader from './TaskTableHeader';
 
 const Styled = styled.div`
   border-radius: 6px;
@@ -20,7 +20,7 @@ class TaskTable extends React.Component {
     return (
       <Styled>
         <TaskTableHeader />
-        {tasks.map(task => (
+        {tasks.map((task) => (
           <TaskRow key={task.id} task={task} onClick={onTaskSelect} />
         ))}
       </Styled>

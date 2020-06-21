@@ -3,11 +3,11 @@ import { combineReducers } from 'redux';
 
 const getById = (items) => {
   let map = Immutable.OrderedMap();
-  items.forEach(item => {
+  items.forEach((item) => {
     if (item.id) {
-      map = map.set(item.id, Immutable.fromJS(item))
+      map = map.set(item.id, Immutable.fromJS(item));
     }
-  })
+  });
   return map;
 };
 

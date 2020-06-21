@@ -3,12 +3,12 @@ import { Flex, Text } from 'rebass/styled-components';
 import Select from 'react-select';
 
 const SELECT_STYLE = {
-  container: provided => ({
+  container: (provided) => ({
     ...provided,
     minWidth: 170,
     flexGrow: 1,
   }),
-  control: provided => ({
+  control: (provided) => ({
     ...provided,
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,

@@ -133,35 +133,35 @@ export const theme = {
 };
 
 export const SubTitle = styled(rebass.Text)`
-  color: ${props => props.theme.colors.grey_dark};
-  font-size: ${props => props.theme.colors.grey_dark};
+  color: ${(props) => props.theme.colors.grey_dark};
+  font-size: ${(props) => props.theme.colors.grey_dark};
   margin-top: 4px;
 `;
 
 export const Error = styled.div`
-  color: ${props => props.theme.colors.danger_main};
+  color: ${(props) => props.theme.colors.danger_main};
 `;
 
 export const Divider = styled(rebass.Box)`
   border: 0;
   height: 1px;
-  background-color: ${props => props.theme.colors.grey_lightest};
+  background-color: ${(props) => props.theme.colors.grey_lightest};
 `;
 
 export const ActionLink = styled(rebass.Link)`
-  color: ${props => props.theme.colors.brand_main};
+  color: ${(props) => props.theme.colors.brand_main};
   cursor: pointer;
   text-decoration: none;
 
   &:visited {
-    color: ${props => props.theme.colors.brand_main};
+    color: ${(props) => props.theme.colors.brand_main};
   }
 
   &:hover {
     text-decoration: underline;
   }
 
-  ${props =>
+  ${(props) =>
     props.size === 'sm' &&
     css`
       font-size: 0.85em;
@@ -174,7 +174,7 @@ export const Button = styled(rebass.Button)`
 `;
 
 export const SettingsCard = styled(rebass.Card)`
-  box-shadow: ${props => props.theme.shadows.settings};
+  box-shadow: ${(props) => props.theme.shadows.settings};
   background: white;
   color: #4e5767;
   height: 100%;
@@ -182,7 +182,7 @@ export const SettingsCard = styled(rebass.Card)`
   min-width: 290px;
   box-shadow: 0 6px 4px hsla(0, 0%, 40%, 0.2);
 
-  @media (max-width: ${props => props.theme.breakpoints[0]}) {
+  @media (max-width: ${(props) => props.theme.breakpoints[0]}) {
     height: auto;
     width: 100%;
     margin-bottom: 0;

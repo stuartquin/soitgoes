@@ -8,9 +8,9 @@ const GET_INVOICES_START = 'GET_INVOICES_START';
 const GET_INVOICES_SUCCESS = 'GET_INVOICES_SUCCESS';
 const DELETE_INVOICE_SUCCESS = 'DELETE_INVOICE_SUCCESS';
 
-export const updateInvoice = (id, form) => dispatch => {
+export const updateInvoice = (id, form) => (dispatch) => {
   const path = 'invoices/';
-  return api.update(path, id, form).then(res =>
+  return api.update(path, id, form).then((res) =>
     dispatch({
       type: GET_INVOICES_SUCCESS,
       items: [res],
@@ -18,7 +18,7 @@ export const updateInvoice = (id, form) => dispatch => {
   );
 };
 
-export const deleteInvoice = invoiceId => dispatch =>
+export const deleteInvoice = (invoiceId) => (dispatch) =>
   api.remove('invoices/', invoiceId).then(() => {
     dispatch({
       type: DELETE_INVOICE_SUCCESS,
@@ -26,10 +26,10 @@ export const deleteInvoice = invoiceId => dispatch =>
     });
   });
 
-export const createInvoice = projectId => dispatch =>
+export const createInvoice = (projectId) => (dispatch) =>
   api.add('invoices/', { project: projectId });
 
-const _saveInvoice = invoice =>
+const _saveInvoice = (invoice) =>
   invoice.id
     ? api.put(`invoices/${invoice.id}`, invoice)
     : api.post('invoices/', invoice);

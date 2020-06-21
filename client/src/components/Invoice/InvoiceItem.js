@@ -29,7 +29,7 @@ const InvoiceItem = ({
   isEditable,
   onToggle,
 }) => {
-  const handleDragStart = event => {
+  const handleDragStart = (event) => {
     event.dataTransfer.setData('application/id', timeslip.id);
   };
 

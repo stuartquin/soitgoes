@@ -10,7 +10,7 @@ import { BREAKPOINTS } from 'components/Grid';
 const Styled = styled.div`
   flex-grow: 1;
   position: relative;
-  background: ${props => props.theme.colors.grey_lightest};
+  background: ${(props) => props.theme.colors.grey_lightest};
   @media (max-width: ${BREAKPOINTS.sm}) {
     width: 100%;
   }
@@ -29,7 +29,7 @@ const Scroll = styled.div`
 `;
 
 const FUTURE_DAYS = 7;
-const getDateRange = today => {
+const getDateRange = (today) => {
   const start = moment(today).subtract(1, 'days');
   return Array.from(Array(FUTURE_DAYS).keys()).map(() => {
     return moment(start.add(1, 'days'));
@@ -38,11 +38,11 @@ const getDateRange = today => {
 
 const getTimeslipsForProject = (project, timeslips) => {
   const projectId = project.id;
-  return timeslips.filter(t => t.project === projectId);
+  return timeslips.filter((t) => t.project === projectId);
 };
 
 const getTimeslipsForTask = (task, timeslips) =>
-  timeslips.filter(t => t.task === task.id);
+  timeslips.filter((t) => t.task === task.id);
 
 const TimeslipGrid = ({
   onSetActiveDate,
@@ -56,7 +56,7 @@ const TimeslipGrid = ({
 }) => {
   const range = getDateRange(weekStart);
   const filteredTasks = tasks.filter(
-    t => !t.project.archived && t.state === 'OPEN'
+    (t) => !t.project.archived && t.state === 'OPEN'
   );
   const [activeCell, setActiveCell] = useState(null);
 
@@ -72,7 +72,7 @@ const TimeslipGrid = ({
             />
           </thead>
           <tbody>
-            {filteredTasks.map(task => (
+            {filteredTasks.map((task) => (
               <TimeslipGridRow
                 key={task.id}
                 task={task}

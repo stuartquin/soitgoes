@@ -10,12 +10,9 @@ const Confirm = (props) => {
     <div>
       {props.children}
       <div>
+        <Button label="Cancel" onClick={props.onCancel} />
         <Button
-          label='Cancel'
-          onClick={props.onCancel}
-        />
-        <Button
-          className='btn btn-success'
+          className="btn btn-success"
           label={confirmText}
           onClick={props.onConfirm}
         />
@@ -24,4 +21,4 @@ const Confirm = (props) => {
   ) : null;
 };
 
-export {Confirm}
+export { Confirm };

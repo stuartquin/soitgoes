@@ -1,32 +1,35 @@
 import { combineReducers } from 'redux';
 
 import * as api from 'services/api';
-import {addFlashMessage} from 'modules/flashmessage';
+import { addFlashMessage } from 'modules/flashmessage';
 
 const GET_PROJECTS_START = 'GET_PROJECTS_START';
 const GET_PROJECTS_SUCCESS = 'GET_PROJECTS_SUCCESS';
 
 const getById = (items) => {
-  return items.reduce((agg, item) => ({
-    ...agg,
-    [item.id]: item,
-  }), {});
+  return items.reduce(
+    (agg, item) => ({
+      ...agg,
+      [item.id]: item,
+    }),
+    {}
+  );
 };
 
 export const fetchProjects = () => (dispatch) =>
-  api.get('projects/').then(res => {
+  api.get('projects/').then((res) => {
     dispatch({
       type: GET_PROJECTS_SUCCESS,
-      items: res.results
+      items: res.results,
     });
   });
 
 export const addProject = (form) => (dispatch) => {
   dispatch({
-    type: GET_PROJECTS_START
+    type: GET_PROJECTS_START,
   });
 
-  return api.add('projects/', form).then(res => {
+  return api.add('projects/', form).then((res) => {
     const text = `Added project ${res.name}`;
     const link = `/projects/${res.id}`;
     const action = 'View';
@@ -34,30 +37,29 @@ export const addProject = (form) => (dispatch) => {
     dispatch(addFlashMessage({ text, action, link }));
     dispatch({
       type: GET_PROJECTS_SUCCESS,
-      items: [res]
+      items: [res],
     });
   });
 };
 
 export const updateProject = (id, form) => (dispatch) => {
-  return api.update('projects/', id, form).then(res => {
+  return api.update('projects/', id, form).then((res) => {
     dispatch({
       type: GET_PROJECTS_SUCCESS,
-      items: [res]
+      items: [res],
     });
   });
 };
 
-
 const items = (state = {}, action) => {
-  switch(action.type) {
-  case GET_PROJECTS_SUCCESS:
-    return {
-      ...state,
-      ...getById(action.items)
-    };
-  default:
-    return state;
+  switch (action.type) {
+    case GET_PROJECTS_SUCCESS:
+      return {
+        ...state,
+        ...getById(action.items),
+      };
+    default:
+      return state;
   }
 };
 

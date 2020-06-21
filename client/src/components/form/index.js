@@ -7,7 +7,7 @@ class Form extends React.Component {
     this.state = {
       isEdit: !!props.isEdit,
       form: {},
-      original: {}
+      original: {},
     };
   }
 
@@ -18,16 +18,17 @@ class Form extends React.Component {
   }
 
   refreshForm() {
-    this.setState({original: { ...this.state.form }});
-    this.setState({isSaveRequired: this.isSaveRequired()});
+    this.setState({ original: { ...this.state.form } });
+    this.setState({ isSaveRequired: this.isSaveRequired() });
   }
 
   isSaveRequired() {
     const form = this.state.form;
     const original = this.state.original;
-    const req =  !Object.keys(form).reduce((prev, key) =>
-      prev && form[key] === original[key]
-    , true);
+    const req = !Object.keys(form).reduce(
+      (prev, key) => prev && form[key] === original[key],
+      true
+    );
     return req;
   }
 
@@ -39,7 +40,7 @@ class Form extends React.Component {
   }
 
   render() {
-    return <div />
+    return <div />;
   }
 }
 

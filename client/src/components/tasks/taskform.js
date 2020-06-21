@@ -10,7 +10,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import Form from 'components/form';
 
-
 class TaskForm extends Form {
   constructor(props) {
     super(props);
@@ -23,70 +22,72 @@ class TaskForm extends Form {
         name: task.get('name'),
         project: task.get('project'),
         cost: task.get('cost'),
-        due_date: moment(task.get('due_date')).toDate()
+        due_date: moment(task.get('due_date')).toDate(),
       });
     } else {
       this.state.form = {
-        project: this.props.projects.first().get('id')
+        project: this.props.projects.first().get('id'),
       };
     }
   }
 
   onSave() {
-    this.props.onSave({
-      ...this.state.form,
-      due_date: moment(this.state.form.due_date).format('YYYY-MM-DD')
-    }).then(() => {
-      this.refreshForm();
-    });
+    this.props
+      .onSave({
+        ...this.state.form,
+        due_date: moment(this.state.form.due_date).format('YYYY-MM-DD'),
+      })
+      .then(() => {
+        this.refreshForm();
+      });
   }
 
   render() {
-    const projects = this.props.projects.toList().toJS().map(p => {
-      return (
-        <MenuItem
-          key={p.id}
-          value={p.id}
-          primaryText={p.name}
-        />
-      );
-    });
+    const projects = this.props.projects
+      .toList()
+      .toJS()
+      .map((p) => {
+        return <MenuItem key={p.id} value={p.id} primaryText={p.name} />;
+      });
 
     return (
-      <div className='settings'>
+      <div className="settings">
         <TextField
-          style={{width: '100%'}}
+          style={{ width: '100%' }}
           value={this.state.form.name}
           onChange={(evt, val) => this.handleChange('name', val)}
-          floatingLabelText='Task Name' />
+          floatingLabelText="Task Name"
+        />
         <SelectField
-          style={{width: '100%'}}
+          style={{ width: '100%' }}
           value={this.state.form.project}
           onChange={(evt, idx, val) => this.handleChange('project', val)}
-          floatingLabelText='Project'>
+          floatingLabelText="Project"
+        >
           {projects}
         </SelectField>
         <TextField
-          style={{width: '100%'}}
-          type='number'
+          style={{ width: '100%' }}
+          type="number"
           value={this.state.form.cost}
           onChange={(evt, val) => this.handleChange('cost', parseFloat(val))}
-          floatingLabelText='Cost' />
+          floatingLabelText="Cost"
+        />
         <DatePicker
-          textFieldStyle={{width: '100%'}}
+          textFieldStyle={{ width: '100%' }}
           onChange={(e, date) => this.handleChange('due_date', date)}
           autoOk={true}
-          floatingLabelText='Due Date'
+          floatingLabelText="Due Date"
           defaultDate={this.state.form.due_date}
         />
-        <div className='action-btns'>
+        <div className="action-btns">
           <RaisedButton
-            className='btn-success'
-            label='Save'
-            labelPosition='before'
+            className="btn-success"
+            label="Save"
+            labelPosition="before"
             disabled={!this.state.isSaveRequired}
             onTouchTap={() => {
-              this.onSave()
+              this.onSave();
             }}
           />
         </div>
@@ -95,4 +96,4 @@ class TaskForm extends Form {
   }
 }
 
-export {TaskForm};
+export { TaskForm };

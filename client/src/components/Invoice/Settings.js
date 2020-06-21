@@ -9,7 +9,7 @@ import { Divider, SettingsCard } from 'components/GUI';
 import { Input } from 'components/Form';
 import { BREAKPOINTS } from 'components/Grid';
 
-const Settings = props => {
+const Settings = (props) => {
   const {
     invoice,
     project,

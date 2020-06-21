@@ -1,13 +1,13 @@
-import React from "react";
-import moment from "moment";
-import styled from "styled-components";
-import { Text, Box, Flex } from "rebass/styled-components";
-import { Link } from "react-router-dom";
+import React from 'react';
+import moment from 'moment';
+import styled from 'styled-components';
+import { Text, Box, Flex } from 'rebass/styled-components';
+import { Link } from 'react-router-dom';
 
-import { BREAKPOINTS, Grid, Cell, CellMd } from "components/Grid";
-import { asCurrency } from "services/currency";
-import { Row } from "components/DataTable";
-import StatusPill from "components/StatusPill";
+import { BREAKPOINTS, Grid, Cell, CellMd } from 'components/Grid';
+import { asCurrency } from 'services/currency';
+import { Row } from 'components/DataTable';
+import StatusPill from 'components/StatusPill';
 
 const ContactName = styled.div`
   color: #828282;
@@ -29,19 +29,19 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
-const formatDate = date => {
-  return date ? moment(date).format("YYYY-MM-DD") : "-";
+const formatDate = (date) => {
+  return date ? moment(date).format('YYYY-MM-DD') : '-';
 };
 
-const getStatus = task => {
+const getStatus = (task) => {
   if (task.completed_at) {
-    return "success";
+    return 'success';
   }
 
-  return "draft";
+  return 'draft';
 };
 
-const getCost = task => {
+const getCost = (task) => {
   return asCurrency(task.cost, task.project.currency);
 };
 
@@ -49,7 +49,7 @@ class TaskRow extends React.Component {
   render() {
     const { task, onClick } = this.props;
     const { project } = task;
-    const status = "PAID";
+    const status = 'PAID';
 
     return (
       <Row onClick={() => onClick(task)} justifyContent="flexEnd">
@@ -65,7 +65,7 @@ class TaskRow extends React.Component {
           </Text>
         </Box>
         <Flex alignItems="center" justifyContent="flex-end">
-          <Box display={["none", "initial"]} ml={4}>
+          <Box display={['none', 'initial']} ml={4}>
             {formatDate(task.created_at)}
           </Box>
           <StatusPill

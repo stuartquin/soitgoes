@@ -1,19 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import {TableRow, TableRowColumn} from 'material-ui/Table';
+import { TableRow, TableRowColumn } from 'material-ui/Table';
 
 const ContactsListRow = ({ contact }) => {
   return (
-    <TableRow className='invoice-list-row'>
+    <TableRow className="invoice-list-row">
       <TableRowColumn>
-        <Link to={`/contacts/${contact.get('id')}`}>
-          {contact.get('name')}
-        </Link>
+        <Link to={`/contacts/${contact.get('id')}`}>{contact.get('name')}</Link>
       </TableRowColumn>
-      <TableRowColumn>
-        {contact.get('email')}
-      </TableRowColumn>
+      <TableRowColumn>{contact.get('email')}</TableRowColumn>
     </TableRow>
   );
 };

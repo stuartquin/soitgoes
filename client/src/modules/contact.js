@@ -11,13 +11,12 @@ const GET_CONTACTS_SUCCESS = 'GET_CONTACTS_SUCCESS';
 
 export const fetchContacts = reduxHelper.fetch(NS, () => api.get('contacts/'));
 
-
 export const addContact = (form) => (dispatch) => {
   dispatch({
-    type: GET_CONTACTS_START
+    type: GET_CONTACTS_START,
   });
 
-  return api.add('contacts/', form).then(res => {
+  return api.add('contacts/', form).then((res) => {
     const text = `Added contact ${res.name}`;
     const link = `/contacts/${res.id}`;
     const action = 'View';
@@ -25,20 +24,20 @@ export const addContact = (form) => (dispatch) => {
     dispatch(addFlashMessage({ text, action, link }));
     dispatch({
       type: GET_CONTACTS_SUCCESS,
-      items: [res]
+      items: [res],
     });
   });
 };
 
 export const updateContact = (id, form) => (dispatch) => {
   dispatch({
-    type: GET_CONTACTS_START
+    type: GET_CONTACTS_START,
   });
 
-  return api.update('contacts/', id, form).then(res => {
+  return api.update('contacts/', id, form).then((res) => {
     dispatch({
       type: GET_CONTACTS_SUCCESS,
-      items: [res]
+      items: [res],
     });
   });
 };

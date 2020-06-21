@@ -6,9 +6,11 @@
   "fullscreen": "true",
   "background_color": "#009688",
   "description": "Simple invoice and time tracking app",
-  "icons": [{
-    "src": "assets/logo-highres.png",
-    "sizes": "192x192",
-    "type": "image/png"
-  }]
+  "icons": [
+    {
+      "src": "assets/logo-highres.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
 }

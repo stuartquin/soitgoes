@@ -1,6 +1,4 @@
-import {
-  createStore, applyMiddleware, combineReducers, compose
-} from 'redux';
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import thunk from 'redux-thunk';
 
 import activityFeed from './reducers/activityfeed';
@@ -17,30 +15,27 @@ import task from 'modules/task';
 import nav from 'modules/nav';
 
 const configureStore = () => {
-  let middlewares = [
-    applyMiddleware(
-      thunk,
-    )
-  ];
+  let middlewares = [applyMiddleware(thunk)];
 
   if (window.__REDUX_DEVTOOLS_EXTENSION__) {
     middlewares.push(window.__REDUX_DEVTOOLS_EXTENSION__());
   }
 
-  return createStore(combineReducers({
-    activityFeed,
-    timeslip,
-    project,
-    invoice,
-    task,
-    user,
-    dash,
-    nav,
-    contact,
-    modifier,
-    flashMessage,
-  }),
-  compose( ...middlewares )
+  return createStore(
+    combineReducers({
+      activityFeed,
+      timeslip,
+      project,
+      invoice,
+      task,
+      user,
+      dash,
+      nav,
+      contact,
+      modifier,
+      flashMessage,
+    }),
+    compose(...middlewares)
   );
 };
 

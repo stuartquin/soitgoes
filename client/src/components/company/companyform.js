@@ -17,58 +17,64 @@ class CompanyForm extends React.Component {
     this.state = {
       isEdit: !!props.isEdit,
       showAddCompany: false,
-      form: {}
+      form: {},
     };
 
     if (company) {
       this.state.form = company.toJS();
     } else {
-      this.state.form = {
-      };
-    };
+      this.state.form = {};
+    }
   }
 
   handleChange(field, val) {
     let form = this.state.form;
     form[field] = val;
-    this.setState({form: form});
+    this.setState({ form: form });
   }
 
   onSave() {
     this.props.onSave({
-      ...this.state.form
+      ...this.state.form,
     });
   }
 
   render() {
     const company = this.props.company;
     const companyFields = [
-      'name', 'address1', 'address2', 'city', 'post_code',
-      'reg_number', 'vat_number'
+      'name',
+      'address1',
+      'address2',
+      'city',
+      'post_code',
+      'reg_number',
+      'vat_number',
     ];
 
     return (
       <div>
         {companyFields.map((field, idx) => {
-          const label = field.split('_').map((word) =>
-            word.charAt(0).toUpperCase() + word.slice(1)
-          ).join(' ');
+          const label = field
+            .split('_')
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
           return (
             <TextField
               key={idx}
-              style={{width: '100%'}}
+              style={{ width: '100%' }}
               value={this.state.form[field]}
               onChange={(evt, val) => this.handleChange(field, val)}
-              floatingLabelText={label} />
-          )
+              floatingLabelText={label}
+            />
+          );
         })}
-        <div className='action-btns'>
+        <div className="action-btns">
           <RaisedButton
-            className='btn-success'
-            label='Save'
-            labelPosition='before'
+            className="btn-success"
+            label="Save"
+            labelPosition="before"
             onTouchTap={(evt) => {
-              this.onSave()
+              this.onSave();
             }}
           />
         </div>

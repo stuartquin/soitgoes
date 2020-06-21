@@ -3,7 +3,7 @@
   list-style: none;
   margin-top: 0;
 
-  color: #FFFFFF;
+  color: #ffffff;
 
   padding-top: 20px;
 }
@@ -15,7 +15,7 @@
 .navActive {
   text-decoration: underline;
   font-weight: bold;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .navHeader {
@@ -40,14 +40,14 @@
 }
 
 .navItem {
-  color: #FFFFFF;
+  color: #ffffff;
   display: inline-block;
   margin-left: 15px;
   padding-top: 4px;
 }
 
 .navItem a {
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .navbarNav {
@@ -69,11 +69,11 @@
 }
 
 @media (max-width: 600px) {
-    .headerLogo {
-        width: 24px;
-        float: left;
-        overflow: hidden;
-    }
+  .headerLogo {
+    width: 24px;
+    float: left;
+    overflow: hidden;
+  }
 }
 
 .headerBrand {
@@ -89,4 +89,3 @@
   color: white !important;
   text-decoration: underline !important;
 }
-

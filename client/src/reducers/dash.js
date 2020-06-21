@@ -18,20 +18,20 @@ const summary = (state, action) => {
       isSaving: false,
       isLoading: false,
       expenses: Immutable.Map(),
-      invoices: Immutable.Map()
+      invoices: Immutable.Map(),
     });
   }
   switch (action.type) {
-  case constants.GET_SUMMARY_SUCCESS:
-    const items = Immutable.fromJS(action.summary);
-    return state.set('isLoading', false).set(action.summaryType, items);
-  default:
-    return state;
+    case constants.GET_SUMMARY_SUCCESS:
+      const items = Immutable.fromJS(action.summary);
+      return state.set('isLoading', false).set(action.summaryType, items);
+    default:
+      return state;
   }
 };
 
 const dash = combineReducers({
-  summary
+  summary,
 });
 
 export default dash;

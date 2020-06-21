@@ -10,7 +10,7 @@ const Date = styled.th`
   height: 40px;
   font-weight: 400;
 
-  ${props =>
+  ${(props) =>
     props.today &&
     css`
       font-weight: 900;

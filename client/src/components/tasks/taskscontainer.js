@@ -1,14 +1,13 @@
 'use strict';
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {Card, CardText} from 'material-ui/Card';
+import { Card, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { TaskList } from './tasklist';
-import {fetchTasks, completeTask} from 'modules/task';
-import {navigate} from 'modules/nav';
-
+import { fetchTasks, completeTask } from 'modules/task';
+import { navigate } from 'modules/nav';
 
 class Tasks extends React.Component {
   componentDidMount() {
@@ -26,13 +25,13 @@ class Tasks extends React.Component {
     });
 
     return (
-      <div className='tasks-container'>
-        <div className='content'>
-          <div className='content-actions'>
+      <div className="tasks-container">
+        <div className="content">
+          <div className="content-actions">
             <RaisedButton
-              className='btn-success'
-              label='Create New'
-              labelPosition='before'
+              className="btn-success"
+              label="Create New"
+              labelPosition="before"
               onTouchTap={(evt) => {
                 this.props.navigate('/tasks/add');
               }}
@@ -64,15 +63,15 @@ class Tasks extends React.Component {
 const mapStateToProps = (state, { params }) => {
   return {
     tasks: state.tasks.items,
-    projects: state.projects.items
+    projects: state.projects.items,
   };
 };
 
 const actions = {
   fetchTasks,
   completeTask,
-  navigate
+  navigate,
 };
 
 const TasksContainer = connect(mapStateToProps, actions)(Tasks);
-export {TasksContainer};
+export { TasksContainer };

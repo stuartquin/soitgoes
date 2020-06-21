@@ -15,9 +15,12 @@ const STATUS_OPTIONS = [
   ['DONE', 'Complete'],
 ];
 
-const BILLING_TYPE_OPTIONS = [['TIME', 'Time'], ['FIXED', 'Fixed Cost']];
+const BILLING_TYPE_OPTIONS = [
+  ['TIME', 'Time'],
+  ['FIXED', 'Fixed Cost'],
+];
 
-const formatDate = date => {
+const formatDate = (date) => {
   return date ? new Date(date).toISOString() : null;
 };
 
@@ -90,7 +93,7 @@ const Task = ({ task, projects, selectedProject, onCancel, onSave }) => {
                 <option value={''} disabled>
                   Choose Project
                 </option>
-                {projects.map(project => (
+                {projects.map((project) => (
                   <option value={project.id}>{project.name}</option>
                 ))}
               </Select>
@@ -168,13 +171,10 @@ const Task = ({ task, projects, selectedProject, onCancel, onSave }) => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    projects: Object.values(state.project.items).filter(p => !p.archived),
+    projects: Object.values(state.project.items).filter((p) => !p.archived),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {}
-)(Task);
+export default connect(mapStateToProps, {})(Task);

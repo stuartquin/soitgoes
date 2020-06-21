@@ -10,9 +10,9 @@ const GET_COMPANIES_SUCCESS = 'GET_COMPANIES_SUCCESS';
 
 export const fetchCompanies = () => (dispatch) => {
   dispatch({
-    type: GET_COMPANIES_START
+    type: GET_COMPANIES_START,
   });
-  api.get('companies/').then(res => {
+  api.get('companies/').then((res) => {
     let items = [];
     if (res.results) {
       items = res.results;
@@ -21,43 +21,43 @@ export const fetchCompanies = () => (dispatch) => {
     }
     dispatch({
       type: GET_COMPANIES_SUCCESS,
-      items
+      items,
     });
   });
 };
 
 export const addCompany = (form) => (dispatch) => {
   dispatch({
-    type: GET_COMPANIES_START
+    type: GET_COMPANIES_START,
   });
 
-  api.add('companies/', form).then(res => {
+  api.add('companies/', form).then((res) => {
     dispatch({
       type: GET_COMPANIES_SUCCESS,
-      items: [res]
+      items: [res],
     });
   });
 };
 
 const view = (state = Immutable.Map({}), action) => {
   switch (action.type) {
-  default:
-    return state;
+    default:
+      return state;
   }
 };
 
 const items = (state = Immutable.OrderedMap({}), action) => {
-  switch(action.type) {
-  case GET_COMPANIES_SUCCESS:
-    return state.merge(getById(action.items));
-  default:
-    return state;
+  switch (action.type) {
+    case GET_COMPANIES_SUCCESS:
+      return state.merge(getById(action.items));
+    default:
+      return state;
   }
 };
 
 const companies = combineReducers({
   items,
-  view
+  view,
 });
 
 export default companies;

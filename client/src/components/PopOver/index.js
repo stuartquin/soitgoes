@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faTimes} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-import {BREAKPOINTS} from 'components/Grid';
-
+import { BREAKPOINTS } from 'components/Grid';
 
 const Styled = styled.div`
   position: relative;
@@ -13,7 +12,6 @@ const Styled = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: center;
-
 `;
 
 const PopOverContent = styled.div`
@@ -56,7 +54,7 @@ const Body = styled.div`
   flex: 1;
   overflow-y: auto;
   text-align: left;
-`
+`;
 
 const Footer = styled.div`
   background: colorBgGrey;
@@ -83,27 +81,17 @@ const Title = styled.div`
   font-size: 16px;
 `;
 
-const PopOver = ({
-  children, title, actions, onClose, headerStyles
-}) => {
+const PopOver = ({ children, title, actions, onClose, headerStyles }) => {
   return (
     <Styled>
-      {onClose ? (
-        <Overlay onClick={onClose} />
-      ) : (
-        <Overlay />
-      )}
+      {onClose ? <Overlay onClick={onClose} /> : <Overlay />}
       <PopOverContent>
         <Header style={headerStyles}>
           <Title>{title}</Title>
         </Header>
         <Body>{children}</Body>
 
-        {actions && (
-          <Footer>
-            {actions}
-          </Footer>
-        )}
+        {actions && <Footer>{actions}</Footer>}
       </PopOverContent>
     </Styled>
   );

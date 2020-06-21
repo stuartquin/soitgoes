@@ -1,28 +1,28 @@
-import React from "react";
-import styled, { ThemeProvider } from "styled-components";
-import { connect } from "react-redux";
-import { Route } from "react-router-dom";
+import React from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+import { connect } from 'react-redux';
+import { Route } from 'react-router-dom';
 
-import Loading from "components/Loading";
-import { theme } from "components/GUI";
-import Invoice from "components/Invoice";
-import Invoices from "components/Invoices";
-import Timeslips from "components/Timeslips";
-import Tasks from "components/Tasks";
-import Login from "components/Login";
-import NavMenu from "components/nav/navmenu";
-import { Container } from "components/Grid";
+import Loading from 'components/Loading';
+import { theme } from 'components/GUI';
+import Invoice from 'components/Invoice';
+import Invoices from 'components/Invoices';
+import Timeslips from 'components/Timeslips';
+import Tasks from 'components/Tasks';
+import Login from 'components/Login';
+import NavMenu from 'components/nav/navmenu';
+import { Container } from 'components/Grid';
 
-import { fetchContacts } from "modules/contact";
-import { fetchUser } from "modules/user";
-import { fetchProjects } from "modules/project";
+import { fetchContacts } from 'modules/contact';
+import { fetchUser } from 'modules/user';
+import { fetchProjects } from 'modules/project';
 
 const Styled = styled.div`
   height: 100%;
   min-height: 100vh;
   width: 100%;
-  color: ${props => props.theme.colors.grey_darkest};
-  background: ${props => props.theme.colors.grey_light};
+  color: ${(props) => props.theme.colors.grey_darkest};
+  background: ${(props) => props.theme.colors.grey_light};
 `;
 
 class Nav extends React.Component {
@@ -30,7 +30,7 @@ class Nav extends React.Component {
     super(props);
     this.state = {
       isLoaded: false,
-      isLoggedIn: true
+      isLoggedIn: true,
     };
   }
 
@@ -49,12 +49,12 @@ class Nav extends React.Component {
   fetchBase = () => {
     return Promise.all([
       this.props.fetchProjects(),
-      this.props.fetchContacts()
+      this.props.fetchContacts(),
     ]);
   };
 
-  handleLogin = form => {
-    login(form).then(res => {
+  handleLogin = (form) => {
+    login(form).then((res) => {
       const { history } = this.props;
       history.push(`/invoices`);
     });
@@ -107,11 +107,8 @@ const mapStateToProps = () => {
 const actions = {
   fetchUser,
   fetchProjects,
-  fetchContacts
+  fetchContacts,
 };
 
-const NavContainer = connect(
-  mapStateToProps,
-  actions
-)(Nav);
+const NavContainer = connect(mapStateToProps, actions)(Nav);
 export { NavContainer };

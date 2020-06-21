@@ -6,7 +6,8 @@ import { asCurrency } from 'services/currency';
 const SummaryRow = ({ title, hours, total }) => {
   return (
     <Flex
-      p={12}
+      px={3}
+      my={2}
       flexDirection={['column', 'row']}
       sx={{ overflowX: 'auto' }}
       justifyContent="space-between"

@@ -1,4 +1,4 @@
-export const getQueryParams = queryString => {
+export const getQueryParams = (queryString) => {
   const qs = queryString || '';
   return qs
     .slice(qs.indexOf('?') + 1)
@@ -10,7 +10,7 @@ export const getQueryParams = queryString => {
     }, {});
 };
 
-export const updateQueryParams = params => {
+export const updateQueryParams = (params) => {
   const url = window.location.pathname + window.location.search;
   const existing = getQueryParams(url);
   const newParams = {
@@ -18,8 +18,8 @@ export const updateQueryParams = params => {
     ...params,
   };
   const qs = Object.keys(newParams)
-    .filter(key => newParams[key])
-    .map(key => `${key}=${newParams[key]}`)
+    .filter((key) => newParams[key])
+    .map((key) => `${key}=${newParams[key]}`)
     .join('&');
 
   const path = url.indexOf('?') > -1 ? url.slice(0, url.indexOf('?')) : url;

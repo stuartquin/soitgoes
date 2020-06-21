@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import {connect} from 'react-redux';
-import {selectBy} from 'services/selectors';
-import {Select} from 'components/Form';
+import { connect } from 'react-redux';
+import { selectBy } from 'services/selectors';
+import { Select } from 'components/Form';
 
 const Styled = styled.div`
   background: #d2ddec;
@@ -15,16 +15,16 @@ const Styled = styled.div`
   border-bottom-right-radius: 4px;
   border-top-right-radius: 4px;
   font-size: 0.85em;
-  box-shadow: 0 6px 4px hsla(0,0%,40%,.2);
+  box-shadow: 0 6px 4px hsla(0, 0%, 40%, 0.2);
 `;
 
-const TimeslipDetail = ({tasks}) => {
+const TimeslipDetail = ({ tasks }) => {
   console.log(tasks);
   return (
     <Styled>
       <strong>Task:</strong>
       <Select>
-        {tasks.map(t => (
+        {tasks.map((t) => (
           <option value={t.id}>{t.name}</option>
         ))}
       </Select>
@@ -38,5 +38,4 @@ const mapStateToProps = (state, { project }) => {
   };
 };
 
-export default connect(mapStateToProps, {
-})(TimeslipDetail);
+export default connect(mapStateToProps, {})(TimeslipDetail);

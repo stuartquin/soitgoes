@@ -4,27 +4,27 @@ import constants from '../constants';
 
 export const fetchSummary = (summaryType, start, end) => (dispatch) => {
   dispatch({
-    type: constants.GET_SUMMARY_START
+    type: constants.GET_SUMMARY_START,
   });
 
   return api.fetchSummary(summaryType, start, end).then((res) =>
     dispatch({
       summaryType,
       type: constants.GET_SUMMARY_SUCCESS,
-      summary: res
+      summary: res,
     })
   );
 };
 
 export const fetchExpenses = (start, end) => (dispatch) => {
   dispatch({
-    type: constants.GET_EXPENSES_START
+    type: constants.GET_EXPENSES_START,
   });
 
   return api.fetchExpenses(start, end).then((res) =>
     dispatch({
       type: constants.GET_EXPENSES_SUCCESS,
-      expenses: res
+      expenses: res,
     })
   );
 };

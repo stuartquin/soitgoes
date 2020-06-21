@@ -12,13 +12,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
 
-from . import serializers, models, summary
-from .cookieauthentication import CookieAuthentication
+from journal import serializers, models, summary
+from journal.cookieauthentication import CookieAuthentication
+from journal.project import get_unbilled_summary
 from journal.invoices import (
     save_invoice_tasks,
     get_new_invoice,
     set_invoice_totals,
-    get_upcoming_invoices,
 )
 
 
@@ -292,16 +292,11 @@ class TimeSlipList(generics.ListCreateAPIView):
         return models.TimeSlip.objects.filter(**filters).order_by("date")
 
 
-class UpcomingInvoices(APIView):
+class ProjectSummary(APIView):
     def get(self, request, pk=None):
-        costs, hours = get_upcoming_invoices()
-        response = []
-        for project in costs:
-            response.append(
-                {"project": project, "total": costs[project], "hours": hours[project]}
-            )
-
-        return Response({"results": response})
+        start_date = self.request.query_params.get("start")
+        end_date = self.request.query_params.get("end")
+        return Response(dict(results=get_unbilled_summary(start_date, end_date)))
 
 
 class TaskList(generics.ListCreateAPIView):
@@ -324,13 +319,6 @@ class TaskList(generics.ListCreateAPIView):
             invoice = self.request.query_params["invoice"]
             if invoice != "none":
                 queryset = queryset.filter(invoices=invoice)
-            # TODO this is broken
-            # else:
-            #    queryset = queryset.filter(
-            #        Q(invoices=None, billing_type=models.BILLING_TYPE_FIXED) |
-            #        Q(billing_type=models.BILLING_TYPE_TIME)
-            #    )
-            #    queryset = queryset.exclude(state=models.TASK_STATUS_DONE)
 
         return queryset.order_by(order_by)
 

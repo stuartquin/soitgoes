@@ -11,10 +11,11 @@ import { Button } from 'components/GUI';
 
 import {
   fetchInvoices,
-  fetchUpcoming,
   getInvoiceStatus,
+  getTotal,
+  getOverdue,
 } from 'services/invoice';
-import { getTotal, getOverdue } from 'services/invoice';
+import { fetchSummary } from 'services/projects';
 import { getHourlyTotal } from 'services/timeslip';
 import { selectWithProject, selectJoined } from 'services/selectors';
 import { getQueryParams, updateQueryParams } from 'services/url';
@@ -26,7 +27,7 @@ const stateOptions = [
   { value: 'OVERDUE', label: 'Overdue' },
 ];
 
-const getCurrentPage = location => {
+const getCurrentPage = (location) => {
   const params = getQueryParams(location.search);
   return parseInt(params['page'] || 0, 10);
 };
@@ -42,7 +43,7 @@ const Invoices = ({ projects, history, location }) => {
       label: 'All Projects',
     },
   ].concat(
-    Object.values(projects).map(p => ({
+    Object.values(projects).map((p) => ({
       value: p.id,
       label: p.name,
     }))
@@ -51,7 +52,7 @@ const Invoices = ({ projects, history, location }) => {
   const loadInvoices = async (projectId = null, page = null) => {
     const offset = page * 20;
     const response = await fetchInvoices({ project: projectId, offset });
-    const withState = response.results.map(inv => ({
+    const withState = response.results.map((inv) => ({
       ...inv,
       state: getInvoiceStatus(inv),
     }));
@@ -61,7 +62,7 @@ const Invoices = ({ projects, history, location }) => {
   };
 
   const loadUpcoming = async () => {
-    const response = await fetchUpcoming();
+    const response = await fetchSummary();
     setUpcoming(selectWithProject(response.results, projects));
   };
 
@@ -77,12 +78,12 @@ const Invoices = ({ projects, history, location }) => {
     loadInvoices(selectedProjectId, currentPage);
   }, [selectedProjectId, currentPage]);
 
-  const handleFilterProject = projectId => {
+  const handleFilterProject = (projectId) => {
     history.push(updateQueryParams({ project: projectId, page: 0 }));
   };
 
   const filteredInvoices = stateFilter
-    ? invoices.filter(inv => inv.state === stateFilter)
+    ? invoices.filter((inv) => inv.state === stateFilter)
     : invoices;
 
   return (
@@ -124,13 +125,10 @@ const Invoices = ({ projects, history, location }) => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     projects: selectJoined(state.project.items, state),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {}
-)(Invoices);
+export default connect(mapStateToProps, {})(Invoices);

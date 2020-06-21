@@ -10,13 +10,13 @@ class ConfirmButton extends React.Component {
     super(props);
 
     this.state = {
-      confirmMode: false
+      confirmMode: false,
     };
   }
 
   onInitialClick() {
-    this.setState({confirmMode: true});
-    setTimeout(() => this.setState({confirmMode: false}), TIMEOUT);
+    this.setState({ confirmMode: true });
+    setTimeout(() => this.setState({ confirmMode: false }), TIMEOUT);
   }
 
   render() {
@@ -24,7 +24,7 @@ class ConfirmButton extends React.Component {
     if (this.state.confirmMode) {
       button = (
         <RaisedButton
-          className='btn-error'
+          className="btn-error"
           label={this.props.confirmText}
           fullWidth={true}
           onTouchTap={(evt) => this.props.onConfirmClick()}
@@ -33,7 +33,7 @@ class ConfirmButton extends React.Component {
     } else {
       button = (
         <RaisedButton
-          className='btn-default'
+          className="btn-default"
           label={this.props.text}
           fullWidth={true}
           onTouchTap={(evt) => this.onInitialClick()}
@@ -45,5 +45,4 @@ class ConfirmButton extends React.Component {
   }
 }
 
-
-export {ConfirmButton};
+export { ConfirmButton };

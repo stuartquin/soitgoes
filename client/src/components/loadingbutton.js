@@ -6,18 +6,14 @@ const LoadingButton = (props) => {
 
   if (props.isLoading) {
     button = (
-      <button
-        className={props.className}
-        disabled={true}>
-      {props.text}
+      <button className={props.className} disabled={true}>
+        {props.text}
       </button>
     );
   } else {
     button = (
-      <button
-        className={props.className}
-        onClick={props.onClick}>
-      {props.text}
+      <button className={props.className} onClick={props.onClick}>
+        {props.text}
       </button>
     );
   }
@@ -25,5 +21,4 @@ const LoadingButton = (props) => {
   return button;
 };
 
-
-export {LoadingButton};
+export { LoadingButton };

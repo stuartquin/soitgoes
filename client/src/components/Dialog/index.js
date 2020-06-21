@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faTimes} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-import {BREAKPOINTS} from 'components/Grid';
-
+import { BREAKPOINTS } from 'components/Grid';
 
 const Styled = styled.div`
   position: fixed;
@@ -16,7 +15,6 @@ const Styled = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: center;
-
 `;
 
 const DialogContent = styled.div`
@@ -36,7 +34,7 @@ const DialogContent = styled.div`
   display: flex;
   flex-direction: column;
 
-  @media(min-width: ${BREAKPOINTS.md}) {
+  @media (min-width: ${BREAKPOINTS.md}) {
     max-width: 570px;
     height: auto;
     margin-top: 100px;
@@ -46,7 +44,7 @@ const DialogContent = styled.div`
 const Overlay = styled.div`
   position: absolute;
 
-  background: rgba(120,120,120,0.4);
+  background: rgba(120, 120, 120, 0.4);
   width: 100%;
   height: 100%;
   min-height: 100vmax;
@@ -67,7 +65,7 @@ const DialogBody = styled.div`
   padding: 12px 16px;
   flex: 1;
   overflow-y: auto;
-`
+`;
 
 const Footer = styled.div`
   background: colorBgGrey;
@@ -94,35 +92,22 @@ const Title = styled.div`
   font-size: 20px;
 `;
 
-const Dialog = ({
-  children, title, actions, onClose, headerStyles
-}) => {
+const Dialog = ({ children, title, actions, onClose, headerStyles }) => {
   return (
     <Styled>
-      {onClose ? (
-        <Overlay onClick={onClose} />
-      ) : (
-        <Overlay />
-      )}
+      {onClose ? <Overlay onClick={onClose} /> : <Overlay />}
       <DialogContent>
         <Header style={headerStyles}>
           <Title>{title}</Title>
           {onClose && (
             <HeaderActions>
-              <FontAwesomeIcon
-                icon={faTimes}
-                onClick={onClose}
-              />
+              <FontAwesomeIcon icon={faTimes} onClick={onClose} />
             </HeaderActions>
           )}
         </Header>
         <DialogBody>{children}</DialogBody>
 
-        {actions && (
-          <Footer>
-            {actions}
-          </Footer>
-        )}
+        {actions && <Footer>{actions}</Footer>}
       </DialogContent>
     </Styled>
   );

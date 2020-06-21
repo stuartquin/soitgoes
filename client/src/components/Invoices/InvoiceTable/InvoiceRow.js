@@ -17,7 +17,7 @@ const STATUS_MAP = {
   PAID: 'success',
 };
 
-const getStatusColor = status => `${STATUS_MAP[status]}_dark`;
+const getStatusColor = (status) => `${STATUS_MAP[status]}_dark`;
 
 const StyledLink = styled(Link)`
   text-decoration: none;

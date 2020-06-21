@@ -6,33 +6,29 @@ import constants from '../constants';
 
 const getById = (items) => {
   let map = Immutable.OrderedMap();
-  items.forEach(item => map = map.set(
-    item.id,
-    Immutable.fromJS(item)
-  ))
+  items.forEach((item) => (map = map.set(item.id, Immutable.fromJS(item))));
   return map;
 };
 
 const view = (state = Immutable.Map({}), action) => {
   switch (action.type) {
-  default:
-    return state;
+    default:
+      return state;
   }
 };
 
 const items = (state = Immutable.OrderedMap({}), action) => {
-  switch(action.type) {
-  case constants.GET_CONTACTS_SUCCESS:
-    return state.merge(getById(action.items));
-  default:
-    return state;
+  switch (action.type) {
+    case constants.GET_CONTACTS_SUCCESS:
+      return state.merge(getById(action.items));
+    default:
+      return state;
   }
 };
 
 const companies = combineReducers({
   items,
-  view
+  view,
 });
 
 export default contacts;
-

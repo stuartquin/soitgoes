@@ -13,16 +13,15 @@ export const GET_TIMESLIPS_SUCCESS = 'GET_TIMESLIPS_SUCCESS';
 
 export const fetchTimeslips = reduxHelper.fetch(
   NS,
-  (invoice, start = null, end = null, project = null) => (
-    api.get('timeslips/', {invoice, start, end, project})
-  )
+  (invoice, start = null, end = null, project = null) =>
+    api.get('timeslips/', { invoice, start, end, project })
 );
 
 export const updateTimeslip = (id, form) => (dispatch) =>
-  api.update('timeslips/', id, form).then(res =>
+  api.update('timeslips/', id, form).then((res) =>
     dispatch({
       type: reduxHelper.constant(NS, 'FETCH', 'success'),
-      items: [res]
+      items: [res],
     })
   );
 
@@ -36,8 +35,8 @@ const addProjectTimeslip = (action) => {
       hours: action.hours,
       date: action.date,
       isNew: true,
-      user: action.user.get('id')
-    }
+      user: action.user.get('id'),
+    },
   };
 };
 

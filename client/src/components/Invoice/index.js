@@ -21,17 +21,19 @@ import { fetchModifiers } from 'services/modifier';
 import TaskOverview from './TaskOverview';
 
 const getInvoiceTotals = (invoice, tasks, timeslips, modifiers) => {
-  const modifier = invoice.modifier.map(id => modifiers.find(m => id === m.id));
+  const modifier = invoice.modifier.map((id) =>
+    modifiers.find((m) => id === m.id)
+  );
   const taskIds = invoice ? invoice.tasks : [];
   const timeslipIds = invoice ? invoice.timeslips : [];
-  const activeTimeslips = timeslips.filter(ts => timeslipIds.includes(ts.id));
+  const activeTimeslips = timeslips.filter((ts) => timeslipIds.includes(ts.id));
   const subTotal = tasks
-    .filter(task => taskIds.includes(task.id))
+    .filter((task) => taskIds.includes(task.id))
     .reduce(
       (total, task) =>
         (total += getTaskTotal(
           task,
-          activeTimeslips.filter(ts => ts.task === task.id)
+          activeTimeslips.filter((ts) => ts.task === task.id)
         )),
       0
     );
@@ -86,7 +88,7 @@ class Invoice extends React.Component {
     this.fetchData().then(([invoice, modifier, timeslips, tasks]) => {
       const editable = invoice.id
         ? { ...invoice, modifier: invoice.modifier || [] }
-        : { ...invoice, modifier: modifier.results.map(m => m.id) };
+        : { ...invoice, modifier: modifier.results.map((m) => m.id) };
 
       this.setState({
         editable,
@@ -118,7 +120,7 @@ class Invoice extends React.Component {
 
   handleToggleItem = (field, id) => {
     const items = this.state.editable[field].includes(id)
-      ? this.state.editable[field].filter(t => t !== id)
+      ? this.state.editable[field].filter((t) => t !== id)
       : this.state.editable[field].concat([id]);
 
     this.setState({
@@ -141,15 +143,17 @@ class Invoice extends React.Component {
   handleUpdateStatus(status, items) {
     const { project } = this.props;
     const { editable, timeslips } = this.state;
-    const isActiveTimeslip = ts =>
-      editable.tasks.includes(ts.task) && editable.timeslips.includes(ts.id) && ts.cost;
+    const isActiveTimeslip = (ts) =>
+      editable.tasks.includes(ts.task) &&
+      editable.timeslips.includes(ts.id) &&
+      ts.cost;
     const saveable = {
       ...editable,
       status,
-      timeslips: timeslips.filter(isActiveTimeslip).map(ts => ts.id),
+      timeslips: timeslips.filter(isActiveTimeslip).map((ts) => ts.id),
     };
 
-    saveInvoice(saveable).then(invoice => {
+    saveInvoice(saveable).then((invoice) => {
       const { history } = this.props;
       this.setState({
         editable: { ...invoice },
@@ -158,7 +162,7 @@ class Invoice extends React.Component {
     });
   }
 
-  handleSetDisplaySettings = displaySettings => {
+  handleSetDisplaySettings = (displaySettings) => {
     this.setState({
       editable: {
         ...this.state.editable,
@@ -187,8 +191,8 @@ class Invoice extends React.Component {
       tasks = [],
     } = this.state;
 
-    const getTaskTimeslips = task =>
-      timeslips.filter(ts => ts.task === task.id && ts.cost);
+    const getTaskTimeslips = (task) =>
+      timeslips.filter((ts) => ts.task === task.id && ts.cost);
 
     const isEditable = editable && !editable.id;
     return (
@@ -197,7 +201,9 @@ class Invoice extends React.Component {
           <InvoiceHeader
             project={project}
             invoice={editable}
-            onUpdateStatus={status => this.handleUpdateStatus(status, editable)}
+            onUpdateStatus={(status) =>
+              this.handleUpdateStatus(status, editable)
+            }
           />
         )}
 
@@ -210,7 +216,7 @@ class Invoice extends React.Component {
                   displaySettings={editable}
                   onChange={this.handleSetDisplaySettings}
                 />
-                {tasks.map(task => (
+                {tasks.map((task) => (
                   <TaskOverview
                     invoice={editable}
                     task={task}
@@ -232,8 +238,8 @@ class Invoice extends React.Component {
                 modifiers={modifiers}
                 reference={editable.reference}
                 dueDate={editable.due_date}
-                onRemoveModifier={id => this.handleToggleItem('modifier', id)}
-                onSetReference={reference => this.setReference(reference)}
+                onRemoveModifier={(id) => this.handleToggleItem('modifier', id)}
+                onSetReference={(reference) => this.setReference(reference)}
                 onChange={this.handleChange}
               />
             </React.Fragment>
@@ -259,7 +265,4 @@ const mapStateToProps = (state, { match }) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {}
-)(Invoice);
+export default connect(mapStateToProps, {})(Invoice);

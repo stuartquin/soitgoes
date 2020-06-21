@@ -58,9 +58,9 @@ const values = [
   'DELETE_INVOICE_SUCCESS',
   'SAVE_INVOICE_SUCCESS',
 
-  'SET_HEADER_BAR_SUCCESS'
+  'SET_HEADER_BAR_SUCCESS',
 ];
 
 const constants = {};
-values.forEach(val => constants[val] = val);
+values.forEach((val) => (constants[val] = val));
 export default constants;

@@ -6,7 +6,7 @@ import ReacDOM from 'react-dom';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import createHistory from 'history/createBrowserHistory'
+import createHistory from 'history/createBrowserHistory';
 
 import constants from './constants';
 import configureStore from './configureStore';
@@ -17,7 +17,7 @@ const history = createHistory();
 const store = configureStore(history);
 
 store.dispatch({
-  type: constants.SET_STATE
+  type: constants.SET_STATE,
 });
 
 ReacDOM.render(

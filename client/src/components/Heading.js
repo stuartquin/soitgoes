@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Heading = ({size = 'h1', action = null, children}) => {
+const Heading = ({ size = 'h1', action = null, children }) => {
   const HeadingSize = styled[size]`
     padding: 0;
     magin: 0;
@@ -11,7 +11,11 @@ const Heading = ({size = 'h1', action = null, children}) => {
     align-items: center;
   `;
 
-  return <HeadingSize>{children} {action}</HeadingSize>
+  return (
+    <HeadingSize>
+      {children} {action}
+    </HeadingSize>
+  );
 };
 
 export default Heading;

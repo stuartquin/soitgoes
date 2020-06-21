@@ -15,7 +15,6 @@ import Summary from './Summary';
 import { selectWithProject } from 'services/selectors';
 import { fetchTimeslips, saveTimeslips } from 'services/timeslip';
 import { fetchTasks } from 'services/task';
-import { fetchUpcoming } from 'services/invoice';
 
 const Styled = styled.div`
   background: #f5f3f5;
@@ -38,14 +37,11 @@ class Timeslips extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      weekStart: moment()
-        .startOf('isoweek')
-        .isoWeekday(1),
+      weekStart: moment().startOf('isoweek').isoWeekday(1),
       updatedTimeslips: {}, // keyed by project_date
       timeslips: [],
       selectedProjectId: null,
       newTask: null,
-      upcoming: [],
     };
   }
 
@@ -80,18 +76,9 @@ class Timeslips extends React.Component {
     });
   }
 
-  async loadUpcoming() {
-    const response = await fetchUpcoming();
-    const { projects } = this.props;
-    this.setState({
-      upcoming: selectWithProject(response.results, projects),
-    });
-  }
-
   async fetchData(project) {
     this.loadTimeslips(project);
     this.loadTasks(project);
-    this.loadUpcoming();
   }
 
   handleNewTask = () => {
@@ -99,12 +86,12 @@ class Timeslips extends React.Component {
     this.setState({ newTask: null });
   };
 
-  handleSetActiveDate = weekStart => {
+  handleSetActiveDate = (weekStart) => {
     const { selectedProjectId } = this.state;
     this.setState({ weekStart }, () => this.loadTimeslips(selectedProjectId));
   };
 
-  handleSelectProject = selectedProject => {
+  handleSelectProject = (selectedProject) => {
     console.log(selectedProject);
     this.setState({ selectedProjectId: selectedProject.value });
     this.fetchData(selectedProject.value);
@@ -142,8 +129,6 @@ class Timeslips extends React.Component {
       timeslips: updated,
       updatedTimeslips: [],
     });
-
-    this.loadUpcoming();
   };
 
   render() {
@@ -153,7 +138,6 @@ class Timeslips extends React.Component {
       updatedTimeslips,
       timeslips,
       tasks,
-      upcoming,
     } = this.state;
     const { projects } = this.props;
     const today = moment();
@@ -167,8 +151,8 @@ class Timeslips extends React.Component {
       },
     ].concat(
       Object.values(projects)
-        .filter(p => !p.archived)
-        .map(p => ({
+        .filter((p) => !p.archived)
+        .map((p) => ({
           value: p.id,
           label: p.name,
         }))
@@ -213,7 +197,7 @@ class Timeslips extends React.Component {
             onHourChanged={this.handleSetHour}
             onSetActiveDate={this.handleSetActiveDate}
           />
-          <Summary upcomingSummary={upcoming} />
+          <Summary projects={projects} weekStart={weekStart} />
         </Styled>
         {newTask && (
           <Task
@@ -228,14 +212,11 @@ class Timeslips extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     isLoading: false,
     projects: state.project.items,
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {}
-)(Timeslips);
+export default connect(mapStateToProps, {})(Timeslips);

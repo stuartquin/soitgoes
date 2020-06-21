@@ -11,7 +11,6 @@ import AddSelect from '../addselect';
 import ContactForm from 'components/contact/contactform';
 import Form from 'components/form';
 
-
 class ProjectForm extends Form {
   constructor(props) {
     super(props);
@@ -35,35 +34,35 @@ class ProjectForm extends Form {
       const contact = this.props.contacts.last();
       this.handleChange('contact', contact.get('id'));
     });
-    this.setState({showAddContact: false});
+    this.setState({ showAddContact: false });
   }
 
   handleShowAddContact() {
-    this.setState({showAddContact: true});
+    this.setState({ showAddContact: true });
   }
 
   onSave() {
-    this.props.onSave({
-      ...this.state.form
-    }).then(() => this.refreshForm());
+    this.props
+      .onSave({
+        ...this.state.form,
+      })
+      .then(() => this.refreshForm());
   }
 
   render() {
-    const contacts = this.props.contacts.toList().toJS().map(p =>
-      <MenuItem
-        key={p.id}
-        value={p.id}
-        primaryText={p.name}
-      />
-    );
+    const contacts = this.props.contacts
+      .toList()
+      .toJS()
+      .map((p) => <MenuItem key={p.id} value={p.id} primaryText={p.name} />);
 
     return (
-      <div className='settings'>
+      <div className="settings">
         <TextField
-          style={{width: '100%'}}
+          style={{ width: '100%' }}
           value={this.state.form.name}
           onChange={(evt, val) => this.handleChange('name', val)}
-          floatingLabelText='Name' />
+          floatingLabelText="Name"
+        />
         <AddSelect
           items={contacts}
           value={this.state.form.contact}
@@ -71,42 +70,46 @@ class ProjectForm extends Form {
           onAdd={() => this.handleShowAddContact()}
         />
         <TextField
-          style={{width: '100%'}}
-          type='number'
+          style={{ width: '100%' }}
+          type="number"
           value={this.state.form.hourly_rate}
           onChange={(evt, val) => this.handleChange('hourly_rate', val)}
-          floatingLabelText='Hourly Rate' />
+          floatingLabelText="Hourly Rate"
+        />
         <TextField
-          style={{width: '100%'}}
-          type='text'
+          style={{ width: '100%' }}
+          type="text"
           value={this.state.form.currency}
           onChange={(evt, val) => this.handleChange('currency', val)}
-          floatingLabelText='Currency' />
+          floatingLabelText="Currency"
+        />
         <Toggle
           label="Archived"
           toggled={this.state.form.archived}
           onToggle={(evt, val) => this.handleChange('archived', val)}
         />
-        <div className='action-btns'>
+        <div className="action-btns">
           <RaisedButton
-            className='btn-success'
-            label='Save'
-            labelPosition='before'
+            className="btn-success"
+            label="Save"
+            labelPosition="before"
             disabled={!this.state.isSaveRequired}
             onTouchTap={() => {
-              this.onSave()
+              this.onSave();
             }}
           />
         </div>
         <Dialog
-          title='New Contact'
+          title="New Contact"
           open={this.state.showAddContact}
           onRequestClose={() => this.setState({ showAddContact: false })}
           autoScrollBodyContent={true}
         >
           <ContactForm
             isEdit={false}
-            onSave={(form) => { this.handleAddContact(form) }}
+            onSave={(form) => {
+              this.handleAddContact(form);
+            }}
           />
         </Dialog>
       </div>
@@ -114,4 +117,4 @@ class ProjectForm extends Form {
   }
 }
 
-export {ProjectForm};
+export { ProjectForm };

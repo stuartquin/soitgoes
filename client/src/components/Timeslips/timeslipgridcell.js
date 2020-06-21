@@ -6,7 +6,7 @@ import TimeslipDetail from './TimeslipDetail';
 const StyledInput = styled.input`
   width: 60px;
   height: 60px;
-  border: solid 1px ${props => props.theme.colors.grey_main};
+  border: solid 1px ${(props) => props.theme.colors.grey_main};
   text-align: center;
   cursor: pointer;
   font-size: 18px;
@@ -29,13 +29,13 @@ const StyledInput = styled.input`
     background: #ccedc9;
   }
 
-  ${props =>
+  ${(props) =>
     props.isWeekend &&
     css`
       border-color: ${props.theme.colors.grey_light};
     `}
 
-  ${props =>
+  ${(props) =>
     props.isSaved &&
     css`
       background-color: #f4f6fa !important;
@@ -70,10 +70,10 @@ const TimeslipGridCell = ({
         value={value}
         isSaved={Boolean(timeslip.id)}
         type="number"
-        onFocus={e => e.target.select()}
+        onFocus={(e) => e.target.select()}
         disabled={isDisabled}
         onClick={handleInputClick}
-        onChange={e => onHourChanged(e.target.value, timeslip)}
+        onChange={(e) => onHourChanged(e.target.value, timeslip)}
         onFocus={() => onSetActive(cellKey)}
         isWeekend={isWeekend}
       />

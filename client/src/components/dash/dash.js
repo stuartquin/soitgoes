@@ -1,13 +1,12 @@
 'use strict';
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import moment from 'moment';
 
-import {Card, CardText} from 'material-ui/Card';
+import { Card, CardText } from 'material-ui/Card';
 
 import * as dashActions from '../../actions/dash';
 import { SummaryBarChart } from './summarybarchart';
-
 
 class Dash extends React.Component {
   componentDidMount() {
@@ -30,24 +29,24 @@ class Dash extends React.Component {
 
   render() {
     return (
-      <div className='dash-container'>
-        <div className='content'>
-          <Card className='dash-card'>
+      <div className="dash-container">
+        <div className="content">
+          <Card className="dash-card">
             <CardText>
               <SummaryBarChart
-                title='Invoices Paid'
-                summary={ this.props.invoiceSummary }
-                totalField='total_paid'
+                title="Invoices Paid"
+                summary={this.props.invoiceSummary}
+                totalField="total_paid"
                 threshold={8350}
               />
             </CardText>
           </Card>
-          <Card className='dash-card'>
+          <Card className="dash-card">
             <CardText>
               <SummaryBarChart
-                title='Expenses'
-                summary={ this.props.expensesSummary }
-                totalField='value'
+                title="Expenses"
+                summary={this.props.expensesSummary}
+                totalField="value"
                 threshold={0}
               />
             </CardText>
@@ -61,13 +60,13 @@ class Dash extends React.Component {
 const mapStateToProps = (state, { params }) => {
   return {
     invoiceSummary: state.dash.summary.get('invoices'),
-    expensesSummary: state.dash.summary.get('expenses')
+    expensesSummary: state.dash.summary.get('expenses'),
   };
 };
 
 const actions = {
-  ...dashActions
+  ...dashActions,
 };
 
 const DashContainer = connect(mapStateToProps, actions)(Dash);
-export {DashContainer};
+export { DashContainer };

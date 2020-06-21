@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {asCurrency} from 'services/currency';
+import { asCurrency } from 'services/currency';
 
 const StyledInvoiceSummaryItem = styled.div`
   color: white;
@@ -19,7 +19,7 @@ const Value = styled.div`
   padding-bottom: 16px;
 `;
 
-const InvoiceSummaryItem = ({title, value}) => {
+const InvoiceSummaryItem = ({ title, value }) => {
   return (
     <StyledInvoiceSummaryItem>
       <Title>{title}</Title>

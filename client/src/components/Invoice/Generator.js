@@ -59,7 +59,7 @@ const Generator = ({
           </DisplaySettingsCell>
         )}
       </Header>
-      {items.map(item => (
+      {items.map((item) => (
         <InvoiceItem
           key={item.id}
           item={item}

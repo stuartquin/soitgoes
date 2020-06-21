@@ -4,13 +4,13 @@ const BASE = 'timeslips/';
 
 export const fetchTimeslips = async (params = {}) => api.get(BASE, params);
 
-export const getTotal = timeslips => {
+export const getTotal = (timeslips) => {
   return timeslips.reduce((total, t) => {
     return total + t.hours * t.project.hourly_rate;
   }, 0);
 };
 
-export const groupByProject = timeslips => {
+export const groupByProject = (timeslips) => {
   return timeslips.reduce((agg, timeslip) => {
     const { project } = timeslip;
     const existing = agg[project.id] || [];
@@ -22,14 +22,14 @@ export const groupByProject = timeslips => {
   }, {});
 };
 
-export const saveTimeslip = async item =>
+export const saveTimeslip = async (item) =>
   item.id ? api.put(`${BASE}${item.id}`, item) : api.post(BASE, item);
 
 export const saveTimeslips = (updatedTimeslips, timeslips) => {
-  const newTimeslips = updatedTimeslips.filter(t => !t.id);
-  const updated = updatedTimeslips.filter(t => Boolean(t.id));
+  const newTimeslips = updatedTimeslips.filter((t) => !t.id);
+  const updated = updatedTimeslips.filter((t) => Boolean(t.id));
   const updates = Promise.all(
-    updated.map(timeslip =>
+    updated.map((timeslip) =>
       api.update(BASE, timeslip.id, {
         hours: timeslip.hours,
       })
@@ -42,9 +42,9 @@ export const saveTimeslips = (updatedTimeslips, timeslips) => {
   }
 
   return Promise.all(calls).then(([results, created = []]) => {
-    const updatedIds = results.map(r => r.id);
+    const updatedIds = results.map((r) => r.id);
     return timeslips
-      .filter(t => !updatedIds.includes(t.id))
+      .filter((t) => !updatedIds.includes(t.id))
       .concat(results)
       .concat(created);
   });
