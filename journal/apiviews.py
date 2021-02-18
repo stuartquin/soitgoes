@@ -115,12 +115,6 @@ class ProjectList(generics.ListCreateAPIView):
         return models.Project.objects.all().order_by("-created_at")
 
 
-class ActivityFeedList(generics.ListAPIView):
-    serializer_class = serializers.ActivitySerializer
-
-    def get_queryset(self):
-        return models.Activity.objects.all().order_by("-created_at")[:10]
-
 
 class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.ProjectSerializer

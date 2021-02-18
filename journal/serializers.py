@@ -113,11 +113,6 @@ class AccountSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class ActivitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Activity
-
-
 class InvoiceModifierSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.InvoiceModifier
@@ -127,7 +122,7 @@ class InvoiceModifierSerializer(serializers.ModelSerializer):
 class TaskNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TaskNote
-        fields = ["__all__"]
+        fields = ["content", "content_type"]
 
 
 class TaskSerializer(serializers.ModelSerializer):
