@@ -1,12 +1,12 @@
 #!/bin/bash
 
 ROOT=/home/dokku
-APP=soitgoes
+APP=$1
 STORAGE=$ROOT/storage/$APP
 NGINX=$ROOT/$APP/nginx.conf.d
 
-su dokku
 mkdir -p $STORAGE
+mkdir -p $NGINX
 
 dokku apps:create $APP
 
@@ -15,6 +15,6 @@ echo "    alias $STORAGE/static;" >> $NGINX/static.conf
 echo "}" >> $NGINX/static.conf
 
 dokku config:set $APP DATABASE_NAME=/storage/db.sqlite3
+dokku config:set --no-restart $APP DOKKU_LETSENCRYPT_EMAIL=$2
 dokku storage:mount $APP $STORAGE:/storage
-dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git
-dokku letsencrypt:enable $APP
+dokku storage:mount $APP $STORAGE/static:/app/static
