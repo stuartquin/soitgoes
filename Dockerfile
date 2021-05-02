@@ -16,6 +16,7 @@ RUN pip install -r /app/requirements.txt
 # could uninstall it in the Jenkinsfile?
 RUN pip install ipdb
 
+ADD Procfile /app/Procfile
 ADD manage.py /app/manage.py
 ADD journal /app/journal
 ADD soitgoes /app/soitgoes
