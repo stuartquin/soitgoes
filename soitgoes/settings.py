@@ -29,6 +29,7 @@ ALLOWED_HOSTS = [
     "tracking.stuartquin.com",
     "books.stuartquin.com",
     "dev.stuartquin.com",
+    "soitgoes.cloud.stuartquin.com",
     "local.books.stuartquin.com",
     "localhost",
 ]
