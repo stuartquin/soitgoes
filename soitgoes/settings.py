@@ -27,9 +27,9 @@ DEBUG = "DEV" in os.environ
 
 ALLOWED_HOSTS = [
     "tracking.stuartquin.com",
+    "tracking.cloud.stuartquin.com",
     "books.stuartquin.com",
     "dev.stuartquin.com",
-    "soitgoes.cloud.stuartquin.com",
     "local.books.stuartquin.com",
     "localhost",
 ]
