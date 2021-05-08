@@ -1,2 +1,2 @@
-web: gunicorn soitgoes.wsgi:application
-release: python manage.py migrate --noinput
+web: gunicorn api.soitgoes.wsgi:application
+release: python api/manage.py migrate --noinput

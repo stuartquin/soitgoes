@@ -54,6 +54,9 @@ import {
     InvoiceModifier,
     InvoiceModifierFromJSON,
     InvoiceModifierToJSON,
+    Login,
+    LoginFromJSON,
+    LoginToJSON,
     Project,
     ProjectFromJSON,
     ProjectToJSON,
@@ -78,7 +81,7 @@ export interface CreateInvoiceRequest {
 }
 
 export interface CreateLoginRequest {
-    body?: any | null;
+    login?: Login;
 }
 
 export interface CreateProjectRequest {
@@ -347,7 +350,7 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async createLoginRaw(requestParameters: CreateLoginRequest): Promise<runtime.ApiResponse<any>> {
+    async createLoginRaw(requestParameters: CreateLoginRequest): Promise<runtime.ApiResponse<Login>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -355,19 +358,19 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/api/login/`,
+            path: `/api/users/login/`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.body as any,
+            body: LoginToJSON(requestParameters.login),
         });
 
-        return new runtime.TextApiResponse(response) as any;
+        return new runtime.JSONApiResponse(response, (jsonValue) => LoginFromJSON(jsonValue));
     }
 
     /**
      */
-    async createLogin(requestParameters: CreateLoginRequest): Promise<any> {
+    async createLogin(requestParameters: CreateLoginRequest): Promise<Login> {
         const response = await this.createLoginRaw(requestParameters);
         return await response.value();
     }
@@ -563,29 +566,6 @@ export class ApiApi extends runtime.BaseAPI {
      */
     async destroyInvoiceModifier(requestParameters: DestroyInvoiceModifierRequest): Promise<void> {
         await this.destroyInvoiceModifierRaw(requestParameters);
-    }
-
-    /**
-     */
-    async destroyLoginRaw(): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/login/`,
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async destroyLogin(): Promise<void> {
-        await this.destroyLoginRaw();
     }
 
     /**

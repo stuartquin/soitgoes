@@ -82,32 +82,6 @@ class UserDetail(APIView):
         return Response(user.data)
 
 
-class LoginView(APIView):
-    authentication_classes = ()
-    permission_classes = ()
-    serializer_class = serializers.UserTokenSerializer
-
-    @csrf_exempt
-    def post(self, request, pk=None):
-        username = request.data.get("username", None)
-        password = request.data.get("password", None)
-        user = auth.authenticate(username=username, password=password)
-
-        if user and user.is_active:
-            auth.login(request, user)
-            response = Response(self.serializer_class(user.auth_token).data)
-            response.set_cookie("sig_token", user.auth_token)
-            return response
-
-        raise PermissionDenied()
-
-    @csrf_exempt
-    def delete(self, request, pk=None):
-        response = Response()
-        response.delete_cookie("sig_token")
-        return response
-
-
 class ProjectList(generics.ListCreateAPIView):
     serializer_class = serializers.ProjectSerializer
 

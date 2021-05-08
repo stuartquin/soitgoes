@@ -9,18 +9,18 @@ ADD install /app/install
 RUN tar -xf /app/install/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
 RUN ln -s /app/wkhtmltox/bin/wkhtmltopdf /usr/bin/wkhtmltopdf
 
-ADD requirements.txt /app/requirements.txt
-RUN pip install -r /app/requirements.txt
+ADD api/requirements.txt /app/api/requirements.txt
+RUN pip install -r /app/api/requirements.txt
 
 # TODO ideally should only do this on dev...
 # could uninstall it in the Jenkinsfile?
 RUN pip install ipdb
 
 ADD Procfile /app/Procfile
-ADD manage.py /app/manage.py
-ADD journal /app/journal
-ADD soitgoes /app/soitgoes
-ADD libs /app/libs
-ADD assets /app/assets
+ADD api/manage.py /app/api/manage.py
+ADD api/journal /app/api/journal
+ADD api/soitgoes /app/api/soitgoes
+ADD api/libs /app/api/libs
+ADD api/assets /app/api/assets
 
-RUN python manage.py collectstatic --noinput
+RUN python api/manage.py collectstatic --noinput

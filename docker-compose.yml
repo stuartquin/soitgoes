@@ -8,13 +8,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python api/manage.py runserver 0.0.0.0:8000
     ports:
      - "8000:8000"
     volumes:
-      - ./journal:/app/journal
-      - ./soitgoes:/app/soitgoes
-      - ./libs:/app/libs
-      - ./assets:/app/assets
+      - ./api:/app/api
       - ./client/dist:/app/journal/static/journal/dist
-      - ./db.sqlite3:/app/db.sqlite3

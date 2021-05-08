@@ -1174,7 +1174,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/login/:
+  /api/users/login/:
     post:
       operationId: createLogin
       description: ''
@@ -1182,25 +1182,20 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: {}
+            schema:
+              $ref: '#/components/schemas/Login'
           application/x-www-form-urlencoded:
-            schema: {}
+            schema:
+              $ref: '#/components/schemas/Login'
           multipart/form-data:
-            schema: {}
+            schema:
+              $ref: '#/components/schemas/Login'
       responses:
         '201':
           content:
             application/json:
-              schema: {}
-          description: ''
-      tags:
-      - api
-    delete:
-      operationId: destroyLogin
-      description: ''
-      parameters: []
-      responses:
-        '204':
+              schema:
+                $ref: '#/components/schemas/Login'
           description: ''
       tags:
       - api
@@ -1651,3 +1646,19 @@ components:
           nullable: true
       required:
       - name
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 300
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - email
+      - password

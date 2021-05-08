@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/ApiApi.ts
 apis/index.ts
 index.ts
@@ -18,6 +17,7 @@ models/InlineResponse2007.ts
 models/Invoice.ts
 models/InvoiceDetail.ts
 models/InvoiceModifier.ts
+models/Login.ts
 models/Project.ts
 models/Task.ts
 models/TaskNotes.ts
