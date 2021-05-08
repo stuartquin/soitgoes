@@ -1,12 +1,11 @@
-FROM node:10.15.1
+FROM node
 
 RUN mkdir /app
 
-ADD client/package.json /app/package.json
+ADD ui/package.json /app/package.json
 WORKDIR /app
 RUN npm install
 
-ADD client/webpack.config.js /app/webpack.config.js
-ADD client/src /app/src
-ADD client/.babelrc /app/.babelrc
-ADD client/.eslintrc /app/.eslintrc
+ADD ui/src /app/src
+ADD ui/tsconfig.json /app/tsconfig.json
+ADD ui/public /app/public

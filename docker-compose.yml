@@ -1,20 +1,5 @@
 version: '2'
 services:
-  nodejs:
-    build:
-      context: .
-      dockerfile: Dockerfile-nodejs
-    ports:
-     - "8080:8080"
-    volumes:
-      - ./client/src:/app/src
-      - ./client/dist:/app/dist
-      - ./client/index.html:/app/index.html
-      - ./client/package.json:/app/package.json
-      - ./client/webpack.config.js:/app/webpack.config.js
-      - ./client/.babelrc:/app/.babelrc
-    command: npm run start:dev
-
   soitgoes:
     stdin_open: true
     tty: true
@@ -26,8 +11,6 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     ports:
      - "8000:8000"
-    depends_on:
-     - nodejs
     volumes:
       - ./journal:/app/journal
       - ./soitgoes:/app/soitgoes
