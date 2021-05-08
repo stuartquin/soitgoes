@@ -19,7 +19,6 @@ urlpatterns = [
         apiviews.InvoiceModifierDetail.as_view(),
     ),
     url(r"api/accounts/$", apiviews.AccountList.as_view()),
-    url(r"api/user/$", apiviews.UserDetail.as_view()),
     url(r"api/tasks/$", apiviews.TaskList.as_view()),
     url(r"api/tasks/(?P<pk>[0-9]+)$", apiviews.TaskDetail.as_view()),
     url(r"api/contacts/$", apiviews.ContactList.as_view()),

@@ -74,20 +74,11 @@ class AccountList(generics.ListAPIView):
         return account
 
 
-class UserDetail(APIView):
-    serializer_class = serializers.UserSerializer
-
-    def get(self, request, pk=None):
-        user = serializers.UserSerializer(self.request.user)
-        return Response(user.data)
-
-
 class ProjectList(generics.ListCreateAPIView):
     serializer_class = serializers.ProjectSerializer
 
     def get_queryset(self):
         return models.Project.objects.all().order_by("-created_at")
-
 
 
 class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):

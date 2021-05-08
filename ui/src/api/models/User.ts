@@ -13,49 +13,49 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import {
-    AccountCompany,
-    AccountCompanyFromJSON,
-    AccountCompanyFromJSONTyped,
-    AccountCompanyToJSON,
-} from './';
-
 /**
  * 
  * @export
- * @interface Account
+ * @interface User
  */
-export interface Account {
+export interface User {
     /**
      * 
      * @type {number}
-     * @memberof Account
+     * @memberof User
      */
     readonly id?: number;
     /**
-     * 
-     * @type {AccountCompany}
-     * @memberof Account
+     * Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.
+     * @type {string}
+     * @memberof User
      */
-    company: AccountCompany;
+    username: string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof User
+     */
+    lastLogin?: Date | null;
 }
 
-export function AccountFromJSON(json: any): Account {
-    return AccountFromJSONTyped(json, false);
+export function UserFromJSON(json: any): User {
+    return UserFromJSONTyped(json, false);
 }
 
-export function AccountFromJSONTyped(json: any, ignoreDiscriminator: boolean): Account {
+export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'company': AccountCompanyFromJSON(json['company']),
+        'username': json['username'],
+        'lastLogin': !exists(json, 'last_login') ? undefined : (json['last_login'] === null ? null : new Date(json['last_login'])),
     };
 }
 
-export function AccountToJSON(value?: Account | null): any {
+export function UserToJSON(value?: User | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -64,7 +64,8 @@ export function AccountToJSON(value?: Account | null): any {
     }
     return {
         
-        'company': AccountCompanyToJSON(value.company),
+        'username': value.username,
+        'last_login': value.lastLogin === undefined ? undefined : (value.lastLogin === null ? null : value.lastLogin.toISOString()),
     };
 }
 

@@ -69,12 +69,6 @@ class TimeSlipSerializer(LogActivity):
         ]
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "username", "last_login"]
-
-
 class UserTokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Token
@@ -105,11 +99,10 @@ class ContactSerializer(serializers.ModelSerializer):
 
 class AccountSerializer(serializers.ModelSerializer):
     company = CompanySerializer()
-    users = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Account
-        fields = ("id", "company", "users")
+        fields = ("id", "company")
         depth = 1
 
 

@@ -6,7 +6,7 @@ from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from users.serializers import LoginSerializer
+from users.serializers import LoginSerializer, UserSerializer
 
 # Create your views here.
 User = auth.get_user_model()
@@ -25,3 +25,10 @@ class LoginView(generics.CreateAPIView):
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
+
+
+class LoggedInUserView(generics.RetrieveAPIView):
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user

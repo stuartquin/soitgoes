@@ -66,6 +66,9 @@ import {
     TimeSlip,
     TimeSlipFromJSON,
     TimeSlipToJSON,
+    User,
+    UserFromJSON,
+    UserToJSON,
 } from '../models';
 
 export interface CreateCompanyRequest {
@@ -980,30 +983,6 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async listUserDetailsRaw(): Promise<runtime.ApiResponse<Array<any>>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/user/`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     */
-    async listUserDetails(): Promise<Array<any>> {
-        const response = await this.listUserDetailsRaw();
-        return await response.value();
-    }
-
-    /**
-     */
     async partialUpdateCompanyRaw(requestParameters: PartialUpdateCompanyRequest): Promise<runtime.ApiResponse<Company>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling partialUpdateCompany.');
@@ -1392,6 +1371,30 @@ export class ApiApi extends runtime.BaseAPI {
      */
     async retrieveTask(requestParameters: RetrieveTaskRequest): Promise<Task> {
         const response = await this.retrieveTaskRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     */
+    async retrieveUserRaw(): Promise<runtime.ApiResponse<User>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/users/`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async retrieveUser(): Promise<User> {
+        const response = await this.retrieveUserRaw();
         return await response.value();
     }
 

@@ -1,6 +1,5 @@
 export * from './Account';
 export * from './AccountCompany';
-export * from './AccountUsers';
 export * from './Company';
 export * from './Contact';
 export * from './InlineResponse200';
@@ -19,3 +18,4 @@ export * from './Project';
 export * from './Task';
 export * from './TaskNotes';
 export * from './TimeSlip';
+export * from './User';

@@ -3,7 +3,6 @@ apis/index.ts
 index.ts
 models/Account.ts
 models/AccountCompany.ts
-models/AccountUsers.ts
 models/Company.ts
 models/Contact.ts
 models/InlineResponse200.ts
@@ -22,5 +21,6 @@ models/Project.ts
 models/Task.ts
 models/TaskNotes.ts
 models/TimeSlip.ts
+models/User.ts
 models/index.ts
 runtime.ts

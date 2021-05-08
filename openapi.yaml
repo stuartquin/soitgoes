@@ -3,6 +3,20 @@ info:
   title: ''
   version: ''
 paths:
+  /api/users/:
+    get:
+      operationId: retrieveUser
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - api
   /api/projects/:
     get:
       operationId: listProjects
@@ -623,21 +637,6 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Account'
-          description: ''
-      tags:
-      - api
-  /api/user/:
-    get:
-      operationId: listUserDetails
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items: {}
           description: ''
       tags:
       - api
@@ -1262,6 +1261,24 @@ paths:
       - api
 components:
   schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+\z
+          maxLength: 150
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+      - username
     Project:
       type: object
       properties:
@@ -1513,27 +1530,6 @@ components:
               nullable: true
           required:
           - name
-        users:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: integer
-                readOnly: true
-              username:
-                type: string
-                description: Required. 150 characters or fewer. Letters, digits and
-                  @/./+/-/_ only.
-                pattern: ^[\w.@+-]+\z
-                maxLength: 150
-              last_login:
-                type: string
-                format: date-time
-                nullable: true
-            required:
-            - username
-          readOnly: true
       required:
       - company
     Task:
@@ -1652,6 +1648,7 @@ components:
         email:
           type: string
           format: email
+          writeOnly: true
           maxLength: 300
         password:
           type: string
