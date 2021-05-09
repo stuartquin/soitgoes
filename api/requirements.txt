@@ -27,3 +27,4 @@ wcwidth==0.1.8
 gunicorn==20.1.0
 uritemplate==3.0.1
 PyYAML==5.4.1
+django_filter==2.4.0

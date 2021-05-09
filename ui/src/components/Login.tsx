@@ -16,6 +16,7 @@ function Login() {
         }
       });
       storeToken(response.token || "");
+      window.location.reload();
     }
 
   };

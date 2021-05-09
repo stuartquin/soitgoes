@@ -5,8 +5,9 @@ from django.contrib import auth
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.db.models import Q
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,11 +16,18 @@ from rest_framework.permissions import BasePermission
 from journal import serializers, models, summary
 from journal.cookieauthentication import CookieAuthentication
 from journal.project import get_unbilled_summary
+from journal.filters import TimeSlipFilter
 from journal.invoices import (
     save_invoice_tasks,
     get_new_invoice,
     set_invoice_totals,
 )
+
+
+def get_allowed_projects(request: HttpRequest) -> list[models.Project]:
+    if not request or not request.user or not request.user.is_authenticated:
+        return []
+    return models.Project.objects.filter(account__in=request.user.account_set.all())
 
 
 class HasProjectAccess(BasePermission):
@@ -78,7 +86,8 @@ class ProjectList(generics.ListCreateAPIView):
     serializer_class = serializers.ProjectSerializer
 
     def get_queryset(self):
-        return models.Project.objects.all().order_by("-created_at")
+        queryset = get_allowed_projects(self.request)
+        return queryset.order_by("-created_at")
 
 
 class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -220,35 +229,13 @@ class TimeSlipList(generics.ListCreateAPIView):
     permission_classes = (HasTimeslipAccess,)
     serializer_class = serializers.TimeSlipSerializer
 
-    def get_serializer(self, *args, **kwargs):
-        kwargs["context"] = self.get_serializer_context()
-        if "data" in kwargs:
-            kwargs["many"] = True
-            for timeslip in kwargs["data"]:
-                timeslip["user"] = self.request.user.pk
-
-        return self.serializer_class(*args, **kwargs)
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = TimeSlipFilter
 
     def get_queryset(self):
-        filters = {}
-        if "project" in self.request.query_params:
-            filters["project"] = self.request.query_params["project"]
-
-        if "start" in self.request.query_params:
-            filters["date__gte"] = self.request.query_params["start"]
-
-        if "end" in self.request.query_params:
-            filters["date__lte"] = self.request.query_params["end"]
-
-        if "invoice" in self.request.query_params:
-            invoice = self.request.query_params["invoice"]
-            filters["invoice"] = invoice if invoice != "none" else None
-
-        if "ids" in self.request.query_params:
-            ids = self.request.query_params["ids"].split(",")
-            filters["id__in"] = ids
-
-        return models.TimeSlip.objects.filter(**filters).order_by("date")
+        return models.TimeSlip.objects.filter(
+            project__in=get_allowed_projects(self.request)
+        )
 
 
 class ProjectSummary(APIView):
@@ -262,7 +249,11 @@ class TaskList(generics.ListCreateAPIView):
     serializer_class = serializers.TaskSerializer
 
     def get_queryset(self):
-        queryset = models.Task.objects
+        queryset = models.Task.objects.filter(
+            project__in=models.Project.objects.filter(
+                account__in=self.request.user.account_set.all()
+            )
+        )
 
         order_by = "-activity_at"
         if "sort" in self.request.query_params:

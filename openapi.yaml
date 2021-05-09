@@ -280,6 +280,24 @@ paths:
         description: The initial index from which to return the results.
         schema:
           type: integer
+      - name: project
+        required: false
+        in: query
+        description: project
+        schema:
+          type: string
+      - name: start
+        required: false
+        in: query
+        description: start
+        schema:
+          type: string
+      - name: end
+        required: false
+        in: query
+        description: end
+        schema:
+          type: string
       responses:
         '200':
           content:

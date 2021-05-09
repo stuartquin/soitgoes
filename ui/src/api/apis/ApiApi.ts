@@ -166,6 +166,9 @@ export interface ListTasksRequest {
 export interface ListTimeSlipsRequest {
     limit?: number;
     offset?: number;
+    project?: string;
+    start?: string;
+    end?: string;
 }
 
 export interface PartialUpdateCompanyRequest {
@@ -960,6 +963,18 @@ export class ApiApi extends runtime.BaseAPI {
 
         if (requestParameters.offset !== undefined) {
             queryParameters['offset'] = requestParameters.offset;
+        }
+
+        if (requestParameters.project !== undefined) {
+            queryParameters['project'] = requestParameters.project;
+        }
+
+        if (requestParameters.start !== undefined) {
+            queryParameters['start'] = requestParameters.start;
+        }
+
+        if (requestParameters.end !== undefined) {
+            queryParameters['end'] = requestParameters.end;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
