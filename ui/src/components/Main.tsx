@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { User, Project } from 'api/models';
 import { getClient } from 'apiClient';
 
+import TimeSheet from 'components/TimeSheet';
+
 interface Props {
   user: User
 };
@@ -24,9 +26,7 @@ function Main({user}: Props) {
 
   return (
     <div className="Main">
-      {projects.map((project) => (
-        <div>{project.name}</div>
-      ))}
+      <TimeSheet user={user} projects={projects}/>
     </div>
   );
 }
