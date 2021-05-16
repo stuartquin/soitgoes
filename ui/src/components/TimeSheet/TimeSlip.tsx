@@ -16,11 +16,13 @@ function TimeSlip({ timeSlipEntry }: Props) {
     updateHours(timeSlipEntry, event.target.value);
   };
 
+  const hours = parseInt(timeSlip.hours || "", 10) || "";
+
   return (
     <div>
       <input
-        className="p-2 w-16"
-        value={timeSlip.hours || ""}
+        className="shadow appearance-none border border-grey-400 rounded w-16 p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mx-1 text-center"
+        value={hours}
         onChange={handleChange}
       />
     </div>

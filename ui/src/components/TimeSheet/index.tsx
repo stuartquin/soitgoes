@@ -3,8 +3,17 @@ import { groupBy } from "lodash";
 
 import * as models from "api/models";
 
-import Project from "components/TimeSheet/Project";
+import Task from "components/TimeSheet/Task";
+import DateRange from "components/TimeSheet/DateRange";
 import { TimeSlipContext } from "components/TimeSheet/TimeSlipContext";
+
+const getProject = (
+  taskProjects: { [projectId: number]: models.Project[] },
+  projectId: number
+): models.Project => {
+  const project = taskProjects[projectId] || [];
+  return project[0] || {};
+};
 
 interface Props {
   user: models.User;
@@ -14,20 +23,24 @@ interface Props {
 function TimeSheet({ user, projects }: Props) {
   const { timeSheet } = useContext(TimeSlipContext);
   const { tasks, dateRange } = timeSheet;
-  const projectTasks = useMemo(() => {
-    return groupBy(tasks, "project");
-  }, [tasks]);
+  const taskProjects = groupBy(projects, "id");
 
   return (
     <div className="p-3">
-      {projects.map((project) => (
-        <Project
-          key={project.id}
-          project={project}
-          dateRange={dateRange}
-          tasks={projectTasks[project.id || ""] || []}
-        />
-      ))}
+      <div className="flex">
+        <div className="flex-grow min-w-1/3 max-w-1/3" />
+        <DateRange dateRange={dateRange} />
+      </div>
+      <div>
+        {tasks.map((task) => (
+          <Task
+            key={task.id}
+            project={getProject(taskProjects, task.project || -1)}
+            dateRange={dateRange}
+            task={task}
+          />
+        ))}
+      </div>
     </div>
   );
 }
