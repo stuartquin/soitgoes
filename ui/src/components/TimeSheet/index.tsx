@@ -1,5 +1,6 @@
 import React, { useContext, useMemo } from "react";
-import { groupBy } from "lodash";
+import { range, groupBy } from "lodash";
+import { format, addDays, addHours } from "date-fns";
 
 import * as models from "api/models";
 
@@ -17,13 +18,17 @@ const getProject = (
 
 interface Props {
   user: models.User;
+  startDate: Date;
   projects: models.Project[];
 }
 
-function TimeSheet({ user, projects }: Props) {
+function TimeSheet({ user, startDate, projects }: Props) {
   const { timeSheet } = useContext(TimeSlipContext);
-  const { tasks, dateRange } = timeSheet;
+  const { tasks } = timeSheet;
   const taskProjects = groupBy(projects, "id");
+  const dateRange = useMemo(() => {
+    return range(7).map((day) => addHours(addDays(startDate, day), 12));
+  }, [startDate]);
 
   return (
     <div className="p-3">

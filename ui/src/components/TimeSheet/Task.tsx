@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { format } from "date-fns";
 
 import * as models from "api/models";
 
@@ -13,7 +14,11 @@ interface Props {
 
 function Task({ task, project, dateRange }: Props) {
   const { timeSheet } = useContext(TimeSlipContext);
-  const entries = timeSheet.entries[task.id || -1] || [];
+  const taskEntries = timeSheet.entries[task.id || -1] || {};
+  const entries = dateRange.map((date) => {
+    const dateStr = format(date, "yyyy-MM-dd");
+    return taskEntries[dateStr];
+  });
 
   return (
     <div className="border-1 border-grey-400 border-radius-sm flex my-1">
@@ -27,7 +32,7 @@ function Task({ task, project, dateRange }: Props) {
 
       <div className="flex">
         {entries.map((entry) => (
-          <TimeSlip timeSlipEntry={entry} key={entry.dateStr} />
+          <TimeSlip timeSlipEntry={entry} key={entry.date.toISOString()} />
         ))}
       </div>
     </div>

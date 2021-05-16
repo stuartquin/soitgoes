@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useMemo, useCallback, useState, useEffect } from "react";
 import {
   startOfWeek,
   endOfMonth,
@@ -7,6 +7,7 @@ import {
   format,
   parse,
 } from "date-fns";
+import { range } from "lodash";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
@@ -38,15 +39,15 @@ function Main({ user }: Props) {
   const [projects, setProjects] = useState<models.Project[]>([]);
   const [timeSheet, setTimeSheet] = useState<TimeSheetType>({
     entries: {},
-    dateRange: [],
     tasks: [],
   });
 
-  const search = window.location.search;
+  const startDate = useMemo(() => {
+    return getStartDate(window.location.search);
+  }, []);
 
   useEffect(() => {
     const load = async () => {
-      const startDate = getStartDate(search);
       const api = getClient();
       const response = await api.listProjects({});
       setProjects(response.results || []);
@@ -67,7 +68,7 @@ function Main({ user }: Props) {
     };
 
     load();
-  }, [search]);
+  }, [startDate]);
 
   const updateHours = useCallback(
     (entry: TimeSlipEntry, hours: string) => {
@@ -94,9 +95,10 @@ function Main({ user }: Props) {
           <div className="flex">
             <TimeSheet
               user={user}
+              startDate={startDate}
               projects={projects.filter((p) => !p.archived)}
             />
-            <Totals projects={projects} />
+            <Totals startDate={startDate} projects={projects} />
           </div>
         )}
       </div>
