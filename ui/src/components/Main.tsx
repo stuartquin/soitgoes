@@ -12,6 +12,7 @@ import * as models from "api/models";
 import { getClient } from "apiClient";
 
 import TimeSheet from "components/TimeSheet";
+import Totals from "components/TimeSheet/Totals";
 import {
   TimeSlipContext,
   getTimeSheet,
@@ -53,6 +54,7 @@ function Main({ user }: Props) {
       const taskResponse = await api.listTasks({});
       const timeSlipResponse = await api.listTimeSlips({
         start: format(startOfMonth(addMonths(startDate, -1)), "yyyy-MM-dd"),
+        end: format(endOfMonth(addMonths(startDate, 1)), "yyyy-MM-dd"),
       });
 
       setTimeSheet(
@@ -89,10 +91,13 @@ function Main({ user }: Props) {
         </button>
 
         {projects.length && (
-          <TimeSheet
-            user={user}
-            projects={projects.filter((p) => !p.archived)}
-          />
+          <div className="flex">
+            <TimeSheet
+              user={user}
+              projects={projects.filter((p) => !p.archived)}
+            />
+            <Totals projects={projects} />
+          </div>
         )}
       </div>
     </TimeSlipContext.Provider>

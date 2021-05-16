@@ -121,8 +121,6 @@ export const saveTimeSheet = (
   const updated = getUpdatedTimeSlips(timeSheet);
   const api = getClient();
 
-  console.log("UPDATED", updated);
-
   const requests = updated.map((timeSlip) => {
     return timeSlip.id
       ? api.updateTimeSlip({
