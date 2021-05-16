@@ -1,37 +1,27 @@
-import React, { useMemo } from "react";
-import { groupBy } from "lodash";
-import { format } from "date-fns";
+import React, { useContext } from "react";
 
 import * as models from "api/models";
 
+import TimeSlip from "components/TimeSheet/TimeSlip";
+import { TimeSlipContext } from "components/TimeSheet/TimeSlipContext";
+
 interface Props {
   task: models.Task;
-  timeSlips: models.TimeSlip[];
   dateRange: Date[];
 }
 
-function Task({ task, timeSlips, dateRange }: Props) {
-  const dateStrs = useMemo(
-    () => dateRange.map((d) => format(d, "yyyy-MM-dd")),
-    [dateRange]
-  );
+function Task({ task, dateRange }: Props) {
+  const { timeSheet } = useContext(TimeSlipContext);
+  const entries = timeSheet.entries[task.id || -1] || [];
 
-  const dateTimeSlips = useMemo(() => {
-    const grouped = groupBy(timeSlips, (ts) => format(ts.date, "yyyy-MM-dd"));
-    return dateStrs.map((dateStr) =>
-      grouped[dateStr] ? grouped[dateStr][0] : ({} as models.TimeSlip)
-    );
-  }, [timeSlips, dateStrs]);
-
-  console.log(dateTimeSlips);
   return (
     <div className="border-2 border-grey-600 border-radius-sm flex">
-      <div className="p-3 text-left flex-grow">{task.name}</div>
+      <div className="p-3 text-left flex-grow">
+        {task.name}: {task.id}
+      </div>
 
-      {dateStrs.map((dateStr, index) => (
-        <div className="p-3 w-16" key={dateStr}>
-          {dateTimeSlips[index].hours || 0}
-        </div>
+      {entries.map((entry) => (
+        <TimeSlip timeSlipEntry={entry} key={entry.dateStr} />
       ))}
     </div>
   );

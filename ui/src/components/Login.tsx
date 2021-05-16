@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import { getFormValues } from 'forms';
-import { getClient, storeToken } from 'apiClient';
+import { getFormValues } from "forms";
+import { getClient, storeToken } from "apiClient";
 
 function Login() {
   const login = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -13,12 +13,11 @@ function Login() {
         login: {
           email: values.email,
           password: values.password,
-        }
+        },
       });
       storeToken(response.token || "");
       window.location.reload();
     }
-
   };
 
   return (
