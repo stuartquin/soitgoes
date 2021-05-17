@@ -251,7 +251,8 @@ class TaskList(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = models.Task.objects.filter(
             project__in=models.Project.objects.filter(
-                account__in=self.request.user.account_set.all()
+                account__in=self.request.user.account_set.all(),
+                archived=False
             )
         )
 

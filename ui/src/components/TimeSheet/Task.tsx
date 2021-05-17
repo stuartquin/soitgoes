@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { format } from "date-fns";
 
 import * as models from "api/models";
@@ -14,20 +14,23 @@ interface Props {
 
 function Task({ task, project, dateRange }: Props) {
   const { timeSheet } = useContext(TimeSlipContext);
-  const taskEntries = timeSheet.entries[task.id || -1] || {};
-  const entries = dateRange.map((date) => {
-    const dateStr = format(date, "yyyy-MM-dd");
-    return taskEntries[dateStr];
-  });
+  const taskEntries = timeSheet.entries[task.id || -1];
+  const entries = useMemo(() => {
+    console.log("crunch entries");
+    return dateRange
+      .map((date) => {
+        const dateStr = format(date, "yyyy-MM-dd");
+        return taskEntries[dateStr];
+      })
+      .filter((entry) => entry);
+  }, [dateRange, taskEntries]);
 
   return (
     <div className="border-1 border-grey-400 border-radius-sm flex my-1">
-      <div className="flex flex-grow flex-wrap py-2 text-gray-700 text-sm md:text-base text-left min-w-1/3 max-w-1/3">
+      <div className="flex flex-grow flex-wrap py-2 text-gray-700 text-sm md:text-base text-left min-w-1/3 max-w-1/2">
         <div className="font-semibold w-full md:w-auto">{project.name}</div>
         <div className="mx-2 hidden md:block">―</div>
-        <div className="text-left">
-          {task.name} : {task.id}
-        </div>
+        <div className="text-left">{task.name}</div>
       </div>
 
       <div className="flex">

@@ -8,7 +8,6 @@ import * as models from "api/models";
 
 const getDateRange = (date: Date): Date[] => {
   const startDate = startOfMonth(date);
-  console.log(startDate);
   return range(64).map((day) => addHours(addDays(startDate, day - 1), 2));
 };
 
@@ -45,6 +44,10 @@ export const getTimeSheet = (
   const dateRange = getDateRange(start);
   const groupedByTask = groupBy(timeSlips, "task");
 
+  const activeTasks = tasks.filter(
+    (task) => (task.hoursSpent || 0) > 0 || task.state === "OPEN"
+  );
+
   const entries = tasks.reduce((acc, task: models.Task) => {
     const groupedByDate = groupBy(groupedByTask[task.id || ""] || [], (ts) =>
       format(ts.date, "yyyy-MM-dd")
@@ -75,7 +78,7 @@ export const getTimeSheet = (
 
   return {
     entries,
-    tasks,
+    tasks: activeTasks,
   };
 };
 

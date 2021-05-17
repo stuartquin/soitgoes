@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 
 import {
   TimeSlipContext,
@@ -12,9 +12,12 @@ interface Props {
 function TimeSlip({ timeSlipEntry }: Props) {
   const { updateHours } = useContext(TimeSlipContext);
   const { timeSlip } = timeSlipEntry;
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateHours(timeSlipEntry, event.target.value);
-  };
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      updateHours(timeSlipEntry, event.target.value);
+    },
+    [timeSlipEntry, updateHours]
+  );
 
   const hours = parseInt(timeSlip.hours || "", 10) || "";
 

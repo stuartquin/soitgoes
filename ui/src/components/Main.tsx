@@ -7,7 +7,6 @@ import {
   format,
   parse,
 } from "date-fns";
-import { range } from "lodash";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";

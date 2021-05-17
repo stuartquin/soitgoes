@@ -27,13 +27,14 @@ function TimeSheet({ user, startDate, projects }: Props) {
   const { tasks } = timeSheet;
   const taskProjects = groupBy(projects, "id");
   const dateRange = useMemo(() => {
+    console.log("Re-crunch Date Range");
     return range(7).map((day) => addHours(addDays(startDate, day), 12));
   }, [startDate]);
 
   return (
     <div className="p-3">
       <div className="flex">
-        <div className="flex-grow min-w-1/3 max-w-1/3" />
+        <div className="flex-grow min-w-1/3 max-w-1/2" />
         <DateRange dateRange={dateRange} />
       </div>
       <div>
