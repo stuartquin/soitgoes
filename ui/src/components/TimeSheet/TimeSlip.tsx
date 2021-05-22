@@ -24,7 +24,7 @@ function TimeSlip({ timeSlipEntry }: Props) {
   return (
     <div>
       <input
-        className="shadow appearance-none border border-grey-400 rounded w-16 p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mx-1 text-center"
+        className="shadow appearance-none border border-grey-300 rounded w-16 p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mx-1 text-center"
         value={hours}
         onChange={handleChange}
       />

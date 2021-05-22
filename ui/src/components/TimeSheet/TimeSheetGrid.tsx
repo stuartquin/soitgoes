@@ -1,21 +1,13 @@
 import React, { useContext, useMemo } from "react";
-import { range, groupBy } from "lodash";
-import { Link } from "react-router-dom";
+import { range } from "lodash";
 import { format, addDays, addHours } from "date-fns";
 
 import * as models from "api/models";
 
-import Task from "components/TimeSheet/Task";
 import DateRange from "components/TimeSheet/DateRange";
+import ProjectTasks from "components/TimeSheet/ProjectTasks";
+import Button from "components/Button";
 import { TimeSlipContext } from "components/TimeSheet/TimeSlipContext";
-
-const getProject = (
-  taskProjects: { [projectId: number]: models.Project[] },
-  projectId: number
-): models.Project => {
-  const project = taskProjects[projectId] || [];
-  return project[0] || {};
-};
 
 interface Props {
   user: models.User;
@@ -25,8 +17,7 @@ interface Props {
 
 function TimeSheetGrid({ user, startDate, projects }: Props) {
   const { timeSheet } = useContext(TimeSlipContext);
-  const { tasks } = timeSheet;
-  const taskProjects = groupBy(projects, "id");
+  const { tasks = [] } = timeSheet;
   const dateRange = useMemo(() => {
     return range(7).map((day) => addHours(addDays(startDate, day), 12));
   }, [startDate]);
@@ -34,25 +25,38 @@ function TimeSheetGrid({ user, startDate, projects }: Props) {
   const prevDateStr = format(addDays(startDate, -7), "yyyy-MM-dd");
   const nextDateStr = format(addDays(startDate, 7), "yyyy-MM-dd");
 
+  const projectList = projects
+    .map((project) => {
+      return { project, tasks: tasks.filter((t) => t.project === project.id) };
+    })
+    .filter(({ tasks }) => tasks.length);
+
   return (
     <div className="p-3">
-      <div className="flex">
-        <div className="flex-grow min-w-1/3 max-w-1/2">
-          <Link to={`/?date=${prevDateStr}`}>Prev</Link>
-          <Link to={`/?date=${nextDateStr}`}>Next</Link>
+      <div className="flex items-center">
+        <div className="flex-grow w-48 md:w-64">
+          <Button
+            variant="light"
+            to={`/?date=${prevDateStr}`}
+            className="rounded-l"
+            group="left"
+          >
+            Prev
+          </Button>
+          <Button variant="light" to={`/?date=${nextDateStr}`} group="right">
+            Next
+          </Button>
         </div>
         <DateRange dateRange={dateRange} />
       </div>
-      <div>
-        {tasks.map((task) => (
-          <Task
-            key={task.id}
-            project={getProject(taskProjects, task.project || -1)}
-            dateRange={dateRange}
-            task={task}
-          />
-        ))}
-      </div>
+      {projectList.map(({ project, tasks }) => (
+        <ProjectTasks
+          dateRange={dateRange}
+          project={project}
+          tasks={tasks}
+          key={project.id}
+        />
+      ))}
     </div>
   );
 }

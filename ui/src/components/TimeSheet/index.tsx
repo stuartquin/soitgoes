@@ -22,6 +22,7 @@ import {
 } from "components/TimeSheet/TimeSlipContext";
 import TimeSheetGrid from "components/TimeSheet/TimeSheetGrid";
 import Totals from "components/TimeSheet/Totals";
+import Actions from "components/TimeSheet/Actions";
 
 const getStartDate = (search: string): Date => {
   const searchParams = new URLSearchParams(search);
@@ -75,26 +76,20 @@ function TimeSheet({ user, projects, tasks }: Props) {
   }, [timeSheet]);
 
   return (
-    <React.Fragment>
+    <div className="flex justify-center">
       <TimeSlipContext.Provider value={{ timeSheet, updateHours }}>
-        <div>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={save}
-          >
-            Save
-          </button>
+        <div className="overflow-x-auto">
+          <Actions onSave={save} />
           <div className="flex">
             <TimeSheetGrid
               user={user}
               startDate={startDate}
               projects={projects.filter((p) => !p.archived)}
             />
-            <Totals startDate={startDate} projects={projects} />
           </div>
         </div>
       </TimeSlipContext.Provider>
-    </React.Fragment>
+    </div>
   );
 }
 
