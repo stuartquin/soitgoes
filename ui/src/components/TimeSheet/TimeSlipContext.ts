@@ -1,7 +1,6 @@
 import { createContext } from "react";
 import { groupBy, range } from "lodash";
-import { format, addDays, addHours } from "date-fns";
-import { startOfMonth } from "date-fns";
+import { format, addDays, addHours, startOfMonth, endOfMonth } from "date-fns";
 
 import { getClient } from "apiClient";
 import * as models from "api/models";
@@ -141,4 +140,44 @@ export const saveTimeSheet = (
   });
 
   return Promise.all(requests);
+};
+
+export type WeekMonthTotals = {
+  week: number;
+  month: number;
+};
+
+export const getTotalsByProject = (
+  startDate: Date,
+  projects: models.Project[],
+  timeSlips: models.TimeSlip[]
+) => {
+  const monthStartDate = startOfMonth(startDate);
+  const monthEndDate = endOfMonth(startDate);
+  const weekEndDate = addDays(startDate, 7);
+
+  const byProject: { [project: number]: WeekMonthTotals } = projects.reduce(
+    (acc, project) => ({
+      ...acc,
+      [project.id || -1]: {
+        week: 0,
+        month: 0,
+      },
+    }),
+    {}
+  );
+
+  timeSlips.forEach((ts) => {
+    const group = byProject[ts.project];
+
+    if (ts.hours && ts.date >= startDate && ts.date <= weekEndDate) {
+      group.week += parseFloat(ts.hours);
+    }
+
+    if (ts.hours && ts.date >= monthStartDate && ts.date <= monthEndDate) {
+      group.month += parseFloat(ts.hours);
+    }
+  });
+
+  return byProject;
 };

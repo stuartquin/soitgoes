@@ -7,7 +7,11 @@ import * as models from "api/models";
 import DateRange from "components/TimeSheet/DateRange";
 import ProjectTasks from "components/TimeSheet/ProjectTasks";
 import Button from "components/Button";
-import { TimeSlipContext } from "components/TimeSheet/TimeSlipContext";
+import {
+  TimeSlipEntry,
+  TimeSlipContext,
+  getTotalsByProject,
+} from "components/TimeSheet/TimeSlipContext";
 
 interface Props {
   user: models.User;
@@ -17,7 +21,7 @@ interface Props {
 
 function TimeSheetGrid({ user, startDate, projects }: Props) {
   const { timeSheet } = useContext(TimeSlipContext);
-  const { tasks = [] } = timeSheet;
+  const { tasks = [], entries } = timeSheet;
   const dateRange = useMemo(() => {
     return range(7).map((day) => addHours(addDays(startDate, day), 12));
   }, [startDate]);
@@ -30,6 +34,15 @@ function TimeSheetGrid({ user, startDate, projects }: Props) {
       return { project, tasks: tasks.filter((t) => t.project === project.id) };
     })
     .filter(({ tasks }) => tasks.length);
+
+  const timeSlips = Object.values(entries)
+    .reduce(
+      (acc, entry) => [...acc, ...Object.values(entry)],
+      [] as TimeSlipEntry[]
+    )
+    .map((entry) => entry.timeSlip);
+
+  const totalsByProject = getTotalsByProject(startDate, projects, timeSlips);
 
   return (
     <div className="p-3">
@@ -53,6 +66,8 @@ function TimeSheetGrid({ user, startDate, projects }: Props) {
         <ProjectTasks
           dateRange={dateRange}
           project={project}
+          weekTotal={totalsByProject[project.id || -1].week}
+          monthTotal={totalsByProject[project.id || -1].month}
           tasks={tasks}
           key={project.id}
         />

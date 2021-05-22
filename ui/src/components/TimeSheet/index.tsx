@@ -21,7 +21,6 @@ import {
   TimeSlipEntry,
 } from "components/TimeSheet/TimeSlipContext";
 import TimeSheetGrid from "components/TimeSheet/TimeSheetGrid";
-import Totals from "components/TimeSheet/Totals";
 import Actions from "components/TimeSheet/Actions";
 
 const getStartDate = (search: string): Date => {
