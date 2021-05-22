@@ -1,14 +1,14 @@
 import { createContext } from "react";
 import { groupBy, range } from "lodash";
 import { format, addDays, addHours } from "date-fns";
-import { startOfDay, startOfMonth } from "date-fns";
+import { startOfMonth } from "date-fns";
 
 import { getClient } from "apiClient";
 import * as models from "api/models";
 
 const getDateRange = (date: Date): Date[] => {
-  const startDate = startOfMonth(date);
-  return range(64).map((day) => addHours(addDays(startDate, day - 1), 2));
+  const startDate = addDays(startOfMonth(date), -7);
+  return range(56).map((day) => addHours(addDays(startDate, day - 1), 2));
 };
 
 export type TimeSlipEntry = {

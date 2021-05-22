@@ -55,7 +55,7 @@ function Totals({ projects, startDate }: Props) {
 
   return (
     <div className="text-left">
-      <h5 className="text-md uppercase font-semibold leading-7 text-gray-900 sm:text-md sm:truncate mt-4">
+      <h5 className="text-md uppercase font-semibold leading-7 text-gray-600 sm:text-md sm:truncate mt-4">
         {format(monthStartDate, "MMMM yyyy")}
       </h5>
       <div>
@@ -68,7 +68,7 @@ function Totals({ projects, startDate }: Props) {
           </div>
         ))}
       </div>
-      <h5 className="text-md uppercase font-semibold leading-7 text-gray-900 sm:text-md sm:truncate mt-4">
+      <h5 className="text-md uppercase font-semibold leading-7 text-gray-600 sm:text-md sm:truncate mt-4">
         This Week
       </h5>
       <div>

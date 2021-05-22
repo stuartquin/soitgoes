@@ -1,49 +1,18 @@
-import React, { useMemo, useCallback, useState, useEffect } from "react";
-import {
-  startOfWeek,
-  endOfMonth,
-  startOfMonth,
-  addMonths,
-  format,
-  parse,
-} from "date-fns";
+import React, { useState, useEffect } from "react";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
 
+import Layout from "components/Layout";
 import TimeSheet from "components/TimeSheet";
-import Totals from "components/TimeSheet/Totals";
-import {
-  TimeSlipContext,
-  getTimeSheet,
-  getUpdatedTimeSheetHours,
-  saveTimeSheet,
-  TimeSheetType,
-  TimeSlipEntry,
-} from "components/TimeSheet/TimeSlipContext";
 
 interface Props {
   user: models.User;
 }
 
-const getStartDate = (search: string): Date => {
-  const searchParams = new URLSearchParams(search);
-  const dateStr = searchParams.get("date");
-  const date = dateStr ? parse(dateStr, "yyyy-MM-dd", new Date()) : new Date();
-
-  return startOfWeek(date, { weekStartsOn: 1 });
-};
-
 function Main({ user }: Props) {
   const [projects, setProjects] = useState<models.Project[]>([]);
-  const [timeSheet, setTimeSheet] = useState<TimeSheetType>({
-    entries: {},
-    tasks: [],
-  });
-
-  const startDate = useMemo(() => {
-    return getStartDate(window.location.search);
-  }, []);
+  const [tasks, setTasks] = useState<models.Task[]>([]);
 
   useEffect(() => {
     const load = async () => {
@@ -52,56 +21,18 @@ function Main({ user }: Props) {
       setProjects(response.results || []);
 
       const taskResponse = await api.listTasks({});
-      const timeSlipResponse = await api.listTimeSlips({
-        start: format(startOfMonth(addMonths(startDate, -1)), "yyyy-MM-dd"),
-        end: format(endOfMonth(addMonths(startDate, 1)), "yyyy-MM-dd"),
-      });
-
-      setTimeSheet(
-        getTimeSheet(
-          startDate,
-          taskResponse.results || [],
-          timeSlipResponse.results || []
-        )
-      );
+      setTasks(taskResponse.results || []);
     };
 
     load();
-  }, [startDate]);
-
-  const updateHours = useCallback(
-    (entry: TimeSlipEntry, hours: string) => {
-      setTimeSheet(getUpdatedTimeSheetHours(user, timeSheet, entry, hours));
-    },
-    [user, timeSheet]
-  );
-
-  const save = useCallback(() => {
-    saveTimeSheet(timeSheet);
-  }, [timeSheet]);
+  }, []);
 
   return (
-    <TimeSlipContext.Provider value={{ timeSheet, updateHours }}>
-      <div className="Main">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={save}
-        >
-          Save
-        </button>
-
-        {projects.length && (
-          <div className="flex">
-            <TimeSheet
-              user={user}
-              startDate={startDate}
-              projects={projects.filter((p) => !p.archived)}
-            />
-            <Totals startDate={startDate} projects={projects} />
-          </div>
-        )}
-      </div>
-    </TimeSlipContext.Provider>
+    <Layout>
+      {projects.length && (
+        <TimeSheet user={user} projects={projects} tasks={tasks} />
+      )}
+    </Layout>
   );
 }
 
