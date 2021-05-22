@@ -34,7 +34,7 @@ function TimeSheetGrid({ user, startDate, projects }: Props) {
   return (
     <div className="p-3">
       <div className="flex items-center">
-        <div className="flex-grow w-48 md:w-64">
+        <div className="flex-grow w-48 md:w-64 flex items-center">
           <Button
             variant="light"
             to={`/?date=${prevDateStr}`}

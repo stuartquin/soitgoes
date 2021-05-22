@@ -7,6 +7,7 @@ type Props = {
   to?: string;
   group?: string;
   className?: string;
+  disabled?: boolean;
   [x: string]: any;
 };
 
@@ -22,20 +23,32 @@ const GROUP: { [group: string]: string } = {
   middle: "",
 };
 
-function Button({ variant, children, className, group, to, ...props }: Props) {
-  const buttonsClasses = `${BUTTONS[variant]} font-bold py-2 px-4 ${
+function Button({
+  variant,
+  children,
+  className,
+  group,
+  to,
+  disabled,
+  ...props
+}: Props) {
+  const buttonsClasses = `${BUTTONS[variant]} font-bold py-2 px-4 leading-4 ${
     className || ""
   }`;
   const groupClasses = group
     ? `${buttonsClasses} ${GROUP[group]}`
     : `${buttonsClasses} rounded`;
 
-  return to ? (
-    <Link to={to} className={groupClasses} {...props}>
+  const disabledClasses = disabled
+    ? `${groupClasses} opacity-50 cursor-not-allowed`
+    : groupClasses;
+
+  return to && !disabled ? (
+    <Link to={to} className={disabledClasses} {...props}>
       {children}
     </Link>
   ) : (
-    <button className={groupClasses} {...props}>
+    <button className={disabledClasses} {...props}>
       {children}
     </button>
   );
