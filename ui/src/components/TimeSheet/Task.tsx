@@ -26,8 +26,11 @@ function Task({ task, project, dateRange }: Props) {
 
   return (
     <div className="border-1 border-grey-400 border-radius-sm flex py-1">
-      <div className="flex flex-wrap py-2 text-gray-700 text-sm md:text-base text-left w-48 md:w-64">
-        <div className="text-left">{task.name}</div>
+      <div
+        className="py-2 text-left text-gray-700 text-sm md:text-base text-left w-48 md:w-64"
+        style={{ minWidth: "140px" }}
+      >
+        {task.name}
       </div>
 
       <div className="flex flex-grow">

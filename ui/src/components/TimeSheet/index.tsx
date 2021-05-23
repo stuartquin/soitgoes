@@ -79,13 +79,11 @@ function TimeSheet({ user, projects, tasks }: Props) {
       <TimeSlipContext.Provider value={{ timeSheet, updateHours }}>
         <div className="overflow-x-auto">
           <Actions onSave={save} />
-          <div className="flex">
-            <TimeSheetGrid
-              user={user}
-              startDate={startDate}
-              projects={projects.filter((p) => !p.archived)}
-            />
-          </div>
+          <TimeSheetGrid
+            user={user}
+            startDate={startDate}
+            projects={projects.filter((p) => !p.archived)}
+          />
         </div>
       </TimeSlipContext.Provider>
     </div>

@@ -45,9 +45,15 @@ function TimeSheetGrid({ user, startDate, projects }: Props) {
   const totalsByProject = getTotalsByProject(startDate, projects, timeSlips);
 
   return (
-    <div className="p-3">
-      <div className="flex items-center">
-        <div className="flex-grow w-48 md:w-64 flex items-center">
+    <div
+      className="max-h-screen overflow-y-auto px-4"
+      style={{ minWidth: "720px" }}
+    >
+      <div className="sticky top-0 flex items-center bg-white py-2">
+        <div
+          className="flex-grow w-48 md:w-64 flex items-center"
+          style={{ minWidth: "140px" }}
+        >
           <Button
             variant="light"
             to={`/?date=${prevDateStr}`}

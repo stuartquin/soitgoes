@@ -36,13 +36,8 @@ function ProjectTasks({
         </div>
       </div>
       {projectTasks.map((task) => (
-        <div className="pl-4">
-          <Task
-            key={task.id}
-            project={project}
-            dateRange={dateRange}
-            task={task}
-          />
+        <div className="pl-4" key={task.id}>
+          <Task project={project} dateRange={dateRange} task={task} />
         </div>
       ))}
     </div>
