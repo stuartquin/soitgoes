@@ -20,13 +20,13 @@ def _save_invoice_timeslip(invoice, item):
 def _save_invoice_task(invoice, task):
     if task.billing_type == BILLING_TYPE_FIXED:
         cost = task.cost
-        hours = 0
+        hours_spent = 0
     else:
         cost = sum([ts.cost for ts in invoice.timeslips.filter(task=task)])
-        hours = sum([ts.hours for ts in invoice.timeslips.filter(task=task)])
+        hours_spent = sum([ts.hours for ts in invoice.timeslips.filter(task=task)])
 
     task_invoice = TaskInvoice.objects.create(
-        task=task, invoice=invoice, cost=cost, hours_spent=hours
+        task=task, invoice=invoice, cost=cost, hours_spent=hours_spent
     )
     task_invoice.save()
 

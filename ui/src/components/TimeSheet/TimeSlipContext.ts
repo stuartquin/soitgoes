@@ -71,7 +71,7 @@ export const getTimeSheet = (
             date,
           },
         };
-      }),
+      }, {}),
     };
   }, {});
 
@@ -134,7 +134,7 @@ export const saveTimeSheet = (
     return timeSlip.id
       ? api.updateTimeSlip({
           id: String(timeSlip.id),
-          timeSlip,
+          timeSlip: { ...timeSlip, hours: timeSlip.hours || "0" },
         })
       : api.createTimeSlip({ timeSlip });
   });

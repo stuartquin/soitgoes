@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { format } from "date-fns";
 
 import * as models from "api/models";
 
@@ -23,15 +24,18 @@ function ProjectTasks({
     () => tasks.filter((t) => t.project === project.id),
     [tasks, project]
   );
+  const startDate = dateRange[0];
 
   return (
     <div className="border-1 bg-gray-50 border-radius-sm my-4">
       <div className="bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-700 text-sm md:text-base text-left p-4 justify-between items-center">
         <div className="font-semibold w-full md:w-auto">{project.name}</div>
-        <div className="md:text-right">
-          <div className="font-semibold text-sm">{weekTotal} hours</div>
-          <div className="text-xs text-gray-400">
-            {monthTotal} hours in April
+        <div className="flex sm:text-right sm:block">
+          <div className="font-semibold text-xs md:text-sm">
+            {weekTotal} hours
+          </div>
+          <div className="text-xs text-gray-400 ml-2">
+            {monthTotal} hours in {format(startDate, "MMMM")}
           </div>
         </div>
       </div>

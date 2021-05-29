@@ -75,18 +75,16 @@ function TimeSheet({ user, projects, tasks }: Props) {
   }, [timeSheet]);
 
   return (
-    <div className="flex justify-center">
-      <TimeSlipContext.Provider value={{ timeSheet, updateHours }}>
-        <div className="overflow-x-auto">
-          <Actions onSave={save} />
-          <TimeSheetGrid
-            user={user}
-            startDate={startDate}
-            projects={projects.filter((p) => !p.archived)}
-          />
-        </div>
-      </TimeSlipContext.Provider>
-    </div>
+    <TimeSlipContext.Provider value={{ timeSheet, updateHours }}>
+      <div style={{ minWidth: "720px" }} className="px-4">
+        <Actions onSave={save} />
+        <TimeSheetGrid
+          user={user}
+          startDate={startDate}
+          projects={projects.filter((p) => !p.archived)}
+        />
+      </div>
+    </TimeSlipContext.Provider>
   );
 }
 
