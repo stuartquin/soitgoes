@@ -1,4 +1,4 @@
-## Install
+# Install
 
 Requires http://wkhtmltopdf.org/downloads.html
 

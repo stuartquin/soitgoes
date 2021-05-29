@@ -17,21 +17,16 @@ export type TimeSlipEntry = {
 };
 
 export type TimeSheetType = {
-  entries: {
-    [taskId: number]: {
-      [dateStr: string]: TimeSlipEntry;
-    };
+  [taskId: number]: {
+    [dateStr: string]: TimeSlipEntry;
   };
-  tasks: models.Task[];
 };
 
 export type TimeSlipContextType = {
-  timeSheet: TimeSheetType;
   updateHours: (entry: TimeSlipEntry, hours: string) => void;
 };
 
 export const TimeSlipContext = createContext<TimeSlipContextType>({
-  timeSheet: { entries: {}, tasks: [] },
   updateHours: (entry: TimeSlipEntry, hours: string) => null,
 });
 
@@ -43,11 +38,7 @@ export const getTimeSheet = (
   const dateRange = getDateRange(start);
   const groupedByTask = groupBy(timeSlips, "task");
 
-  const activeTasks = tasks.filter(
-    (task) => (task.hoursSpent || 0) > 0 || task.state === "OPEN"
-  );
-
-  const entries = tasks.reduce((acc, task: models.Task) => {
+  return tasks.reduce((acc, task: models.Task) => {
     const groupedByDate = groupBy(groupedByTask[task.id || ""] || [], (ts) =>
       format(ts.date, "yyyy-MM-dd")
     );
@@ -74,11 +65,6 @@ export const getTimeSheet = (
       }, {}),
     };
   }, {});
-
-  return {
-    entries,
-    tasks: activeTasks,
-  };
 };
 
 export const getUpdatedTimeSheetHours = (
@@ -90,9 +76,8 @@ export const getUpdatedTimeSheetHours = (
   const { timeSlip, date } = entry;
   const dateStr = format(date, "yyyy-MM-dd");
   const taskId = timeSlip.task || -1;
-  const { entries } = timeSheet;
 
-  entries[taskId][dateStr] = {
+  timeSheet[taskId][dateStr] = {
     ...entry,
     updated: true,
     timeSlip: {
@@ -104,18 +89,14 @@ export const getUpdatedTimeSheetHours = (
 
   return {
     ...timeSheet,
-    entries: {
-      ...entries,
-      [taskId]: { ...entries[taskId] },
-    },
+    [taskId]: { ...timeSheet[taskId] },
   };
 };
 
 export const getUpdatedTimeSlips = (
   timeSheet: TimeSheetType
 ): models.TimeSlip[] => {
-  const { entries } = timeSheet;
-  return Object.values(entries)
+  return Object.values(timeSheet)
     .reduce(
       (acc, val) => [...acc, ...Object.values(val)],
       [] as TimeSlipEntry[]

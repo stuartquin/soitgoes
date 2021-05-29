@@ -19,7 +19,6 @@ const Styled = styled.div`
 `;
 
 const TimeslipDetail = ({ tasks }) => {
-  console.log(tasks);
   return (
     <Styled>
       <strong>Task:</strong>

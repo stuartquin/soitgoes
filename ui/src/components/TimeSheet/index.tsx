@@ -39,16 +39,15 @@ interface Props {
 
 function TimeSheet({ user, projects, tasks }: Props) {
   const search = useLocation().search;
-  const [timeSheet, setTimeSheet] = useState<TimeSheetType>({
-    entries: {},
-    tasks: [],
-  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [timeSheet, setTimeSheet] = useState<TimeSheetType>({});
   const startDate = useMemo(() => {
     return getStartDate(search);
   }, [search]);
 
   useEffect(() => {
     const load = async () => {
+      setIsLoading(true);
       const api = getClient();
       const timeSlipResponse = await api.listTimeSlips({
         start: format(startOfMonth(addMonths(startDate, -1)), "yyyy-MM-dd"),
@@ -58,6 +57,7 @@ function TimeSheet({ user, projects, tasks }: Props) {
       setTimeSheet(
         getTimeSheet(startDate, tasks, timeSlipResponse.results || [])
       );
+      setIsLoading(false);
     };
 
     load();
@@ -75,14 +75,20 @@ function TimeSheet({ user, projects, tasks }: Props) {
   }, [timeSheet]);
 
   return (
-    <TimeSlipContext.Provider value={{ timeSheet, updateHours }}>
+    <TimeSlipContext.Provider value={{ updateHours }}>
       <div style={{ minWidth: "720px" }} className="px-4">
         <Actions onSave={save} />
-        <TimeSheetGrid
-          user={user}
-          startDate={startDate}
-          projects={projects.filter((p) => !p.archived)}
-        />
+        {isLoading ? (
+          <p>Loading</p>
+        ) : (
+          <TimeSheetGrid
+            user={user}
+            startDate={startDate}
+            timeSheet={timeSheet}
+            projects={projects}
+            tasks={tasks}
+          />
+        )}
       </div>
     </TimeSlipContext.Provider>
   );

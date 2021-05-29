@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import * as models from "api/models";
 
 import Task from "components/TimeSheet/Task";
+import { TimeSheetType } from "components/TimeSheet/TimeSlipContext";
 
 interface Props {
   tasks: models.Task[];
@@ -11,6 +12,7 @@ interface Props {
   dateRange: Date[];
   weekTotal: number;
   monthTotal: number;
+  timeSheet: TimeSheetType;
 }
 
 function ProjectTasks({
@@ -19,6 +21,7 @@ function ProjectTasks({
   monthTotal,
   project,
   dateRange,
+  timeSheet,
 }: Props) {
   const projectTasks = useMemo(
     () => tasks.filter((t) => t.project === project.id),
@@ -41,7 +44,12 @@ function ProjectTasks({
       </div>
       {projectTasks.map((task) => (
         <div className="pl-4" key={task.id}>
-          <Task project={project} dateRange={dateRange} task={task} />
+          <Task
+            timeSheet={timeSheet}
+            project={project}
+            dateRange={dateRange}
+            task={task}
+          />
         </div>
       ))}
     </div>

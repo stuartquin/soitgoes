@@ -1,20 +1,20 @@
-import React, { useContext, useMemo } from "react";
+import React, { useMemo } from "react";
 import { format } from "date-fns";
 
 import * as models from "api/models";
 
 import TimeSlip from "components/TimeSheet/TimeSlip";
-import { TimeSlipContext } from "components/TimeSheet/TimeSlipContext";
+import { TimeSheetType } from "components/TimeSheet/TimeSlipContext";
 
 interface Props {
   task: models.Task;
   project: models.Project;
   dateRange: Date[];
+  timeSheet: TimeSheetType;
 }
 
-function Task({ task, project, dateRange }: Props) {
-  const { timeSheet } = useContext(TimeSlipContext);
-  const taskEntries = timeSheet.entries[task.id || -1];
+function Task({ task, timeSheet, project, dateRange }: Props) {
+  const taskEntries = timeSheet[task.id || -1];
   const entries = useMemo(() => {
     return dateRange
       .map((date) => {

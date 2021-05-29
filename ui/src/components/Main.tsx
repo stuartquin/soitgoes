@@ -18,10 +18,13 @@ function Main({ user }: Props) {
     const load = async () => {
       const api = getClient();
       const response = await api.listProjects({});
-      setProjects(response.results || []);
+      setProjects((response.results || []).filter((p) => !p.archived));
 
       const taskResponse = await api.listTasks({});
-      setTasks(taskResponse.results || []);
+      const activeTasks = (taskResponse.results || []).filter(
+        (task) => (task.hoursSpent || 0) > 0 || task.state === "OPEN"
+      );
+      setTasks(activeTasks);
     };
 
     load();
@@ -29,7 +32,7 @@ function Main({ user }: Props) {
 
   return (
     <Layout>
-      {projects.length && (
+      {projects.length && tasks.length && (
         <TimeSheet user={user} projects={projects} tasks={tasks} />
       )}
     </Layout>

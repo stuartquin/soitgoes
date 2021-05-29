@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import React, { useMemo } from "react";
 import { range } from "lodash";
 import { format, addDays, addHours } from "date-fns";
 
@@ -9,7 +9,7 @@ import ProjectTasks from "components/TimeSheet/ProjectTasks";
 import Button from "components/Button";
 import {
   TimeSlipEntry,
-  TimeSlipContext,
+  TimeSheetType,
   getTotalsByProject,
 } from "components/TimeSheet/TimeSlipContext";
 
@@ -17,11 +17,11 @@ interface Props {
   user: models.User;
   startDate: Date;
   projects: models.Project[];
+  timeSheet: TimeSheetType;
+  tasks: models.Task[];
 }
 
-function TimeSheetGrid({ user, startDate, projects }: Props) {
-  const { timeSheet } = useContext(TimeSlipContext);
-  const { tasks = [], entries } = timeSheet;
+function TimeSheetGrid({ user, tasks, timeSheet, startDate, projects }: Props) {
   const dateRange = useMemo(() => {
     return range(7).map((day) => addHours(addDays(startDate, day), 12));
   }, [startDate]);
@@ -29,13 +29,18 @@ function TimeSheetGrid({ user, startDate, projects }: Props) {
   const prevDateStr = format(addDays(startDate, -7), "yyyy-MM-dd");
   const nextDateStr = format(addDays(startDate, 7), "yyyy-MM-dd");
 
-  const projectList = projects
-    .map((project) => {
-      return { project, tasks: tasks.filter((t) => t.project === project.id) };
-    })
-    .filter(({ tasks }) => tasks.length);
+  const projectList = useMemo(() => {
+    return projects
+      .map((project) => {
+        return {
+          project,
+          tasks: tasks.filter((t) => t.project === project.id),
+        };
+      })
+      .filter(({ tasks }) => tasks.length);
+  }, [tasks, projects]);
 
-  const timeSlips = Object.values(entries)
+  const timeSlips = Object.values(timeSheet)
     .reduce(
       (acc, entry) => [...acc, ...Object.values(entry)],
       [] as TimeSlipEntry[]
@@ -73,6 +78,7 @@ function TimeSheetGrid({ user, startDate, projects }: Props) {
             weekTotal={totalsByProject[project.id || -1].week}
             monthTotal={totalsByProject[project.id || -1].month}
             tasks={tasks}
+            timeSheet={timeSheet}
             key={project.id}
           />
         ))}
