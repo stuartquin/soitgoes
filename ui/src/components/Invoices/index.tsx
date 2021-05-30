@@ -9,12 +9,12 @@ import SlideOver from "components/SlideOver";
 
 interface RouterProps {
   invoiceId: string;
+  projectId: string;
 }
 
 interface Props {
   user: models.User;
   projects: models.Project[];
-  tasks: models.Task[];
 }
 
 function ensure<T>(
@@ -28,9 +28,9 @@ function ensure<T>(
   return argument;
 }
 
-function Invoices({ user, projects, tasks }: Props) {
+function Invoices({ user, projects }: Props) {
   const [invoices, setInvoices] = useState<models.Invoice[]>([]);
-  const { invoiceId } = useParams<RouterProps>();
+  const { projectId, invoiceId } = useParams<RouterProps>();
   const history = useHistory();
 
   useEffect(() => {
@@ -45,7 +45,7 @@ function Invoices({ user, projects, tasks }: Props) {
     };
 
     load();
-  }, [tasks]);
+  }, []);
 
   const invoiceList = useMemo(() => {
     return invoices.map((invoice) => {
@@ -60,6 +60,14 @@ function Invoices({ user, projects, tasks }: Props) {
     history.push("/invoices");
   }, [history]);
 
+  const project = useMemo(() => {
+    return projectId
+      ? ensure(projects.find((p) => p.id === parseInt(projectId, 10)))
+      : ({} as models.Project);
+  }, [projects, projectId]);
+
+  console.log("UPDATE", invoiceId);
+
   return (
     <React.Fragment>
       <div className="px-4">
@@ -73,7 +81,11 @@ function Invoices({ user, projects, tasks }: Props) {
         </div>
       </div>
       <SlideOver isOpen={Boolean(invoiceId)} onClose={closeInvoiceDetail}>
-        {Boolean(invoiceId) ? <InvoiceDetail invoiceId={invoiceId} /> : <div />}
+        {Boolean(invoiceId) ? (
+          <InvoiceDetail project={project} invoiceId={invoiceId} />
+        ) : (
+          <div />
+        )}
       </SlideOver>
     </React.Fragment>
   );

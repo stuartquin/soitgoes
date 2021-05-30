@@ -8,7 +8,6 @@ interface Props {
 
 function SlideOver({ children, isOpen, onClose }: Props) {
   const slideOver = isOpen ? "translate-x-0" : "translate-x-full";
-  // <div className="fixed inset-y-0 right-0 pl-10 max-w-1/2 flex">
 
   return (
     <div

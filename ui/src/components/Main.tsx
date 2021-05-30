@@ -38,11 +38,11 @@ function Main({ user }: Props) {
       <Layout>
         {projects.length && tasks.length && (
           <Switch>
-            <Route path="/invoices/:invoiceId">
-              <Invoices user={user} projects={projects} tasks={tasks} />
+            <Route path="/invoices/:projectId/:invoiceId">
+              <Invoices user={user} projects={projects} />
             </Route>
             <Route path="/invoices">
-              <Invoices user={user} projects={projects} tasks={tasks} />
+              <Invoices user={user} projects={projects} />
             </Route>
             <Route path="/time">
               <TimeSheet user={user} projects={projects} tasks={tasks} />

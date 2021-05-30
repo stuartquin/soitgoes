@@ -16,7 +16,7 @@ from rest_framework.permissions import BasePermission
 from journal import serializers, models, summary
 from journal.cookieauthentication import CookieAuthentication
 from journal.project import get_unbilled_summary
-from journal.filters import TimeSlipFilter
+from journal.filters import TimeSlipFilter, TaskFilter
 from journal.invoices import (
     save_invoice_tasks,
     get_new_invoice,
@@ -238,40 +238,17 @@ class TimeSlipList(generics.ListCreateAPIView):
         )
 
 
-class ProjectSummary(APIView):
-    def get(self, request, pk=None):
-        start_date = self.request.query_params.get("start")
-        end_date = self.request.query_params.get("end")
-        return Response(dict(results=get_unbilled_summary(start_date, end_date)))
-
-
 class TaskList(generics.ListCreateAPIView):
+    queryset = models.Task.objects.all()
     serializer_class = serializers.TaskSerializer
 
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = TaskFilter
+
     def get_queryset(self):
-        queryset = models.Task.objects.filter(
-            project__in=models.Project.objects.filter(
-                account__in=self.request.user.account_set.all(),
-                archived=False
-            )
+        return models.Task.objects.filter(
+            project__in=get_allowed_projects(self.request)
         )
-
-        order_by = "-activity_at"
-        if "sort" in self.request.query_params:
-            order_by = self.request.query_params["sort"]
-
-        if "state" in self.request.query_params:
-            queryset = queryset.filter(state=self.request.query_params["state"])
-
-        if "project" in self.request.query_params:
-            queryset = queryset.filter(project=self.request.query_params["project"])
-
-        if "invoice" in self.request.query_params:
-            invoice = self.request.query_params["invoice"]
-            if invoice != "none":
-                queryset = queryset.filter(invoices=invoice)
-
-        return queryset.order_by(order_by)
 
 
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -284,6 +261,13 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
             kwargs["partial"] = True
 
         return self.serializer_class(*args, **kwargs)
+
+
+class ProjectSummary(APIView):
+    def get(self, request, pk=None):
+        start_date = self.request.query_params.get("start")
+        end_date = self.request.query_params.get("end")
+        return Response(dict(results=get_unbilled_summary(start_date, end_date)))
 
 
 class CompanyList(generics.ListCreateAPIView):

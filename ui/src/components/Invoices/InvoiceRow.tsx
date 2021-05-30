@@ -26,7 +26,7 @@ function InvoiceRow({ invoice, project }: Props) {
 
   return (
     <Link
-      to={`/invoices/${invoice.id}`}
+      to={`/invoices/${invoice.project}/${invoice.id}`}
       className={`cursor-pointer border-l-4 flex hover:bg-blue-50 justify-between my-2 py-3 px-4 ${borderClass}`}
     >
       <div className="flex-grow">

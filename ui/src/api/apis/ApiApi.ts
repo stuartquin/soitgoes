@@ -161,11 +161,14 @@ export interface ListProjectsRequest {
 export interface ListTasksRequest {
     limit?: number;
     offset?: number;
+    invoices?: string;
+    project?: string;
 }
 
 export interface ListTimeSlipsRequest {
     limit?: number;
     offset?: number;
+    invoice?: string;
     project?: string;
     start?: string;
     end?: string;
@@ -933,6 +936,14 @@ export class ApiApi extends runtime.BaseAPI {
             queryParameters['offset'] = requestParameters.offset;
         }
 
+        if (requestParameters.invoices !== undefined) {
+            queryParameters['invoices'] = requestParameters.invoices;
+        }
+
+        if (requestParameters.project !== undefined) {
+            queryParameters['project'] = requestParameters.project;
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
@@ -963,6 +974,10 @@ export class ApiApi extends runtime.BaseAPI {
 
         if (requestParameters.offset !== undefined) {
             queryParameters['offset'] = requestParameters.offset;
+        }
+
+        if (requestParameters.invoice !== undefined) {
+            queryParameters['invoice'] = requestParameters.invoice;
         }
 
         if (requestParameters.project !== undefined) {

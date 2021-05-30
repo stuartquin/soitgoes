@@ -1,6 +1,6 @@
 from django_filters.filters import DateFilter, DateRangeFilter
 from django_filters.rest_framework import FilterSet
-from journal.models import TimeSlip
+from journal.models import TimeSlip, Task
 
 
 class TimeSlipFilter(FilterSet):
@@ -9,4 +9,10 @@ class TimeSlipFilter(FilterSet):
 
     class Meta:
         model = TimeSlip
-        fields = ["project", "start", "end"]
+        fields = ["invoice", "project", "start", "end"]
+
+
+class TaskFilter(FilterSet):
+    class Meta:
+        model = Task
+        fields = ["invoices", "project"]

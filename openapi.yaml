@@ -280,6 +280,12 @@ paths:
         description: The initial index from which to return the results.
         schema:
           type: integer
+      - name: invoice
+        required: false
+        in: query
+        description: invoice
+        schema:
+          type: string
       - name: project
         required: false
         in: query
@@ -675,6 +681,18 @@ paths:
         description: The initial index from which to return the results.
         schema:
           type: integer
+      - name: invoices
+        required: false
+        in: query
+        description: invoices
+        schema:
+          type: string
+      - name: project
+        required: false
+        in: query
+        description: project
+        schema:
+          type: string
       responses:
         '200':
           content:
