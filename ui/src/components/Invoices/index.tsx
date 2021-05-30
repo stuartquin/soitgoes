@@ -1,9 +1,15 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useCallback, useState, useEffect, useMemo } from "react";
+import { useHistory, useParams, useLocation } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
 import InvoiceRow from "components/Invoices/InvoiceRow";
+import InvoiceDetail from "components/Invoices/InvoiceDetail";
+import SlideOver from "components/SlideOver";
+
+interface RouterProps {
+  invoiceId: string;
+}
 
 interface Props {
   user: models.User;
@@ -23,9 +29,9 @@ function ensure<T>(
 }
 
 function Invoices({ user, projects, tasks }: Props) {
-  const search = useLocation().search;
-  const [isLoading, setIsLoading] = useState(true);
   const [invoices, setInvoices] = useState<models.Invoice[]>([]);
+  const { invoiceId } = useParams<RouterProps>();
+  const history = useHistory();
 
   useEffect(() => {
     const load = async () => {
@@ -36,7 +42,6 @@ function Invoices({ user, projects, tasks }: Props) {
       });
 
       setInvoices(response.results || []);
-      setIsLoading(false);
     };
 
     load();
@@ -51,17 +56,26 @@ function Invoices({ user, projects, tasks }: Props) {
     });
   }, [invoices, projects]);
 
+  const closeInvoiceDetail = useCallback(() => {
+    history.push("/invoices");
+  }, [history]);
+
   return (
-    <div className="px-4">
-      <div className="border-1 bg-gray-50 border-radius-sm my-4">
-        <div className="bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-700 text-sm md:text-base text-left p-4 justify-between items-center">
-          <div className="font-semibold w-full md:w-auto">Invoice</div>
+    <React.Fragment>
+      <div className="px-4">
+        <div className="border-1 bg-gray-50 border-radius-sm my-4">
+          <div className="bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-700 text-sm md:text-base text-left p-4 justify-between items-center">
+            <div className="font-semibold w-full md:w-auto">Invoice</div>
+          </div>
+          {invoiceList.map(({ invoice, project }) => (
+            <InvoiceRow key={invoice.id} invoice={invoice} project={project} />
+          ))}
         </div>
-        {invoiceList.map(({ invoice, project }) => (
-          <InvoiceRow key={invoice.id} invoice={invoice} project={project} />
-        ))}
       </div>
-    </div>
+      <SlideOver isOpen={Boolean(invoiceId)} onClose={closeInvoiceDetail}>
+        {Boolean(invoiceId) ? <InvoiceDetail invoiceId={invoiceId} /> : <div />}
+      </SlideOver>
+    </React.Fragment>
   );
 }
 

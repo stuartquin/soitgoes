@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { Link } from "react-router-dom";
 import { format } from "date-fns";
 
 import * as models from "api/models";
@@ -24,7 +25,8 @@ function InvoiceRow({ invoice, project }: Props) {
   const date = status === InvoiceStatus.Paid ? invoice.paidAt : invoice.dueDate;
 
   return (
-    <div
+    <Link
+      to={`/invoices/${invoice.id}`}
       className={`cursor-pointer border-l-4 flex hover:bg-blue-50 justify-between my-2 py-3 px-4 ${borderClass}`}
     >
       <div className="flex-grow">
@@ -46,7 +48,7 @@ function InvoiceRow({ invoice, project }: Props) {
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

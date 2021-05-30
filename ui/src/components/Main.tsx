@@ -38,6 +38,9 @@ function Main({ user }: Props) {
       <Layout>
         {projects.length && tasks.length && (
           <Switch>
+            <Route path="/invoices/:invoiceId">
+              <Invoices user={user} projects={projects} tasks={tasks} />
+            </Route>
             <Route path="/invoices">
               <Invoices user={user} projects={projects} tasks={tasks} />
             </Route>
