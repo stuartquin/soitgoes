@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
 
 import Layout from "components/Layout";
 import TimeSheet from "components/TimeSheet";
+import Invoices from "components/Invoices";
 
 interface Props {
   user: models.User;
@@ -30,12 +32,22 @@ function Main({ user }: Props) {
     load();
   }, []);
 
+  // TODO whole app dependnent on projects/tasks existing
   return (
-    <Layout>
-      {projects.length && tasks.length && (
-        <TimeSheet user={user} projects={projects} tasks={tasks} />
-      )}
-    </Layout>
+    <Router>
+      <Layout>
+        {projects.length && tasks.length && (
+          <Switch>
+            <Route path="/invoices">
+              <Invoices user={user} projects={projects} tasks={tasks} />
+            </Route>
+            <Route path="/time">
+              <TimeSheet user={user} projects={projects} tasks={tasks} />
+            </Route>
+          </Switch>
+        )}
+      </Layout>
+    </Router>
   );
 }
 

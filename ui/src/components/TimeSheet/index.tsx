@@ -47,7 +47,6 @@ function TimeSheet({ user, projects, tasks }: Props) {
 
   useEffect(() => {
     const load = async () => {
-      setIsLoading(true);
       const api = getClient();
       const timeSlipResponse = await api.listTimeSlips({
         start: format(startOfMonth(addMonths(startDate, -1)), "yyyy-MM-dd"),
@@ -76,7 +75,7 @@ function TimeSheet({ user, projects, tasks }: Props) {
 
   return (
     <TimeSlipContext.Provider value={{ updateHours }}>
-      <div style={{ minWidth: "720px" }} className="px-4">
+      <div style={{ minWidth: "720px" }} className="px-3">
         <Actions onSave={save} />
         {isLoading ? (
           <p>Loading</p>

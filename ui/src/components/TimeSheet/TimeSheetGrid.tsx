@@ -58,13 +58,17 @@ function TimeSheetGrid({ user, tasks, timeSheet, startDate, projects }: Props) {
         >
           <Button
             variant="light"
-            to={`/?date=${prevDateStr}`}
+            to={`/time?date=${prevDateStr}`}
             className="rounded-l"
             group="left"
           >
             Prev
           </Button>
-          <Button variant="light" to={`/?date=${nextDateStr}`} group="right">
+          <Button
+            variant="light"
+            to={`/time?date=${nextDateStr}`}
+            group="right"
+          >
             Next
           </Button>
         </div>

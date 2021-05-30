@@ -33,7 +33,7 @@ function Task({ task, timeSheet, project, dateRange }: Props) {
         {task.name}
       </div>
 
-      <div className="flex flex-grow">
+      <div className="flex flex-grow justify-end">
         {entries.map((entry) => (
           <TimeSlip timeSlipEntry={entry} key={entry.date.toISOString()} />
         ))}
