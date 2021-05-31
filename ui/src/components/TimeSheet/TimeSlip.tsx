@@ -14,18 +14,17 @@ function TimeSlip({ timeSlipEntry }: Props) {
   const { timeSlip } = timeSlipEntry;
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      updateHours(timeSlipEntry, event.target.value);
+      updateHours(timeSlipEntry, parseFloat(event.target.value));
     },
     [timeSlipEntry, updateHours]
   );
 
-  const hours = parseInt(timeSlip.hours || "", 10) || "";
-
+  const hours = timeSlip.hours || 0;
   return (
     <div>
       <input
         className="shadow appearance-none border border-grey-300 rounded w-16 p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mx-1 text-center"
-        value={hours}
+        value={hours || ""}
         onChange={handleChange}
       />
     </div>

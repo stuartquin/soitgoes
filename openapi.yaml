@@ -1427,14 +1427,12 @@ components:
         user:
           type: integer
         hours:
-          type: string
-          format: decimal
+          type: number
           multipleOf: 0.001
           maximum: 1000
           minimum: -1000
         hourly_rate:
-          type: string
-          format: decimal
+          type: number
           multipleOf: 0.001
           maximum: 1000
           minimum: -1000

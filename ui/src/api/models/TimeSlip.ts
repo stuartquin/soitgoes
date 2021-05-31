@@ -33,16 +33,16 @@ export interface TimeSlip {
     user: number;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof TimeSlip
      */
-    hours?: string;
+    hours?: number;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof TimeSlip
      */
-    hourlyRate?: string;
+    hourlyRate?: number;
     /**
      * 
      * @type {number}

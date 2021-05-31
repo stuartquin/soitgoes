@@ -1,9 +1,10 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 
 import * as models from "api/models";
-import { formatCurrency, InvoiceStatus, getInvoiceStatus } from "invoices";
+import { InvoiceStatus, getInvoiceStatus } from "invoices";
+import { formatCurrency } from "currency";
 
 const STATUS_COLORS = {
   Draft: "gray-400",

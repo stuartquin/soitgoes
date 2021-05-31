@@ -23,11 +23,11 @@ export type TimeSheetType = {
 };
 
 export type TimeSlipContextType = {
-  updateHours: (entry: TimeSlipEntry, hours: string) => void;
+  updateHours: (entry: TimeSlipEntry, hours: number) => void;
 };
 
 export const TimeSlipContext = createContext<TimeSlipContextType>({
-  updateHours: (entry: TimeSlipEntry, hours: string) => null,
+  updateHours: (entry: TimeSlipEntry, hours: number) => null,
 });
 
 export const getTimeSheet = (
@@ -71,7 +71,7 @@ export const getUpdatedTimeSheetHours = (
   user: models.User,
   timeSheet: TimeSheetType,
   entry: TimeSlipEntry,
-  hours: string
+  hours: number
 ): TimeSheetType => {
   const { timeSlip, date } = entry;
   const dateStr = format(date, "yyyy-MM-dd");
@@ -115,7 +115,7 @@ export const saveTimeSheet = (
     return timeSlip.id
       ? api.updateTimeSlip({
           id: String(timeSlip.id),
-          timeSlip: { ...timeSlip, hours: timeSlip.hours || "0" },
+          timeSlip: { ...timeSlip, hours: timeSlip.hours || 0 },
         })
       : api.createTimeSlip({ timeSlip });
   });
@@ -152,11 +152,11 @@ export const getTotalsByProject = (
     const group = byProject[ts.project];
 
     if (ts.hours && ts.date >= startDate && ts.date <= weekEndDate) {
-      group.week += parseFloat(ts.hours);
+      group.week += ts.hours || 0;
     }
 
     if (ts.hours && ts.date >= monthStartDate && ts.date <= monthEndDate) {
-      group.month += parseFloat(ts.hours);
+      group.month += ts.hours || 0;
     }
   });
 

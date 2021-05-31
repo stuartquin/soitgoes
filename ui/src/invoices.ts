@@ -22,7 +22,3 @@ export const getInvoiceStatus = (invoice: models.Invoice): InvoiceStatus => {
   }
   return InvoiceStatus.Due;
 };
-
-export const formatCurrency = (total: number): string => {
-  return `£${total}`;
-};

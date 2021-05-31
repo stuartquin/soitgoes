@@ -63,7 +63,7 @@ function TimeSheet({ user, projects, tasks }: Props) {
   }, [startDate, tasks]);
 
   const updateHours = useCallback(
-    (entry: TimeSlipEntry, hours: string) => {
+    (entry: TimeSlipEntry, hours: number) => {
       setTimeSheet(getUpdatedTimeSheetHours(user, timeSheet, entry, hours));
     },
     [user, timeSheet]
