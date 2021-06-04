@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import {
+    InvoiceDetailModifier,
+    InvoiceDetailModifierFromJSON,
+    InvoiceDetailModifierFromJSONTyped,
+    InvoiceDetailModifierToJSON,
+} from './';
+
 /**
  * 
  * @export
@@ -117,10 +124,10 @@ export interface InvoiceDetail {
     tasks: Array<number>;
     /**
      * 
-     * @type {Array<number>}
+     * @type {Array<InvoiceDetailModifier>}
      * @memberof InvoiceDetail
      */
-    modifier: Array<number>;
+    modifier: Array<InvoiceDetailModifier>;
 }
 
 /**
@@ -166,7 +173,7 @@ export function InvoiceDetailFromJSONTyped(json: any, ignoreDiscriminator: boole
         'showHours': !exists(json, 'show_hours') ? undefined : json['show_hours'],
         'timeslips': json['timeslips'],
         'tasks': json['tasks'],
-        'modifier': json['modifier'],
+        'modifier': ((json['modifier'] as Array<any>).map(InvoiceDetailModifierFromJSON)),
     };
 }
 
@@ -192,7 +199,7 @@ export function InvoiceDetailToJSON(value?: InvoiceDetail | null): any {
         'show_hours': value.showHours,
         'timeslips': value.timeslips,
         'tasks': value.tasks,
-        'modifier': value.modifier,
+        'modifier': ((value.modifier as Array<any>).map(InvoiceDetailModifierToJSON)),
     };
 }
 

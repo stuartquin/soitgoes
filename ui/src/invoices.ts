@@ -8,17 +8,32 @@ export enum InvoiceStatus {
   Overdue = "Overdue",
 }
 
-export const getInvoiceStatus = (invoice: models.Invoice): InvoiceStatus => {
-  if (!invoice.issuedAt) {
+const STATUS_COLORS = {
+  Draft: "gray-400",
+  Paid: "green-600",
+  Overdue: "red-400",
+  Due: "blue-500",
+};
+
+export const getInvoiceStatus = (
+  issuedAt?: Date,
+  paidAt?: Date | null,
+  dueDate?: Date | null
+): InvoiceStatus => {
+  if (!issuedAt) {
     return InvoiceStatus.Draft;
   }
 
-  if (invoice.paidAt) {
+  if (paidAt) {
     return InvoiceStatus.Paid;
   }
 
-  if (isAfter(new Date(), invoice.dueDate || new Date())) {
+  if (isAfter(new Date(), dueDate || new Date())) {
     return InvoiceStatus.Overdue;
   }
   return InvoiceStatus.Due;
+};
+
+export const getStatusColor = (status: InvoiceStatus): string => {
+  return STATUS_COLORS[status];
 };

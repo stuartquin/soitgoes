@@ -66,8 +66,6 @@ function Invoices({ user, projects }: Props) {
       : ({} as models.Project);
   }, [projects, projectId]);
 
-  console.log("UPDATE", invoiceId);
-
   return (
     <React.Fragment>
       <div className="px-4">

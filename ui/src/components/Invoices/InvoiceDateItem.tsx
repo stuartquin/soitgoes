@@ -24,7 +24,7 @@ function InvoiceDateItem({ timeSlip, task, project }: Props) {
         <div className="text-gray-500 text-sm pt-1">{task.name}</div>
       </div>
       <div className="flex w-1/4 justify-between">
-        <div className="text-sm md:text-md">
+        <div className="text-sm md:text-md text-right ml-4">
           {getFormattedHours(timeSlip.hours || 0)}
         </div>
         <div className="text-sm md:text-md text-right">

@@ -3,15 +3,8 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 
 import * as models from "api/models";
-import { InvoiceStatus, getInvoiceStatus } from "invoices";
+import { InvoiceStatus, getInvoiceStatus, getStatusColor } from "invoices";
 import { formatCurrency } from "currency";
-
-const STATUS_COLORS = {
-  Draft: "gray-400",
-  Paid: "green-600",
-  Overdue: "red-400",
-  Due: "blue-700",
-};
 
 interface Props {
   invoice: models.Invoice;
@@ -19,9 +12,13 @@ interface Props {
 }
 
 function InvoiceRow({ invoice, project }: Props) {
-  const status = getInvoiceStatus(invoice);
-  const borderClass = `border-${STATUS_COLORS[status]}`;
-  const textClass = `text-${STATUS_COLORS[status]}`;
+  const status = getInvoiceStatus(
+    invoice.issuedAt,
+    invoice.paidAt,
+    invoice.dueDate
+  );
+  const borderClass = `border-${getStatusColor(status)}`;
+  const textClass = `text-${getStatusColor(status)}`;
 
   const date = status === InvoiceStatus.Paid ? invoice.paidAt : invoice.dueDate;
 
