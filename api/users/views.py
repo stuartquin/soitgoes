@@ -5,8 +5,10 @@ from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.authtoken.serializers import AuthTokenSerializer
 
-from users.serializers import LoginSerializer, UserSerializer
+from users.serializers import LoginSerializer, UserSerializer, OneTimeTokenSerializer
+from users.models import OneTimeToken
 
 # Create your views here.
 User = auth.get_user_model()
@@ -32,3 +34,11 @@ class LoggedInUserView(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class OneTimeTokenView(generics.RetrieveAPIView):
+    serializer_class = OneTimeTokenSerializer
+
+    def get_object(self):
+        token, _ = OneTimeToken.objects.get_or_create(user=self.request.user)
+        return token

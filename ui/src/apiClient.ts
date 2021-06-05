@@ -1,6 +1,6 @@
-import * as Api from './api';
+import * as Api from "./api";
 
-const getBaseUrl = (): string => {
+export const getBaseUrl = (): string => {
   return `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
 };
 
@@ -11,7 +11,7 @@ export const storeToken = (token: string) => {
 export const getClient = (): Api.ApiApi => {
   const config = {
     basePath: getBaseUrl(),
-    headers: {} as Api.HTTPHeaders
+    headers: {} as Api.HTTPHeaders,
   };
 
   const token = window.localStorage.getItem("token");
@@ -21,5 +21,3 @@ export const getClient = (): Api.ApiApi => {
 
   return new Api.ApiApi(new Api.Configuration(config));
 };
-
-

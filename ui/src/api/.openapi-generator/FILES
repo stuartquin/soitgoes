@@ -18,6 +18,7 @@ models/InvoiceDetail.ts
 models/InvoiceDetailModifier.ts
 models/InvoiceModifier.ts
 models/Login.ts
+models/OneTimeToken.ts
 models/Project.ts
 models/Task.ts
 models/TaskNotes.ts

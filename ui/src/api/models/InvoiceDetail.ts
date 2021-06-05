@@ -128,6 +128,12 @@ export interface InvoiceDetail {
      * @memberof InvoiceDetail
      */
     modifier: Array<InvoiceDetailModifier>;
+    /**
+     * 
+     * @type {string}
+     * @memberof InvoiceDetail
+     */
+    readonly pdfName?: string;
 }
 
 /**
@@ -174,6 +180,7 @@ export function InvoiceDetailFromJSONTyped(json: any, ignoreDiscriminator: boole
         'timeslips': json['timeslips'],
         'tasks': json['tasks'],
         'modifier': ((json['modifier'] as Array<any>).map(InvoiceDetailModifierFromJSON)),
+        'pdfName': !exists(json, 'pdf_name') ? undefined : json['pdf_name'],
     };
 }
 

@@ -3,6 +3,20 @@ info:
   title: ''
   version: ''
 paths:
+  /api/users/token/:
+    get:
+      operationId: retrieveOneTimeToken
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OneTimeToken'
+          description: ''
+      tags:
+      - api
   /api/users/:
     get:
       operationId: retrieveUser
@@ -1297,6 +1311,14 @@ paths:
       - api
 components:
   schemas:
+    OneTimeToken:
+      type: object
+      properties:
+        key:
+          type: string
+          maxLength: 40
+      required:
+      - key
     User:
       type: object
       properties:
@@ -1534,6 +1556,9 @@ components:
                 readOnly: true
             required:
             - name
+        pdf_name:
+          type: string
+          readOnly: true
       required:
       - project
       - timeslips

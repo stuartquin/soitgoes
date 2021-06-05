@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model, authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 
+from users.models import OneTimeToken
+
 User = get_user_model()
 
 
@@ -31,3 +33,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "username", "last_login"]
+
+
+class OneTimeTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OneTimeToken
+        fields = ["key"]

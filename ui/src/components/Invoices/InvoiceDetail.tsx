@@ -6,6 +6,7 @@ import { getClient } from "apiClient";
 import { InvoiceStatus, getInvoiceStatus, getStatusColor } from "invoices";
 import InvoiceDateItem from "components/Invoices/InvoiceDateItem";
 import InvoiceDetailTotals from "components/Invoices/InvoiceDetailTotals";
+import Button from "components/Button";
 
 interface Props {
   invoiceId: string;
@@ -16,6 +17,15 @@ interface GroupedTimeSlip {
   timeSlip: models.TimeSlip;
   task: models.Task;
 }
+
+const getDownloadUrl = (
+  token?: models.OneTimeToken,
+  invoice?: models.InvoiceDetail
+): string => {
+  return token && invoice
+    ? `/api/invoices/${invoice.id}/pdf?token=${token.key}`
+    : "";
+};
 
 const getStatusDate = (
   status: InvoiceStatus,
@@ -28,6 +38,7 @@ const getStatusDate = (
 };
 
 function InvoiceDetail({ project, invoiceId }: Props) {
+  const [token, setToken] = useState<models.OneTimeToken>();
   const [invoice, setInvoice] = useState<models.InvoiceDetail>();
   const [groupedTimeSlips, setGroupedTimeSlips] = useState<GroupedTimeSlip[]>(
     []
@@ -44,6 +55,8 @@ function InvoiceDetail({ project, invoiceId }: Props) {
       const taskResponse = await api.listTasks({ invoices: invoiceId });
       const taskResults = taskResponse.results || [];
       setTasks(taskResults);
+
+      setToken(await api.retrieveOneTimeToken());
 
       setGroupedTimeSlips(
         (timeSlipResponse.results || []).map((timeSlip) => {
@@ -70,11 +83,19 @@ function InvoiceDetail({ project, invoiceId }: Props) {
   }, [invoice]);
 
   const statusColor = getStatusColor(status);
+  const downloadURL = getDownloadUrl(token, invoice);
 
   return invoice ? (
     <div>
-      <div className="text-gray-800 text-sm md:text-lg">
-        #{invoice.sequenceNum} {project.name}
+      <div className="flex justify-between">
+        <div className="text-gray-800 text-sm md:text-lg">
+          #{invoice.sequenceNum} {project.name}
+        </div>
+        <div>
+          <a href={downloadURL} download={invoice.pdfName}>
+            Download
+          </a>
+        </div>
       </div>
       <div className="flex justify-between my-3 flex-wrap">
         <div className="uppercase text-sm text-gray-600">

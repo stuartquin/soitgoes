@@ -13,6 +13,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
 
+from users.onetimetoken import OneTimeTokenAccess
+
 from journal import serializers, models, summary
 from journal.cookieauthentication import CookieAuthentication
 from journal.project import get_unbilled_summary
@@ -185,7 +187,7 @@ class InvoiceModifierDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class InvoicePDF(APIView):
     permission_classes = (HasInvoiceAccess,)
-    authentication_classes = (CookieAuthentication,)
+    authentication_classes = (OneTimeTokenAccess,)
 
     def get(self, request, pk=None):
         invoice = models.Invoice.objects.get(id=pk)

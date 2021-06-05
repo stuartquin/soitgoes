@@ -15,6 +15,7 @@ export * from './InvoiceDetail';
 export * from './InvoiceDetailModifier';
 export * from './InvoiceModifier';
 export * from './Login';
+export * from './OneTimeToken';
 export * from './Project';
 export * from './Task';
 export * from './TaskNotes';

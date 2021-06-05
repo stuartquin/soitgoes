@@ -57,6 +57,9 @@ import {
     Login,
     LoginFromJSON,
     LoginToJSON,
+    OneTimeToken,
+    OneTimeTokenFromJSON,
+    OneTimeTokenToJSON,
     Project,
     ProjectFromJSON,
     ProjectToJSON,
@@ -1345,6 +1348,30 @@ export class ApiApi extends runtime.BaseAPI {
      */
     async retrieveInvoiceModifier(requestParameters: RetrieveInvoiceModifierRequest): Promise<InvoiceModifier> {
         const response = await this.retrieveInvoiceModifierRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     */
+    async retrieveOneTimeTokenRaw(): Promise<runtime.ApiResponse<OneTimeToken>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/users/token/`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OneTimeTokenFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async retrieveOneTimeToken(): Promise<OneTimeToken> {
+        const response = await this.retrieveOneTimeTokenRaw();
         return await response.value();
     }
 

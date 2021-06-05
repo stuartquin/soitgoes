@@ -233,4 +233,5 @@ class InvoiceDetailSerializer(InvoiceSerializer):
             "timeslips",
             "tasks",
             "modifier",
+            "pdf_name",
         ]

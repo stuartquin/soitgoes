@@ -39,6 +39,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     "journal.apps.JournalConfig",
+    "users",
     "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
