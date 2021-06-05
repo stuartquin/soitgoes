@@ -24,4 +24,4 @@ ADD api/soitgoes /app/api/soitgoes
 ADD api/libs /app/api/libs
 ADD api/assets /app/api/assets
 
-RUN python api/manage.py collectstatic --noinput
+ADD dokku/nginx.conf.sigil /app/nginx.conf.sigil

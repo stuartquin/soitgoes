@@ -10,7 +10,7 @@ mkdir -p $NGINX
 
 dokku apps:create $APP
 
-echo "location /static {" > $NGINX/static.conf
+echo "location / {" > $NGINX/static.conf
 echo "    alias $STORAGE/static;" >> $NGINX/static.conf
 echo "}" >> $NGINX/static.conf
 
