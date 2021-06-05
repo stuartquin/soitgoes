@@ -38,7 +38,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    "journal.apps.JournalConfig",
+    "journal",
     "users",
     "corsheaders",
     "rest_framework",
