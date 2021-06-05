@@ -211,7 +211,7 @@ class TaskInvoiceSerializer(serializers.ModelSerializer):
 
 
 class InvoiceDetailSerializer(InvoiceSerializer):
-    modifier = InvoiceModifierSerializer(many=True)
+    modifier = InvoiceModifierSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Invoice

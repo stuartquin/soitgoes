@@ -6,6 +6,8 @@ import { getClient } from "apiClient";
 import Login from "components/Login";
 import Main from "components/Main";
 
+import "./App.css";
+
 function App() {
   const [user, setUser] = useState<User>();
   const [loginRequired, setLoginRequired] = useState(false);

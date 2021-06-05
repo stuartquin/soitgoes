@@ -33,19 +33,19 @@ function Invoices({ user, projects }: Props) {
   const { projectId, invoiceId } = useParams<RouterProps>();
   const history = useHistory();
 
-  useEffect(() => {
-    const load = async () => {
-      const api = getClient();
-      const response = await api.listInvoices({
-        limit: 20,
-        offset: 0,
-      });
+  const loadInvoices = useCallback(async () => {
+    const api = getClient();
+    const response = await api.listInvoices({
+      limit: 20,
+      offset: 0,
+    });
 
-      setInvoices(response.results || []);
-    };
-
-    load();
+    setInvoices(response.results || []);
   }, []);
+
+  useEffect(() => {
+    loadInvoices();
+  }, [loadInvoices]);
 
   const invoiceList = useMemo(() => {
     return invoices.map((invoice) => {
@@ -80,7 +80,11 @@ function Invoices({ user, projects }: Props) {
       </div>
       <SlideOver isOpen={Boolean(invoiceId)} onClose={closeInvoiceDetail}>
         {Boolean(invoiceId) ? (
-          <InvoiceDetail project={project} invoiceId={invoiceId} />
+          <InvoiceDetail
+            project={project}
+            invoiceId={invoiceId}
+            onStatusUpdate={loadInvoices}
+          />
         ) : (
           <div />
         )}

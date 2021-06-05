@@ -16,18 +16,18 @@ const getFormattedHours = (hours: number): string => {
 
 function InvoiceDateItem({ timeSlip, task, project }: Props) {
   return (
-    <div className="flex my-3 px-4 justify-between items-center">
-      <div className="flex flex-wrap">
-        <div className="text-gray-800 text-sm md:text-lg mr-2">
+    <div className="flex my-3 px-2 sm:px-4 justify-between items-center">
+      <div className="flex flex-wrap items-center flex-grow">
+        <div className="text-gray-800 text-sm md:text-lg mr-2 w-full sm:w-auto">
           {format(timeSlip.date, "yyyy-MM-dd")}
         </div>
-        <div className="text-gray-500 text-sm pt-1">{task.name}</div>
+        <div className="text-gray-500 text-sm">{task.name}</div>
       </div>
-      <div className="flex w-1/4 justify-between">
-        <div className="text-sm md:text-md text-right ml-4">
+      <div className="flex min-w-1/4 justify-between">
+        <div className="text-sm mr-3">
           {getFormattedHours(timeSlip.hours || 0)}
         </div>
-        <div className="text-sm md:text-md text-right">
+        <div className="text-sm">
           {formatCurrency(parseFloat(timeSlip.cost || "0"))}
         </div>
       </div>

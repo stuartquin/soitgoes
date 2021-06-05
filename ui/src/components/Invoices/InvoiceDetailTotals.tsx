@@ -18,6 +18,7 @@ function InvoiceDetailTotals({ invoice }: Props) {
         </div>
         {invoice.modifier.map((modifier) => (
           <InvoiceDetailModifierItem
+            key={modifier.id}
             invoiceModifier={modifier}
             subtotalDue={invoice.subtotalDue || 0}
           />

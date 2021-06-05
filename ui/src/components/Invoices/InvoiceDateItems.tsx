@@ -1,25 +1,48 @@
-import React from "react";
-import { format } from "date-fns";
+import React, { useMemo } from "react";
 
+import InvoiceDateItem from "components/Invoices/InvoiceDateItem";
 import * as models from "api/models";
 
-interface Props {
-  invoice: models.InvoiceDetail;
-  project: models.Project;
-  timeSlips: models.TimeSlip[];
-  tasks: models.Task[];
+interface GroupedTimeSlip {
+  timeSlip: models.TimeSlip;
+  task: models.Task;
 }
 
-function InvoiceDateItems({ timeSlips, tasks, project, invoice }: Props) {
+interface Props {
+  tasks: models.Task[];
+  timeSlips: models.TimeSlip[];
+  project: models.Project;
+}
+
+function InvoiceDateItems({ project, tasks, timeSlips }: Props) {
+  const groupedTimeSlips = useMemo(
+    () =>
+      timeSlips.map((timeSlip) => {
+        return {
+          timeSlip,
+          task: tasks.find((t) => t.id === timeSlip.task),
+        } as GroupedTimeSlip;
+      }),
+    [tasks, timeSlips]
+  );
+
   return (
-    <div>
-      <div className="flex my-3">
-        <div className="text-gray-800 text-sm md:text-lg"></div>
-        <div className="text-gray-500 text-sm pt-1"></div>
-        <div className="text-gray-500 text-sm pt-1">
-          Due: {format(invoice.dueDate || new Date(), "yyyy-MM-dd")}
+    <div className="my-4">
+      <div className="uppercase bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-600 text-sm md:text-base text-left px-2 sm:px-4 justify-between items-center">
+        <div className="text-sm">Date</div>
+        <div className="flex sm:w-1/4 justify-between">
+          <div className="text-sm mr-3">Hours</div>
+          <div className="text-sm">Total</div>
         </div>
       </div>
+      {groupedTimeSlips.map(({ task, timeSlip }) => (
+        <InvoiceDateItem
+          key={timeSlip.id}
+          timeSlip={timeSlip}
+          task={task}
+          project={project}
+        />
+      ))}
     </div>
   );
 }

@@ -124,8 +124,7 @@ class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer, *args, **kwargs):
         validated = serializer.validated_data
-        if validated["paid_at"] is None and validated["status"] == "PAID":
-            serializer.validated_data["total_paid"] = validated["total_due"]
+        if validated.get("paid_at") is None and validated["status"] == "PAID":
             serializer.validated_data["paid_at"] = datetime.datetime.now()
 
         if "tasks" in serializer.validated_data:

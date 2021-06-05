@@ -12,7 +12,7 @@ const STATUS_COLORS = {
   Draft: "gray-400",
   Paid: "green-600",
   Overdue: "red-400",
-  Due: "blue-500",
+  Due: "yellow-600",
 };
 
 export const getInvoiceStatus = (

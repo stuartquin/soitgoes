@@ -1,31 +1,19 @@
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useCallback, useMemo, useEffect, useState } from "react";
 import { format, formatDistance } from "date-fns";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
 import { InvoiceStatus, getInvoiceStatus, getStatusColor } from "invoices";
-import InvoiceDateItem from "components/Invoices/InvoiceDateItem";
+import InvoiceDateItems from "components/Invoices/InvoiceDateItems";
 import InvoiceDetailTotals from "components/Invoices/InvoiceDetailTotals";
-import Button from "components/Button";
+import InvoiceDetailLoading from "components/Invoices/InvoiceDetailLoading";
+import InvoiceSummary from "components/Invoices/InvoiceSummary";
 
 interface Props {
   invoiceId: string;
   project: models.Project;
+  onStatusUpdate: () => void;
 }
-
-interface GroupedTimeSlip {
-  timeSlip: models.TimeSlip;
-  task: models.Task;
-}
-
-const getDownloadUrl = (
-  token?: models.OneTimeToken,
-  invoice?: models.InvoiceDetail
-): string => {
-  return token && invoice
-    ? `/api/invoices/${invoice.id}/pdf?token=${token.key}`
-    : "";
-};
 
 const getStatusDate = (
   status: InvoiceStatus,
@@ -37,35 +25,28 @@ const getStatusDate = (
   return format(dueDate || new Date(), "yyyy-MM-dd");
 };
 
-function InvoiceDetail({ project, invoiceId }: Props) {
+function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
   const [token, setToken] = useState<models.OneTimeToken>();
   const [invoice, setInvoice] = useState<models.InvoiceDetail>();
-  const [groupedTimeSlips, setGroupedTimeSlips] = useState<GroupedTimeSlip[]>(
-    []
-  );
+  const [isLoading, setIsLoading] = useState(true);
   const [tasks, setTasks] = useState<models.Task[]>([]);
+  const [timeSlips, setTimeSlips] = useState<models.TimeSlip[]>([]);
 
   useEffect(() => {
     const load = async () => {
+      setIsLoading(true);
       const api = getClient();
       setInvoice(await api.retrieveInvoice({ id: invoiceId }));
 
       const timeSlipResponse = await api.listTimeSlips({ invoice: invoiceId });
+      setTimeSlips(timeSlipResponse.results || []);
 
       const taskResponse = await api.listTasks({ invoices: invoiceId });
-      const taskResults = taskResponse.results || [];
-      setTasks(taskResults);
+      setTasks(taskResponse.results || []);
 
       setToken(await api.retrieveOneTimeToken());
 
-      setGroupedTimeSlips(
-        (timeSlipResponse.results || []).map((timeSlip) => {
-          return {
-            timeSlip,
-            task: taskResults.find((t) => t.id === timeSlip.task),
-          } as GroupedTimeSlip;
-        })
-      );
+      setIsLoading(false);
     };
 
     load();
@@ -83,21 +64,34 @@ function InvoiceDetail({ project, invoiceId }: Props) {
   }, [invoice]);
 
   const statusColor = getStatusColor(status);
-  const downloadURL = getDownloadUrl(token, invoice);
 
-  return invoice ? (
+  const handleSetPaid = useCallback(async () => {
+    if (invoice && invoice.id) {
+      const api = getClient();
+      setInvoice(
+        await api.updateInvoice({
+          id: `${invoice.id}`,
+          invoiceDetail: {
+            ...invoice,
+            status: models.InvoiceDetailStatusEnum.Paid,
+            totalPaid: invoice.totalDue,
+          },
+        })
+      );
+      onStatusUpdate();
+    }
+  }, [invoice, onStatusUpdate]);
+
+  return !isLoading && invoice ? (
     <div>
-      <div className="flex justify-between">
-        <div className="text-gray-800 text-sm md:text-lg">
-          #{invoice.sequenceNum} {project.name}
-        </div>
-        <div>
-          <a href={downloadURL} download={invoice.pdfName}>
-            Download
-          </a>
-        </div>
-      </div>
-      <div className="flex justify-between my-3 flex-wrap">
+      <InvoiceSummary
+        token={token}
+        invoice={invoice}
+        project={project}
+        onSetPaid={handleSetPaid}
+      />
+
+      <div className="flex justify-between my-5 flex-wrap">
         <div className="uppercase text-sm text-gray-600">
           <div className="grid grid-cols-2 gap-1">
             <div>Issued</div>
@@ -118,26 +112,10 @@ function InvoiceDetail({ project, invoiceId }: Props) {
         <InvoiceDetailTotals invoice={invoice} />
       </div>
 
-      <div className="my-4">
-        <div className="uppercase bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-600 text-sm md:text-base text-left px-4 justify-between items-center">
-          <div className="text-sm">Date</div>
-          <div className="flex w-1/4 justify-between">
-            <div className="text-sm mx-1">Hours</div>
-            <div className="text-sm mx-1">Total</div>
-          </div>
-        </div>
-        {groupedTimeSlips.map(({ task, timeSlip }) => (
-          <InvoiceDateItem
-            key={timeSlip.id}
-            timeSlip={timeSlip}
-            task={task}
-            project={project}
-          />
-        ))}
-      </div>
+      <InvoiceDateItems project={project} tasks={tasks} timeSlips={timeSlips} />
     </div>
   ) : (
-    <h2>Loading</h2>
+    <InvoiceDetailLoading />
   );
 }
 
