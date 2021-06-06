@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "!+#^o6)aofo(rux+bs6m4lpq^^4nzs&n670b5ka6bj@67_2%s_"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = "DEV" in os.environ
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "tracking.stuartquin.com",
