@@ -1,5 +1,4 @@
 import { isAfter } from "date-fns";
-import * as models from "api/models";
 
 export enum InvoiceStatus {
   Draft = "Draft",
@@ -7,6 +6,12 @@ export enum InvoiceStatus {
   Due = "Due",
   Overdue = "Overdue",
 }
+
+//  Trick tailwind optimiser
+//  text-gray-400   border-gray-400
+//  text-green-600  border-green-600
+//  text-red-400    border-red-400
+//  text-yellow-600 border-yellow-600
 
 const STATUS_COLORS = {
   Draft: "gray-400",
