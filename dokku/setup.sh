@@ -10,11 +10,8 @@ mkdir -p $NGINX
 
 dokku apps:create $APP
 
-echo "location / {" > $NGINX/static.conf
-echo "    alias $STORAGE/static;" >> $NGINX/static.conf
-echo "}" >> $NGINX/static.conf
-
-dokku config:set $APP DATABASE_NAME=/storage/db.sqlite3
 dokku config:set --no-restart $APP DOKKU_LETSENCRYPT_EMAIL=$2
+dokku config:set $APP DATABASE_NAME=/storage/db.sqlite3
+dokku config:set $APP DJANGO_SECRET_KEY=$3
 dokku storage:mount $APP $STORAGE:/storage
-dokku storage:mount $APP $STORAGE/static:/app/static
+dokku storage:mount $APP $STORAGE/static:/app/api/static

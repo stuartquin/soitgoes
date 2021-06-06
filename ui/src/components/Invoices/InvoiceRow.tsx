@@ -20,6 +20,8 @@ function InvoiceRow({ invoice, project }: Props) {
   const borderClass = `border-${getStatusColor(status)}`;
   const textClass = `text-${getStatusColor(status)}`;
 
+  console.log("STATUS", status, borderClass);
+
   const date = status === InvoiceStatus.Paid ? invoice.paidAt : invoice.dueDate;
 
   return (

@@ -4,6 +4,7 @@ services:
     stdin_open: true
     tty: true
     environment:
+     - DJANGO_SECRET_KEY=abc-123
      - DEV=true
     build:
       context: .
