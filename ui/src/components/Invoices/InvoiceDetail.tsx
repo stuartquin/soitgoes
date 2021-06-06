@@ -5,6 +5,7 @@ import * as models from "api/models";
 import { getClient } from "apiClient";
 import { InvoiceStatus, getInvoiceStatus, getStatusColor } from "invoices";
 import InvoiceDateItems from "components/Invoices/InvoiceDateItems";
+import InvoiceTaskItems from "components/Invoices/InvoiceTaskItems";
 import InvoiceDetailTotals from "components/Invoices/InvoiceDetailTotals";
 import InvoiceDetailLoading from "components/Invoices/InvoiceDetailLoading";
 import InvoiceSummary from "components/Invoices/InvoiceSummary";
@@ -31,6 +32,7 @@ function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
   const [isLoading, setIsLoading] = useState(true);
   const [tasks, setTasks] = useState<models.Task[]>([]);
   const [timeSlips, setTimeSlips] = useState<models.TimeSlip[]>([]);
+  const [view, setView] = useState("date");
 
   useEffect(() => {
     const load = async () => {
@@ -82,6 +84,17 @@ function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
     }
   }, [invoice, onStatusUpdate]);
 
+  const displayTasks = useMemo(() => {
+    if (invoice) {
+      return invoice.groupBy === models.InvoiceDetailGroupByEnum.Tasks
+        ? tasks
+        : tasks.filter(
+            (t) => t.billingType === models.TaskBillingTypeEnum.Fixed
+          );
+    }
+    return [];
+  }, [tasks, invoice]);
+
   return !isLoading && invoice ? (
     <div>
       <InvoiceSummary
@@ -112,7 +125,22 @@ function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
         <InvoiceDetailTotals invoice={invoice} />
       </div>
 
-      <InvoiceDateItems project={project} tasks={tasks} timeSlips={timeSlips} />
+      {invoice.groupBy === models.InvoiceDetailGroupByEnum.Timeslips &&
+        timeSlips.length > 0 && (
+          <InvoiceDateItems
+            project={project}
+            tasks={tasks}
+            timeSlips={timeSlips}
+          />
+        )}
+
+      {displayTasks.length > 0 && (
+        <InvoiceTaskItems
+          project={project}
+          tasks={displayTasks}
+          timeSlips={timeSlips}
+        />
+      )}
     </div>
   ) : (
     <InvoiceDetailLoading />
