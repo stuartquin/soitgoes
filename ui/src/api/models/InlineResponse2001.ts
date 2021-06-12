@@ -14,10 +14,10 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    Invoice,
-    InvoiceFromJSON,
-    InvoiceFromJSONTyped,
-    InvoiceToJSON,
+    ProjectSummary,
+    ProjectSummaryFromJSON,
+    ProjectSummaryFromJSONTyped,
+    ProjectSummaryToJSON,
 } from './';
 
 /**
@@ -46,10 +46,10 @@ export interface InlineResponse2001 {
     previous?: string | null;
     /**
      * 
-     * @type {Array<Invoice>}
+     * @type {Array<ProjectSummary>}
      * @memberof InlineResponse2001
      */
-    results?: Array<Invoice>;
+    results?: Array<ProjectSummary>;
 }
 
 export function InlineResponse2001FromJSON(json: any): InlineResponse2001 {
@@ -65,7 +65,7 @@ export function InlineResponse2001FromJSONTyped(json: any, ignoreDiscriminator: 
         'count': !exists(json, 'count') ? undefined : json['count'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(InvoiceFromJSON)),
+        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(ProjectSummaryFromJSON)),
     };
 }
 
@@ -81,7 +81,7 @@ export function InlineResponse2001ToJSON(value?: InlineResponse2001 | null): any
         'count': value.count,
         'next': value.next,
         'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(InvoiceToJSON)),
+        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(ProjectSummaryToJSON)),
     };
 }
 

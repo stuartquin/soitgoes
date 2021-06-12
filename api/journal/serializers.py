@@ -235,3 +235,9 @@ class InvoiceDetailSerializer(InvoiceSerializer):
             "modifier",
             "pdf_name",
         ]
+
+
+class ProjectSummarySerializer(serializers.Serializer):
+    project = serializers.PrimaryKeyRelatedField(queryset=models.Project.objects.all())
+    hours = serializers.FloatField(read_only=True)
+    total = serializers.FloatField(read_only=True)

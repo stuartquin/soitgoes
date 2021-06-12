@@ -13,6 +13,7 @@ models/InlineResponse2004.ts
 models/InlineResponse2005.ts
 models/InlineResponse2006.ts
 models/InlineResponse2007.ts
+models/InlineResponse2008.ts
 models/Invoice.ts
 models/InvoiceDetail.ts
 models/InvoiceDetailModifier.ts
@@ -20,6 +21,7 @@ models/InvoiceModifier.ts
 models/Login.ts
 models/OneTimeToken.ts
 models/Project.ts
+models/ProjectSummary.ts
 models/Task.ts
 models/TaskNotes.ts
 models/TimeSlip.ts

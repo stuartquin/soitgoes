@@ -1,10 +1,13 @@
 import React, { useCallback, useState, useEffect, useMemo } from "react";
-import { useHistory, useParams, useLocation } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
+import { ensure } from "typeHelpers";
 import InvoiceRow from "components/Invoices/InvoiceRow";
 import InvoiceDetail from "components/Invoices/InvoiceDetail";
+import InvoiceCreateNew from "components/Invoices/InvoiceCreateNew";
+import Button from "components/Button";
 import SlideOver from "components/SlideOver";
 
 interface RouterProps {
@@ -15,23 +18,20 @@ interface RouterProps {
 interface Props {
   user: models.User;
   projects: models.Project[];
+  isCreateNew?: boolean;
 }
 
-function ensure<T>(
-  argument: T | undefined | null,
-  message: string = "This value was promised to be there."
-): T {
-  if (argument === undefined || argument === null) {
-    throw new TypeError(message);
-  }
-
-  return argument;
-}
-
-function Invoices({ user, projects }: Props) {
+function Invoices({ user, projects, isCreateNew = false }: Props) {
   const [invoices, setInvoices] = useState<models.Invoice[]>([]);
+  const [summary, setSummary] = useState<models.ProjectSummary[]>([]);
   const { projectId, invoiceId } = useParams<RouterProps>();
   const history = useHistory();
+
+  const loadSummary = useCallback(async () => {
+    const api = getClient();
+    const response = await api.listProjectSummarys({});
+    setSummary(response.results || []);
+  }, []);
 
   const loadInvoices = useCallback(async () => {
     const api = getClient();
@@ -45,7 +45,8 @@ function Invoices({ user, projects }: Props) {
 
   useEffect(() => {
     loadInvoices();
-  }, [loadInvoices]);
+    loadSummary();
+  }, [loadInvoices, loadSummary]);
 
   const invoiceList = useMemo(() => {
     return invoices.map((invoice) => {
@@ -56,8 +57,12 @@ function Invoices({ user, projects }: Props) {
     });
   }, [invoices, projects]);
 
-  const closeInvoiceDetail = useCallback(() => {
+  const closeSlideOver = useCallback(() => {
     history.push("/invoices");
+  }, [history]);
+
+  const createNewInvoice = useCallback(() => {
+    history.push("/invoices/new");
   }, [history]);
 
   const project = useMemo(() => {
@@ -66,8 +71,33 @@ function Invoices({ user, projects }: Props) {
       : ({} as models.Project);
   }, [projects, projectId]);
 
+  const getSlideOverComponent = () => {
+    if (isCreateNew) {
+      return (
+        <InvoiceCreateNew projects={projects} projectSummaries={summary} />
+      );
+    }
+
+    return invoiceId ? (
+      <InvoiceDetail
+        project={project}
+        invoiceId={invoiceId}
+        onStatusUpdate={loadInvoices}
+      />
+    ) : (
+      <div />
+    );
+  };
+
+  const isOpen = isCreateNew || Boolean(projectId);
+
   return (
     <React.Fragment>
+      <div>
+        <Button variant="success" onClick={createNewInvoice}>
+          Create Invoice
+        </Button>
+      </div>
       <div className="px-4">
         <div className="border-1 bg-gray-50 border-radius-sm my-4">
           <div className="bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-700 text-sm md:text-base text-left p-4 justify-between items-center">
@@ -78,16 +108,8 @@ function Invoices({ user, projects }: Props) {
           ))}
         </div>
       </div>
-      <SlideOver isOpen={Boolean(invoiceId)} onClose={closeInvoiceDetail}>
-        {Boolean(invoiceId) ? (
-          <InvoiceDetail
-            project={project}
-            invoiceId={invoiceId}
-            onStatusUpdate={loadInvoices}
-          />
-        ) : (
-          <div />
-        )}
+      <SlideOver isOpen={isOpen} onClose={closeSlideOver}>
+        {getSlideOverComponent()}
       </SlideOver>
     </React.Fragment>
   );

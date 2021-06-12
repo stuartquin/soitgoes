@@ -14,10 +14,10 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    Contact,
-    ContactFromJSON,
-    ContactFromJSONTyped,
-    ContactToJSON,
+    Task,
+    TaskFromJSON,
+    TaskFromJSONTyped,
+    TaskToJSON,
 } from './';
 
 /**
@@ -46,10 +46,10 @@ export interface InlineResponse2005 {
     previous?: string | null;
     /**
      * 
-     * @type {Array<Contact>}
+     * @type {Array<Task>}
      * @memberof InlineResponse2005
      */
-    results?: Array<Contact>;
+    results?: Array<Task>;
 }
 
 export function InlineResponse2005FromJSON(json: any): InlineResponse2005 {
@@ -65,7 +65,7 @@ export function InlineResponse2005FromJSONTyped(json: any, ignoreDiscriminator: 
         'count': !exists(json, 'count') ? undefined : json['count'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(ContactFromJSON)),
+        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(TaskFromJSON)),
     };
 }
 
@@ -81,7 +81,7 @@ export function InlineResponse2005ToJSON(value?: InlineResponse2005 | null): any
         'count': value.count,
         'next': value.next,
         'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(ContactToJSON)),
+        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(TaskToJSON)),
     };
 }
 

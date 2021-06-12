@@ -14,10 +14,10 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    Task,
-    TaskFromJSON,
-    TaskFromJSONTyped,
-    TaskToJSON,
+    Account,
+    AccountFromJSON,
+    AccountFromJSONTyped,
+    AccountToJSON,
 } from './';
 
 /**
@@ -46,10 +46,10 @@ export interface InlineResponse2004 {
     previous?: string | null;
     /**
      * 
-     * @type {Array<Task>}
+     * @type {Array<Account>}
      * @memberof InlineResponse2004
      */
-    results?: Array<Task>;
+    results?: Array<Account>;
 }
 
 export function InlineResponse2004FromJSON(json: any): InlineResponse2004 {
@@ -65,7 +65,7 @@ export function InlineResponse2004FromJSONTyped(json: any, ignoreDiscriminator: 
         'count': !exists(json, 'count') ? undefined : json['count'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(TaskFromJSON)),
+        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(AccountFromJSON)),
     };
 }
 
@@ -81,7 +81,7 @@ export function InlineResponse2004ToJSON(value?: InlineResponse2004 | null): any
         'count': value.count,
         'next': value.next,
         'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(TaskToJSON)),
+        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(AccountToJSON)),
     };
 }
 

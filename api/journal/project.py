@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 from django.db.models import Q, F, Sum
 from journal.models import (
+    Project,
     Task,
     Invoice,
     TaskInvoice,
@@ -11,22 +12,18 @@ from journal.models import (
 )
 
 
-def get_unbilled_summary(start_date=None, end_date=None):
+def get_unbilled_summary(projects: list[Project]):
     task_costs = (
-        Task.objects.filter(billing_type=BILLING_TYPE_FIXED, invoices=None)
+        Task.objects.filter(
+            billing_type=BILLING_TYPE_FIXED, invoices=None, project__in=projects
+        )
         .exclude(state=TASK_STATUS_DONE)
         .values("project")
         .annotate(cost=Sum("cost"))
     )
     time_query = TimeSlip.objects.filter(
-        invoice=None, task__billing_type=BILLING_TYPE_TIME,
+        invoice=None, task__billing_type=BILLING_TYPE_TIME, project__in=projects
     )
-
-    if start_date:
-        time_query = time_query.filter(date__gte=start_date)
-
-    if end_date:
-        time_query = time_query.filter(date__lt=end_date)
 
     time_costs = time_query.values("project").annotate(
         cost=Sum(F("hours") * F("hourly_rate")), hours=Sum("hours")
@@ -48,6 +45,11 @@ def get_unbilled_summary(start_date=None, end_date=None):
 
     keys = set(list(hours.keys()) + list(total_cost.keys()))
 
-    return [
-        dict(project=p, hours=hours.get(p, 0), total=total_cost.get(p, 0)) for p in keys
-    ]
+    return sorted(
+        [
+            dict(project=p, hours=hours.get(p.pk, 0), total=total_cost.get(p.pk, 0))
+            for p in projects
+        ],
+        key=lambda a: a["total"],
+        reverse=True,
+    )

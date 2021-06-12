@@ -45,6 +45,9 @@ import {
     InlineResponse2007,
     InlineResponse2007FromJSON,
     InlineResponse2007ToJSON,
+    InlineResponse2008,
+    InlineResponse2008FromJSON,
+    InlineResponse2008ToJSON,
     Invoice,
     InvoiceFromJSON,
     InvoiceToJSON,
@@ -152,6 +155,11 @@ export interface ListInvoicePDFsRequest {
 }
 
 export interface ListInvoicesRequest {
+    limit?: number;
+    offset?: number;
+}
+
+export interface ListProjectSummarysRequest {
     limit?: number;
     offset?: number;
 }
@@ -636,7 +644,7 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async listAccountsRaw(requestParameters: ListAccountsRequest): Promise<runtime.ApiResponse<InlineResponse2003>> {
+    async listAccountsRaw(requestParameters: ListAccountsRequest): Promise<runtime.ApiResponse<InlineResponse2004>> {
         const queryParameters: any = {};
 
         if (requestParameters.limit !== undefined) {
@@ -656,12 +664,12 @@ export class ApiApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2003FromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2004FromJSON(jsonValue));
     }
 
     /**
      */
-    async listAccounts(requestParameters: ListAccountsRequest): Promise<InlineResponse2003> {
+    async listAccounts(requestParameters: ListAccountsRequest): Promise<InlineResponse2004> {
         const response = await this.listAccountsRaw(requestParameters);
         return await response.value();
     }
@@ -692,7 +700,7 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async listCompanysRaw(requestParameters: ListCompanysRequest): Promise<runtime.ApiResponse<InlineResponse2007>> {
+    async listCompanysRaw(requestParameters: ListCompanysRequest): Promise<runtime.ApiResponse<InlineResponse2008>> {
         const queryParameters: any = {};
 
         if (requestParameters.limit !== undefined) {
@@ -712,19 +720,19 @@ export class ApiApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2007FromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2008FromJSON(jsonValue));
     }
 
     /**
      */
-    async listCompanys(requestParameters: ListCompanysRequest): Promise<InlineResponse2007> {
+    async listCompanys(requestParameters: ListCompanysRequest): Promise<InlineResponse2008> {
         const response = await this.listCompanysRaw(requestParameters);
         return await response.value();
     }
 
     /**
      */
-    async listContactsRaw(requestParameters: ListContactsRequest): Promise<runtime.ApiResponse<InlineResponse2005>> {
+    async listContactsRaw(requestParameters: ListContactsRequest): Promise<runtime.ApiResponse<InlineResponse2006>> {
         const queryParameters: any = {};
 
         if (requestParameters.limit !== undefined) {
@@ -744,12 +752,12 @@ export class ApiApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2005FromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2006FromJSON(jsonValue));
     }
 
     /**
      */
-    async listContacts(requestParameters: ListContactsRequest): Promise<InlineResponse2005> {
+    async listContacts(requestParameters: ListContactsRequest): Promise<InlineResponse2006> {
         const response = await this.listContactsRaw(requestParameters);
         return await response.value();
     }
@@ -780,7 +788,7 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async listInvoiceModifiersRaw(requestParameters: ListInvoiceModifiersRequest): Promise<runtime.ApiResponse<InlineResponse2006>> {
+    async listInvoiceModifiersRaw(requestParameters: ListInvoiceModifiersRequest): Promise<runtime.ApiResponse<InlineResponse2007>> {
         const queryParameters: any = {};
 
         if (requestParameters.limit !== undefined) {
@@ -800,12 +808,12 @@ export class ApiApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2006FromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2007FromJSON(jsonValue));
     }
 
     /**
      */
-    async listInvoiceModifiers(requestParameters: ListInvoiceModifiersRequest): Promise<InlineResponse2006> {
+    async listInvoiceModifiers(requestParameters: ListInvoiceModifiersRequest): Promise<InlineResponse2007> {
         const response = await this.listInvoiceModifiersRaw(requestParameters);
         return await response.value();
     }
@@ -840,7 +848,7 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async listInvoicesRaw(requestParameters: ListInvoicesRequest): Promise<runtime.ApiResponse<InlineResponse2001>> {
+    async listInvoicesRaw(requestParameters: ListInvoicesRequest): Promise<runtime.ApiResponse<InlineResponse2002>> {
         const queryParameters: any = {};
 
         if (requestParameters.limit !== undefined) {
@@ -860,20 +868,28 @@ export class ApiApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2001FromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2002FromJSON(jsonValue));
     }
 
     /**
      */
-    async listInvoices(requestParameters: ListInvoicesRequest): Promise<InlineResponse2001> {
+    async listInvoices(requestParameters: ListInvoicesRequest): Promise<InlineResponse2002> {
         const response = await this.listInvoicesRaw(requestParameters);
         return await response.value();
     }
 
     /**
      */
-    async listProjectSummarysRaw(): Promise<runtime.ApiResponse<Array<any>>> {
+    async listProjectSummarysRaw(requestParameters: ListProjectSummarysRequest): Promise<runtime.ApiResponse<InlineResponse2001>> {
         const queryParameters: any = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -884,13 +900,13 @@ export class ApiApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse<any>(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2001FromJSON(jsonValue));
     }
 
     /**
      */
-    async listProjectSummarys(): Promise<Array<any>> {
-        const response = await this.listProjectSummarysRaw();
+    async listProjectSummarys(requestParameters: ListProjectSummarysRequest): Promise<InlineResponse2001> {
+        const response = await this.listProjectSummarysRaw(requestParameters);
         return await response.value();
     }
 
@@ -928,7 +944,7 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async listTasksRaw(requestParameters: ListTasksRequest): Promise<runtime.ApiResponse<InlineResponse2004>> {
+    async listTasksRaw(requestParameters: ListTasksRequest): Promise<runtime.ApiResponse<InlineResponse2005>> {
         const queryParameters: any = {};
 
         if (requestParameters.limit !== undefined) {
@@ -956,19 +972,19 @@ export class ApiApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2004FromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2005FromJSON(jsonValue));
     }
 
     /**
      */
-    async listTasks(requestParameters: ListTasksRequest): Promise<InlineResponse2004> {
+    async listTasks(requestParameters: ListTasksRequest): Promise<InlineResponse2005> {
         const response = await this.listTasksRaw(requestParameters);
         return await response.value();
     }
 
     /**
      */
-    async listTimeSlipsRaw(requestParameters: ListTimeSlipsRequest): Promise<runtime.ApiResponse<InlineResponse2002>> {
+    async listTimeSlipsRaw(requestParameters: ListTimeSlipsRequest): Promise<runtime.ApiResponse<InlineResponse2003>> {
         const queryParameters: any = {};
 
         if (requestParameters.limit !== undefined) {
@@ -1004,12 +1020,12 @@ export class ApiApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2002FromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse2003FromJSON(jsonValue));
     }
 
     /**
      */
-    async listTimeSlips(requestParameters: ListTimeSlipsRequest): Promise<InlineResponse2002> {
+    async listTimeSlips(requestParameters: ListTimeSlipsRequest): Promise<InlineResponse2003> {
         const response = await this.listTimeSlipsRaw(requestParameters);
         return await response.value();
     }

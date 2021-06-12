@@ -41,6 +41,12 @@ function Main({ user }: Props) {
             <Route path="/invoices/:projectId/:invoiceId">
               <Invoices user={user} projects={projects} />
             </Route>
+            <Route path="/invoices/new">
+              <Invoices user={user} projects={projects} isCreateNew />
+            </Route>
+            <Route path="/invoices/:projectId">
+              <Invoices user={user} projects={projects} isCreateNew />
+            </Route>
             <Route path="/invoices">
               <Invoices user={user} projects={projects} />
             </Route>

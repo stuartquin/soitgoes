@@ -9,6 +9,7 @@ interface Props {
 }
 
 function InvoiceDetailTotals({ invoice }: Props) {
+  const modifiers = invoice.modifier || [];
   return (
     <div className="uppercase text-sm text-gray-600 w-full sm:w-56 mt-3 sm:mt-0">
       <div className="grid grid-cols-2 gap-1">
@@ -16,7 +17,7 @@ function InvoiceDetailTotals({ invoice }: Props) {
         <div className="text-right">
           {formatCurrency(invoice.subtotalDue || 0)}
         </div>
-        {invoice.modifier.map((modifier) => (
+        {modifiers.map((modifier) => (
           <InvoiceDetailModifierItem
             key={modifier.id}
             invoiceModifier={modifier}

@@ -103,14 +103,43 @@ paths:
     get:
       operationId: listProjectSummarys
       description: ''
-      parameters: []
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: array
-                items: {}
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?offset=400&limit=100
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?offset=200&limit=100
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProjectSummary'
           description: ''
       tags:
       - api
@@ -1371,6 +1400,19 @@ components:
       required:
       - name
       - contact
+    ProjectSummary:
+      type: object
+      properties:
+        project:
+          type: integer
+        hours:
+          type: number
+          readOnly: true
+        total:
+          type: number
+          readOnly: true
+      required:
+      - project
     Invoice:
       type: object
       properties:
@@ -1556,6 +1598,7 @@ components:
                 readOnly: true
             required:
             - name
+          readOnly: true
         pdf_name:
           type: string
           readOnly: true
@@ -1563,7 +1606,6 @@ components:
       - project
       - timeslips
       - tasks
-      - modifier
     InvoiceModifier:
       type: object
       properties:

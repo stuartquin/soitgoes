@@ -127,7 +127,7 @@ export interface InvoiceDetail {
      * @type {Array<InvoiceDetailModifier>}
      * @memberof InvoiceDetail
      */
-    modifier: Array<InvoiceDetailModifier>;
+    readonly modifier?: Array<InvoiceDetailModifier>;
     /**
      * 
      * @type {string}
@@ -179,7 +179,7 @@ export function InvoiceDetailFromJSONTyped(json: any, ignoreDiscriminator: boole
         'showHours': !exists(json, 'show_hours') ? undefined : json['show_hours'],
         'timeslips': json['timeslips'],
         'tasks': json['tasks'],
-        'modifier': ((json['modifier'] as Array<any>).map(InvoiceDetailModifierFromJSON)),
+        'modifier': !exists(json, 'modifier') ? undefined : ((json['modifier'] as Array<any>).map(InvoiceDetailModifierFromJSON)),
         'pdfName': !exists(json, 'pdf_name') ? undefined : json['pdf_name'],
     };
 }
@@ -206,7 +206,6 @@ export function InvoiceDetailToJSON(value?: InvoiceDetail | null): any {
         'show_hours': value.showHours,
         'timeslips': value.timeslips,
         'tasks': value.tasks,
-        'modifier': ((value.modifier as Array<any>).map(InvoiceDetailModifierToJSON)),
     };
 }
 

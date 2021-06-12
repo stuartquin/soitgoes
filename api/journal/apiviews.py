@@ -28,7 +28,7 @@ from journal.invoices import (
 
 def get_allowed_projects(request: HttpRequest) -> list[models.Project]:
     if not request or not request.user or not request.user.is_authenticated:
-        return []
+        return models.Project.objects.none()
     return models.Project.objects.filter(account__in=request.user.account_set.all())
 
 
@@ -264,11 +264,13 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
         return self.serializer_class(*args, **kwargs)
 
 
-class ProjectSummary(APIView):
-    def get(self, request, pk=None):
-        start_date = self.request.query_params.get("start")
-        end_date = self.request.query_params.get("end")
-        return Response(dict(results=get_unbilled_summary(start_date, end_date)))
+class ProjectSummary(generics.ListAPIView):
+    serializer_class = serializers.ProjectSummarySerializer
+
+    def get_queryset(self):
+        projects = get_allowed_projects(self.request).filter(archived=False)
+        summary = get_unbilled_summary(projects)
+        return summary
 
 
 class CompanyList(generics.ListCreateAPIView):
