@@ -47,7 +47,12 @@ def get_unbilled_summary(projects: list[Project]):
 
     return sorted(
         [
-            dict(project=p, hours=hours.get(p.pk, 0), total=total_cost.get(p.pk, 0))
+            dict(
+                project=p,
+                hours=hours.get(p.pk, 0),
+                total=total_cost.get(p.pk, 0),
+                next_sequence_num=Invoice.get_next_sequence_num(p.pk),
+            )
             for p in projects
         ],
         key=lambda a: a["total"],

@@ -4,7 +4,7 @@ import Button from "components/Button";
 import * as models from "api/models";
 
 interface Props {
-  invoice: models.InvoiceDetail;
+  invoice: models.Invoice;
   project: models.Project;
   onSetPaid: () => void;
   token?: models.OneTimeToken;
@@ -12,7 +12,7 @@ interface Props {
 
 const getDownloadUrl = (
   token?: models.OneTimeToken,
-  invoice?: models.InvoiceDetail
+  invoice?: models.Invoice
 ): string => {
   return token && invoice
     ? `/api/invoices/${invoice.id}/pdf?token=${token.key}`
@@ -35,7 +35,7 @@ function InvoiceDateItems({ project, invoice, token, onSetPaid }: Props) {
         >
           Download
         </a>
-        {invoice.status === models.InvoiceDetailStatusEnum.Issued && (
+        {invoice.status === models.InvoiceStatusEnum.Issued && (
           <Button onClick={onSetPaid} variant="success">
             Set Paid
           </Button>

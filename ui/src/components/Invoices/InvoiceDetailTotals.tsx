@@ -5,7 +5,7 @@ import * as models from "api/models";
 import { formatCurrency } from "currency";
 
 interface Props {
-  invoice: models.InvoiceDetail;
+  invoice: models.Invoice;
 }
 
 function InvoiceDetailTotals({ invoice }: Props) {

@@ -238,6 +238,26 @@ paths:
           description: ''
       tags:
       - api
+  /api/projects/{project}/invoice:
+    get:
+      operationId: retrieveNewInvoice
+      description: ''
+      parameters:
+      - name: project
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+          description: ''
+      tags:
+      - api
   /api/invoices/:
     get:
       operationId: listInvoices
@@ -398,21 +418,6 @@ paths:
           description: ''
       tags:
       - api
-  /api/invoices/new:
-    get:
-      operationId: listInvoiceCreateNews
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items: {}
-          description: ''
-      tags:
-      - api
   /api/invoices/{id}:
     get:
       operationId: retrieveInvoice
@@ -429,7 +434,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InvoiceDetail'
+                $ref: '#/components/schemas/Invoice'
           description: ''
       tags:
       - api
@@ -447,19 +452,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InvoiceDetail'
+              $ref: '#/components/schemas/Invoice'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/InvoiceDetail'
+              $ref: '#/components/schemas/Invoice'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/InvoiceDetail'
+              $ref: '#/components/schemas/Invoice'
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InvoiceDetail'
+                $ref: '#/components/schemas/Invoice'
           description: ''
       tags:
       - api
@@ -477,19 +482,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InvoiceDetail'
+              $ref: '#/components/schemas/Invoice'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/InvoiceDetail'
+              $ref: '#/components/schemas/Invoice'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/InvoiceDetail'
+              $ref: '#/components/schemas/Invoice'
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InvoiceDetail'
+                $ref: '#/components/schemas/Invoice'
           description: ''
       tags:
       - api
@@ -1411,115 +1416,12 @@ components:
         total:
           type: number
           readOnly: true
+        next_sequence_num:
+          type: integer
+          readOnly: true
       required:
       - project
     Invoice:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        sequence_num:
-          type: integer
-        project:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        issued_at:
-          type: string
-          format: date-time
-          readOnly: true
-        paid_at:
-          type: string
-          format: date-time
-          nullable: true
-        due_date:
-          type: string
-          format: date
-          nullable: true
-        total_paid:
-          type: number
-          nullable: true
-        total_due:
-          type: number
-          nullable: true
-        subtotal_due:
-          type: number
-          nullable: true
-        status:
-          enum:
-          - DRAFT
-          - ISSUED
-          - PAID
-          type: string
-        reference:
-          type: string
-          nullable: true
-          maxLength: 256
-        group_by:
-          enum:
-          - tasks
-          - timeslips
-          type: string
-        show_hours:
-          type: boolean
-        timeslips:
-          type: array
-          items:
-            type: integer
-        tasks:
-          type: array
-          items:
-            type: integer
-        modifier:
-          type: array
-          items:
-            type: integer
-      required:
-      - project
-      - timeslips
-      - tasks
-      - modifier
-    TimeSlip:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        user:
-          type: integer
-        hours:
-          type: number
-          multipleOf: 0.001
-          maximum: 1000
-          minimum: -1000
-        hourly_rate:
-          type: number
-          multipleOf: 0.001
-          maximum: 1000
-          minimum: -1000
-        project:
-          type: integer
-        task:
-          type: integer
-          nullable: true
-        invoice:
-          type: integer
-          nullable: true
-        cost:
-          type: string
-          readOnly: true
-        date:
-          type: string
-          format: date
-      required:
-      - user
-      - project
-      - task
-      - date
-    InvoiceDetail:
       type: object
       properties:
         id:
@@ -1606,6 +1508,43 @@ components:
       - project
       - timeslips
       - tasks
+    TimeSlip:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        hours:
+          type: number
+          multipleOf: 0.001
+          maximum: 1000
+          minimum: -1000
+        hourly_rate:
+          type: number
+          multipleOf: 0.001
+          maximum: 1000
+          minimum: -1000
+        project:
+          type: integer
+        task:
+          type: integer
+          nullable: true
+        invoice:
+          type: integer
+          nullable: true
+        cost:
+          type: string
+          readOnly: true
+        date:
+          type: string
+          format: date
+      required:
+      - user
+      - project
+      - task
+      - date
     InvoiceModifier:
       type: object
       properties:

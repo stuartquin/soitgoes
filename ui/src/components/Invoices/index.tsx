@@ -1,11 +1,12 @@
 import React, { useCallback, useState, useEffect, useMemo } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, Switch, Route } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
 import { ensure } from "typeHelpers";
 import InvoiceRow from "components/Invoices/InvoiceRow";
 import InvoiceDetail from "components/Invoices/InvoiceDetail";
+import InvoiceSelectProject from "components/Invoices/InvoiceSelectProject";
 import InvoiceCreateNew from "components/Invoices/InvoiceCreateNew";
 import Button from "components/Button";
 import SlideOver from "components/SlideOver";
@@ -71,24 +72,6 @@ function Invoices({ user, projects, isCreateNew = false }: Props) {
       : ({} as models.Project);
   }, [projects, projectId]);
 
-  const getSlideOverComponent = () => {
-    if (isCreateNew) {
-      return (
-        <InvoiceCreateNew projects={projects} projectSummaries={summary} />
-      );
-    }
-
-    return invoiceId ? (
-      <InvoiceDetail
-        project={project}
-        invoiceId={invoiceId}
-        onStatusUpdate={loadInvoices}
-      />
-    ) : (
-      <div />
-    );
-  };
-
   const isOpen = isCreateNew || Boolean(projectId);
 
   return (
@@ -109,7 +92,24 @@ function Invoices({ user, projects, isCreateNew = false }: Props) {
         </div>
       </div>
       <SlideOver isOpen={isOpen} onClose={closeSlideOver}>
-        {getSlideOverComponent()}
+        <Switch>
+          <Route path="/invoices/:projectId/:invoiceId">
+            <InvoiceDetail
+              project={project}
+              invoiceId={invoiceId}
+              onStatusUpdate={loadInvoices}
+            />
+          </Route>
+          <Route path="/invoices/new">
+            <InvoiceSelectProject
+              projects={projects}
+              projectSummaries={summary}
+            />
+          </Route>
+          <Route path="/invoices/:projectId">
+            <InvoiceCreateNew project={project} />
+          </Route>
+        </Switch>
       </SlideOver>
     </React.Fragment>
   );

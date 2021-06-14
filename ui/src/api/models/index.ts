@@ -12,8 +12,6 @@ export * from './InlineResponse2006';
 export * from './InlineResponse2007';
 export * from './InlineResponse2008';
 export * from './Invoice';
-export * from './InvoiceDetail';
-export * from './InvoiceDetailModifier';
 export * from './InvoiceModifier';
 export * from './Login';
 export * from './OneTimeToken';

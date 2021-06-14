@@ -51,9 +51,6 @@ import {
     Invoice,
     InvoiceFromJSON,
     InvoiceToJSON,
-    InvoiceDetail,
-    InvoiceDetailFromJSON,
-    InvoiceDetailToJSON,
     InvoiceModifier,
     InvoiceModifierFromJSON,
     InvoiceModifierToJSON,
@@ -197,7 +194,7 @@ export interface PartialUpdateContactRequest {
 
 export interface PartialUpdateInvoiceRequest {
     id: string;
-    invoiceDetail?: InvoiceDetail;
+    invoice?: Invoice;
 }
 
 export interface PartialUpdateInvoiceModifierRequest {
@@ -238,6 +235,10 @@ export interface RetrieveInvoiceModifierRequest {
     modifier: string;
 }
 
+export interface RetrieveNewInvoiceRequest {
+    project: string;
+}
+
 export interface RetrieveProjectRequest {
     id: string;
 }
@@ -258,7 +259,7 @@ export interface UpdateContactRequest {
 
 export interface UpdateInvoiceRequest {
     id: string;
-    invoiceDetail?: InvoiceDetail;
+    invoice?: Invoice;
 }
 
 export interface UpdateInvoiceModifierRequest {
@@ -764,30 +765,6 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async listInvoiceCreateNewsRaw(): Promise<runtime.ApiResponse<Array<any>>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/invoices/new`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     */
-    async listInvoiceCreateNews(): Promise<Array<any>> {
-        const response = await this.listInvoiceCreateNewsRaw();
-        return await response.value();
-    }
-
-    /**
-     */
     async listInvoiceModifiersRaw(requestParameters: ListInvoiceModifiersRequest): Promise<runtime.ApiResponse<InlineResponse2007>> {
         const queryParameters: any = {};
 
@@ -1094,7 +1071,7 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async partialUpdateInvoiceRaw(requestParameters: PartialUpdateInvoiceRequest): Promise<runtime.ApiResponse<InvoiceDetail>> {
+    async partialUpdateInvoiceRaw(requestParameters: PartialUpdateInvoiceRequest): Promise<runtime.ApiResponse<Invoice>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling partialUpdateInvoice.');
         }
@@ -1110,15 +1087,15 @@ export class ApiApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: InvoiceDetailToJSON(requestParameters.invoiceDetail),
+            body: InvoiceToJSON(requestParameters.invoice),
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceDetailFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceFromJSON(jsonValue));
     }
 
     /**
      */
-    async partialUpdateInvoice(requestParameters: PartialUpdateInvoiceRequest): Promise<InvoiceDetail> {
+    async partialUpdateInvoice(requestParameters: PartialUpdateInvoiceRequest): Promise<Invoice> {
         const response = await this.partialUpdateInvoiceRaw(requestParameters);
         return await response.value();
     }
@@ -1309,7 +1286,7 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async retrieveInvoiceRaw(requestParameters: RetrieveInvoiceRequest): Promise<runtime.ApiResponse<InvoiceDetail>> {
+    async retrieveInvoiceRaw(requestParameters: RetrieveInvoiceRequest): Promise<runtime.ApiResponse<Invoice>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling retrieveInvoice.');
         }
@@ -1325,12 +1302,12 @@ export class ApiApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceDetailFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceFromJSON(jsonValue));
     }
 
     /**
      */
-    async retrieveInvoice(requestParameters: RetrieveInvoiceRequest): Promise<InvoiceDetail> {
+    async retrieveInvoice(requestParameters: RetrieveInvoiceRequest): Promise<Invoice> {
         const response = await this.retrieveInvoiceRaw(requestParameters);
         return await response.value();
     }
@@ -1364,6 +1341,34 @@ export class ApiApi extends runtime.BaseAPI {
      */
     async retrieveInvoiceModifier(requestParameters: RetrieveInvoiceModifierRequest): Promise<InvoiceModifier> {
         const response = await this.retrieveInvoiceModifierRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     */
+    async retrieveNewInvoiceRaw(requestParameters: RetrieveNewInvoiceRequest): Promise<runtime.ApiResponse<Invoice>> {
+        if (requestParameters.project === null || requestParameters.project === undefined) {
+            throw new runtime.RequiredError('project','Required parameter requestParameters.project was null or undefined when calling retrieveNewInvoice.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/projects/{project}/invoice`.replace(`{${"project"}}`, encodeURIComponent(String(requestParameters.project))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async retrieveNewInvoice(requestParameters: RetrieveNewInvoiceRequest): Promise<Invoice> {
+        const response = await this.retrieveNewInvoiceRaw(requestParameters);
         return await response.value();
     }
 
@@ -1535,7 +1540,7 @@ export class ApiApi extends runtime.BaseAPI {
 
     /**
      */
-    async updateInvoiceRaw(requestParameters: UpdateInvoiceRequest): Promise<runtime.ApiResponse<InvoiceDetail>> {
+    async updateInvoiceRaw(requestParameters: UpdateInvoiceRequest): Promise<runtime.ApiResponse<Invoice>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateInvoice.');
         }
@@ -1551,15 +1556,15 @@ export class ApiApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: InvoiceDetailToJSON(requestParameters.invoiceDetail),
+            body: InvoiceToJSON(requestParameters.invoice),
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceDetailFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceFromJSON(jsonValue));
     }
 
     /**
      */
-    async updateInvoice(requestParameters: UpdateInvoiceRequest): Promise<InvoiceDetail> {
+    async updateInvoice(requestParameters: UpdateInvoiceRequest): Promise<Invoice> {
         const response = await this.updateInvoiceRaw(requestParameters);
         return await response.value();
     }

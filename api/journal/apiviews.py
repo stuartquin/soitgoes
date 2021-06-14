@@ -12,12 +12,14 @@ from rest_framework import generics, viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
+from rest_framework.schemas.openapi import AutoSchema
 
 from users.onetimetoken import OneTimeTokenAccess
 
 from journal import serializers, models, summary
 from journal.cookieauthentication import CookieAuthentication
 from journal.project import get_unbilled_summary
+from journal.schema import NewInvoiceSchema
 from journal.filters import TimeSlipFilter, TaskFilter
 from journal.invoices import (
     save_invoice_tasks,
@@ -113,7 +115,7 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
 class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (HasInvoiceAccess,)
     queryset = models.Invoice.objects.all()
-    serializer_class = serializers.InvoiceDetailSerializer
+    serializer_class = serializers.InvoiceSerializer
 
     def get_serializer(self, *args, **kwargs):
         kwargs["context"] = self.get_serializer_context()
@@ -131,11 +133,6 @@ class InvoiceDetail(generics.RetrieveUpdateDestroyAPIView):
             del serializer.validated_data["tasks"]
 
         serializer.save()
-
-
-class InvoiceCreateNew(APIView):
-    def get(self, request, format=None):
-        return Response(get_new_invoice(request.GET.get("project")))
 
 
 class InvoiceListCreate(generics.ListCreateAPIView):
@@ -323,3 +320,14 @@ class InvoiceTaskDetail(generics.RetrieveUpdateDestroyAPIView):
         invoice.modifier.remove(models.InvoiceModifier.objects.get(id=modifier))
         invoice.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class NewInvoiceDetail(generics.RetrieveAPIView):
+    queryset = models.Invoice.objects.all()
+    serializer_class = serializers.InvoiceSerializer
+    schema = AutoSchema(operation_id_base="NewInvoice",)
+    lookup_field = "project"
+
+    def get(self, request, project=None):
+        get_object_or_404(get_allowed_projects(request), pk=project)
+        return Response(get_new_invoice(project))

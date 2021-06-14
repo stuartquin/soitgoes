@@ -70,7 +70,6 @@ def get_new_invoice(project_id):
         "project": project_id,
         "tasks": task_ids,
         "timeslips": timeslip_ids,
-        "items": [],
         "modifier": [],
         "due_date": due_date.strftime("%Y-%m-%d"),
         "group_by": "timeslips",

@@ -28,11 +28,10 @@ const getStatusDate = (
 
 function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
   const [token, setToken] = useState<models.OneTimeToken>();
-  const [invoice, setInvoice] = useState<models.InvoiceDetail>();
+  const [invoice, setInvoice] = useState<models.Invoice>();
   const [isLoading, setIsLoading] = useState(true);
   const [tasks, setTasks] = useState<models.Task[]>([]);
   const [timeSlips, setTimeSlips] = useState<models.TimeSlip[]>([]);
-  const [view, setView] = useState("date");
 
   useEffect(() => {
     const load = async () => {
@@ -73,9 +72,9 @@ function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
       setInvoice(
         await api.updateInvoice({
           id: `${invoice.id}`,
-          invoiceDetail: {
+          invoice: {
             ...invoice,
-            status: models.InvoiceDetailStatusEnum.Paid,
+            status: models.InvoiceStatusEnum.Paid,
             totalPaid: invoice.totalDue,
           },
         })
@@ -86,7 +85,7 @@ function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
 
   const displayTasks = useMemo(() => {
     if (invoice) {
-      return invoice.groupBy === models.InvoiceDetailGroupByEnum.Tasks
+      return invoice.groupBy === models.InvoiceGroupByEnum.Tasks
         ? tasks
         : tasks.filter(
             (t) => t.billingType === models.TaskBillingTypeEnum.Fixed
@@ -125,7 +124,7 @@ function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
         <InvoiceDetailTotals invoice={invoice} />
       </div>
 
-      {invoice.groupBy === models.InvoiceDetailGroupByEnum.Timeslips &&
+      {invoice.groupBy === models.InvoiceGroupByEnum.Timeslips &&
         timeSlips.length > 0 && (
           <InvoiceDateItems
             project={project}

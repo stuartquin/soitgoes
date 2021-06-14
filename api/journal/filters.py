@@ -1,6 +1,6 @@
-from django_filters.filters import DateFilter, DateRangeFilter
+from django_filters.filters import DateFilter, BooleanFilter
 from django_filters.rest_framework import FilterSet
-from journal.models import TimeSlip, Task
+from journal.models import TimeSlip, Task, Invoice
 
 
 class TimeSlipFilter(FilterSet):

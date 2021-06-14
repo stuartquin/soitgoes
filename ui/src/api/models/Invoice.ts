@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import {
+    InvoiceModifier,
+    InvoiceModifierFromJSON,
+    InvoiceModifierFromJSONTyped,
+    InvoiceModifierToJSON,
+} from './';
+
 /**
  * 
  * @export
@@ -117,10 +124,16 @@ export interface Invoice {
     tasks: Array<number>;
     /**
      * 
-     * @type {Array<number>}
+     * @type {Array<InvoiceModifier>}
      * @memberof Invoice
      */
-    modifier: Array<number>;
+    readonly modifier?: Array<InvoiceModifier>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Invoice
+     */
+    readonly pdfName?: string;
 }
 
 /**
@@ -166,7 +179,8 @@ export function InvoiceFromJSONTyped(json: any, ignoreDiscriminator: boolean): I
         'showHours': !exists(json, 'show_hours') ? undefined : json['show_hours'],
         'timeslips': json['timeslips'],
         'tasks': json['tasks'],
-        'modifier': json['modifier'],
+        'modifier': !exists(json, 'modifier') ? undefined : ((json['modifier'] as Array<any>).map(InvoiceModifierFromJSON)),
+        'pdfName': !exists(json, 'pdf_name') ? undefined : json['pdf_name'],
     };
 }
 
@@ -192,7 +206,6 @@ export function InvoiceToJSON(value?: Invoice | null): any {
         'show_hours': value.showHours,
         'timeslips': value.timeslips,
         'tasks': value.tasks,
-        'modifier': value.modifier,
     };
 }
 

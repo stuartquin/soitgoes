@@ -37,6 +37,12 @@ export interface ProjectSummary {
      * @memberof ProjectSummary
      */
     readonly total?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ProjectSummary
+     */
+    readonly nextSequenceNum?: number;
 }
 
 export function ProjectSummaryFromJSON(json: any): ProjectSummary {
@@ -52,6 +58,7 @@ export function ProjectSummaryFromJSONTyped(json: any, ignoreDiscriminator: bool
         'project': json['project'],
         'hours': !exists(json, 'hours') ? undefined : json['hours'],
         'total': !exists(json, 'total') ? undefined : json['total'],
+        'nextSequenceNum': !exists(json, 'next_sequence_num') ? undefined : json['next_sequence_num'],
     };
 }
 

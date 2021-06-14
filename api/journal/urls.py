@@ -6,11 +6,14 @@ urlpatterns = [
     url(r"api/projects/summary/$", apiviews.ProjectSummary.as_view()),
     url(r"api/projects/(?P<pk>[0-9]+)$", apiviews.ProjectDetail.as_view()),
     url(
+        r"api/projects/(?P<project>[0-9]+)/invoice",
+        apiviews.NewInvoiceDetail.as_view(),
+    ),
+    url(
         r"api/invoices/$", apiviews.InvoiceListCreate.as_view(), name="project-invoices"
     ),
     url(r"api/timeslips/$", apiviews.TimeSlipList.as_view()),
     url(r"api/timeslips/(?P<pk>[0-9]+)$", apiviews.TimeSlipDetail.as_view()),
-    url(r"api/invoices/new$", apiviews.InvoiceCreateNew.as_view()),
     url(r"api/invoices/(?P<pk>[0-9]+)$", apiviews.InvoiceDetail.as_view()),
     url(r"api/invoices/(?P<pk>[0-9]+)/pdf$", apiviews.InvoicePDF.as_view()),
     url(r"api/invoices/zip$", apiviews.BulkInvoicePDF.as_view()),

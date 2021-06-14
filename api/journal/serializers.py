@@ -153,16 +153,13 @@ class TaskSerializer(serializers.ModelSerializer):
 
 class InvoiceSerializer(serializers.ModelSerializer):
     ACTIVITY_CODE = "INV"
-    # TODO restrict this to matching project
     timeslips = serializers.PrimaryKeyRelatedField(
         many=True, queryset=models.TimeSlip.objects.all()
     )
     tasks = serializers.PrimaryKeyRelatedField(
         many=True, queryset=models.Task.objects.all()
     )
-    modifier = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=models.InvoiceModifier.objects.all()
-    )
+    modifier = InvoiceModifierSerializer(many=True, read_only=True)
 
     def update(self, instance, validated_data):
         request_data = self.context["request"].data
@@ -196,6 +193,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
             "timeslips",
             "tasks",
             "modifier",
+            "pdf_name",
         ]
 
 
@@ -210,34 +208,8 @@ class TaskInvoiceSerializer(serializers.ModelSerializer):
         fields = ["id", "created_at", "invoice", "cost", "task", "hours_spent"]
 
 
-class InvoiceDetailSerializer(InvoiceSerializer):
-    modifier = InvoiceModifierSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = models.Invoice
-        fields = [
-            "id",
-            "sequence_num",
-            "project",
-            "created_at",
-            "issued_at",
-            "paid_at",
-            "due_date",
-            "total_paid",
-            "total_due",
-            "subtotal_due",
-            "status",
-            "reference",
-            "group_by",
-            "show_hours",
-            "timeslips",
-            "tasks",
-            "modifier",
-            "pdf_name",
-        ]
-
-
 class ProjectSummarySerializer(serializers.Serializer):
     project = serializers.PrimaryKeyRelatedField(queryset=models.Project.objects.all())
     hours = serializers.FloatField(read_only=True)
     total = serializers.FloatField(read_only=True)
+    next_sequence_num = serializers.IntegerField(read_only=True)
