@@ -367,6 +367,12 @@ paths:
         description: end
         schema:
           type: string
+      - name: no_invoice
+        required: false
+        in: query
+        description: no_invoice
+        schema:
+          type: string
       responses:
         '200':
           content:
@@ -739,6 +745,12 @@ paths:
         required: false
         in: query
         description: project
+        schema:
+          type: string
+      - name: no_invoice
+        required: false
+        in: query
+        description: no_invoice
         schema:
           type: string
       responses:
@@ -1535,7 +1547,7 @@ components:
           type: integer
           nullable: true
         cost:
-          type: string
+          type: number
           readOnly: true
         date:
           type: string

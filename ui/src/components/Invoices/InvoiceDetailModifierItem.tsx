@@ -2,6 +2,7 @@ import React from "react";
 
 import * as models from "api/models";
 import { formatCurrency } from "currency";
+import { getModifierLabel, calculateModifierImpact } from "invoices";
 
 interface Props {
   invoiceModifier: models.InvoiceModifier;
@@ -9,8 +10,8 @@ interface Props {
 }
 
 function InvoiceDetailModifierItem({ subtotalDue, invoiceModifier }: Props) {
-  const name = `${invoiceModifier.name} ${invoiceModifier.percent}%`;
-  const impact = (subtotalDue / 100.0) * (invoiceModifier.percent || 0);
+  const name = getModifierLabel(invoiceModifier);
+  const impact = calculateModifierImpact(subtotalDue, invoiceModifier);
 
   return (
     <React.Fragment>

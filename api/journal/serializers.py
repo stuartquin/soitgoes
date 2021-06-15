@@ -52,6 +52,7 @@ class ProjectSerializer(LogActivity):
 
 class TimeSlipSerializer(LogActivity):
     ACTIVITY_CODE = "TIM"
+    cost = serializers.FloatField(read_only=True)
 
     class Meta:
         model = models.TimeSlip

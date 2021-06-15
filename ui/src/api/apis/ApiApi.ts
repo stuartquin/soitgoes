@@ -171,6 +171,7 @@ export interface ListTasksRequest {
     offset?: number;
     invoices?: string;
     project?: string;
+    noInvoice?: string;
 }
 
 export interface ListTimeSlipsRequest {
@@ -180,6 +181,7 @@ export interface ListTimeSlipsRequest {
     project?: string;
     start?: string;
     end?: string;
+    noInvoice?: string;
 }
 
 export interface PartialUpdateCompanyRequest {
@@ -940,6 +942,10 @@ export class ApiApi extends runtime.BaseAPI {
             queryParameters['project'] = requestParameters.project;
         }
 
+        if (requestParameters.noInvoice !== undefined) {
+            queryParameters['no_invoice'] = requestParameters.noInvoice;
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
@@ -986,6 +992,10 @@ export class ApiApi extends runtime.BaseAPI {
 
         if (requestParameters.end !== undefined) {
             queryParameters['end'] = requestParameters.end;
+        }
+
+        if (requestParameters.noInvoice !== undefined) {
+            queryParameters['no_invoice'] = requestParameters.noInvoice;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

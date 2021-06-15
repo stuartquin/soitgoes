@@ -34,11 +34,11 @@ const getStartDate = (search: string): Date => {
 interface Props {
   user: models.User;
   projects: models.Project[];
-  tasks: models.Task[];
 }
 
-function TimeSheet({ user, projects, tasks }: Props) {
+function TimeSheet({ user, projects }: Props) {
   const search = useLocation().search;
+  const [tasks, setTasks] = useState<models.Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [timeSheet, setTimeSheet] = useState<TimeSheetType>({});
   const startDate = useMemo(() => {
@@ -53,14 +53,20 @@ function TimeSheet({ user, projects, tasks }: Props) {
         end: format(endOfMonth(addMonths(startDate, 1)), "yyyy-MM-dd"),
       });
 
+      const taskResponse = await api.listTasks({});
+      const activeTasks = (taskResponse.results || []).filter(
+        (task) => (task.hoursSpent || 0) > 0 || task.state === "OPEN"
+      );
+      setTasks(activeTasks);
+
       setTimeSheet(
-        getTimeSheet(startDate, tasks, timeSlipResponse.results || [])
+        getTimeSheet(startDate, activeTasks, timeSlipResponse.results || [])
       );
       setIsLoading(false);
     };
 
     load();
-  }, [startDate, tasks]);
+  }, [startDate]);
 
   const updateHours = useCallback(
     (entry: TimeSlipEntry, hours: number) => {

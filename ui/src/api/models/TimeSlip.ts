@@ -63,10 +63,10 @@ export interface TimeSlip {
     invoice?: number | null;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof TimeSlip
      */
-    readonly cost?: string;
+    readonly cost?: number;
     /**
      * 
      * @type {Date}

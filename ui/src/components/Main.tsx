@@ -14,19 +14,11 @@ interface Props {
 
 function Main({ user }: Props) {
   const [projects, setProjects] = useState<models.Project[]>([]);
-  const [tasks, setTasks] = useState<models.Task[]>([]);
-
   useEffect(() => {
     const load = async () => {
       const api = getClient();
       const response = await api.listProjects({});
       setProjects((response.results || []).filter((p) => !p.archived));
-
-      const taskResponse = await api.listTasks({});
-      const activeTasks = (taskResponse.results || []).filter(
-        (task) => (task.hoursSpent || 0) > 0 || task.state === "OPEN"
-      );
-      setTasks(activeTasks);
     };
 
     load();
@@ -36,7 +28,7 @@ function Main({ user }: Props) {
   return (
     <Router>
       <Layout>
-        {projects.length && tasks.length && (
+        {projects.length && (
           <Switch>
             <Route path="/invoices/:projectId/:invoiceId">
               <Invoices user={user} projects={projects} />
@@ -51,7 +43,7 @@ function Main({ user }: Props) {
               <Invoices user={user} projects={projects} />
             </Route>
             <Route path="/time">
-              <TimeSheet user={user} projects={projects} tasks={tasks} />
+              <TimeSheet user={user} projects={projects} />
             </Route>
           </Switch>
         )}
