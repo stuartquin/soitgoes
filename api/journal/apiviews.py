@@ -19,7 +19,6 @@ from users.onetimetoken import OneTimeTokenAccess
 from journal import serializers, models, summary
 from journal.cookieauthentication import CookieAuthentication
 from journal.project import get_unbilled_summary
-from journal.schema import NewInvoiceSchema
 from journal.filters import TimeSlipFilter, TaskFilter
 from journal.invoices import (
     save_invoice_tasks,

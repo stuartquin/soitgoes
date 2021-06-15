@@ -8,6 +8,7 @@ urlpatterns = [
     url(
         r"api/projects/(?P<project>[0-9]+)/invoice",
         apiviews.NewInvoiceDetail.as_view(),
+        name="projects_new_invoice",
     ),
     url(
         r"api/invoices/$", apiviews.InvoiceListCreate.as_view(), name="project-invoices"
