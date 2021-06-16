@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
-import { MinusCircleIcon } from "@heroicons/react/outline";
 
-import InvoiceDateItem from "components/Invoices/InvoiceDateItem";
+import InvoiceToggleableItem from "components/Invoices/InvoiceToggleableItem";
 import * as models from "api/models";
 
 interface GroupedTimeSlip {
@@ -12,15 +11,17 @@ interface GroupedTimeSlip {
 interface Props {
   tasks: models.Task[];
   timeSlips: models.TimeSlip[];
+  invoice: models.Invoice;
   project: models.Project;
-  onRemoveTimeSlip: (timeSlip: models.TimeSlip) => void;
+  onToggleTimeSlip: (timeSlip: models.TimeSlip) => void;
 }
 
 function InvoiceEditableItems({
+  invoice,
   project,
   tasks,
   timeSlips,
-  onRemoveTimeSlip,
+  onToggleTimeSlip,
 }: Props) {
   const groupedTimeSlips = useMemo(
     () =>
@@ -43,19 +44,13 @@ function InvoiceEditableItems({
         </div>
       </div>
       {groupedTimeSlips.map(({ task, timeSlip }) => (
-        <InvoiceDateItem
-          key={timeSlip.id}
-          timeSlip={timeSlip}
+        <InvoiceToggleableItem
           task={task}
+          timeSlip={timeSlip}
+          invoice={invoice}
           project={project}
-        >
-          <div
-            className="p-2 cursor-pointer"
-            onClick={() => onRemoveTimeSlip(timeSlip)}
-          >
-            <MinusCircleIcon className="h-4 w-4 text-gray-400 hover:text-gray-600" />
-          </div>
-        </InvoiceDateItem>
+          onToggleTimeSlip={onToggleTimeSlip}
+        />
       ))}
     </div>
   );

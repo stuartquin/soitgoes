@@ -8,9 +8,10 @@ import ActionLink from "components/ActionLink";
 
 interface Props {
   invoice: models.Invoice;
+  onRemoveModifier: (modifier: models.InvoiceModifier) => void;
 }
 
-function InvoiceEditableTotals({ invoice }: Props) {
+function InvoiceEditableTotals({ invoice, onRemoveModifier }: Props) {
   const modifiers = invoice.modifier || [];
   return (
     <div className="text-sm text-gray-600 w-full sm:w-56 mt-3 sm:mt-0">
@@ -29,7 +30,7 @@ function InvoiceEditableTotals({ invoice }: Props) {
             )}
             <div
               className="p-2 cursor-pointer absolute -right-7"
-              onClick={() => console.log(modifier)}
+              onClick={() => onRemoveModifier(modifier)}
             >
               <MinusCircleIcon className="h-4 w-4 text-gray-400 hover:text-gray-600" />
             </div>

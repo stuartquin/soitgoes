@@ -2,7 +2,6 @@ import React from "react";
 import { ChevronDownIcon } from "@heroicons/react/outline";
 
 import * as models from "api/models";
-import ActionLink from "components/ActionLink";
 import Button from "components/Button";
 
 interface Props {

@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import Button from "components/Button";
 
 import * as models from "api/models";
+import ActionLink from "components/ActionLink";
 
 interface Props {
   invoice: models.Invoice;
@@ -28,15 +29,15 @@ function InvoiceDateItems({ project, invoice, token, onSetPaid }: Props) {
         #{invoice.sequenceNum} {project.name}
       </div>
       <div className="flex items-center">
-        <a
+        <ActionLink
           href={downloadURL}
+          variant="primary"
           download={invoice.pdfName}
-          className="text-blue-800 mr-2"
         >
           Download
-        </a>
+        </ActionLink>
         {invoice.status === models.InvoiceStatusEnum.Issued && (
-          <Button onClick={onSetPaid} variant="success">
+          <Button onClick={onSetPaid} variant="success" className="ml-2">
             Set Paid
           </Button>
         )}
