@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/outline";
 
 import InvoiceDateItem from "components/Invoices/InvoiceDateItem";

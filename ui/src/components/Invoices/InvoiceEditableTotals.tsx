@@ -1,18 +1,21 @@
 import React from "react";
-import { MinusCircleIcon } from "@heroicons/react/outline";
 
 import * as models from "api/models";
 import { formatCurrency } from "currency";
-import { getModifierLabel, calculateModifierImpact } from "invoices";
 import ActionLink from "components/ActionLink";
+import InvoiceTotalsModifierItem from "components/Invoices/InvoiceTotalsModifierItem";
 
 interface Props {
   invoice: models.Invoice;
-  onRemoveModifier: (modifier: models.InvoiceModifier) => void;
+  modifiers: models.InvoiceModifier[];
+  onToggleModifier: (modifier: models.InvoiceModifier) => void;
 }
 
-function InvoiceEditableTotals({ invoice, onRemoveModifier }: Props) {
-  const modifiers = invoice.modifier || [];
+function InvoiceEditableTotals({
+  invoice,
+  modifiers,
+  onToggleModifier,
+}: Props) {
   return (
     <div className="text-sm text-gray-600 w-full sm:w-56 mt-3 sm:mt-0">
       <div className="flex justify-between uppercase">
@@ -22,20 +25,11 @@ function InvoiceEditableTotals({ invoice, onRemoveModifier }: Props) {
         </div>
       </div>
       {modifiers.map((modifier) => (
-        <div className="flex justify-between uppercase" key={modifier.id}>
-          <div>{getModifierLabel(modifier)}</div>
-          <div className="flex items-center relative">
-            {formatCurrency(
-              calculateModifierImpact(invoice.subtotalDue || 0, modifier)
-            )}
-            <div
-              className="p-2 cursor-pointer absolute -right-7"
-              onClick={() => onRemoveModifier(modifier)}
-            >
-              <MinusCircleIcon className="h-4 w-4 text-gray-400 hover:text-gray-600" />
-            </div>
-          </div>
-        </div>
+        <InvoiceTotalsModifierItem
+          invoice={invoice}
+          modifier={modifier}
+          onToggleModifier={onToggleModifier}
+        />
       ))}
       <div className="text-right">
         <ActionLink variant="primary">Add Discount/Tax</ActionLink>

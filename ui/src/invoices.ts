@@ -65,5 +65,18 @@ export const calculateModifierImpact = (
   return (subtotalDue / 100.0) * (modifier.percent || 0);
 };
 
+export const calculateTotal = (
+  subtotalDue: number,
+  modifiers: models.InvoiceModifier[]
+): number => {
+  return (
+    subtotalDue +
+    modifiers.reduce(
+      (acc, modifier) => acc + calculateModifierImpact(subtotalDue, modifier),
+      0
+    )
+  );
+};
+
 export const getModifierLabel = (modifier: models.InvoiceModifier): string =>
   `${modifier.name} ${modifier.percent}%`;

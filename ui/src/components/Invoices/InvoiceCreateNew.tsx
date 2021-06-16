@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
@@ -7,7 +6,8 @@ import InvoiceActions from "components/Invoices/InvoiceActions";
 import InvoiceForm from "components/Invoices/InvoiceForm";
 import InvoiceEditableItems from "components/Invoices/InvoiceEditableItems";
 import InvoiceEditableTotals from "components/Invoices/InvoiceEditableTotals";
-import { calculateSubTotal } from "invoices";
+import { calculateTotal, calculateSubTotal } from "invoices";
+import { ensure } from "typeHelpers";
 
 interface Props {
   project: models.Project;
@@ -46,43 +46,59 @@ function InvoiceCreateNew({ project }: Props) {
   }, [project]);
 
   useEffect(() => {
+    const subtotalDue = calculateSubTotal(tasks, timeSlips);
     setInvoice({
+      subtotalDue,
       project: project.id || 0,
       tasks: tasks.map((t) => t.id || 0),
       timeslips: timeSlips.map((t) => t.id || 0),
       modifier: modifiers,
-      subtotalDue: calculateSubTotal(tasks, timeSlips),
+      totalDue: calculateTotal(subtotalDue, modifiers),
     });
   }, [project, tasks, timeSlips, modifiers]);
 
   const toggleTimeSlip = useCallback(
     (timeSlip) => {
-      const invoiceTimeSlips = invoice ? invoice.timeslips : [];
-      const updatedTimeSlips = invoiceTimeSlips.includes(timeSlip.id)
-        ? invoiceTimeSlips.filter((id) => id !== timeSlip.id)
-        : invoiceTimeSlips.concat([timeSlip.id]);
+      if (invoice) {
+        const updatedTimeSlips = invoice.timeslips.includes(timeSlip.id)
+          ? invoice.timeslips.filter((id) => id !== timeSlip.id)
+          : invoice.timeslips.concat([timeSlip.id]);
 
-      const subtotalDue = calculateSubTotal(
-        tasks,
-        timeSlips.filter((t) => updatedTimeSlips.includes(t.id || 0))
-      );
-      setInvoice({
-        ...invoice,
-        subtotalDue,
-        timeslips: updatedTimeSlips,
-      } as models.Invoice);
+        const subtotalDue = calculateSubTotal(
+          tasks,
+          timeSlips.filter((t) => updatedTimeSlips.includes(t.id || 0))
+        );
+        setInvoice({
+          ...invoice,
+          subtotalDue,
+          totalDue: calculateTotal(subtotalDue, ensure(invoice.modifier)),
+          timeslips: updatedTimeSlips,
+        } as models.Invoice);
+      }
     },
     [invoice, timeSlips, tasks]
   );
 
-  const removeModifier = useCallback(
+  const toggleModifier = useCallback(
     (modifier) => {
-      setInvoice({
-        ...invoice,
-        modifier: modifiers.filter((m) => m.id !== modifier.id),
-      } as models.Invoice);
+      if (invoice) {
+        const invoiceModifiers = invoice ? ensure(invoice.modifier) : [];
+        const updatedModifiers = invoiceModifiers.find(
+          (m) => m.id === modifier.id
+        )
+          ? invoiceModifiers.filter((m) => m.id !== modifier.id)
+          : invoiceModifiers.concat([modifier]);
+        setInvoice({
+          ...invoice,
+          modifier: updatedModifiers,
+          totalDue: calculateTotal(
+            invoice.subtotalDue || 0,
+            ensure(updatedModifiers)
+          ),
+        } as models.Invoice);
+      }
     },
-    [invoice, modifiers]
+    [invoice]
   );
 
   return (
@@ -93,8 +109,9 @@ function InvoiceCreateNew({ project }: Props) {
           <div className="flex flex-wrap items-end justify-between mx-4 sm:mx-0">
             <InvoiceForm invoice={invoice} />
             <InvoiceEditableTotals
+              modifiers={modifiers}
               invoice={invoice}
-              onRemoveModifier={removeModifier}
+              onToggleModifier={toggleModifier}
             />
           </div>
         </React.Fragment>
