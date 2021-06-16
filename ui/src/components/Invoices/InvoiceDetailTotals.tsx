@@ -3,13 +3,14 @@ import React from "react";
 import InvoiceDetailModifierItem from "components/Invoices/InvoiceDetailModifierItem";
 import * as models from "api/models";
 import { formatCurrency } from "currency";
+import { ensure } from "typeHelpers";
 
 interface Props {
   invoice: models.Invoice;
+  modifiers: models.InvoiceModifier[];
 }
 
-function InvoiceDetailTotals({ invoice }: Props) {
-  const modifiers = invoice.modifier || [];
+function InvoiceDetailTotals({ invoice, modifiers }: Props) {
   return (
     <div className="uppercase text-sm text-gray-600 w-full sm:w-56 mt-3 sm:mt-0">
       <div className="grid grid-cols-2 gap-1">
@@ -17,10 +18,10 @@ function InvoiceDetailTotals({ invoice }: Props) {
         <div className="text-right">
           {formatCurrency(invoice.subtotalDue || 0)}
         </div>
-        {modifiers.map((modifier) => (
+        {ensure(invoice.modifier).map((id) => (
           <InvoiceDetailModifierItem
-            key={modifier.id}
-            invoiceModifier={modifier}
+            key={id}
+            invoiceModifier={ensure(modifiers.find((m) => m.id === id))}
             subtotalDue={invoice.subtotalDue || 0}
           />
         ))}

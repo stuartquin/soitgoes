@@ -7,9 +7,10 @@ import Button from "components/Button";
 interface Props {
   invoice: models.Invoice;
   project: models.Project;
+  onIssue: () => void;
 }
 
-function InvoiceActions({ project, invoice }: Props) {
+function InvoiceActions({ project, invoice, onIssue }: Props) {
   return (
     <div className="flex justify-between">
       <div className="text-gray-700">
@@ -19,7 +20,7 @@ function InvoiceActions({ project, invoice }: Props) {
         <Button variant="light" className="mx-1 flex">
           Payment Details <ChevronDownIcon className="w-4 ml-2" />
         </Button>
-        <Button variant="success" className="mx-1">
+        <Button variant="success" className="mx-1" onClick={onIssue}>
           Issue
         </Button>
       </div>

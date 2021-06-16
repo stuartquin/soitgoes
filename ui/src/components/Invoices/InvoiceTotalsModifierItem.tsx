@@ -17,9 +17,7 @@ function InvoiceTotalsModifierItem({
   modifier,
   onToggleModifier,
 }: Props) {
-  const hasModifier = ensure(invoice.modifier).find(
-    (m) => m.id === modifier.id
-  );
+  const hasModifier = ensure(invoice.modifier).find((id) => id === modifier.id);
   return (
     <div className={!hasModifier ? "opacity-25" : ""}>
       <div className="flex justify-between uppercase">

@@ -12,19 +12,16 @@ from journal.models import (
 )
 
 
-def _save_invoice_timeslip(invoice, item):
-    timeslip = TimeSlip.objects.get(pk=item.get("id"))
-    timeslip.invoice = invoice
-    timeslip.save()
+def _save_fixed_task(invoice, task):
+    task_invoice = TaskInvoice.objects.create(
+        task=task, invoice=invoice, cost=task.cost, hours_spent=hours_spent
+    )
+    task_invoice.save()
 
 
-def _save_invoice_task(invoice, task):
-    if task.billing_type == BILLING_TYPE_FIXED:
-        cost = task.cost
-        hours_spent = 0
-    else:
-        cost = sum([ts.cost for ts in invoice.timeslips.filter(task=task)])
-        hours_spent = sum([ts.hours for ts in invoice.timeslips.filter(task=task)])
+def _save_time_task(invoice, task):
+    cost = sum([ts.cost for ts in invoice.timeslips.filter(task=task)])
+    hours_spent = sum([ts.hours for ts in invoice.timeslips.filter(task=task)])
 
     task_invoice = TaskInvoice.objects.create(
         task=task, invoice=invoice, cost=cost, hours_spent=hours_spent
@@ -32,9 +29,16 @@ def _save_invoice_task(invoice, task):
     task_invoice.save()
 
 
-def save_invoice_tasks(invoice, tasks):
-    for task in tasks:
-        _save_invoice_task(invoice, task)
+def save_invoice_tasks(invoice: Invoice, fixed_tasks: list[Task]):
+    time_tasks = Task.objects.filter(
+        id__in=set(invoice.timeslips.values_list("task", flat=True))
+    ).all()
+
+    for task in fixed_tasks:
+        _save_fixed_task(invoice, task)
+
+    for task in time_tasks:
+        _save_time_task(invoice, task)
 
 
 def set_invoice_totals(invoice):

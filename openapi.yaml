@@ -1499,23 +1499,7 @@ components:
         modifier:
           type: array
           items:
-            type: object
-            properties:
-              id:
-                type: integer
-                readOnly: true
-              name:
-                type: string
-                maxLength: 512
-              percent:
-                type: number
-              created_at:
-                type: string
-                format: date-time
-                readOnly: true
-            required:
-            - name
-          readOnly: true
+            type: integer
         pdf_name:
           type: string
           readOnly: true

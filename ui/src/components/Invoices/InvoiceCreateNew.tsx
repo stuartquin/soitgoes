@@ -50,9 +50,11 @@ function InvoiceCreateNew({ project }: Props) {
     setInvoice({
       subtotalDue,
       project: project.id || 0,
-      tasks: tasks.map((t) => t.id || 0),
-      timeslips: timeSlips.map((t) => t.id || 0),
-      modifier: modifiers,
+      tasks: tasks
+        .filter((t) => t.billingType === models.TaskBillingTypeEnum.Fixed)
+        .map((t) => t.id || 0),
+      timeslips: timeSlips.map((t) => ensure(t.id)),
+      modifier: modifiers.map((m) => ensure(m.id)),
       totalDue: calculateTotal(subtotalDue, modifiers),
     });
   }, [project, tasks, timeSlips, modifiers]);
@@ -68,44 +70,56 @@ function InvoiceCreateNew({ project }: Props) {
           tasks,
           timeSlips.filter((t) => updatedTimeSlips.includes(t.id || 0))
         );
+
+        const invoiceModifiers = modifiers.filter((m) =>
+          ensure(invoice.modifier).includes(ensure(m.id))
+        );
         setInvoice({
           ...invoice,
           subtotalDue,
-          totalDue: calculateTotal(subtotalDue, ensure(invoice.modifier)),
+          totalDue: calculateTotal(subtotalDue, invoiceModifiers),
           timeslips: updatedTimeSlips,
         } as models.Invoice);
       }
     },
-    [invoice, timeSlips, tasks]
+    [invoice, timeSlips, tasks, modifiers]
   );
 
   const toggleModifier = useCallback(
     (modifier) => {
-      if (invoice) {
-        const invoiceModifiers = invoice ? ensure(invoice.modifier) : [];
-        const updatedModifiers = invoiceModifiers.find(
-          (m) => m.id === modifier.id
-        )
-          ? invoiceModifiers.filter((m) => m.id !== modifier.id)
-          : invoiceModifiers.concat([modifier]);
+      if (invoice && invoice.modifier) {
+        const updatedModifiers = invoice.modifier.includes(modifier.id)
+          ? invoice.modifier.filter((id) => id !== modifier.id)
+          : invoice.modifier.concat([modifier.id]);
+
+        const invoiceModifiers = modifiers.filter((m) =>
+          updatedModifiers.includes(ensure(m.id))
+        );
+
         setInvoice({
           ...invoice,
           modifier: updatedModifiers,
-          totalDue: calculateTotal(
-            invoice.subtotalDue || 0,
-            ensure(updatedModifiers)
-          ),
+          totalDue: calculateTotal(invoice.subtotalDue || 0, invoiceModifiers),
         } as models.Invoice);
       }
     },
-    [invoice]
+    [invoice, modifiers]
   );
+
+  const issueInvoice = useCallback(async () => {
+    const api = getClient();
+    setInvoice(await api.createInvoice({ invoice }));
+  }, [invoice]);
 
   return (
     <div>
       {invoice && (
         <React.Fragment>
-          <InvoiceActions invoice={invoice} project={project} />
+          <InvoiceActions
+            invoice={invoice}
+            project={project}
+            onIssue={issueInvoice}
+          />
           <div className="flex flex-wrap items-end justify-between mx-4 sm:mx-0">
             <InvoiceForm invoice={invoice} />
             <InvoiceEditableTotals

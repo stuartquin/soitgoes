@@ -165,7 +165,6 @@ class InvoiceSerializer(serializers.ModelSerializer):
     tasks = serializers.PrimaryKeyRelatedField(
         many=True, queryset=models.Task.objects.all()
     )
-    modifier = InvoiceModifierSerializer(many=True, read_only=True)
 
     def update(self, instance, validated_data):
         request_data = self.context["request"].data

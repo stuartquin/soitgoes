@@ -32,6 +32,7 @@ function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
   const [isLoading, setIsLoading] = useState(true);
   const [tasks, setTasks] = useState<models.Task[]>([]);
   const [timeSlips, setTimeSlips] = useState<models.TimeSlip[]>([]);
+  const [modifiers, setModifiers] = useState<models.InvoiceModifier[]>([]);
 
   useEffect(() => {
     const load = async () => {
@@ -44,6 +45,9 @@ function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
 
       const taskResponse = await api.listTasks({ invoices: invoiceId });
       setTasks(taskResponse.results || []);
+
+      const modifierResponse = await api.listInvoiceModifiers({});
+      setModifiers(modifierResponse.results || []);
 
       setToken(await api.retrieveOneTimeToken());
 
@@ -121,7 +125,7 @@ function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
           </div>
         </div>
 
-        <InvoiceDetailTotals invoice={invoice} />
+        <InvoiceDetailTotals modifiers={modifiers} invoice={invoice} />
       </div>
 
       {invoice.groupBy === models.InvoiceGroupByEnum.Timeslips &&
