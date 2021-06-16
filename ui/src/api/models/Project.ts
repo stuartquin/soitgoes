@@ -79,6 +79,12 @@ export interface Project {
      * @memberof Project
      */
     defaultTask?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Project
+     */
+    readonly nextSequenceNum?: string;
 }
 
 export function ProjectFromJSON(json: any): Project {
@@ -101,6 +107,7 @@ export function ProjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): P
         'archived': !exists(json, 'archived') ? undefined : json['archived'],
         'currency': !exists(json, 'currency') ? undefined : json['currency'],
         'defaultTask': !exists(json, 'default_task') ? undefined : json['default_task'],
+        'nextSequenceNum': !exists(json, 'next_sequence_num') ? undefined : json['next_sequence_num'],
     };
 }
 

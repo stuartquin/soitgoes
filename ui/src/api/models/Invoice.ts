@@ -134,6 +134,12 @@ export interface Invoice {
      * @memberof Invoice
      */
     readonly pdfName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Invoice
+     */
+    readonly name?: string;
 }
 
 /**
@@ -181,6 +187,7 @@ export function InvoiceFromJSONTyped(json: any, ignoreDiscriminator: boolean): I
         'tasks': json['tasks'],
         'modifier': !exists(json, 'modifier') ? undefined : ((json['modifier'] as Array<any>).map(InvoiceModifierFromJSON)),
         'pdfName': !exists(json, 'pdf_name') ? undefined : json['pdf_name'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
     };
 }
 

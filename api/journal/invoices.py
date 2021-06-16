@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 from django.db.models import Q, F, Sum
 from journal.models import (
+    Project,
     Task,
     Invoice,
     TaskInvoice,
@@ -46,6 +47,7 @@ def set_invoice_totals(invoice):
 
 def get_new_invoice(project_id):
     due_date = date.today() + timedelta(days=14)
+    project = Project.objects.get(pk=project_id)
     timeslips = TimeSlip.objects.filter(
         project_id=project_id, invoice=None, task__billing_type=BILLING_TYPE_TIME,
     ).values_list("pk", "task_id")
@@ -66,8 +68,12 @@ def get_new_invoice(project_id):
         .values_list("pk")
     ]
 
+    sequence_num = Invoice.get_next_sequence_num(project_id)
+    name = f"{project.name} #{sequence_num}"
     return {
         "project": project_id,
+        "sequence_num": sequence_num,
+        "name": name,
         "tasks": task_ids,
         "timeslips": timeslip_ids,
         "modifier": [],

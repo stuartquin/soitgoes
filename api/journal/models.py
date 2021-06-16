@@ -154,6 +154,10 @@ class Invoice(models.Model):
         invoicepdf.render(self, user, path)
         return invoicepdf.get_pdf_file(self, user, path)
 
+    @property
+    def name(self):
+        return f"{self.project.name} #{self.sequence_num}"
+
     @staticmethod
     def get_bulk_file(invoices, user):
         return invoicepdf.get_bulk_file(invoices, user)

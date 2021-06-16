@@ -3,11 +3,10 @@ import { Link } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
+import InvoiceActions from "components/Invoices/InvoiceActions";
 import InvoiceForm from "components/Invoices/InvoiceForm";
 import InvoiceEditableItems from "components/Invoices/InvoiceEditableItems";
 import InvoiceEditableTotals from "components/Invoices/InvoiceEditableTotals";
-import { formatCurrency } from "currency";
-import { ensure } from "typeHelpers";
 import { calculateSubTotal } from "invoices";
 
 interface Props {
@@ -65,8 +64,15 @@ function InvoiceCreateNew({ project }: Props) {
 
   return (
     <div>
-      <div className="py-4">{project.name} Invoice #X</div>
-      {invoice && <InvoiceEditableTotals invoice={invoice} />}
+      {invoice && (
+        <React.Fragment>
+          <InvoiceActions invoice={invoice} project={project} />
+          <div className="flex flex-wrap items-end justify-between mx-4 sm:mx-0">
+            <InvoiceForm invoice={invoice} />
+            <InvoiceEditableTotals invoice={invoice} />
+          </div>
+        </React.Fragment>
+      )}
       {tasks.length && (
         <InvoiceEditableItems
           project={project}

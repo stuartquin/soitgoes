@@ -1414,6 +1414,9 @@ components:
         default_task:
           type: integer
           nullable: true
+        next_sequence_num:
+          type: string
+          readOnly: true
       required:
       - name
       - contact
@@ -1514,6 +1517,9 @@ components:
             - name
           readOnly: true
         pdf_name:
+          type: string
+          readOnly: true
+        name:
           type: string
           readOnly: true
       required:

@@ -32,6 +32,10 @@ class ProjectSerializer(LogActivity):
     )
     total_paid = serializers.IntegerField(source="get_total_paid", read_only=True)
     account = serializers.HiddenField(default=CurrentAccountDefault())
+    next_sequence_num = serializers.SerializerMethodField(read_only=True)
+
+    def get_next_sequence_num(self, project):
+        return models.Invoice.get_next_sequence_num(project.id)
 
     class Meta:
         model = models.Project
@@ -47,6 +51,7 @@ class ProjectSerializer(LogActivity):
             "currency",
             "account",
             "default_task",
+            "next_sequence_num",
         ]
 
 
@@ -195,6 +200,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
             "tasks",
             "modifier",
             "pdf_name",
+            "name",
         ]
 
 
