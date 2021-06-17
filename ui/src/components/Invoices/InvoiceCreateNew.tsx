@@ -6,7 +6,7 @@ import InvoiceActions from "components/Invoices/InvoiceActions";
 import InvoiceForm from "components/Invoices/InvoiceForm";
 import InvoiceEditableItems from "components/Invoices/InvoiceEditableItems";
 import InvoiceEditableTotals from "components/Invoices/InvoiceEditableTotals";
-import { calculateTotal, calculateSubTotal } from "invoices";
+import { TimeSlipTask, calculateTotal, calculateSubTotal } from "invoices";
 import { ensure } from "typeHelpers";
 
 interface Props {
@@ -48,6 +48,7 @@ function InvoiceCreateNew({ project }: Props) {
   useEffect(() => {
     const subtotalDue = calculateSubTotal(tasks, timeSlips);
     setInvoice({
+      groupBy: (invoice && invoice.groupBy) || models.InvoiceGroupByEnum.Tasks,
       subtotalDue,
       project: project.id || 0,
       tasks: tasks
@@ -57,14 +58,14 @@ function InvoiceCreateNew({ project }: Props) {
       modifier: modifiers.map((m) => ensure(m.id)),
       totalDue: calculateTotal(subtotalDue, modifiers),
     });
-  }, [project, tasks, timeSlips, modifiers]);
+  }, [project, tasks, timeSlips, modifiers, invoice]);
 
-  const toggleTimeSlip = useCallback(
-    (timeSlip) => {
+  const toggleInvoiceItem = useCallback(
+    (item) => {
       if (invoice) {
-        const updatedTimeSlips = invoice.timeslips.includes(timeSlip.id)
-          ? invoice.timeslips.filter((id) => id !== timeSlip.id)
-          : invoice.timeslips.concat([timeSlip.id]);
+        const updatedTimeSlips = invoice.timeslips.includes(item.id)
+          ? invoice.timeslips.filter((id) => id !== item.id)
+          : invoice.timeslips.concat([item.id]);
 
         const subtotalDue = calculateSubTotal(
           tasks,
@@ -128,16 +129,16 @@ function InvoiceCreateNew({ project }: Props) {
               onToggleModifier={toggleModifier}
             />
           </div>
+          {tasks.length > 0 && (
+            <InvoiceEditableItems
+              project={project}
+              invoice={invoice}
+              tasks={tasks}
+              timeSlips={timeSlips}
+              onToggle={toggleInvoiceItem}
+            />
+          )}
         </React.Fragment>
-      )}
-      {tasks.length && invoice && (
-        <InvoiceEditableItems
-          project={project}
-          invoice={invoice}
-          tasks={tasks}
-          timeSlips={timeSlips}
-          onToggleTimeSlip={toggleTimeSlip}
-        />
       )}
     </div>
   );

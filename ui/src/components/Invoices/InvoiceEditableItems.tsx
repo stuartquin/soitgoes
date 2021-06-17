@@ -1,19 +1,15 @@
 import React, { useMemo } from "react";
 
-import InvoiceToggleableItem from "components/Invoices/InvoiceToggleableItem";
 import * as models from "api/models";
-
-interface GroupedTimeSlip {
-  timeSlip: models.TimeSlip;
-  task: models.Task;
-}
+import InvoiceToggleableItem from "components/Invoices/InvoiceToggleableItem";
+import { TimeSlipTask, getGroupedByTask, getGroupedByTime } from "invoices";
 
 interface Props {
   tasks: models.Task[];
   timeSlips: models.TimeSlip[];
   invoice: models.Invoice;
   project: models.Project;
-  onToggleTimeSlip: (timeSlip: models.TimeSlip) => void;
+  onToggle: (item: TimeSlipTask) => void;
 }
 
 function InvoiceEditableItems({
@@ -21,38 +17,65 @@ function InvoiceEditableItems({
   project,
   tasks,
   timeSlips,
-  onToggleTimeSlip,
+  onToggle,
 }: Props) {
-  const groupedTimeSlips = useMemo(
-    () =>
-      timeSlips.map((timeSlip) => {
-        return {
-          timeSlip,
-          task: tasks.find((t) => t.id === timeSlip.task),
-        } as GroupedTimeSlip;
-      }),
-    [tasks, timeSlips]
-  );
+  const items = useMemo(() => getGroupedByTime(tasks, timeSlips), [
+    tasks,
+    timeSlips,
+  ]);
+  const invoiceTasks = tasks.filter((t) => invoice.tasks.includes(t.id || 0));
+  const tasksGrouping =
+    invoice.groupBy === models.InvoiceGroupByEnum.Tasks
+      ? invoiceTasks
+      : invoiceTasks.filter(
+          (t) => t.billingType === models.TaskBillingTypeEnum.Fixed
+        );
+
+  const tasksGroup = getGroupedByTask(tasksGrouping, timeSlips);
 
   return (
-    <div className="my-4">
-      <div className="uppercase bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-600 text-sm md:text-base text-left px-2 sm:px-4 justify-between items-center">
-        <div className="text-sm">Date</div>
-        <div className="flex sm:w-1/4 justify-between mr-8">
-          <div className="text-sm mr-3">Hours</div>
-          <div className="text-sm">Total</div>
+    <React.Fragment>
+      {invoice.groupBy === models.InvoiceGroupByEnum.Timeslips && (
+        <div className="my-4">
+          <div className="uppercase bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-600 text-sm md:text-base text-left px-2 sm:px-4 justify-between items-center">
+            <div className="text-sm">Date</div>
+            <div className="flex sm:w-1/4 justify-between mr-8">
+              <div className="text-sm mr-3">Hours</div>
+              <div className="text-sm">Total</div>
+            </div>
+          </div>
+          {items.map((item) => (
+            <InvoiceToggleableItem
+              key={item.id}
+              item={item}
+              invoice={invoice}
+              project={project}
+              onToggle={onToggle}
+            />
+          ))}
         </div>
-      </div>
-      {groupedTimeSlips.map(({ task, timeSlip }) => (
-        <InvoiceToggleableItem
-          task={task}
-          timeSlip={timeSlip}
-          invoice={invoice}
-          project={project}
-          onToggleTimeSlip={onToggleTimeSlip}
-        />
-      ))}
-    </div>
+      )}
+
+      {tasksGroup.length > 0 && (
+        <div className="my-4">
+          <div className="uppercase bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-600 text-sm md:text-base text-left px-2 sm:px-4 justify-between items-center">
+            <div className="text-sm">Task</div>
+            <div className="flex sm:w-1/4 justify-end mr-8">
+              <div className="text-sm">Total</div>
+            </div>
+          </div>
+          {tasksGroup.map((item) => (
+            <InvoiceToggleableItem
+              key={item.id}
+              item={item}
+              invoice={invoice}
+              project={project}
+              onToggle={onToggle}
+            />
+          ))}
+        </div>
+      )}
+    </React.Fragment>
   );
 }
 

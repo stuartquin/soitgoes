@@ -41,7 +41,7 @@ def get_unbilled_summary(projects: list[Project]):
         cost = item["cost"]
         hours[project] = hours.get(project, 0) + item["hours"]
         if cost > 0:
-            total_cost[project] = total_cost.get(project, 0) + cost
+            total_cost[project] = float(total_cost.get(project, 0)) + float(cost)
 
     keys = set(list(hours.keys()) + list(total_cost.keys()))
 

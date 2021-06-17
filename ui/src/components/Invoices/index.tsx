@@ -76,12 +76,12 @@ function Invoices({ user, projects, isCreateNew = false }: Props) {
 
   return (
     <React.Fragment>
-      <div>
+      <div className="flex justify-end my-4 w-full px-2 sm:px-0">
         <Button variant="success" onClick={createNewInvoice}>
           Create Invoice
         </Button>
       </div>
-      <div className="px-4">
+      <div className="px-2 sm:px-0">
         <div className="border-1 bg-gray-50 border-radius-sm my-4">
           <div className="bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-700 text-sm md:text-base text-left p-4 justify-between items-center">
             <div className="font-semibold w-full md:w-auto">Invoice</div>

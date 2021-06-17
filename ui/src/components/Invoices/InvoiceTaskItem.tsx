@@ -8,13 +8,14 @@ interface Props {
   project: models.Project;
   timeSlips: models.TimeSlip[];
   task: models.Task;
+  children?: React.ReactNode;
 }
 
 const getFormattedHours = (hours: number): string => {
   return hours.toFixed(2).replace(".", ":");
 };
 
-function InvoiceTaskItem({ timeSlips, task, project }: Props) {
+function InvoiceTaskItem({ timeSlips, task, project, children }: Props) {
   const hourlyRate = timeSlips.length ? timeSlips[0].hourlyRate : 0;
   const totalHours = sumBy(timeSlips, "hours");
   const totalCost =
@@ -33,6 +34,7 @@ function InvoiceTaskItem({ timeSlips, task, project }: Props) {
         <div className="text-sm mr-3">{getFormattedHours(totalHours)}</div>
         <div className="text-sm">{formatCurrency(totalCost || 0)}</div>
       </div>
+      {children}
     </div>
   );
 }

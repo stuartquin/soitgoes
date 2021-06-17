@@ -1,6 +1,7 @@
 import * as models from "api/models";
-import { isAfter } from "date-fns";
+import { format, isAfter } from "date-fns";
 import { sumBy } from "lodash";
+import { ensure } from "typeHelpers";
 
 export enum InvoiceStatus {
   Draft = "Draft",
@@ -8,6 +9,74 @@ export enum InvoiceStatus {
   Due = "Due",
   Overdue = "Overdue",
 }
+
+export interface TimeSlipTask {
+  timeSlips: models.TimeSlip[];
+  task: models.Task;
+  hours: number;
+  cost: number;
+  id: number;
+  grouping: string;
+  title: string;
+  subTitle: string;
+}
+
+export const getGroupedByTime = (
+  tasks: models.Task[],
+  timeSlips: models.TimeSlip[]
+): TimeSlipTask[] => {
+  return timeSlips.map((ts) => {
+    const timeSlip = ensure(ts);
+    const task = ensure(tasks.find((t) => t.id === timeSlip.task));
+    const title = format(timeSlip.date, "yyyy-MM-dd");
+    const subTitle = task.name;
+    return {
+      task,
+      timeSlips: [ensure(timeSlip)],
+      hours: timeSlip.hours || 0,
+      cost: timeSlip.cost || 0,
+      id: ensure(timeSlip.id),
+      grouping: "TimeSlip",
+      title,
+      subTitle,
+    };
+  });
+};
+
+export const getGroupedByTask = (
+  tasks: models.Task[],
+  timeSlips: models.TimeSlip[]
+): TimeSlipTask[] => {
+  const taskIds = tasks.map((t) => t.id);
+  return tasks.map((task) => {
+    const taskTimeSlips = timeSlips.filter((t) =>
+      taskIds.includes(t.task || 0)
+    );
+    const hourlyRate = taskTimeSlips.length ? taskTimeSlips[0].hourlyRate : 0;
+    const hours =
+      task.billingType === models.TaskBillingTypeEnum.Fixed
+        ? 0
+        : sumBy(timeSlips, "hours");
+    const cost =
+      task.billingType === models.TaskBillingTypeEnum.Fixed
+        ? task.cost
+        : hours * (hourlyRate || 0);
+
+    const title = task.name;
+    const subTitle = `${task.billingType}`;
+
+    return {
+      task,
+      timeSlips: taskTimeSlips,
+      hours: hours || 0,
+      cost: cost || 0,
+      grouping: "Task",
+      id: ensure(task.id),
+      title,
+      subTitle,
+    };
+  });
+};
 
 //  Trick tailwind optimiser
 //  text-gray-400   border-gray-400
