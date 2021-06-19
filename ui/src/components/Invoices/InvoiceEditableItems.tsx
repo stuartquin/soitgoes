@@ -2,12 +2,7 @@ import React, { useMemo } from "react";
 
 import * as models from "api/models";
 import InvoiceToggleableItem from "components/Invoices/InvoiceToggleableItem";
-import {
-  getActiveTasks,
-  TimeSlipTask,
-  getGroupedByTask,
-  getGroupedByTime,
-} from "invoices";
+import { TimeSlipTask, getGroupedByTask, getGroupedByTime } from "invoices";
 
 interface Props {
   tasks: models.Task[];
@@ -24,19 +19,18 @@ function InvoiceEditableItems({
   timeSlips,
   onToggle,
 }: Props) {
-  const items = useMemo(() => getGroupedByTime(tasks, timeSlips), [
-    tasks,
-    timeSlips,
-  ]);
-  const activeTasks = getActiveTasks(invoice, timeSlips, tasks);
-  const timeSlipTaskIds = new Set(timeSlips.map((t) => t.task));
-  const invoiceTasks = tasks.filter((t) => invoice.tasks.includes(t.id || 0));
-  const timeSlipTasks = tasks.filter((t) => timeSlipTaskIds.has(t.id || 0));
+  const timeSlipItems = useMemo(
+    () => getGroupedByTime(invoice, tasks, timeSlips),
+    [invoice, tasks, timeSlips]
+  );
+  const timeSlipTaskIds = new Set(timeSlipItems.map((t) => t.task.id));
+  const fixedTasks = tasks.filter((t) => invoice.tasks.includes(t.id || 0));
+  const activeTasks = tasks.filter((t) => timeSlipTaskIds.has(t.id || 0));
   const tasksGrouping =
     invoice.groupBy === models.InvoiceGroupByEnum.Tasks
-      ? timeSlipTasks.concat(invoiceTasks)
-      : invoiceTasks;
-  const tasksGroup = getGroupedByTask(tasksGrouping, timeSlips);
+      ? activeTasks.concat(fixedTasks)
+      : fixedTasks;
+  const tasksGroup = getGroupedByTask(invoice, tasksGrouping, timeSlips);
 
   return (
     <React.Fragment>
@@ -49,11 +43,10 @@ function InvoiceEditableItems({
               <div className="text-sm">Total</div>
             </div>
           </div>
-          {items.map((item) => (
+          {timeSlipItems.map((item) => (
             <InvoiceToggleableItem
               key={item.id}
               item={item}
-              invoice={invoice}
               project={project}
               onToggle={onToggle}
             />
@@ -65,7 +58,8 @@ function InvoiceEditableItems({
         <div className="my-4">
           <div className="uppercase bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-600 text-sm md:text-base text-left px-2 sm:px-4 justify-between items-center">
             <div className="text-sm">Task</div>
-            <div className="flex sm:w-1/4 justify-end mr-8">
+            <div className="flex sm:w-1/4 justify-between mr-8">
+              <div className="text-sm mr-3">Hours</div>
               <div className="text-sm">Total</div>
             </div>
           </div>
@@ -73,7 +67,6 @@ function InvoiceEditableItems({
             <InvoiceToggleableItem
               key={item.id}
               item={item}
-              invoice={invoice}
               project={project}
               onToggle={onToggle}
             />

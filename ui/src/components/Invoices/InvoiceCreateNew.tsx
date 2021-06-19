@@ -6,7 +6,7 @@ import InvoiceActions from "components/Invoices/InvoiceActions";
 import InvoiceForm from "components/Invoices/InvoiceForm";
 import InvoiceEditableItems from "components/Invoices/InvoiceEditableItems";
 import InvoiceEditableTotals from "components/Invoices/InvoiceEditableTotals";
-import { calculateTotal, calculateSubTotal } from "invoices";
+import { TimeSlipTask, calculateTotal, calculateSubTotal } from "invoices";
 import { ensure } from "typeHelpers";
 
 interface Props {
@@ -25,20 +25,24 @@ function InvoiceCreateNew({ project }: Props) {
       setIsLoading(true);
       const api = getClient();
 
-      const timeSlipResponse = await api.listTimeSlips({
-        project: `${project.id}`,
-        noInvoice: "true",
-      });
+      const [
+        timeSlipResponse,
+        modifierResponse,
+        taskResponse,
+      ] = await Promise.all([
+        api.listTimeSlips({
+          project: `${project.id}`,
+          noInvoice: "true",
+        }),
+        api.listInvoiceModifiers({}),
+        api.listTasks({
+          project: `${project.id}`,
+        }),
+      ]);
+
       setTimeSlips(timeSlipResponse.results || []);
-
-      const modifierResponse = await api.listInvoiceModifiers({});
       setModifiers(modifierResponse.results || []);
-
-      const taskResponse = await api.listTasks({
-        project: `${project.id}`,
-      });
       setTasks(taskResponse.results || []);
-
       setIsLoading(false);
     };
 
@@ -47,6 +51,7 @@ function InvoiceCreateNew({ project }: Props) {
 
   useEffect(() => {
     const subtotalDue = calculateSubTotal(tasks, timeSlips);
+
     setInvoice({
       groupBy: models.InvoiceGroupByEnum.Timeslips,
       subtotalDue,
@@ -61,11 +66,24 @@ function InvoiceCreateNew({ project }: Props) {
   }, [project, tasks, timeSlips, modifiers]);
 
   const toggleInvoiceItem = useCallback(
-    (item) => {
+    (item: TimeSlipTask) => {
       if (invoice) {
-        const updatedTimeSlips = invoice.timeslips.includes(item.id)
-          ? invoice.timeslips.filter((id) => id !== item.id)
-          : invoice.timeslips.concat([item.id]);
+        const changedTimeSlipIds =
+          item.type === "Task"
+            ? item.timeSlips.map((t) => t.id || 0)
+            : [item.id || 0];
+
+        console.log("CHANGED TIME IDS");
+        console.log(changedTimeSlipIds);
+
+        const updatedTimeSlips = item.isActive
+          ? invoice.timeslips.filter((id) => !changedTimeSlipIds.includes(id))
+          : invoice.timeslips.concat(changedTimeSlipIds);
+
+        const updatedTasks =
+          item.type === "Task"
+            ? invoice.tasks.filter((id) => id !== item.id)
+            : invoice.tasks;
 
         const subtotalDue = calculateSubTotal(
           tasks,
@@ -80,6 +98,7 @@ function InvoiceCreateNew({ project }: Props) {
           subtotalDue,
           totalDue: calculateTotal(subtotalDue, invoiceModifiers),
           timeslips: updatedTimeSlips,
+          tasks: updatedTasks,
         } as models.Invoice);
       }
     },

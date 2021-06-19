@@ -16,12 +16,14 @@ export interface TimeSlipTask {
   hours: number;
   cost: number;
   id: number;
-  grouping: string;
+  type: string;
   title: string;
   subTitle: string;
+  isActive: boolean;
 }
 
 export const getGroupedByTime = (
+  invoice: models.Invoice,
   tasks: models.Task[],
   timeSlips: models.TimeSlip[]
 ): TimeSlipTask[] => {
@@ -30,13 +32,16 @@ export const getGroupedByTime = (
     const task = ensure(tasks.find((t) => t.id === timeSlip.task));
     const title = format(timeSlip.date, "yyyy-MM-dd");
     const subTitle = task.name;
+    const isActive = invoice.timeslips.includes(ts.id || 0);
+
     return {
       task,
       timeSlips: [ensure(timeSlip)],
       hours: timeSlip.hours || 0,
       cost: timeSlip.cost || 0,
       id: ensure(timeSlip.id),
-      grouping: "TimeSlip",
+      type: "TimeSlip",
+      isActive,
       title,
       subTitle,
     };
@@ -44,34 +49,37 @@ export const getGroupedByTime = (
 };
 
 export const getGroupedByTask = (
+  invoice: models.Invoice,
   tasks: models.Task[],
   timeSlips: models.TimeSlip[]
 ): TimeSlipTask[] => {
-  const taskIds = tasks.map((t) => t.id);
   return tasks.map((task) => {
-    const taskTimeSlips = timeSlips.filter((t) =>
-      taskIds.includes(t.task || 0)
+    const taskTimeSlips = timeSlips.filter(
+      (t) => t.task === task.id && invoice.timeslips.includes(ensure(t.id))
     );
-    const hourlyRate = taskTimeSlips.length ? taskTimeSlips[0].hourlyRate : 0;
     const hours =
       task.billingType === models.TaskBillingTypeEnum.Fixed
         ? 0
-        : sumBy(timeSlips, "hours");
+        : sumBy(taskTimeSlips, "hours");
+
     const cost =
       task.billingType === models.TaskBillingTypeEnum.Fixed
         ? task.cost
-        : hours * (hourlyRate || 0);
+        : sumBy(taskTimeSlips, "cost");
 
     const title = task.name;
     const subTitle = `${task.billingType}`;
+    const isActive =
+      invoice.tasks.includes(ensure(task.id)) || taskTimeSlips.length > 0;
 
     return {
       task,
       timeSlips: taskTimeSlips,
       hours: hours || 0,
       cost: cost || 0,
-      grouping: "Task",
+      type: "Task",
       id: ensure(task.id),
+      isActive,
       title,
       subTitle,
     };
@@ -149,17 +157,3 @@ export const calculateTotal = (
 
 export const getModifierLabel = (modifier: models.InvoiceModifier): string =>
   `${modifier.name} ${modifier.percent}%`;
-
-export const getActiveTasks = (
-  invoice: models.Invoice,
-  timeSlips: models.TimeSlip[],
-  tasks: models.Task[]
-) => {
-  const activeTimeSlips = timeSlips.filter((t) =>
-    invoice.timeslips.includes(t.id || 0)
-  );
-  const timeSlipTaskIds = new Set(timeSlips.map((t) => t.task));
-  return tasks.filter(
-    (t) => invoice.tasks.includes(t.id || 0) || timeSlipTaskIds.has(t.id || 0)
-  );
-};

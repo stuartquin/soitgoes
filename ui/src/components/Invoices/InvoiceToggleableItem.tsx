@@ -12,18 +12,12 @@ const getFormattedHours = (hours: number): string => {
 interface Props {
   item: TimeSlipTask;
   project: models.Project;
-  invoice: models.Invoice;
   onToggle: (item: TimeSlipTask) => void;
 }
 
-function InvoiceToggleableItem({ invoice, project, item, onToggle }: Props) {
-  const hasItem =
-    item.grouping === "TimeSlip"
-      ? invoice.timeslips.includes(item.id || 0)
-      : invoice.tasks.includes(item.id || 0);
-
+function InvoiceToggleableItem({ project, item, onToggle }: Props) {
   return (
-    <div className={!hasItem ? "opacity-25" : ""} key={item.id}>
+    <div className={!item.isActive ? "opacity-25" : ""} key={item.id}>
       <div className="flex my-3 px-2 sm:px-4 justify-between items-center hover:bg-blue-50">
         <div className="flex flex-wrap items-center flex-grow">
           <div className="text-gray-800 text-sm md:text-lg mr-2 w-full sm:w-auto">
@@ -40,9 +34,9 @@ function InvoiceToggleableItem({ invoice, project, item, onToggle }: Props) {
         <div
           className="p-2 cursor-pointer"
           onClick={() => onToggle(item)}
-          title="Toggle Item"
+          title={item.isActive ? "Remove Item" : "Add Item"}
         >
-          {hasItem ? (
+          {item.isActive ? (
             <MinusCircleIcon className="h-4 w-4 text-gray-400 hover:text-gray-600" />
           ) : (
             <PlusCircleIcon className="h-4 w-4 text-gray-400 hover:text-gray-600" />

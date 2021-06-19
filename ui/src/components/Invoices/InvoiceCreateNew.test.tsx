@@ -74,7 +74,7 @@ class MockApi extends Api.ApiApi {
           due_date: null,
           hours_spent: 0.0,
           hours_predicted: 0.0,
-          billing_type: "TIME",
+          billingType: models.TaskBillingTypeEnum.Time,
           state: "DONE",
           invoices: [317],
           notes: [],
@@ -90,25 +90,25 @@ class MockApi extends Api.ApiApi {
           due_date: null,
           hours_spent: 0.0,
           hours_predicted: 0.0,
-          billing_type: "TIME",
+          billingType: models.TaskBillingTypeEnum.Time,
           state: "DONE",
           invoices: [317],
           notes: [],
         },
         {
-          id: 90,
+          id: 3,
           project: 1,
           name: "Test Task 3",
-          cost: 1000.0,
+          cost: 300.0,
           created_at: new Date("2021-05-23T07:51:46.718809Z"),
           activity_at: new Date("2021-05-23T07:51:46.718866Z"),
-          completed_at: new Date("2021-05-29T06:47:45.857782Z"),
+          completed_at: null,
           due_date: null,
           hours_spent: 0.0,
           hours_predicted: 0.0,
-          billing_type: "FIXED",
-          state: "DONE",
-          invoices: [355],
+          billingType: models.TaskBillingTypeEnum.Fixed,
+          state: "OPEN",
+          invoices: [],
           notes: [],
         },
       ],
@@ -153,30 +153,30 @@ describe("InvoiceCreateNew", () => {
           <InvoiceCreateNew project={project} />
         </BrowserRouter>
       );
-      await findByText("£910");
-      await findByText("£182");
-      await findByText("£1092");
+      await findByText("£1210");
+      await findByText("£242");
+      await findByText("£1452");
     });
   });
 
-  test("Toggle timeslip updates totals", async () => {
+  test("Toggling timeslip updates totals", async () => {
     await act(async () => {
       const { findByText, findAllByTitle } = render(
         <BrowserRouter>
           <InvoiceCreateNew project={project} />
         </BrowserRouter>
       );
-      const toggles = await findAllByTitle("Toggle Item");
+      const toggles = await findAllByTitle("Remove Item");
       await fireEvent.click(toggles[0]);
 
-      await findByText("£585");
-      await findByText("£117");
-      await findByText("£702");
+      await findByText("£885");
+      await findByText("£177");
+      await findByText("£1062");
 
       await fireEvent.click(toggles[0]);
-      await findByText("£910");
-      await findByText("£182");
-      await findByText("£1092");
+      await findByText("£1210");
+      await findByText("£242");
+      await findByText("£1452");
     });
   });
 
@@ -196,6 +196,26 @@ describe("InvoiceCreateNew", () => {
       await findByText("Task");
       await findByText("Test Task 1");
       await findByText("Test Task 2");
+    });
+  });
+
+  test("Toggle TIME based task", async () => {
+    await act(async () => {
+      const { findByText, findAllByTitle, findByLabelText } = render(
+        <BrowserRouter>
+          <InvoiceCreateNew project={project} />
+        </BrowserRouter>
+      );
+      const groupBy = await findByLabelText("Group By");
+      await fireEvent.change(groupBy, { target: { value: "tasks" } });
+
+      const toggles = await findAllByTitle("Remove Item");
+      await fireEvent.click(toggles[0]);
+
+      await findByText("£430");
+
+      await fireEvent.click(toggles[0]);
+      await findByText("£1210");
     });
   });
 });
