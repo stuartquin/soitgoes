@@ -2,7 +2,12 @@ import React, { useMemo } from "react";
 
 import * as models from "api/models";
 import InvoiceToggleableItem from "components/Invoices/InvoiceToggleableItem";
-import { TimeSlipTask, getGroupedByTask, getGroupedByTime } from "invoices";
+import {
+  getActiveTasks,
+  TimeSlipTask,
+  getGroupedByTask,
+  getGroupedByTime,
+} from "invoices";
 
 interface Props {
   tasks: models.Task[];
@@ -23,14 +28,14 @@ function InvoiceEditableItems({
     tasks,
     timeSlips,
   ]);
+  const activeTasks = getActiveTasks(invoice, timeSlips, tasks);
+  const timeSlipTaskIds = new Set(timeSlips.map((t) => t.task));
   const invoiceTasks = tasks.filter((t) => invoice.tasks.includes(t.id || 0));
+  const timeSlipTasks = tasks.filter((t) => timeSlipTaskIds.has(t.id || 0));
   const tasksGrouping =
     invoice.groupBy === models.InvoiceGroupByEnum.Tasks
-      ? invoiceTasks
-      : invoiceTasks.filter(
-          (t) => t.billingType === models.TaskBillingTypeEnum.Fixed
-        );
-
+      ? timeSlipTasks.concat(invoiceTasks)
+      : invoiceTasks;
   const tasksGroup = getGroupedByTask(tasksGrouping, timeSlips);
 
   return (

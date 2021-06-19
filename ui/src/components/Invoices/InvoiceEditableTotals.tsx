@@ -26,6 +26,7 @@ function InvoiceEditableTotals({
       </div>
       {modifiers.map((modifier) => (
         <InvoiceTotalsModifierItem
+          key={modifier.id}
           invoice={invoice}
           modifier={modifier}
           onToggleModifier={onToggleModifier}

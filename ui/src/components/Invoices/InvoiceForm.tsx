@@ -4,9 +4,10 @@ import * as models from "api/models";
 
 interface Props {
   invoice: models.Invoice;
+  onChangeGroupBy: (groupBy: models.InvoiceGroupByEnum) => void;
 }
 
-function InvoiceForm({ invoice }: Props) {
+function InvoiceForm({ invoice, onChangeGroupBy }: Props) {
   return (
     <form action="#" method="POST" className="w-full sm:w-auto">
       <div className="my-4">
@@ -56,6 +57,9 @@ function InvoiceForm({ invoice }: Props) {
             id="groupBy"
             className="flex-1 block w-full sm:text-sm border border-gray-300 rounded p-2"
             value={invoice.groupBy}
+            onChange={(event) =>
+              onChangeGroupBy(event.target.value as models.InvoiceGroupByEnum)
+            }
           >
             <option value={models.InvoiceGroupByEnum.Timeslips}>
               {models.InvoiceGroupByEnum.Timeslips}

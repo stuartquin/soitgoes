@@ -2,7 +2,6 @@ import React from "react";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/outline";
 
 import * as models from "api/models";
-import InvoiceDateItem from "components/Invoices/InvoiceDateItem";
 import { TimeSlipTask } from "invoices";
 import { formatCurrency } from "currency";
 
@@ -38,7 +37,11 @@ function InvoiceToggleableItem({ invoice, project, item, onToggle }: Props) {
           </div>
           <div className="text-sm">{formatCurrency(item.cost || 0)}</div>
         </div>
-        <div className="p-2 cursor-pointer" onClick={() => onToggle(item)}>
+        <div
+          className="p-2 cursor-pointer"
+          onClick={() => onToggle(item)}
+          title="Toggle Item"
+        >
           {hasItem ? (
             <MinusCircleIcon className="h-4 w-4 text-gray-400 hover:text-gray-600" />
           ) : (

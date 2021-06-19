@@ -149,3 +149,17 @@ export const calculateTotal = (
 
 export const getModifierLabel = (modifier: models.InvoiceModifier): string =>
   `${modifier.name} ${modifier.percent}%`;
+
+export const getActiveTasks = (
+  invoice: models.Invoice,
+  timeSlips: models.TimeSlip[],
+  tasks: models.Task[]
+) => {
+  const activeTimeSlips = timeSlips.filter((t) =>
+    invoice.timeslips.includes(t.id || 0)
+  );
+  const timeSlipTaskIds = new Set(timeSlips.map((t) => t.task));
+  return tasks.filter(
+    (t) => invoice.tasks.includes(t.id || 0) || timeSlipTaskIds.has(t.id || 0)
+  );
+};

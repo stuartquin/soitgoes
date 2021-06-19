@@ -1,7 +1,7 @@
 import React from "react";
 import { parse } from "date-fns";
 import { BrowserRouter } from "react-router-dom";
-import { render, fireEvent, waitFor, screen } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 
 import * as models from "api/models";
 import TimeSheetGrid from "./TimeSheetGrid";

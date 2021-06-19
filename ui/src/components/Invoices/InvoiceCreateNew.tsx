@@ -6,7 +6,7 @@ import InvoiceActions from "components/Invoices/InvoiceActions";
 import InvoiceForm from "components/Invoices/InvoiceForm";
 import InvoiceEditableItems from "components/Invoices/InvoiceEditableItems";
 import InvoiceEditableTotals from "components/Invoices/InvoiceEditableTotals";
-import { TimeSlipTask, calculateTotal, calculateSubTotal } from "invoices";
+import { calculateTotal, calculateSubTotal } from "invoices";
 import { ensure } from "typeHelpers";
 
 interface Props {
@@ -48,7 +48,7 @@ function InvoiceCreateNew({ project }: Props) {
   useEffect(() => {
     const subtotalDue = calculateSubTotal(tasks, timeSlips);
     setInvoice({
-      groupBy: (invoice && invoice.groupBy) || models.InvoiceGroupByEnum.Tasks,
+      groupBy: models.InvoiceGroupByEnum.Timeslips,
       subtotalDue,
       project: project.id || 0,
       tasks: tasks
@@ -58,7 +58,7 @@ function InvoiceCreateNew({ project }: Props) {
       modifier: modifiers.map((m) => ensure(m.id)),
       totalDue: calculateTotal(subtotalDue, modifiers),
     });
-  }, [project, tasks, timeSlips, modifiers, invoice]);
+  }, [project, tasks, timeSlips, modifiers]);
 
   const toggleInvoiceItem = useCallback(
     (item) => {
@@ -107,6 +107,18 @@ function InvoiceCreateNew({ project }: Props) {
     [invoice, modifiers]
   );
 
+  const changeGroupBy = useCallback(
+    (groupBy: models.InvoiceGroupByEnum) => {
+      if (invoice) {
+        setInvoice({
+          ...invoice,
+          groupBy,
+        });
+      }
+    },
+    [invoice]
+  );
+
   const issueInvoice = useCallback(async () => {
     const api = getClient();
     setInvoice(await api.createInvoice({ invoice }));
@@ -122,7 +134,7 @@ function InvoiceCreateNew({ project }: Props) {
             onIssue={issueInvoice}
           />
           <div className="flex flex-wrap items-end justify-between mx-4 sm:mx-0">
-            <InvoiceForm invoice={invoice} />
+            <InvoiceForm invoice={invoice} onChangeGroupBy={changeGroupBy} />
             <InvoiceEditableTotals
               modifiers={modifiers}
               invoice={invoice}
