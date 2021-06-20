@@ -14,7 +14,7 @@ from journal.models import (
 
 def _save_fixed_task(invoice, task):
     task_invoice = TaskInvoice.objects.create(
-        task=task, invoice=invoice, cost=task.cost, hours_spent=hours_spent
+        task=task, invoice=invoice, cost=task.cost, hours_spent=task.hours_spent
     )
     task_invoice.save()
 

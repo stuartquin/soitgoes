@@ -1,14 +1,30 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { format } from "date-fns";
 
 import * as models from "api/models";
 
 interface Props {
   invoice: models.Invoice;
-  onChangeGroupBy: (groupBy: models.InvoiceGroupByEnum) => void;
+  onUpdate: (invoice: models.Invoice) => void;
 }
 
-function InvoiceForm({ invoice, onChangeGroupBy }: Props) {
+function InvoiceForm({ invoice, onUpdate }: Props) {
+  const updateInvoice = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const { name, value } = event.target;
+      onUpdate({ ...invoice, [name]: value });
+    },
+    [invoice, onUpdate]
+  );
+
+  const updateDueDate = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const { value } = event.target;
+      onUpdate({ ...invoice, dueDate: new Date(value) });
+    },
+    [invoice, onUpdate]
+  );
+
   return (
     <form action="#" method="POST" className="w-full sm:w-auto">
       <div className="my-4">
@@ -22,6 +38,8 @@ function InvoiceForm({ invoice, onChangeGroupBy }: Props) {
           <input
             type="text"
             name="reference"
+            value={invoice.reference || ""}
+            onChange={updateInvoice}
             id="reference"
             className="flex-1 block w-full rounded-none sm:text-sm border border-gray-300 rounded p-2"
           />
@@ -40,6 +58,8 @@ function InvoiceForm({ invoice, onChangeGroupBy }: Props) {
             type="date"
             name="dueDate"
             id="dueDate"
+            value={format(invoice.dueDate || new Date(), "yyyy-MM-dd")}
+            onChange={updateDueDate}
             className="flex-1 block w-full sm:text-sm border border-gray-300 rounded p-2"
           />
         </div>
@@ -58,9 +78,7 @@ function InvoiceForm({ invoice, onChangeGroupBy }: Props) {
             id="groupBy"
             className="flex-1 block w-full sm:text-sm border border-gray-300 rounded p-2"
             value={invoice.groupBy}
-            onChange={(event) =>
-              onChangeGroupBy(event.target.value as models.InvoiceGroupByEnum)
-            }
+            onChange={updateInvoice}
           >
             <option value={models.InvoiceGroupByEnum.Timeslips}>
               {models.InvoiceGroupByEnum.Timeslips}

@@ -137,17 +137,9 @@ function InvoiceCreateNew({ project }: Props) {
     [invoice, modifiers]
   );
 
-  const changeGroupBy = useCallback(
-    (groupBy: models.InvoiceGroupByEnum) => {
-      if (invoice) {
-        setInvoice({
-          ...invoice,
-          groupBy,
-        });
-      }
-    },
-    [invoice]
-  );
+  const updateInvoice = useCallback((invoice: models.Invoice) => {
+    setInvoice(invoice);
+  }, []);
 
   const issueInvoice = useCallback(async () => {
     const api = getClient();
@@ -166,7 +158,7 @@ function InvoiceCreateNew({ project }: Props) {
             onIssue={issueInvoice}
           />
           <div className="flex flex-wrap items-end justify-between mx-4 sm:mx-0">
-            <InvoiceForm invoice={invoice} onChangeGroupBy={changeGroupBy} />
+            <InvoiceForm invoice={invoice} onUpdate={updateInvoice} />
             <InvoiceEditableTotals
               modifiers={modifiers}
               invoice={invoice}
