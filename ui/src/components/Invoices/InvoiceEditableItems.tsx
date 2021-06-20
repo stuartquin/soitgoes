@@ -23,14 +23,13 @@ function InvoiceEditableItems({
     () => getGroupedByTime(invoice, tasks, timeSlips),
     [invoice, tasks, timeSlips]
   );
-  const timeSlipTaskIds = new Set(timeSlipItems.map((t) => t.task.id));
-  const fixedTasks = tasks.filter((t) => invoice.tasks.includes(t.id || 0));
-  const activeTasks = tasks.filter((t) => timeSlipTaskIds.has(t.id || 0));
-  const tasksGrouping =
-    invoice.groupBy === models.InvoiceGroupByEnum.Tasks
-      ? activeTasks.concat(fixedTasks)
-      : fixedTasks;
-  const tasksGroup = getGroupedByTask(invoice, tasksGrouping, timeSlips);
+  const taskItems = useMemo(
+    () =>
+      invoice.groupBy === models.InvoiceGroupByEnum.Timeslips
+        ? getGroupedByTask(invoice, tasks, [])
+        : getGroupedByTask(invoice, tasks, timeSlipItems),
+    [invoice, tasks, timeSlipItems]
+  );
 
   return (
     <React.Fragment>
@@ -54,7 +53,7 @@ function InvoiceEditableItems({
         </div>
       )}
 
-      {tasksGroup.length > 0 && (
+      {taskItems.length > 0 && (
         <div className="my-4">
           <div className="uppercase bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-600 text-sm md:text-base text-left px-2 sm:px-4 justify-between items-center">
             <div className="text-sm">Task</div>
@@ -63,7 +62,7 @@ function InvoiceEditableItems({
               <div className="text-sm">Total</div>
             </div>
           </div>
-          {tasksGroup.map((item) => (
+          {taskItems.map((item) => (
             <InvoiceToggleableItem
               key={item.id}
               item={item}

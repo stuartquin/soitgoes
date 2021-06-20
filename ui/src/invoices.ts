@@ -1,6 +1,6 @@
 import * as models from "api/models";
 import { format, isAfter } from "date-fns";
-import { sumBy } from "lodash";
+import { groupBy, sumBy } from "lodash";
 import { ensure } from "typeHelpers";
 
 export enum InvoiceStatus {
@@ -51,39 +51,49 @@ export const getGroupedByTime = (
 export const getGroupedByTask = (
   invoice: models.Invoice,
   tasks: models.Task[],
-  timeSlips: models.TimeSlip[]
+  timeSlipItems: TimeSlipTask[]
 ): TimeSlipTask[] => {
-  return tasks.map((task) => {
-    const taskTimeSlips = timeSlips.filter(
-      (t) => t.task === task.id && invoice.timeslips.includes(ensure(t.id))
-    );
-    const hours =
-      task.billingType === models.TaskBillingTypeEnum.Fixed
-        ? 0
-        : sumBy(taskTimeSlips, "hours");
+  const groupedTimeSlipItems = groupBy(timeSlipItems, (t) => t.task.id);
 
-    const cost =
-      task.billingType === models.TaskBillingTypeEnum.Fixed
-        ? task.cost
-        : sumBy(taskTimeSlips, "cost");
+  return tasks
+    .filter(
+      (t) =>
+        groupedTimeSlipItems[ensure(t.id)] ||
+        invoice.tasks.includes(ensure(t.id))
+    )
+    .map((task) => {
+      const id = ensure(task.id);
+      const taskTimeSlipItems = groupedTimeSlipItems[id] || [];
+      const activeTimeSlipItems = taskTimeSlipItems.filter((t) => t.isActive);
+      const activeTimeSlips = activeTimeSlipItems.map((t) => t.timeSlips[0]);
+      const hours =
+        task.billingType === models.TaskBillingTypeEnum.Fixed
+          ? 0
+          : sumBy(activeTimeSlips, "hours");
 
-    const title = task.name;
-    const subTitle = `${task.billingType}`;
-    const isActive =
-      invoice.tasks.includes(ensure(task.id)) || taskTimeSlips.length > 0;
+      const cost =
+        task.billingType === models.TaskBillingTypeEnum.Fixed
+          ? task.cost
+          : sumBy(activeTimeSlips, "cost");
 
-    return {
-      task,
-      timeSlips: taskTimeSlips,
-      hours: hours || 0,
-      cost: cost || 0,
-      type: "Task",
-      id: ensure(task.id),
-      isActive,
-      title,
-      subTitle,
-    };
-  });
+      const title = task.name;
+      const subTitle = `${task.billingType}`;
+      const isActive =
+        invoice.tasks.includes(ensure(task.id)) ||
+        activeTimeSlipItems.length > 0;
+
+      return {
+        id: ensure(task.id),
+        task,
+        timeSlips: taskTimeSlipItems.map((t) => t.timeSlips[0]),
+        title,
+        subTitle,
+        hours,
+        cost,
+        isActive,
+        type: "Task",
+      } as TimeSlipTask;
+    });
 };
 
 //  Trick tailwind optimiser

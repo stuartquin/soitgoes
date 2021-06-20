@@ -73,9 +73,6 @@ function InvoiceCreateNew({ project }: Props) {
             ? item.timeSlips.map((t) => t.id || 0)
             : [item.id || 0];
 
-        console.log("CHANGED TIME IDS");
-        console.log(changedTimeSlipIds);
-
         const updatedTimeSlips = item.isActive
           ? invoice.timeslips.filter((id) => !changedTimeSlipIds.includes(id))
           : invoice.timeslips.concat(changedTimeSlipIds);
