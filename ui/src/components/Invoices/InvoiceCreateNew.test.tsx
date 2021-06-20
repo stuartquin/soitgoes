@@ -218,4 +218,43 @@ describe("InvoiceCreateNew", () => {
       await findByText("£1210");
     });
   });
+
+  test("Toggle FIXED task", async () => {
+    await act(async () => {
+      const { findByText, findAllByTitle, findByLabelText } = render(
+        <BrowserRouter>
+          <InvoiceCreateNew project={project} />
+        </BrowserRouter>
+      );
+      const groupBy = await findByLabelText("Group By");
+      await fireEvent.change(groupBy, { target: { value: "tasks" } });
+
+      const toggles = await findAllByTitle("Remove Item");
+      await fireEvent.click(toggles[2]);
+      await findByText("£910");
+
+      await fireEvent.click(toggles[2]);
+      await findByText("£1210");
+    });
+  });
+
+  test("Toggle Modifier", async () => {
+    await act(async () => {
+      const { findAllByText, findByText, findByTitle } = render(
+        <BrowserRouter>
+          <InvoiceCreateNew project={project} />
+        </BrowserRouter>
+      );
+      const toggle = await findByTitle("Remove");
+      await fireEvent.click(toggle);
+      const totals = await findAllByText("£1210");
+      expect(totals.length).toBe(2);
+      await findByText("£242");
+
+      await fireEvent.click(toggle);
+      await findByText("£1210");
+      await findByText("£242");
+      await findByText("£1452");
+    });
+  });
 });

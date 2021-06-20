@@ -59,7 +59,7 @@ export const getGroupedByTask = (
     .filter(
       (t) =>
         groupedTimeSlipItems[ensure(t.id)] ||
-        invoice.tasks.includes(ensure(t.id))
+        t.billingType === models.TaskBillingTypeEnum.Fixed
     )
     .map((task) => {
       const id = ensure(task.id);

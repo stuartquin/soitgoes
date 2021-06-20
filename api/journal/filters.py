@@ -18,4 +18,4 @@ class TaskFilter(FilterSet):
 
     class Meta:
         model = Task
-        fields = ["invoices", "project", "no_invoice"]
+        fields = ["invoices", "project", "no_invoice", "billing_type"]

@@ -9,7 +9,8 @@ interface Props {
   timeSlips: models.TimeSlip[];
   invoice: models.Invoice;
   project: models.Project;
-  onToggle: (item: TimeSlipTask) => void;
+  onToggleTimeSlip: (item: TimeSlipTask) => void;
+  onToggleTask: (item: TimeSlipTask) => void;
 }
 
 function InvoiceEditableItems({
@@ -17,7 +18,8 @@ function InvoiceEditableItems({
   project,
   tasks,
   timeSlips,
-  onToggle,
+  onToggleTimeSlip,
+  onToggleTask,
 }: Props) {
   const timeSlipItems = useMemo(
     () => getGroupedByTime(invoice, tasks, timeSlips),
@@ -47,7 +49,7 @@ function InvoiceEditableItems({
               key={item.id}
               item={item}
               project={project}
-              onToggle={onToggle}
+              onToggle={onToggleTimeSlip}
             />
           ))}
         </div>
@@ -67,7 +69,7 @@ function InvoiceEditableItems({
               key={item.id}
               item={item}
               project={project}
-              onToggle={onToggle}
+              onToggle={onToggleTask}
             />
           ))}
         </div>

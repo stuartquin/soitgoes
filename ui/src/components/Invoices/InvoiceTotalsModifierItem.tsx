@@ -29,6 +29,7 @@ function InvoiceTotalsModifierItem({
           <div
             className="p-2 cursor-pointer absolute -right-7"
             onClick={() => onToggleModifier(modifier)}
+            title={hasModifier ? "Remove" : "Add"}
           >
             {hasModifier ? (
               <MinusCircleIcon className="h-4 w-4 text-gray-400 hover:text-gray-600" />

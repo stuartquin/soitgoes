@@ -753,6 +753,15 @@ paths:
         description: no_invoice
         schema:
           type: string
+      - name: billing_type
+        required: false
+        in: query
+        description: billing_type
+        schema:
+          type: string
+          enum:
+          - TIME
+          - FIXED
       responses:
         '200':
           content:

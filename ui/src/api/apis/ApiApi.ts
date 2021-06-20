@@ -172,6 +172,7 @@ export interface ListTasksRequest {
     invoices?: string;
     project?: string;
     noInvoice?: string;
+    billingType?: ListTasksBillingTypeEnum;
 }
 
 export interface ListTimeSlipsRequest {
@@ -946,6 +947,10 @@ export class ApiApi extends runtime.BaseAPI {
             queryParameters['no_invoice'] = requestParameters.noInvoice;
         }
 
+        if (requestParameters.billingType !== undefined) {
+            queryParameters['billing_type'] = requestParameters.billingType;
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
@@ -1707,4 +1712,13 @@ export class ApiApi extends runtime.BaseAPI {
         return await response.value();
     }
 
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum ListTasksBillingTypeEnum {
+    Time = 'TIME',
+    Fixed = 'FIXED'
 }
