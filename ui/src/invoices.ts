@@ -1,5 +1,5 @@
 import * as models from "api/models";
-import { format, isAfter } from "date-fns";
+import { addDays, format, isAfter } from "date-fns";
 import { groupBy, sumBy } from "lodash";
 import { ensure } from "typeHelpers";
 
@@ -167,3 +167,33 @@ export const calculateTotal = (
 
 export const getModifierLabel = (modifier: models.InvoiceModifier): string =>
   `${modifier.name} ${modifier.percent}%`;
+
+export const getCalculatedInvoice = (
+  invoice: models.Invoice,
+  fixedTasks: models.Task[],
+  timeSlips: models.TimeSlip[],
+  modifiers: models.InvoiceModifier[]
+): models.Invoice => {
+  const invoiceModifiers = invoice.modifier
+    ? modifiers.filter((m) => ensure(invoice.modifier).includes(ensure(m.id)))
+    : modifiers;
+
+  const subtotalDue = calculateSubTotal(fixedTasks, timeSlips);
+  const dueDate =
+    invoice && invoice.dueDate ? invoice.dueDate : addDays(new Date(), 14);
+  const groupBy =
+    invoice && invoice.groupBy
+      ? invoice.groupBy
+      : models.InvoiceGroupByEnum.Timeslips;
+
+  return {
+    ...invoice,
+    subtotalDue,
+    dueDate,
+    groupBy,
+    tasks: fixedTasks.map((t) => t.id || 0),
+    timeslips: timeSlips.map((t) => ensure(t.id)),
+    modifier: invoiceModifiers.map((m) => ensure(m.id)),
+    totalDue: calculateTotal(subtotalDue, modifiers),
+  };
+};

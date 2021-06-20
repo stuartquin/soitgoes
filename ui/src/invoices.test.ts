@@ -88,3 +88,5 @@ describe("getGroupedByTask", () => {
     expect(updated[1].cost).toBe(150);
   });
 });
+
+describe("getCalculatedInvoice", () => {});
