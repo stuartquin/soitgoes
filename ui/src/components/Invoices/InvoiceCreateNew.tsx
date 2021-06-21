@@ -12,9 +12,10 @@ import { ensure } from "typeHelpers";
 
 interface Props {
   project: models.Project;
+  onIssue: () => void;
 }
 
-function InvoiceCreateNew({ project }: Props) {
+function InvoiceCreateNew({ project, onIssue }: Props) {
   const [invoice, setInvoice] = useState<models.Invoice>();
   const [isLoading, setIsLoading] = useState(true);
   const [timeTasks, setTimeTasks] = useState<models.Task[]>([]);
@@ -147,7 +148,8 @@ function InvoiceCreateNew({ project }: Props) {
     const api = getClient();
     const updatedInvoice = await api.createInvoice({ invoice });
     history.push(`/invoices/${updatedInvoice.project}/${updatedInvoice.id}`);
-  }, [invoice, history]);
+    onIssue();
+  }, [invoice, history, onIssue]);
 
   const allTasks = timeTasks.concat(fixedTasks);
 

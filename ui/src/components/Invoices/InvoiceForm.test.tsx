@@ -51,4 +51,27 @@ describe("InvoiceForm", () => {
       dueDate: new Date("2021-06-01"),
     });
   });
+
+  test("Update Show Hours", async () => {
+    const invoice = {
+      project: 1,
+      dueDate: new Date("2021-05-09"),
+      reference: "Test Reference",
+      showHours: false,
+      timeslips: [],
+      tasks: [],
+    };
+    const onUpdate = jest.fn();
+    const { findByLabelText } = render(
+      <BrowserRouter>
+        <InvoiceForm invoice={invoice} onUpdate={onUpdate} />
+      </BrowserRouter>
+    );
+
+    await fireEvent.click(await findByLabelText("Show Hours"));
+    expect(onUpdate).toHaveBeenCalledWith({
+      ...invoice,
+      showHours: true,
+    });
+  });
 });

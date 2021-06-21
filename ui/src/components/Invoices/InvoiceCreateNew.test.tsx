@@ -171,7 +171,7 @@ describe("InvoiceCreateNew", () => {
     await act(async () => {
       const { findByText } = render(
         <BrowserRouter>
-          <InvoiceCreateNew project={project} />
+          <InvoiceCreateNew project={project} onIssue={jest.fn()} />
         </BrowserRouter>
       );
       await findByText("£1210");
@@ -184,7 +184,7 @@ describe("InvoiceCreateNew", () => {
     await act(async () => {
       const { findByText, findAllByTitle } = render(
         <BrowserRouter>
-          <InvoiceCreateNew project={project} />
+          <InvoiceCreateNew project={project} onIssue={jest.fn()} />
         </BrowserRouter>
       );
       const toggles = await findAllByTitle("Remove Item");
@@ -205,7 +205,7 @@ describe("InvoiceCreateNew", () => {
     await act(async () => {
       const { findByText, findByLabelText } = render(
         <BrowserRouter>
-          <InvoiceCreateNew project={project} />
+          <InvoiceCreateNew project={project} onIssue={jest.fn()} />
         </BrowserRouter>
       );
       const groupBy = await findByLabelText("Group By");
@@ -224,7 +224,7 @@ describe("InvoiceCreateNew", () => {
     await act(async () => {
       const { findByText, findAllByTitle, findByLabelText } = render(
         <BrowserRouter>
-          <InvoiceCreateNew project={project} />
+          <InvoiceCreateNew project={project} onIssue={jest.fn()} />
         </BrowserRouter>
       );
       const groupBy = await findByLabelText("Group By");
@@ -244,7 +244,7 @@ describe("InvoiceCreateNew", () => {
     await act(async () => {
       const { findByText, findAllByTitle, findByLabelText } = render(
         <BrowserRouter>
-          <InvoiceCreateNew project={project} />
+          <InvoiceCreateNew project={project} onIssue={jest.fn()} />
         </BrowserRouter>
       );
       const groupBy = await findByLabelText("Group By");
@@ -263,7 +263,7 @@ describe("InvoiceCreateNew", () => {
     await act(async () => {
       const { findAllByText, findByText, findByTitle } = render(
         <BrowserRouter>
-          <InvoiceCreateNew project={project} />
+          <InvoiceCreateNew project={project} onIssue={jest.fn()} />
         </BrowserRouter>
       );
       const toggle = await findByTitle("Remove");
@@ -281,9 +281,10 @@ describe("InvoiceCreateNew", () => {
 
   test("Issue Invoice", async () => {
     await act(async () => {
+      const onIssue = jest.fn();
       const { findByTitle } = render(
         <BrowserRouter>
-          <InvoiceCreateNew project={project} />
+          <InvoiceCreateNew project={project} onIssue={onIssue} />
         </BrowserRouter>
       );
       await fireEvent.click(await findByTitle("Issue Invoice"));
@@ -293,6 +294,7 @@ describe("InvoiceCreateNew", () => {
       const arg = mockAPIInstance.createInvoice.mock.calls[0][0];
       expect(arg["invoice"]["subtotalDue"]).toBe(1210);
       expect(arg["invoice"]["timeslips"]).toEqual([2018, 2019, 2023, 2024]);
+      expect(onIssue).toHaveBeenCalled();
     });
   });
 });

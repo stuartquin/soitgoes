@@ -107,7 +107,7 @@ function Invoices({ user, projects, isCreateNew = false }: Props) {
             />
           </Route>
           <Route path="/invoices/:projectId">
-            <InvoiceCreateNew project={project} />
+            <InvoiceCreateNew project={project} onIssue={loadInvoices} />
           </Route>
         </Switch>
       </SlideOver>
