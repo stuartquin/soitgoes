@@ -30,6 +30,8 @@ class Billing(models.Model):
     account_no = models.CharField(max_length=512)
     sort_code = models.CharField(max_length=512)
     created_at = models.DateTimeField(auto_now_add=True)
+    iban = models.CharField(max_length=512, blank=True, null=True)
+    swift = models.CharField(max_length=512, blank=True, null=True)
 
     def __str__(self):
         return "%s, %s" % (self.bank_name, self.sort_code)

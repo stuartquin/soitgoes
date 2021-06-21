@@ -78,7 +78,7 @@ tr.modifiers:first-child td {
 }
 
 tr.total td {
-  padding-top: 12px;
+  padding-top: 8px;
 }
 
 .footer table {
@@ -135,11 +135,10 @@ tr.total td {
 
         <div class='invoice-details'>
           {% if invoice.reference %}
-          <h3>{{invoice.reference}}</h3>
-          <h4>Invoice #{{invoice.sequence_num}}</h4>
+          <strong>{{invoice.reference}}</strong>
           {% else %}
-          <h3>Invoice #{{invoice.sequence_num}}</h3>
           {% endif %}
+          <h4>Invoice #{{invoice.sequence_num}}</h4>
           <span class='invoice-sent-date'>
             <strong>Issued:</strong>
             <span>{{ sent_date }}</span>
@@ -174,9 +173,25 @@ tr.total td {
         <div>
           <h3>Payment Details</h3>
           {{company.billing.bank_name}} <br />
-          <strong>Bank/Sort Code:</strong> {{company.billing.sort_code}} <br />
-          <strong>Account Number:</strong> {{company.billing.account_no}} <br />
-          <strong>Reference:</strong> {{project.name}} #{{invoice.sequence_num}} <br />
+          <div style="margin-top: 6px">
+            <strong>Bank/Sort Code:</strong> {{company.billing.sort_code}} <br />
+          </div>
+          <div style="margin-top: 6px">
+            <strong>Account Number:</strong> {{company.billing.account_no}} <br />
+          </div>
+          {% if company.billing.iban %}
+            <div style="margin-top: 6px">
+              <strong>IBAN:</strong> {{company.billing.iban}} <br />
+            </div>
+          {% endif %}
+          {% if company.billing.swift %}
+            <div style="margin-top: 6px">
+              <strong>Swift:</strong> {{company.billing.swift}} <br />
+            </div>
+          {% endif %}
+          <div style="margin-top: 6px">
+            <strong>Reference:</strong> {{project.name}} #{{invoice.sequence_num}} <br />
+          </div>
         </div>
       </section>
     </div>

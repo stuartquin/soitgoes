@@ -11,7 +11,7 @@
       <td>
         {{ ti.task.name }}
         {% if invoice.show_hours and ti.task.hours_spent %}
-          {{ ti.task.hours_spent }} Hours
+          {{ ti.task.hours_spent|floatformat:1 }} Hours
         {% endif %}
       </td>
       <td class="number">{{ ti.cost }}</td>

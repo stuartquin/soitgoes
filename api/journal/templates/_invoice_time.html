@@ -8,7 +8,7 @@
   {% for timeslip in timeslips %}
     {% if timeslip.hours %}
       <tr>
-        <td>{{ timeslip.hours }} Hours on {{ timeslip.date }}: {{ timeslip.project.name }}</td>
+        <td>{{ timeslip.hours|floatformat:1 }} Hours on {{ timeslip.date }}: {{ timeslip.project.name }}</td>
         <td class="number">{{ timeslip.hourly_rate }}</td>
         <td class="number">{{ timeslip.hourly_rate|multiply:timeslip.hours|floatformat:2 }}</td>
       </tr>
