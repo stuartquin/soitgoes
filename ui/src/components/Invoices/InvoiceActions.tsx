@@ -20,7 +20,12 @@ function InvoiceActions({ project, invoice, onIssue }: Props) {
         <Button variant="light" className="mx-1 flex">
           Payment Details <ChevronDownIcon className="w-4 ml-2" />
         </Button>
-        <Button variant="success" className="mx-1" onClick={onIssue}>
+        <Button
+          title="Issue Invoice"
+          variant="success"
+          className="mx-1"
+          onClick={onIssue}
+        >
           Issue
         </Button>
       </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { render, act, fireEvent } from "@testing-library/react";
+import { addDays } from "date-fns";
 
 import * as models from "api/models";
 import InvoiceCreateNew from "./InvoiceCreateNew";
@@ -9,7 +10,23 @@ import * as Api from "api";
 
 jest.mock("api");
 
+const MOCK_HISTORY_PUSH = jest.fn();
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useHistory: () => ({
+    push: MOCK_HISTORY_PUSH,
+  }),
+}));
+
 class MockApi extends Api.ApiApi {
+  createInvoice = jest.fn(
+    (args: any): Promise<any> =>
+      Promise.resolve({
+        id: 2,
+        project: 1,
+      })
+  );
+
   async listTimeSlips(args: any): Promise<any> {
     return {
       results: [
@@ -130,6 +147,7 @@ class MockApi extends Api.ApiApi {
 
 describe("InvoiceCreateNew", () => {
   let mockGetClient: any;
+  let mockAPIInstance: any;
 
   const project = {
     id: 1,
@@ -137,13 +155,16 @@ describe("InvoiceCreateNew", () => {
   } as models.Project;
 
   beforeEach(() => {
+    mockAPIInstance = new MockApi();
+
     mockGetClient = jest
       .spyOn(api, "getClient")
-      .mockImplementation(() => new MockApi());
+      .mockImplementation(() => mockAPIInstance);
   });
 
   afterEach(() => {
     mockGetClient.mockRestore();
+    MOCK_HISTORY_PUSH.mockClear();
   });
 
   test("Displays totals summary", async () => {
@@ -255,6 +276,23 @@ describe("InvoiceCreateNew", () => {
       await findByText("£1210");
       await findByText("£242");
       await findByText("£1452");
+    });
+  });
+
+  test("Issue Invoice", async () => {
+    await act(async () => {
+      const { findByTitle } = render(
+        <BrowserRouter>
+          <InvoiceCreateNew project={project} />
+        </BrowserRouter>
+      );
+      await fireEvent.click(await findByTitle("Issue Invoice"));
+
+      expect(MOCK_HISTORY_PUSH).toHaveBeenCalledWith("/invoices/1/2");
+
+      const arg = mockAPIInstance.createInvoice.mock.calls[0][0];
+      expect(arg["invoice"]["subtotalDue"]).toBe(1210);
+      expect(arg["invoice"]["timeslips"]).toEqual([2018, 2019, 2023, 2024]);
     });
   });
 });

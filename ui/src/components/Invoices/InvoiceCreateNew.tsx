@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
@@ -20,6 +21,7 @@ function InvoiceCreateNew({ project }: Props) {
   const [fixedTasks, setFixedTasks] = useState<models.Task[]>([]);
   const [modifiers, setModifiers] = useState<models.InvoiceModifier[]>([]);
   const [timeSlips, setTimeSlips] = useState<models.TimeSlip[]>([]);
+  const history = useHistory();
 
   useEffect(() => {
     const load = async () => {
@@ -143,8 +145,9 @@ function InvoiceCreateNew({ project }: Props) {
 
   const issueInvoice = useCallback(async () => {
     const api = getClient();
-    setInvoice(await api.createInvoice({ invoice }));
-  }, [invoice]);
+    const updatedInvoice = await api.createInvoice({ invoice });
+    history.push(`/invoices/${updatedInvoice.project}/${updatedInvoice.id}`);
+  }, [invoice, history]);
 
   const allTasks = timeTasks.concat(fixedTasks);
 
