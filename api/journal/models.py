@@ -307,3 +307,4 @@ class Activity(models.Model):
     @staticmethod
     def update(user, id, type, status=None):
         Activity._insert(user, id, type, "UPD", status)
+        due_date=due_date,

@@ -19,6 +19,8 @@ function TimeSlip({ timeSlipEntry }: Props) {
     [timeSlipEntry, updateHours]
   );
 
+  const disabled = Boolean(timeSlip.invoice);
+
   const hours = timeSlip.hours || 0;
   return (
     <div>
@@ -26,6 +28,7 @@ function TimeSlip({ timeSlipEntry }: Props) {
         className="shadow appearance-none border border-grey-300 rounded w-16 p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mx-1 text-center"
         value={hours || ""}
         onChange={handleChange}
+        disabled={disabled}
       />
     </div>
   );
