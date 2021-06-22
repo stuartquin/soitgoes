@@ -17,9 +17,6 @@ function InvoiceActions({ project, invoice, onIssue }: Props) {
         {project.name} #{project.nextSequenceNum}
       </div>
       <div className="flex">
-        <Button variant="light" className="mx-1 flex">
-          Payment Details <ChevronDownIcon className="w-4 ml-2" />
-        </Button>
         <Button
           title="Issue Invoice"
           variant="success"

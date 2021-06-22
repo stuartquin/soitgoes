@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { Link } from "react-router-dom";
 import { format } from "date-fns";
 
 import * as models from "api/models";
@@ -24,13 +25,18 @@ function Task({ task, timeSheet, project, dateRange }: Props) {
       .filter((entry) => entry);
   }, [dateRange, taskEntries]);
 
+  const url = `/time?task=${task.id}&date=${format(
+    dateRange[0],
+    "yyyy-MM-dd"
+  )}`;
+
   return (
     <div className="border-1 border-grey-400 border-radius-sm flex py-1">
       <div
         className="py-2 text-left text-gray-700 text-sm md:text-base text-left w-48 md:w-64"
         style={{ minWidth: "140px" }}
       >
-        {task.name}
+        <Link to={url}>{task.name}</Link>
       </div>
 
       <div className="flex flex-grow justify-end">

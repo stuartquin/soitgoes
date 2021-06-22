@@ -25,7 +25,7 @@ function InvoiceDateItems({ project, invoice, token, onSetPaid }: Props) {
 
   return (
     <div className="flex justify-between">
-      <div className="text-gray-800 text-lg sm:text-xl">
+      <div className="text-gray-800 text-md sm:text-lg">
         #{invoice.sequenceNum} {project.name}
       </div>
       <div className="flex items-center">
