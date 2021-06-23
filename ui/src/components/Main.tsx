@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import * as models from "api/models";
-import { getClient } from "apiClient";
+import { getClient, removeToken } from "apiClient";
 
 import Layout from "components/Layout";
 import TimeSheet from "components/TimeSheet";
@@ -24,10 +24,15 @@ function Main({ user }: Props) {
     load();
   }, []);
 
-  // TODO whole app dependnent on projects/tasks existing
+  const logout = useCallback(() => {
+    removeToken();
+    window.location.reload();
+  }, []);
+
+  // TODO whole app dependnent on projects existing
   return (
     <Router>
-      <Layout>
+      <Layout onLogout={logout}>
         {projects.length && (
           <Switch>
             <Route path="/invoices/:projectId/:invoiceId">

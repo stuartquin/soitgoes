@@ -8,6 +8,10 @@ export const storeToken = (token: string) => {
   window.localStorage.setItem("token", token);
 };
 
+export const removeToken = () => {
+  window.localStorage.removeItem("token");
+};
+
 export const getClient = (): Api.ApiApi => {
   const config = {
     basePath: getBaseUrl(),
