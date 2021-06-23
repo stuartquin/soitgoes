@@ -20,14 +20,12 @@ function TaskInvoiceItem({ invoice }: Props) {
 
   return (
     <div className="flex my-3 px-2 sm:px-4 justify-between items-center">
-      <div className="flex flex-wrap items-center flex-grow">
-        <div className="text-gray-800 text-sm md:text-lg mr-2 w-full sm:w-auto">
-          <div className="text-gray-800 text-sm md:text-lg truncate w-3/4">
-            #{invoice.sequenceNum}
-          </div>
-          <div className="text-gray-500 text-sm">
-            {format(invoice.issuedAt || new Date(), "yyyy-MM-dd")}
-          </div>
+      <div className="flex-grow">
+        <div className="text-gray-800 text-sm md:text-lg truncate w-3/4">
+          {invoice.name}
+        </div>
+        <div className="text-gray-500 text-sm">
+          {format(invoice.issuedAt || new Date(), "yyyy-MM-dd")}
         </div>
       </div>
       <div className="text-right">

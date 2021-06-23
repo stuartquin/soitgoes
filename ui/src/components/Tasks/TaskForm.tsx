@@ -1,14 +1,18 @@
 import React, { useCallback } from "react";
 import { format } from "date-fns";
 
+import Label from "components/Form/Label";
+import Input from "components/Form/Input";
+import Select from "components/Form/Select";
 import * as models from "api/models";
 
 interface Props {
   task: models.Task;
+  projects: models.Project[];
   onUpdate?: (task: models.Task) => void;
 }
 
-function TaskForm({ task, onUpdate }: Props) {
+function TaskForm({ task, projects, onUpdate }: Props) {
   const updateTask = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const target = event.target as HTMLInputElement;
@@ -22,7 +26,7 @@ function TaskForm({ task, onUpdate }: Props) {
   const updateDate = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, value } = event.target;
-      onUpdate && onUpdate({ ...task, [name]: new Date(value) });
+      onUpdate && onUpdate({ ...task, [name]: value ? new Date(value) : null });
     },
     [task, onUpdate]
   );
@@ -30,59 +34,47 @@ function TaskForm({ task, onUpdate }: Props) {
   const isBillingTypeDisabled = Boolean(task.id);
 
   return (
-    <form action="#" method="POST" className="w-full sm:w-auto">
-      <div className="my-4 flex">
-        <div className="flex-grow mr-2">
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Name
-          </label>
-          <input
+    <form
+      action="#"
+      method="POST"
+      className="w-full sm:w-auto grid sm:grid-cols-3 gap-4"
+    >
+      <div className="grid col-span-2 grid-rows-2 sm:grid-rows-3 grid-cols-3 gap-4">
+        <div className="col-span-3">
+          <Label htmlFor="name">Name</Label>
+          <Input
             type="text"
             name="name"
             value={task.name || ""}
             onChange={updateTask}
             id="name"
-            className="block w-full rounded-none sm:text-sm border border-gray-300 rounded p-2 h-9"
+            className="w-full"
           />
         </div>
-        <div className="w-1/4">
-          <label
-            htmlFor="state"
-            className="block text-sm font-medium text-gray-700"
-          >
-            State
-          </label>
-          <select
-            name="state"
-            id="state"
-            className="block w-full rounded-none sm:text-sm border border-gray-300 rounded p-2 h-9"
-            value={task.state}
+
+        <div className="">
+          <Label htmlFor="billingType">Project</Label>
+          <Select
+            className="w-full"
+            name="project"
+            id="project"
+            value={task.project}
             onChange={updateTask}
+            disabled={isBillingTypeDisabled}
           >
-            {Object.values(models.TaskStateEnum).map((state) => (
-              <option key={state} value={state}>
-                {state}
+            {projects.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
-      </div>
-
-      <div className="my-4 flex">
-        <div className="flex-grow mr-2 w-1/2">
-          <label
-            htmlFor="billingType"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Billing Type
-          </label>
-          <select
+        <div className="">
+          <Label htmlFor="billingType">Billing Type</Label>
+          <Select
+            className="w-full"
             name="billingType"
             id="billingType"
-            className="flex-1 block w-full sm:text-sm border border-gray-300 rounded p-2"
             value={task.billingType}
             onChange={updateTask}
             disabled={isBillingTypeDisabled}
@@ -92,76 +84,62 @@ function TaskForm({ task, onUpdate }: Props) {
                 {billingType}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
-        {task.billingType === models.TaskBillingTypeEnum.Fixed ? (
-          <div className="flex-grow mr-2 w-1/2">
-            <label
-              htmlFor="cost"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Cost
-            </label>
-            <input
+        {task.billingType === models.TaskBillingTypeEnum.Fixed && (
+          <div className="">
+            <Label htmlFor="cost">Cost</Label>
+            <Input
               type="text"
               name="cost"
               value={task.cost || ""}
               onChange={updateTask}
               id="cost"
-              className="block w-full rounded-none sm:text-sm border border-gray-300 rounded p-2 h-9"
-            />
-          </div>
-        ) : (
-          <div className="flex-grow mr-2 w-1/2">
-            <label
-              htmlFor="hoursPredicted"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Hours Predicted
-            </label>
-            <input
-              type="text"
-              name="hoursPredicted"
-              value={task.hoursPredicted || ""}
-              onChange={updateTask}
-              id="hoursPredicted"
-              className="block w-full rounded-none sm:text-sm border border-gray-300 rounded p-2 h-9"
+              className="w-full"
             />
           </div>
         )}
       </div>
 
-      <div className="my-4 flex">
-        <div className="flex-grow mr-2 w-1/2">
-          <label
-            htmlFor="dueDate"
-            className="block text-sm font-medium text-gray-700"
+      <div className="grid gap-4 col-span-2 sm:col-span-1">
+        <div className="">
+          <Label htmlFor="state">State</Label>
+          <Select
+            className="w-full"
+            name="state"
+            id="state"
+            value={task.state}
+            onChange={updateTask}
           >
-            Due Date
-          </label>
-          <input
-            className="flex-1 block w-full sm:text-sm border border-gray-300 rounded p-2"
+            {Object.values(models.TaskStateEnum).map((state) => (
+              <option key={state} value={state}>
+                {state}
+              </option>
+            ))}
+          </Select>
+        </div>
+        <div className="">
+          <Label htmlFor="dueDate">Due Date</Label>
+          <Input
             type="date"
             name="dueDate"
             id="dueDate"
-            value={format(task.dueDate || new Date(), "yyyy-MM-dd")}
+            value={task.dueDate ? format(task.dueDate, "yyyy-MM-dd") : ""}
             onChange={updateDate}
+            className="w-full"
           />
         </div>
-        <div className="flex-grow mr-2 w-1/2">
-          <label
-            htmlFor="completedAt"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Completed Date
-          </label>
-          <input
-            className="flex-1 block w-full sm:text-sm border border-gray-300 rounded p-2"
+        <div className="">
+          <Label htmlFor="completedAt">Completed Date</Label>
+          <Input
             type="date"
             name="completedAt"
             id="completedAt"
-            value={format(task.completedAt || new Date(), "yyyy-MM-dd")}
+            value={
+              task.completedAt ? format(task.completedAt, "yyyy-MM-dd") : ""
+            }
             onChange={updateDate}
+            className="w-full"
           />
         </div>
       </div>

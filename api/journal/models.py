@@ -158,7 +158,7 @@ class Invoice(models.Model):
 
     @property
     def name(self):
-        return f"{self.project.name} #{self.sequence_num}"
+        return f"#{self.sequence_num} {self.project.name}"
 
     @staticmethod
     def get_bulk_file(invoices, user):
@@ -307,4 +307,4 @@ class Activity(models.Model):
     @staticmethod
     def update(user, id, type, status=None):
         Activity._insert(user, id, type, "UPD", status)
-        due_date=due_date,
+        due_date = (due_date,)

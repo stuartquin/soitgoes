@@ -112,7 +112,11 @@ function TimeSheet({ user, projects }: Props) {
         )}
       </div>
       <SlideOver isOpen={isOpen} onClose={closeSlideOver}>
-        <div>{selectedTaskId && <TaskDetail taskId={selectedTaskId} />}</div>
+        <div>
+          {selectedTaskId && (
+            <TaskDetail taskId={selectedTaskId} projects={projects} />
+          )}
+        </div>
       </SlideOver>
     </TimeSlipContext.Provider>
   );

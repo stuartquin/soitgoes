@@ -33,7 +33,7 @@ function Task({ task, timeSheet, project, dateRange }: Props) {
   return (
     <div className="border-1 border-grey-400 border-radius-sm flex py-1">
       <div
-        className="py-2 text-left text-gray-700 text-sm md:text-base text-left w-48 md:w-64"
+        className="py-2 text-left text-gray-700 text-sm md:text-base text-left w-48 md:w-64 truncate"
         style={{ minWidth: "140px" }}
       >
         <Link to={url}>{task.name}</Link>
