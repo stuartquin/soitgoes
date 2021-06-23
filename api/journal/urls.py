@@ -5,11 +5,6 @@ urlpatterns = [
     url(r"api/projects/$", apiviews.ProjectList.as_view()),
     url(r"api/projects/summary/$", apiviews.ProjectSummary.as_view()),
     url(r"api/projects/(?P<pk>[0-9]+)$", apiviews.ProjectDetail.as_view()),
-    url(
-        r"api/projects/(?P<project>[0-9]+)/invoice",
-        apiviews.NewInvoiceDetail.as_view(),
-        name="projects-new-invoice",
-    ),
     url(r"api/invoices/$", apiviews.InvoiceListCreate.as_view()),
     url(r"api/timeslips/$", apiviews.TimeSlipList.as_view(), name="timeslips-list"),
     url(r"api/timeslips/(?P<pk>[0-9]+)$", apiviews.TimeSlipDetail.as_view()),
@@ -23,6 +18,11 @@ urlpatterns = [
     url(r"api/accounts/$", apiviews.AccountList.as_view()),
     url(r"api/tasks/$", apiviews.TaskList.as_view(), name="tasks-list"),
     url(r"api/tasks/(?P<pk>[0-9]+)$", apiviews.TaskDetail.as_view()),
+    url(
+        r"api/tasks/(?P<pk>[0-9]+)/summary$",
+        apiviews.TaskSummary.as_view(),
+        name="task-summary",
+    ),
     url(r"api/contacts/$", apiviews.ContactList.as_view()),
     url(r"api/contacts/(?P<pk>[0-9]+)$", apiviews.ContactDetail.as_view()),
     url(r"api/modifiers/$", apiviews.InvoiceModifierList.as_view()),

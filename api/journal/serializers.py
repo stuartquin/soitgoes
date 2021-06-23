@@ -219,3 +219,8 @@ class ProjectSummarySerializer(serializers.Serializer):
     hours = serializers.FloatField(read_only=True)
     total = serializers.FloatField(read_only=True)
     next_sequence_num = serializers.IntegerField(read_only=True)
+
+
+class TaskSummarySerializer(serializers.Serializer):
+    invoices = InvoiceSerializer(many=True)
+    timeslips = TimeSlipSerializer(source="timeslip_set", many=True)

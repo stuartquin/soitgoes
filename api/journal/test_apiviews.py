@@ -6,34 +6,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.test import force_authenticate, APIClient
 from model_bakery import baker
 
-
-class NewInvoiceDetailTest(TestCase):
-    def test_retrieve_new_invoice(self):
-        account = baker.make("journal.Account", make_m2m=True)
-        project = baker.make("journal.Project", account=account)
-        token = Token.objects.create(user=account.users.first())
-
-        task = baker.make("journal.Task", project=project)
-        timeslip_1 = baker.make("journal.TimeSlip", task=task, project=project, hours=5)
-        timeslip_2 = baker.make("journal.TimeSlip", task=task, project=project, hours=4)
-        timeslip_3 = baker.make(
-            "journal.TimeSlip",
-            task=task,
-            project=project,
-            hours=5,
-            _fill_optional=["invoice"],
-        )
-
-        client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
-        response = client.get(
-            reverse("projects-new-invoice", kwargs={"project": project.id}),
-        )
-
-        data = response.json()
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(data["tasks"], [task.pk])
-        self.assertEquals(data["timeslips"], [timeslip_1.pk, timeslip_2.pk])
+from journal.invoices import save_invoice_tasks
 
 
 class TaskListTest(TestCase):
@@ -78,3 +51,33 @@ class TimeSlipListTest(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertEquals(data["count"], 1)
         self.assertEquals(data["results"][0]["id"], timeslip_1.id)
+
+
+class TaskSummaryTest(TestCase):
+    def test_get(self):
+        account = baker.make("journal.Account", make_m2m=True)
+        project = baker.make("journal.Project", account=account)
+        token = Token.objects.create(user=account.users.first())
+
+        task = baker.make("journal.Task", project=project)
+        timeslip_1 = baker.make("journal.TimeSlip", project=project, task=task)
+        timeslip_2 = baker.make("journal.TimeSlip", project=project, task=task)
+        timeslip_3 = baker.make("journal.TimeSlip", project=project, task=task)
+        invoice_1 = baker.make(
+            "journal.Invoice", project=project, timeslips=[timeslip_1, timeslip_2]
+        )
+        save_invoice_tasks(invoice_1, [])
+
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        response = client.get(reverse("task-summary", kwargs={"pk": task.pk}))
+
+        data = response.json()
+
+        invoices = data["invoices"]
+        self.assertEquals(len(invoices), 1)
+        self.assertEquals(invoices[0]["sequence_num"], invoice_1.sequence_num)
+        self.assertEquals(invoices[0]["project"], invoice_1.project.id)
+
+        timeslips = data["timeslips"]
+        self.assertEquals(len(timeslips), 3)

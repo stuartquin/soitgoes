@@ -3,6 +3,7 @@ import { format } from "date-fns";
 
 import * as models from "api/models";
 import { formatCurrency } from "currency";
+import { formatHours } from "timeSlips";
 
 interface Props {
   children?: React.ReactNode;
@@ -10,10 +11,6 @@ interface Props {
   timeSlip: models.TimeSlip;
   task: models.Task;
 }
-
-const getFormattedHours = (hours: number): string => {
-  return hours.toFixed(2).replace(".", ":");
-};
 
 function InvoiceDateItem({ timeSlip, task, project, children }: Props) {
   return (
@@ -25,9 +22,7 @@ function InvoiceDateItem({ timeSlip, task, project, children }: Props) {
         <div className="text-gray-500 text-sm">{task.name}</div>
       </div>
       <div className="flex min-w-1/4 justify-between">
-        <div className="text-sm mr-3">
-          {getFormattedHours(timeSlip.hours || 0)}
-        </div>
+        <div className="text-sm mr-3">{formatHours(timeSlip.hours || 0)}</div>
         <div className="text-sm">{formatCurrency(timeSlip.cost || 0)}</div>
       </div>
       {children}

@@ -19,5 +19,8 @@ export * from './Project';
 export * from './ProjectSummary';
 export * from './Task';
 export * from './TaskNotes';
+export * from './TaskSummary';
+export * from './TaskSummaryInvoices';
+export * from './TaskSummaryTimeslips';
 export * from './TimeSlip';
 export * from './User';

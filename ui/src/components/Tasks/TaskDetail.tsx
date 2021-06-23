@@ -1,10 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useMemo, useCallback, useEffect, useState } from "react";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
 
 import TaskForm from "components/Tasks/TaskForm";
 import TaskLoading from "components/Tasks/TaskLoading";
+import TaskInvoices from "components/Tasks/TaskInvoices";
+import TaskTimeSlips from "components/Tasks/TaskTimeSlips";
 import Button from "components/Button";
 
 interface Props {
@@ -13,11 +15,14 @@ interface Props {
 
 function TaskDetail({ taskId }: Props) {
   const [task, setTask] = useState<models.Task>();
+  const [summary, setSummary] = useState<models.TaskSummary>();
 
   useEffect(() => {
     const load = async () => {
       const api = getClient();
       setTask(await api.retrieveTask({ id: taskId }));
+
+      setSummary(await api.retrieveTaskSummary({ id: taskId }));
     };
     load();
   }, [taskId]);
@@ -29,6 +34,14 @@ function TaskDetail({ taskId }: Props) {
     }
   }, [task, taskId]);
 
+  const invoices = useMemo(() => {
+    return summary ? (summary.invoices as models.Invoice[]) : [];
+  }, [summary]);
+
+  const timeSlips = useMemo(() => {
+    return summary ? (summary.timeslips as models.TimeSlip[]) : [];
+  }, [summary]);
+
   return task ? (
     <div>
       <div className="flex justify-between">
@@ -38,6 +51,10 @@ function TaskDetail({ taskId }: Props) {
         </Button>
       </div>
       <TaskForm task={task} onUpdate={setTask} />
+      {invoices.length > 0 && <TaskInvoices task={task} invoices={invoices} />}
+      {timeSlips.length > 0 && (
+        <TaskTimeSlips task={task} timeSlips={timeSlips} />
+      )}
     </div>
   ) : (
     <TaskLoading />

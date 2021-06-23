@@ -27,10 +27,8 @@ export const getGroupedByTime = (
   tasks: models.Task[],
   timeSlips: models.TimeSlip[]
 ): TimeSlipTask[] => {
-  console.log(tasks);
   return timeSlips.map((ts) => {
     const timeSlip = ensure(ts);
-    console.log(timeSlip);
     const task = ensure(tasks.find((t) => t.id === timeSlip.task));
     const title = format(timeSlip.date, "yyyy-MM-dd");
     const subTitle = task.name;

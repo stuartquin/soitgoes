@@ -22,6 +22,9 @@ models/Project.ts
 models/ProjectSummary.ts
 models/Task.ts
 models/TaskNotes.ts
+models/TaskSummary.ts
+models/TaskSummaryInvoices.ts
+models/TaskSummaryTimeslips.ts
 models/TimeSlip.ts
 models/User.ts
 models/index.ts

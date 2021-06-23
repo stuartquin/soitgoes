@@ -11,7 +11,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import BasePermission
 from rest_framework.schemas.openapi import AutoSchema
 
 from users.onetimetoken import OneTimeTokenAccess
@@ -25,55 +24,19 @@ from journal.invoices import (
     get_new_invoice,
     set_invoice_totals,
 )
+from journal.permissions import (
+    HasProjectAccess,
+    HasTaskAccess,
+    HasInvoiceAccess,
+    HasBulkInvoiceAccess,
+    HasTimeslipAccess,
+)
 
 
 def get_allowed_projects(request: HttpRequest) -> list[models.Project]:
     if not request or not request.user or not request.user.is_authenticated:
         return models.Project.objects.none()
     return models.Project.objects.filter(account__in=request.user.account_set.all())
-
-
-class HasProjectAccess(BasePermission):
-    def has_permission(self, request, view):
-        project_id = request.parser_context["kwargs"]["pk"]
-        project = models.Project.objects.filter(id=project_id).first()
-        return len(project.account.users.filter(id=request.user.id)) > 0
-
-
-class HasBulkInvoiceAccess(BasePermission):
-    def has_permission(self, request, view):
-        return True
-
-
-class HasInvoiceAccess(BasePermission):
-    def has_permission(self, request, view):
-        invoice_id = request.query_params.get("invoice", None) or request.data.get(
-            "invoice", None
-        )
-
-        if invoice_id is None:
-            invoice_id = request.parser_context["kwargs"]["pk"]
-
-        invoice = models.Invoice.objects.get(id=invoice_id)
-        project = models.Project.objects.filter(id=invoice.project_id).first()
-        return len(project.account.users.filter(id=request.user.id)) > 0
-
-
-class HasTimeslipAccess(BasePermission):
-    def has_permission(self, request, view):
-        # @TODO this needs fixed
-        if request.method == "GET":
-            return True
-
-        if "project" in request.data:
-            project_ids = set([request.data["project"]])
-        else:
-            project_ids = set([data["project"] for data in request.data])
-
-        projects = models.Project.objects.filter(id__in=project_ids)
-        # list flatten
-        users = set([u.id for p in projects for u in p.account.users.all()])
-        return request.user.id in users
 
 
 class AccountList(generics.ListAPIView):
@@ -321,12 +284,8 @@ class InvoiceTaskDetail(generics.RetrieveUpdateDestroyAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class NewInvoiceDetail(generics.RetrieveAPIView):
-    queryset = models.Invoice.objects.all()
-    serializer_class = serializers.InvoiceSerializer
-    schema = AutoSchema(operation_id_base="NewInvoice",)
-    lookup_field = "project"
-
-    def get(self, request, project=None):
-        get_object_or_404(get_allowed_projects(request), pk=project)
-        return Response(get_new_invoice(project))
+class TaskSummary(generics.RetrieveAPIView):
+    schema = AutoSchema(component_name="TaskSummary", operation_id_base="TaskSummary",)
+    queryset = models.Task.objects.all()
+    serializer_class = serializers.TaskSummarySerializer
+    permission_classes = (HasTaskAccess,)
