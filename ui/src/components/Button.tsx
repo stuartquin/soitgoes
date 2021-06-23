@@ -32,7 +32,7 @@ function Button({
   disabled,
   ...props
 }: Props) {
-  const buttonsClasses = `${BUTTONS[variant]} font-bold py-2 px-4 leading-4 ${
+  const buttonsClasses = `${BUTTONS[variant]} font-bold py-3 px-4 leading-4 ${
     className || ""
   }`;
   const groupClasses = group

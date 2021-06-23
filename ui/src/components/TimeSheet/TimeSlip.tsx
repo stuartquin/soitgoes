@@ -31,6 +31,7 @@ function TimeSlip({ timeSlipEntry }: Props) {
         value={hours || ""}
         onChange={handleChange}
         disabled={disabled}
+        type="tel"
       />
     </div>
   );
