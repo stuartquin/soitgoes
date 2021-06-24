@@ -31,7 +31,6 @@ function App() {
 
   return (
     <div className="App">
-      {loading && <h2>Loading</h2>}
       {loginRequired && <Login />}
       {user && (
         <Router>
