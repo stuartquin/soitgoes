@@ -1,5 +1,8 @@
 {
   "scripts": {
-    "postdeploy": "python api/manage.py collectstatic"
+    "postdeploy": "python api/manage.py collectstatic",
+    "dokku": {
+      "predeploy": ""
+    }
   }
 }

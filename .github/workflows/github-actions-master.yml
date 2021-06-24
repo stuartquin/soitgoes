@@ -68,6 +68,6 @@ jobs:
           known_hosts: ${{ secrets.SSH_HOST_KEY }}
       - name: Push to dokku
         run: |
-          echo "SHA ${GITHUB_SHA}"
+          ssh dokku@cloud.stuartquin.com -t "dokku config:set --no-restart tracking-dev GIT_BRANCH=${GITHUB_REF}"
           git remote add dokku dokku@cloud.stuartquin.com:tracking-dev
           git push -f dokku
