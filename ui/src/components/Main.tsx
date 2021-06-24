@@ -14,11 +14,14 @@ interface Props {
 
 function Main({ user }: Props) {
   const [projects, setProjects] = useState<models.Project[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const load = async () => {
+      setIsLoading(true);
       const api = getClient();
       const response = await api.listProjects({});
       setProjects((response.results || []).filter((p) => !p.archived));
+      setIsLoading(false);
     };
 
     load();
@@ -33,7 +36,7 @@ function Main({ user }: Props) {
   return (
     <Router>
       <Layout onLogout={logout}>
-        {projects.length && (
+        {!isLoading && projects.length > 0 && (
           <Switch>
             <Route path="/invoices/:projectId/:invoiceId">
               <Invoices user={user} projects={projects} />
@@ -48,6 +51,9 @@ function Main({ user }: Props) {
               <Invoices user={user} projects={projects} />
             </Route>
             <Route path="/time">
+              <TimeSheet user={user} projects={projects} />
+            </Route>
+            <Route path="/">
               <TimeSheet user={user} projects={projects} />
             </Route>
           </Switch>

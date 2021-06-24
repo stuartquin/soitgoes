@@ -50,10 +50,10 @@ function TimeSheetGrid({ user, tasks, timeSheet, startDate, projects }: Props) {
   const totalsByProject = getTotalsByProject(startDate, projects, timeSlips);
 
   return (
-    <div>
-      <div className="sticky top-0 flex items-center bg-white py-2">
+    <div className="overflow-y-auto overflow-x-auto">
+      <div className="sticky top-0 flex items-center bg-white py-2 w-max sm:w-full">
         <div
-          className="flex-grow w-48 md:w-64 flex items-center"
+          className="flex-grow w-48 sm:w-auto mr-4 flex items-center"
           style={{ minWidth: "140px" }}
         >
           <Button
@@ -74,7 +74,7 @@ function TimeSheetGrid({ user, tasks, timeSheet, startDate, projects }: Props) {
         </div>
         <DateRange dateRange={dateRange} />
       </div>
-      <div className="min-w-100">
+      <div className="w-max sm:w-full">
         {projectList.map(({ project, tasks }) => (
           <ProjectTasks
             dateRange={dateRange}

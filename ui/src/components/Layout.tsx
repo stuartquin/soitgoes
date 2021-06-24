@@ -42,13 +42,9 @@ function Layout({ children, onLogout }: Props) {
           </div>
         </div>
       </nav>
-      <div
-        style={{ maxHeight: "calc(100vh - 48px)" }}
-        className="overflow-y-auto overflow-x-auto flex sm:justify-center"
-      >
-        <div className="w-100 flex-grow" style={{ maxWidth: "900px" }}>
-          {children}
-        </div>
+
+      <div className="mx-auto" style={{ maxWidth: "1024px" }}>
+        {children}
       </div>
     </div>
   );

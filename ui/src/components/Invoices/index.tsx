@@ -75,7 +75,7 @@ function Invoices({ user, projects, isCreateNew = false }: Props) {
   const isOpen = isCreateNew || Boolean(projectId);
 
   return (
-    <React.Fragment>
+    <div className="w-full">
       <div className="flex justify-end my-4 w-full px-2 sm:px-0">
         <Button variant="success" onClick={createNewInvoice}>
           Create Invoice
@@ -111,7 +111,7 @@ function Invoices({ user, projects, isCreateNew = false }: Props) {
           </Route>
         </Switch>
       </SlideOver>
-    </React.Fragment>
+    </div>
   );
 }
 

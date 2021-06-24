@@ -21,7 +21,7 @@ function TaskTimeSlipItem({ timeSlip }: Props) {
         <div className="text-sm md:text-lg text-gray-800">
           {formatCurrency(timeSlip.cost || 0)}
         </div>
-        <div className={`capitalize text-sm`}>
+        <div className="capitalize text-sm text-gray-600">
           {formatHours(timeSlip.hours || 0)} Hours
         </div>
       </div>

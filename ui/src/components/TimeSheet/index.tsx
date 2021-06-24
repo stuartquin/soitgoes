@@ -97,7 +97,7 @@ function TimeSheet({ user, projects }: Props) {
 
   return (
     <TimeSlipContext.Provider value={{ updateHours }}>
-      <div style={{ minWidth: "720px" }} className="px-3">
+      <div className="px-3 w-full">
         <Actions onSave={save} />
         {isLoading ? (
           <TimeSheetLoading />
