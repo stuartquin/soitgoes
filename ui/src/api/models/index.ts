@@ -24,3 +24,4 @@ export * from './TaskSummaryInvoices';
 export * from './TaskSummaryTimeslips';
 export * from './TimeSlip';
 export * from './User';
+export * from './Version';

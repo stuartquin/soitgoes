@@ -224,3 +224,8 @@ class ProjectSummarySerializer(serializers.Serializer):
 class TaskSummarySerializer(serializers.Serializer):
     invoices = InvoiceSerializer(many=True)
     timeslips = TimeSlipSerializer(source="timeslip_set", many=True)
+
+
+class VersionSerializer(serializers.Serializer):
+    git_branch = serializers.CharField(read_only=True)
+    git_rev = serializers.CharField(read_only=True)

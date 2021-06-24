@@ -27,5 +27,6 @@ models/TaskSummaryInvoices.ts
 models/TaskSummaryTimeslips.ts
 models/TimeSlip.ts
 models/User.ts
+models/Version.ts
 models/index.ts
 runtime.ts

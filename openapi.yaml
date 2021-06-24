@@ -1278,6 +1278,20 @@ paths:
           description: ''
       tags:
       - api
+  /api/version/:
+    get:
+      operationId: retrieveVersion
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Version'
+          description: ''
+      tags:
+      - api
   /api/users/login/:
     post:
       operationId: createLogin
@@ -1829,6 +1843,15 @@ components:
           nullable: true
       required:
       - name
+    Version:
+      type: object
+      properties:
+        git_branch:
+          type: string
+          readOnly: true
+        git_rev:
+          type: string
+          readOnly: true
     Login:
       type: object
       properties:

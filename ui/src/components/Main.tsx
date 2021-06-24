@@ -19,6 +19,10 @@ function Main({ user }: Props) {
     const load = async () => {
       setIsLoading(true);
       const api = getClient();
+
+      const version = await api.retrieveVersion();
+      console.table(version);
+
       const response = await api.listProjects({});
       setProjects((response.results || []).filter((p) => !p.archived));
       setIsLoading(false);

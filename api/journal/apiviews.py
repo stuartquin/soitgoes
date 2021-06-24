@@ -1,3 +1,4 @@
+import os
 import json
 import zipfile
 import datetime
@@ -289,3 +290,15 @@ class TaskSummary(generics.RetrieveAPIView):
     queryset = models.Task.objects.all()
     serializer_class = serializers.TaskSummarySerializer
     permission_classes = (HasTaskAccess,)
+
+
+class VersionView(generics.RetrieveAPIView):
+    authentication_classes: list = []
+    permission_classes: list = []
+    serializer_class = serializers.VersionSerializer
+
+    def get_object(self):
+        return {
+            "git_branch": os.environ.get("GIT_BRANCH"),
+            "git_rev": os.environ.get("GIT_REV"),
+        }
