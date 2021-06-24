@@ -1,5 +1,17 @@
 import * as Api from "./api";
 
+export const getAPIErrorMessage = (error: any): string => {
+  if (error.detail) {
+    return error.detail;
+  }
+
+  if (error.length > 0) {
+    return error[0];
+  }
+
+  return "There was an error";
+};
+
 export const getBaseUrl = (): string => {
   return `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
 };

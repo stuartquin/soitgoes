@@ -3,7 +3,12 @@ import React, { useState } from "react";
 import Button from "components/Button";
 import Input from "components/Form/Input";
 import { getFormValues } from "forms";
-import { getClient, storeToken } from "apiClient";
+import {
+  getClient,
+  storeToken,
+  removeToken,
+  getAPIErrorMessage,
+} from "apiClient";
 
 function Login() {
   const [error, setError] = useState<string>();
@@ -22,9 +27,8 @@ function Login() {
         storeToken(response.token || "");
         window.location.reload();
       } catch (error) {
-        const errors = await error.json();
-
-        setError(errors.length > 0 ? errors[0] : "There was an error");
+        removeToken();
+        setError(getAPIErrorMessage(await error.json()));
       }
     }
   };
