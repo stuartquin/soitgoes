@@ -1,6 +1,9 @@
-name: Python package
+name: Release Develop
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   test-api:
