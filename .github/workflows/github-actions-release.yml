@@ -68,6 +68,5 @@ jobs:
           known_hosts: ${{ secrets.SSH_HOST_KEY }}
       - name: Push to dokku
         run: |
-          echo "SHA ${GITHUB_SHA}"
           git remote add dokku dokku@cloud.stuartquin.com:tracking
-          git push -f dokku
+          git push -f dokku ${GITHUB_SHA}:master
