@@ -146,7 +146,11 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
 
   const issueInvoice = useCallback(async () => {
     const api = getClient();
-    const updatedInvoice = await api.createInvoice({ invoice });
+    const issuedInvoice = {
+      ...invoice,
+      status: models.InvoiceStatusEnum.Issued,
+    } as models.Invoice;
+    const updatedInvoice = await api.createInvoice({ invoice: issuedInvoice });
     history.push(`/invoices/${updatedInvoice.project}/${updatedInvoice.id}`);
     onIssue();
   }, [invoice, history, onIssue]);

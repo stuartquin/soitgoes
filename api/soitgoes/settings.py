@@ -29,12 +29,10 @@ DEBUG = "DEV" in os.environ
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 ALLOWED_HOSTS = [
+    "tracking.local",
     "tracking.stuartquin.com",
     "tracking.cloud.stuartquin.com",
     "tracking-dev.cloud.stuartquin.com",
-    "books.stuartquin.com",
-    "dev.stuartquin.com",
-    "local.books.stuartquin.com",
     "localhost",
 ]
 
