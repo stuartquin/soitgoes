@@ -84,7 +84,7 @@ class UserTokenSerializer(serializers.ModelSerializer):
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Company
-        fields = ("id", "name", "billing", "logo_image")
+        fields = ("id", "name", "billing", "logo_image", "contacts")
 
 
 class ContactSerializer(serializers.ModelSerializer):
@@ -100,6 +100,8 @@ class ContactSerializer(serializers.ModelSerializer):
             "account",
             "address1",
             "post_code",
+            "company",
+            "projects",
         )
 
 

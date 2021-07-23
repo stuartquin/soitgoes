@@ -74,6 +74,9 @@ class Contact(models.Model):
     city = models.CharField(max_length=128, blank=True, null=True)
     post_code = models.CharField(max_length=128, blank=True, null=True)
     vat_number = models.CharField(max_length=128, blank=True, null=True)
+    company = models.ForeignKey(
+        Company, models.SET_NULL, blank=True, null=True, related_name="contacts"
+    )
 
     def __str__(self):
         return "%s (%s)" % (self.name, self.email)
@@ -89,7 +92,9 @@ class InvoiceModifier(models.Model):
 
 
 class Project(models.Model):
-    contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
+    contact = models.ForeignKey(
+        Contact, on_delete=models.CASCADE, related_name="projects"
+    )
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     name = models.CharField(max_length=512)
     created_at = models.DateTimeField(auto_now_add=True)

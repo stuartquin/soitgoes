@@ -1608,8 +1608,13 @@ components:
             logo_image:
               type: string
               nullable: true
+            contacts:
+              type: array
+              items:
+                type: integer
           required:
           - name
+          - contacts
       required:
       - company
     Task:
@@ -1823,9 +1828,17 @@ components:
           type: string
           nullable: true
           maxLength: 128
+        company:
+          type: integer
+          nullable: true
+        projects:
+          type: array
+          items:
+            type: integer
       required:
       - name
       - email
+      - projects
     Company:
       type: object
       properties:
@@ -1841,8 +1854,13 @@ components:
         logo_image:
           type: string
           nullable: true
+        contacts:
+          type: array
+          items:
+            type: integer
       required:
       - name
+      - contacts
     Version:
       type: object
       properties:

@@ -30,6 +30,13 @@ function Layout({ children, onLogout }: Props) {
                 >
                   Invoices
                 </NavLink>
+                <NavLink
+                  to="/contacts"
+                  className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                  activeClassName="bg-gray-900 text-white"
+                >
+                  Contacts
+                </NavLink>
               </div>
             </div>
             <div

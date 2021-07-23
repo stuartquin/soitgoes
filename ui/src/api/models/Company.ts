@@ -43,6 +43,12 @@ export interface Company {
      * @memberof Company
      */
     logoImage?: string | null;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof Company
+     */
+    contacts: Array<number>;
 }
 
 export function CompanyFromJSON(json: any): Company {
@@ -59,6 +65,7 @@ export function CompanyFromJSONTyped(json: any, ignoreDiscriminator: boolean): C
         'name': json['name'],
         'billing': !exists(json, 'billing') ? undefined : json['billing'],
         'logoImage': !exists(json, 'logo_image') ? undefined : json['logo_image'],
+        'contacts': json['contacts'],
     };
 }
 
@@ -74,6 +81,7 @@ export function CompanyToJSON(value?: Company | null): any {
         'name': value.name,
         'billing': value.billing,
         'logo_image': value.logoImage,
+        'contacts': value.contacts,
     };
 }
 

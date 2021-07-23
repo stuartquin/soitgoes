@@ -7,6 +7,7 @@ import { getClient, removeToken } from "apiClient";
 import Layout from "components/Layout";
 import TimeSheet from "components/TimeSheet";
 import Invoices from "components/Invoices";
+import Contacts from "components/Contacts";
 
 interface Props {
   user: models.User;
@@ -56,6 +57,12 @@ function Main({ user }: Props) {
             </Route>
             <Route path="/time">
               <TimeSheet user={user} projects={projects} />
+            </Route>
+            <Route path="/contacts/:contactId">
+              <Contacts user={user} projects={projects} />
+            </Route>
+            <Route path="/contacts">
+              <Contacts user={user} projects={projects} />
             </Route>
             <Route path="/">
               <TimeSheet user={user} projects={projects} />
