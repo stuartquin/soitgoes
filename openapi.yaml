@@ -1824,6 +1824,14 @@ components:
           type: string
           nullable: true
           maxLength: 512
+        address2:
+          type: string
+          nullable: true
+          maxLength: 512
+        city:
+          type: string
+          nullable: true
+          maxLength: 128
         post_code:
           type: string
           nullable: true

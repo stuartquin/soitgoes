@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
+import Button from "components/Button";
+import ContactForm from "components/Contacts/ContactForm";
 
 interface Props {
   contactId: string;
@@ -12,6 +14,7 @@ interface Props {
 
 function ContactDetail({ contactId, projects, onSave }: Props) {
   const [contact, setContact] = useState<models.Contact>();
+  const [hasChanged, setHasChanged] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const history = useHistory();
 
@@ -29,17 +32,26 @@ function ContactDetail({ contactId, projects, onSave }: Props) {
   }, [contactId, projects]);
 
   const updateContact = useCallback((updatedContact: models.Contact) => {
+    setHasChanged(true);
     setContact(updatedContact);
   }, []);
 
-  return (
+  const saveContact = () => {};
+
+  return contact ? (
     <div>
-      {contact && (
-        <React.Fragment>
-          <div>{contact.name}</div>
-        </React.Fragment>
-      )}
+      <div className="flex justify-between mb-6">
+        <div className="text-gray-800 text-md sm:text-lg">{contact.name}</div>
+        <Button variant="success" onClick={saveContact} disabled={!hasChanged}>
+          Save
+        </Button>
+      </div>
+      <div className="bg-gray-100 p-4">
+        <ContactForm contact={contact} onUpdate={updateContact} />
+      </div>
     </div>
+  ) : (
+    <div>Loading</div>
   );
 }
 

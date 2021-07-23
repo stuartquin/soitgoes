@@ -99,6 +99,8 @@ class ContactSerializer(serializers.ModelSerializer):
             "created_at",
             "account",
             "address1",
+            "address2",
+            "city",
             "post_code",
             "company",
             "projects",
