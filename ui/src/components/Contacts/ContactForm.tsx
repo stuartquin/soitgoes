@@ -41,47 +41,52 @@ function ContactForm({ contact, onUpdate }: Props) {
           className="w-full"
         />
       </div>
-      <div className="my-4">
-        <Label htmlFor="address1">Address 1</Label>
-        <Input
-          name="address1"
-          id="address1"
-          value={contact.address1 || ""}
-          onChange={updateContact}
-          className="w-full"
-        />
-      </div>
-      <div className="my-4">
-        <Label htmlFor="address2">Address 2</Label>
-        <Input
-          name="address2"
-          id="address2"
-          value={contact.address2 || ""}
-          onChange={updateContact}
-          className="w-full"
-        />
-      </div>
+      <details className="w-full sm:text-sm border border-gray-300 rounded p-2">
+        <summary className="cursor-pointer">Address</summary>
+        <div>
+          <div className="my-4">
+            <Label htmlFor="address1">Address 1</Label>
+            <Input
+              name="address1"
+              id="address1"
+              value={contact.address1 || ""}
+              onChange={updateContact}
+              className="w-full"
+            />
+          </div>
+          <div className="my-4">
+            <Label htmlFor="address2">Address 2</Label>
+            <Input
+              name="address2"
+              id="address2"
+              value={contact.address2 || ""}
+              onChange={updateContact}
+              className="w-full"
+            />
+          </div>
 
-      <div className="my-4">
-        <Label htmlFor="city">City</Label>
-        <Input
-          name="city"
-          id="city"
-          value={contact.city || ""}
-          onChange={updateContact}
-          className="w-full"
-        />
-      </div>
-      <div className="my-4">
-        <Label htmlFor="postCode">Post Code</Label>
-        <Input
-          name="postCode"
-          id="postCode"
-          value={contact.postCode || ""}
-          onChange={updateContact}
-          className="w-full"
-        />
-      </div>
+          <div className="my-4">
+            <Label htmlFor="city">City</Label>
+            <Input
+              name="city"
+              id="city"
+              value={contact.city || ""}
+              onChange={updateContact}
+              className="w-full"
+            />
+          </div>
+          <div className="my-4">
+            <Label htmlFor="postCode">Post Code</Label>
+            <Input
+              name="postCode"
+              id="postCode"
+              value={contact.postCode || ""}
+              onChange={updateContact}
+              className="w-full"
+            />
+          </div>
+        </div>
+      </details>
     </form>
   );
 }

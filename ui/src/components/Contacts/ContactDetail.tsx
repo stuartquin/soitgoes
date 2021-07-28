@@ -17,12 +17,10 @@ function ContactDetail({ contactId, projects, onSave }: Props) {
   const [contact, setContact] = useState<models.Contact>();
   const [notes, setNotes] = useState<models.Note[]>([]);
   const [hasChanged, setHasChanged] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const history = useHistory();
 
   useEffect(() => {
     const load = async () => {
-      setIsLoading(true);
       const api = getClient();
 
       if (contactId) {
@@ -50,11 +48,14 @@ function ContactDetail({ contactId, projects, onSave }: Props) {
       const method = contact.id
         ? api.updateContact({ id: `${contact.id}`, contact: { ...contact } })
         : api.createContact({ contact: { ...contact } });
-      setContact(await method);
+
+      const updatedContact = await method;
+      setContact(updatedContact);
+      history.push(`/contacts/${updatedContact.id}`);
       setHasChanged(false);
       onSave();
     }
-  }, [contact, onSave]);
+  }, [contact, onSave, history]);
 
   return contact ? (
     <div>
@@ -68,7 +69,7 @@ function ContactDetail({ contactId, projects, onSave }: Props) {
         <ContactForm contact={contact} onUpdate={updateContact} />
       </div>
 
-      <ContactNotes notes={notes} />
+      {contact.id && <ContactNotes notes={notes} />}
     </div>
   ) : (
     <div>Loading</div>
