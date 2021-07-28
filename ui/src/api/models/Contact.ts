@@ -48,6 +48,12 @@ export interface Contact {
      * @type {string}
      * @memberof Contact
      */
+    readonly account?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Contact
+     */
     address1?: string | null;
     /**
      * 
@@ -73,12 +79,6 @@ export interface Contact {
      * @memberof Contact
      */
     company?: number | null;
-    /**
-     * 
-     * @type {Array<number>}
-     * @memberof Contact
-     */
-    projects: Array<number>;
 }
 
 export function ContactFromJSON(json: any): Contact {
@@ -95,12 +95,12 @@ export function ContactFromJSONTyped(json: any, ignoreDiscriminator: boolean): C
         'name': json['name'],
         'email': json['email'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
+        'account': !exists(json, 'account') ? undefined : json['account'],
         'address1': !exists(json, 'address1') ? undefined : json['address1'],
         'address2': !exists(json, 'address2') ? undefined : json['address2'],
         'city': !exists(json, 'city') ? undefined : json['city'],
         'postCode': !exists(json, 'post_code') ? undefined : json['post_code'],
         'company': !exists(json, 'company') ? undefined : json['company'],
-        'projects': json['projects'],
     };
 }
 
@@ -120,7 +120,6 @@ export function ContactToJSON(value?: Contact | null): any {
         'city': value.city,
         'post_code': value.postCode,
         'company': value.company,
-        'projects': value.projects,
     };
 }
 

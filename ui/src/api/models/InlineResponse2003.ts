@@ -14,10 +14,10 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    TimeSlip,
-    TimeSlipFromJSON,
-    TimeSlipFromJSONTyped,
-    TimeSlipToJSON,
+    Invoice,
+    InvoiceFromJSON,
+    InvoiceFromJSONTyped,
+    InvoiceToJSON,
 } from './';
 
 /**
@@ -46,10 +46,10 @@ export interface InlineResponse2003 {
     previous?: string | null;
     /**
      * 
-     * @type {Array<TimeSlip>}
+     * @type {Array<Invoice>}
      * @memberof InlineResponse2003
      */
-    results?: Array<TimeSlip>;
+    results?: Array<Invoice>;
 }
 
 export function InlineResponse2003FromJSON(json: any): InlineResponse2003 {
@@ -65,7 +65,7 @@ export function InlineResponse2003FromJSONTyped(json: any, ignoreDiscriminator: 
         'count': !exists(json, 'count') ? undefined : json['count'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(TimeSlipFromJSON)),
+        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(InvoiceFromJSON)),
     };
 }
 
@@ -81,7 +81,7 @@ export function InlineResponse2003ToJSON(value?: InlineResponse2003 | null): any
         'count': value.count,
         'next': value.next,
         'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(TimeSlipToJSON)),
+        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(InvoiceToJSON)),
     };
 }
 

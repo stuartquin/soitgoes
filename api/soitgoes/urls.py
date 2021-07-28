@@ -19,5 +19,6 @@ from django.contrib import admin
 urlpatterns = [
     path("admin/", admin.site.urls),
     path(r"api/users/", include("users.urls")),
+    path(r"api/crm/", include("crm.urls")),
     path(r"", include("journal.urls")),
 ]

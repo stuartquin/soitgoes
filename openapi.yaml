@@ -31,6 +31,80 @@ paths:
           description: ''
       tags:
       - api
+  /api/crm/note/:
+    get:
+      operationId: listNotes
+      description: ''
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: contact
+        required: false
+        in: query
+        description: contact
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?offset=400&limit=100
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?offset=200&limit=100
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Note'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createNote
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Note'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Note'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Note'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: ''
+      tags:
+      - api
   /api/projects/:
     get:
       operationId: listProjects
@@ -1406,6 +1480,23 @@ components:
           nullable: true
       required:
       - username
+    Note:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        content:
+          type: string
+        contact:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - content
+      - contact
     Project:
       type: object
       properties:
@@ -1820,6 +1911,9 @@ components:
           type: string
           format: date-time
           readOnly: true
+        account:
+          type: string
+          readOnly: true
         address1:
           type: string
           nullable: true
@@ -1839,14 +1933,9 @@ components:
         company:
           type: integer
           nullable: true
-        projects:
-          type: array
-          items:
-            type: integer
       required:
       - name
       - email
-      - projects
     Company:
       type: object
       properties:

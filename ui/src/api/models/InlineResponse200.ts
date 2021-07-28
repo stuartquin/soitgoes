@@ -14,10 +14,10 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    Project,
-    ProjectFromJSON,
-    ProjectFromJSONTyped,
-    ProjectToJSON,
+    Note,
+    NoteFromJSON,
+    NoteFromJSONTyped,
+    NoteToJSON,
 } from './';
 
 /**
@@ -46,10 +46,10 @@ export interface InlineResponse200 {
     previous?: string | null;
     /**
      * 
-     * @type {Array<Project>}
+     * @type {Array<Note>}
      * @memberof InlineResponse200
      */
-    results?: Array<Project>;
+    results?: Array<Note>;
 }
 
 export function InlineResponse200FromJSON(json: any): InlineResponse200 {
@@ -65,7 +65,7 @@ export function InlineResponse200FromJSONTyped(json: any, ignoreDiscriminator: b
         'count': !exists(json, 'count') ? undefined : json['count'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(ProjectFromJSON)),
+        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(NoteFromJSON)),
     };
 }
 
@@ -81,7 +81,7 @@ export function InlineResponse200ToJSON(value?: InlineResponse200 | null): any {
         'count': value.count,
         'next': value.next,
         'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(ProjectToJSON)),
+        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(NoteToJSON)),
     };
 }
 

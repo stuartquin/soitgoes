@@ -15,12 +15,12 @@ interface RouterProps {
 
 interface Props {
   user: models.User;
-  projects: models.Project[];
   isCreateNew?: boolean;
 }
 
-function Contacts({ user, projects, isCreateNew }: Props) {
+function Contacts({ user, isCreateNew }: Props) {
   const [contacts, setContacts] = useState<models.Contact[]>([]);
+  const [projects, setProjects] = useState<models.Project[]>([]);
   const { contactId } = useParams<RouterProps>();
   const history = useHistory();
 
@@ -29,6 +29,9 @@ function Contacts({ user, projects, isCreateNew }: Props) {
 
     const contactResponse = await api.listContacts({});
     setContacts(contactResponse.results || []);
+
+    const projectResponse = await api.listProjects({});
+    setProjects(projectResponse.results || []);
   }, []);
 
   useEffect(() => {

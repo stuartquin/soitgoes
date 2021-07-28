@@ -37,7 +37,7 @@ function Main({ user }: Props) {
     window.location.reload();
   }, []);
 
-  // TODO whole app dependnent on projects existing
+  // TODO whole app dependent on projects existing
   return (
     <Router>
       <Layout onLogout={logout}>
@@ -59,10 +59,10 @@ function Main({ user }: Props) {
               <TimeSheet user={user} projects={projects} />
             </Route>
             <Route path="/contacts/:contactId">
-              <Contacts user={user} projects={projects} />
+              <Contacts user={user} />
             </Route>
             <Route path="/contacts">
-              <Contacts user={user} projects={projects} />
+              <Contacts user={user} />
             </Route>
             <Route path="/">
               <TimeSheet user={user} projects={projects} />

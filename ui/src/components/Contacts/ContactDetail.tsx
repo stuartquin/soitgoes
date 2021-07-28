@@ -5,6 +5,7 @@ import * as models from "api/models";
 import { getClient } from "apiClient";
 import Button from "components/Button";
 import ContactForm from "components/Contacts/ContactForm";
+import ContactNotes from "components/Contacts/ContactNotes";
 
 interface Props {
   contactId: string;
@@ -14,6 +15,7 @@ interface Props {
 
 function ContactDetail({ contactId, projects, onSave }: Props) {
   const [contact, setContact] = useState<models.Contact>();
+  const [notes, setNotes] = useState<models.Note[]>([]);
   const [hasChanged, setHasChanged] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const history = useHistory();
@@ -24,11 +26,13 @@ function ContactDetail({ contactId, projects, onSave }: Props) {
       const api = getClient();
 
       if (contactId) {
-        setContact(
-          contactId === "new"
-            ? models.ContactFromJSON({})
-            : await api.retrieveContact({ id: contactId })
-        );
+        if (contactId === "new") {
+          setContact(models.ContactFromJSON({}));
+        } else {
+          setContact(await api.retrieveContact({ id: contactId }));
+          const noteResponse = await api.listNotes({ contact: `${contactId}` });
+          setNotes(noteResponse.results || []);
+        }
       }
     };
 
@@ -63,6 +67,8 @@ function ContactDetail({ contactId, projects, onSave }: Props) {
       <div className="bg-gray-100 p-4">
         <ContactForm contact={contact} onUpdate={updateContact} />
       </div>
+
+      <ContactNotes notes={notes} />
     </div>
   ) : (
     <div>Loading</div>

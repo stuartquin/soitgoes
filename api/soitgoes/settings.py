@@ -42,6 +42,7 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
     "journal",
     "users",
+    "crm",
     "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",

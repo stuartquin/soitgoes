@@ -14,49 +14,49 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    Contact,
-    ContactFromJSON,
-    ContactFromJSONTyped,
-    ContactToJSON,
+    Company,
+    CompanyFromJSON,
+    CompanyFromJSONTyped,
+    CompanyToJSON,
 } from './';
 
 /**
  * 
  * @export
- * @interface InlineResponse2007
+ * @interface InlineResponse2009
  */
-export interface InlineResponse2007 {
+export interface InlineResponse2009 {
     /**
      * 
      * @type {number}
-     * @memberof InlineResponse2007
+     * @memberof InlineResponse2009
      */
     count?: number;
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2007
+     * @memberof InlineResponse2009
      */
     next?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2007
+     * @memberof InlineResponse2009
      */
     previous?: string | null;
     /**
      * 
-     * @type {Array<Contact>}
-     * @memberof InlineResponse2007
+     * @type {Array<Company>}
+     * @memberof InlineResponse2009
      */
-    results?: Array<Contact>;
+    results?: Array<Company>;
 }
 
-export function InlineResponse2007FromJSON(json: any): InlineResponse2007 {
-    return InlineResponse2007FromJSONTyped(json, false);
+export function InlineResponse2009FromJSON(json: any): InlineResponse2009 {
+    return InlineResponse2009FromJSONTyped(json, false);
 }
 
-export function InlineResponse2007FromJSONTyped(json: any, ignoreDiscriminator: boolean): InlineResponse2007 {
+export function InlineResponse2009FromJSONTyped(json: any, ignoreDiscriminator: boolean): InlineResponse2009 {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -65,11 +65,11 @@ export function InlineResponse2007FromJSONTyped(json: any, ignoreDiscriminator: 
         'count': !exists(json, 'count') ? undefined : json['count'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(ContactFromJSON)),
+        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(CompanyFromJSON)),
     };
 }
 
-export function InlineResponse2007ToJSON(value?: InlineResponse2007 | null): any {
+export function InlineResponse2009ToJSON(value?: InlineResponse2009 | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -81,7 +81,7 @@ export function InlineResponse2007ToJSON(value?: InlineResponse2007 | null): any
         'count': value.count,
         'next': value.next,
         'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(ContactToJSON)),
+        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(CompanyToJSON)),
     };
 }
 
