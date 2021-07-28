@@ -24,7 +24,11 @@ function ContactDetail({ contactId, projects, onSave }: Props) {
       const api = getClient();
 
       if (contactId) {
-        setContact(await api.retrieveContact({ id: contactId }));
+        setContact(
+          contactId === "new"
+            ? models.ContactFromJSON({})
+            : await api.retrieveContact({ id: contactId })
+        );
       }
     };
 
@@ -36,7 +40,17 @@ function ContactDetail({ contactId, projects, onSave }: Props) {
     setContact(updatedContact);
   }, []);
 
-  const saveContact = () => {};
+  const saveContact = useCallback(async () => {
+    if (contact) {
+      const api = getClient();
+      const method = contact.id
+        ? api.updateContact({ id: `${contact.id}`, contact: { ...contact } })
+        : api.createContact({ contact: { ...contact } });
+      setContact(await method);
+      setHasChanged(false);
+      onSave();
+    }
+  }, [contact, onSave]);
 
   return contact ? (
     <div>

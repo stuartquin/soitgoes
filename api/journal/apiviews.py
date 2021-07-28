@@ -26,6 +26,7 @@ from journal.invoices import (
     set_invoice_totals,
 )
 from journal.permissions import (
+    HasContactAccess,
     HasProjectAccess,
     HasTaskAccess,
     HasInvoiceAccess,
@@ -261,10 +262,16 @@ class ContactList(generics.ListCreateAPIView):
 
         return models.Contact.objects.filter(**filters)
 
+    def perform_create(self, serializer):
+        account = models.Account.get_user_account(self.request.user)
+        serializer.validated_data["account_id"] = account.pk
+        super().perform_create(serializer)
+
 
 class ContactDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Contact.objects.all()
     serializer_class = serializers.ContactSerializer
+    permission_classes = (HasContactAccess,)
 
     def get_serializer(self, *args, **kwargs):
         kwargs["context"] = self.get_serializer_context()

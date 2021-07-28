@@ -8,7 +8,8 @@ import journal.models as models
 
 
 class CurrentAccountDefault(serializers.CurrentUserDefault):
-    def __call__(self):
+    def __call__(self, *args, **kwargs):
+        __import__("ipdb").set_trace()
         return self.user.account_set.first()
 
 
@@ -88,7 +89,7 @@ class CompanySerializer(serializers.ModelSerializer):
 
 
 class ContactSerializer(serializers.ModelSerializer):
-    account = serializers.HiddenField(default=CurrentAccountDefault())
+    account = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = models.Contact
@@ -103,7 +104,6 @@ class ContactSerializer(serializers.ModelSerializer):
             "city",
             "post_code",
             "company",
-            "projects",
         )
 
 

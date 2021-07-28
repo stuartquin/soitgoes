@@ -27,11 +27,7 @@ function Contacts({ user, projects, isCreateNew }: Props) {
   const loadContacts = useCallback(async () => {
     const api = getClient();
 
-    const [contactResponse, companyResponse] = await Promise.all([
-      api.listContacts({}),
-      api.listCompanys({}),
-    ]);
-
+    const contactResponse = await api.listContacts({});
     setContacts(contactResponse.results || []);
   }, []);
 
@@ -81,12 +77,11 @@ function Contacts({ user, projects, isCreateNew }: Props) {
       </div>
       <SlideOver isOpen={isOpen} onClose={closeSlideOver}>
         <Switch>
-          <Route path="/contacts/new"></Route>
           <Route path="/contacts/:contactId">
             <ContactDetail
               projects={projects}
               contactId={contactId}
-              onSave={() => console.log()}
+              onSave={loadContacts}
             />
           </Route>
         </Switch>

@@ -81,3 +81,55 @@ class TaskSummaryTest(TestCase):
 
         timeslips = data["timeslips"]
         self.assertEquals(len(timeslips), 3)
+
+
+class ContactListTest(TestCase):
+    def test_create(self):
+        account = baker.make("journal.Account", make_m2m=True)
+        token = Token.objects.create(user=account.users.first())
+
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        response = client.post(
+            reverse("contacts-list"), {"name": "test name", "email": "test@email.com"}
+        )
+
+        data = response.json()
+        self.assertEquals(response.status_code, 201)
+        self.assertEquals(data["account"], account.pk)
+        self.assertEquals(data["name"], "test name")
+        self.assertEquals(data["email"], "test@email.com")
+
+    def test_update(self):
+        account = baker.make("journal.Account", make_m2m=True)
+        contact = baker.make("journal.Contact", account=account, make_m2m=True)
+        token = Token.objects.create(user=account.users.first())
+
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        response = client.put(
+            reverse("contacts-detail", kwargs={"pk": contact.pk}),
+            {"name": "updated name", "email": "updated@email.com"},
+        )
+
+        data = response.json()
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(data["account"], account.pk)
+        self.assertEquals(data["name"], "updated name")
+        self.assertEquals(data["email"], "updated@email.com")
+
+    def test_update_permission_failure(self):
+        account = baker.make("journal.Account", make_m2m=True)
+        contact_account = baker.make("journal.Account", make_m2m=True)
+        contact = baker.make("journal.Contact", account=contact_account, make_m2m=True)
+        token = Token.objects.create(user=account.users.first())
+
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        response = client.put(
+            reverse("contacts-detail", kwargs={"pk": contact.pk}),
+            {"name": "updated name", "email": "updated@email.com"},
+        )
+
+        data = response.json()
+        self.assertEquals(response.status_code, 403)

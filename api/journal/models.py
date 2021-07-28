@@ -1,3 +1,4 @@
+from __future__ import annotations
 import datetime
 
 from django.contrib.auth.models import User
@@ -60,7 +61,14 @@ class Account(models.Model):
     company = models.ForeignKey(Company, models.SET_NULL, blank=True, null=True,)
 
     def __str__(self):
-        return "%s" % (self.company.name)
+        if self.company:
+            return "%s" % (self.company.name)
+        return super().__str__()
+
+    @staticmethod
+    def get_user_account(user: User) -> Account:
+        # TODO some notion of primary account?
+        return user.account_set.first()
 
 
 class Contact(models.Model):

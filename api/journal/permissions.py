@@ -1,5 +1,13 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.permissions import BasePermission
 from journal import models
+
+
+class HasContactAccess(BasePermission):
+    def has_permission(self, request, view):
+        pk = request.parser_context["kwargs"]["pk"]
+        contact = get_object_or_404(models.Contact.objects, pk=pk)
+        return request.user.account_set.filter(id=contact.account.id).exists()
 
 
 class HasProjectAccess(BasePermission):
