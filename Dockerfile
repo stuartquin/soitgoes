@@ -28,6 +28,7 @@ ADD Procfile /app/Procfile
 ADD api/manage.py /app/api/manage.py
 ADD api/journal /app/api/journal
 ADD api/users /app/api/users
+ADD api/crm /app/api/crm
 ADD api/soitgoes /app/api/soitgoes
 ADD api/libs /app/api/libs
 ADD api/assets /app/api/assets
