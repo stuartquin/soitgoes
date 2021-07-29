@@ -10,8 +10,9 @@ interface Props {
 }
 
 function ContactRow({ contact, projects }: Props) {
-  const borderClass = "";
   const project = projects.length ? projects[0] : null;
+  const archived = Boolean(!project || project.archived);
+  const borderClass = archived ? "border-gray-400" : "border-green-600";
 
   return (
     <Link

@@ -999,6 +999,12 @@ paths:
         description: The initial index from which to return the results.
         schema:
           type: integer
+      - name: search
+        required: false
+        in: query
+        description: search
+        schema:
+          type: string
       responses:
         '200':
           content:

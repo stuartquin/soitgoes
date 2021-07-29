@@ -156,6 +156,7 @@ export interface ListCompanysRequest {
 export interface ListContactsRequest {
     limit?: number;
     offset?: number;
+    search?: string;
 }
 
 export interface ListInvoiceModifiersRequest {
@@ -794,6 +795,10 @@ export class ApiApi extends runtime.BaseAPI {
 
         if (requestParameters.offset !== undefined) {
             queryParameters['offset'] = requestParameters.offset;
+        }
+
+        if (requestParameters.search !== undefined) {
+            queryParameters['search'] = requestParameters.search;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

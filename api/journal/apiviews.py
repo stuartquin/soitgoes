@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpRequest
 from django.db.models import Q
+from django.db.models.query import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets, status
 from rest_framework.views import APIView
@@ -19,7 +20,7 @@ from users.onetimetoken import OneTimeTokenAccess
 from journal import serializers, models, summary
 from journal.cookieauthentication import CookieAuthentication
 from journal.project import get_unbilled_summary
-from journal.filters import TimeSlipFilter, TaskFilter
+from journal.filters import TimeSlipFilter, TaskFilter, ContactFilter
 from journal.invoices import (
     save_invoice_tasks,
     get_new_invoice,
@@ -35,7 +36,13 @@ from journal.permissions import (
 )
 
 
-def get_allowed_projects(request: HttpRequest) -> list[models.Project]:
+def get_allowed_contacts(request: HttpRequest) -> "QuerySet[models.Contact]":
+    if not request or not request.user or not request.user.is_authenticated:
+        return models.Contact.objects.none()
+    return models.Contact.objects.filter(account__in=request.user.account_set.all())
+
+
+def get_allowed_projects(request: HttpRequest) -> "QuerySet[models.Project]":
     if not request or not request.user or not request.user.is_authenticated:
         return models.Project.objects.none()
     return models.Project.objects.filter(account__in=request.user.account_set.all())
@@ -256,11 +263,11 @@ class CompanyDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class ContactList(generics.ListCreateAPIView):
     serializer_class = serializers.ContactSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ContactFilter
 
     def get_queryset(self):
-        filters = {"account__in": self.request.user.account_set.all()}
-
-        return models.Contact.objects.filter(**filters)
+        return get_allowed_contacts(self.request)
 
     def perform_create(self, serializer):
         account = models.Account.get_user_account(self.request.user)

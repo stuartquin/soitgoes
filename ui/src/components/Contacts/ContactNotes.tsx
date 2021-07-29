@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
 import { format } from "date-fns";
-import { PlusCircleIcon } from "@heroicons/react/outline";
 
 import * as models from "api/models";
 import Button from "components/Button";
@@ -26,9 +25,6 @@ function ContactNotes({ notes, onAdd }: Props) {
     <div className="my-4">
       <div className="uppercase bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-600 text-sm md:text-base text-left px-2 sm:px-4 justify-between items-center">
         <div className="text-sm">Notes</div>
-        <div>
-          <PlusCircleIcon className="w-4 cursor-pointer" />
-        </div>
       </div>
       <div className="my-3 relative">
         <Textarea
@@ -39,7 +35,7 @@ function ContactNotes({ notes, onAdd }: Props) {
           onChange={updateNote}
         ></Textarea>
         <Button
-          variant="success"
+          variant="light"
           size="small"
           className="absolute right-3 bottom-3"
           onClick={addNote}

@@ -1,11 +1,13 @@
 import React, { useCallback, useState, useEffect, useMemo } from "react";
 import { useHistory, useParams, Switch, Route } from "react-router-dom";
+import { debounce } from "lodash";
 
 import { ensure } from "typeHelpers";
 import * as models from "api/models";
 import { getClient } from "apiClient";
 import Button from "components/Button";
 import SlideOver from "components/SlideOver";
+import Input from "components/Form/Input";
 import ContactRow from "components/Contacts/ContactRow";
 import ContactDetail from "components/Contacts/ContactDetail";
 
@@ -20,23 +22,33 @@ interface Props {
 
 function Contacts({ user, isCreateNew }: Props) {
   const [contacts, setContacts] = useState<models.Contact[]>([]);
+  const [search, setSearch] = useState("");
   const [projects, setProjects] = useState<models.Project[]>([]);
   const { contactId } = useParams<RouterProps>();
   const history = useHistory();
 
-  const loadContacts = useCallback(async () => {
+  const loadContacts = useCallback(async (search) => {
     const api = getClient();
 
-    const contactResponse = await api.listContacts({});
+    const contactResponse = await api.listContacts({
+      search,
+    });
     setContacts(contactResponse.results || []);
+  }, []);
 
+  const loadProjects = useCallback(async () => {
+    const api = getClient();
     const projectResponse = await api.listProjects({});
     setProjects(projectResponse.results || []);
   }, []);
 
   useEffect(() => {
-    loadContacts();
-  }, [loadContacts]);
+    loadProjects();
+  }, [loadContacts, loadProjects]);
+
+  useEffect(() => {
+    loadContacts(search);
+  }, [loadContacts, search]);
 
   const contactList = useMemo(() => {
     return contacts.map((contact) => {
@@ -55,11 +67,27 @@ function Contacts({ user, isCreateNew }: Props) {
     history.push("/contacts/new");
   }, [history]);
 
+  const handleSearch = useCallback((event) => {
+    setSearch(event.target.value);
+  }, []);
+
+  const reloadContacts = useCallback(() => {
+    loadContacts(search);
+  }, [loadContacts, search]);
+
   const isOpen = isCreateNew || Boolean(contactId);
 
   return (
     <div className="w-full">
-      <div className="flex justify-end my-4 w-full px-2 sm:px-0">
+      <div className="flex justify-between my-4 w-full px-2 sm:px-0">
+        <div>
+          <Input
+            type="search"
+            placeholder="Search"
+            value={search}
+            onChange={handleSearch}
+          />
+        </div>
         <Button variant="success" onClick={createNewContact}>
           Create Contact
         </Button>
@@ -84,7 +112,7 @@ function Contacts({ user, isCreateNew }: Props) {
             <ContactDetail
               projects={projects}
               contactId={contactId}
-              onSave={loadContacts}
+              onSave={reloadContacts}
             />
           </Route>
         </Switch>
