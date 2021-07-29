@@ -5,6 +5,7 @@ type Props = {
   children: React.ReactNode;
   variant: string;
   to?: string;
+  size?: string;
   group?: string;
   className?: string;
   disabled?: boolean;
@@ -15,6 +16,11 @@ const BUTTONS: { [variant: string]: string } = {
   primary: "bg-blue-500 hover:bg-blue-700 text-white",
   light: "bg-gray-200 hover:bg-gray-300 text-gray-700",
   success: "bg-green-400 hover:bg-green-500 text-green-800",
+};
+
+const SIZES: { [size: string]: string } = {
+  small: "py-1 px-2 text-sm",
+  medium: "py-3 px-4 text-md",
 };
 
 const GROUP: { [group: string]: string } = {
@@ -28,13 +34,14 @@ function Button({
   children,
   className,
   group,
+  size,
   to,
   disabled,
   ...props
 }: Props) {
-  const buttonsClasses = `${BUTTONS[variant]} font-bold py-3 px-4 leading-4 ${
-    className || ""
-  }`;
+  const buttonsClasses = `${BUTTONS[variant]} ${
+    SIZES[size || "medium"]
+  } font-bold leading-4 ${className || ""}`;
   const groupClasses = group
     ? `${buttonsClasses} ${GROUP[group]}`
     : `${buttonsClasses} rounded`;

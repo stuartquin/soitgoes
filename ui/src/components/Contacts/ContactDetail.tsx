@@ -19,24 +19,27 @@ function ContactDetail({ contactId, projects, onSave }: Props) {
   const [hasChanged, setHasChanged] = useState(false);
   const history = useHistory();
 
+  const loadNotes = useCallback(async () => {
+    const api = getClient();
+    const noteResponse = await api.listNotes({ contact: `${contactId}` });
+    setNotes(noteResponse.results || []);
+  }, [contactId]);
+
   useEffect(() => {
     const load = async () => {
       const api = getClient();
-
       if (contactId) {
         if (contactId === "new") {
           setContact(models.ContactFromJSON({}));
         } else {
           setContact(await api.retrieveContact({ id: contactId }));
-          const noteResponse = await api.listNotes({ contact: `${contactId}` });
-          setNotes(noteResponse.results || []);
+          loadNotes();
         }
       }
     };
 
     load();
-  }, [contactId, projects]);
-
+  }, [contactId, projects, loadNotes]);
   const updateContact = useCallback((updatedContact: models.Contact) => {
     setHasChanged(true);
     setContact(updatedContact);
@@ -57,6 +60,18 @@ function ContactDetail({ contactId, projects, onSave }: Props) {
     }
   }, [contact, onSave, history]);
 
+  const addNote = useCallback(
+    async (content: string) => {
+      const api = getClient();
+      await api.createNote({
+        note: models.NoteFromJSON({ content, contact: contactId }),
+      });
+
+      loadNotes();
+    },
+    [loadNotes, contactId]
+  );
+
   return contact ? (
     <div>
       <div className="flex justify-between mb-6">
@@ -69,7 +84,7 @@ function ContactDetail({ contactId, projects, onSave }: Props) {
         <ContactForm contact={contact} onUpdate={updateContact} />
       </div>
 
-      {contact.id && <ContactNotes notes={notes} />}
+      {contact.id && <ContactNotes notes={notes} onAdd={addNote} />}
     </div>
   ) : (
     <div>Loading</div>
