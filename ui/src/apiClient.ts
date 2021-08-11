@@ -1,15 +1,22 @@
 import * as Api from "./api";
 
-export const getAPIErrorMessage = (error: any): string => {
-  if (error.detail) {
-    return error.detail;
+export const getAPIErrorMessage = async (error: any): Promise<string> => {
+  if (error.status === 500) {
+    return Promise.resolve(error.statusText);
   }
 
-  if (error.length > 0) {
-    return error[0];
+  if (error.json) {
+    const errorJSON = await error.json();
+    if (error.detail) {
+      return errorJSON.detail;
+    }
+
+    if (errorJSON.length > 0) {
+      return errorJSON[0];
+    }
   }
 
-  return "There was an error";
+  return Promise.resolve("There was an error");
 };
 
 export const getBaseUrl = (): string => {

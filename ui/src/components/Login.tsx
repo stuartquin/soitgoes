@@ -28,7 +28,7 @@ function Login() {
         window.location.reload();
       } catch (error) {
         removeToken();
-        setError(getAPIErrorMessage(await error.json()));
+        setError(await getAPIErrorMessage(error));
       }
     }
   };

@@ -120,3 +120,5 @@ jspm_packages
 version.txt
 
 .mypy_cache/
+
+api/pyrightconfig.json
