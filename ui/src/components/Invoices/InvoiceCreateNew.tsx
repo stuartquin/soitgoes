@@ -6,8 +6,15 @@ import { getClient } from "apiClient";
 import InvoiceActions from "components/Invoices/InvoiceActions";
 import InvoiceForm from "components/Invoices/InvoiceForm";
 import InvoiceEditableItems from "components/Invoices/InvoiceEditableItems";
+import InvoiceNewItems from "components/Invoices/InvoiceNewItems";
 import InvoiceEditableTotals from "components/Invoices/InvoiceEditableTotals";
-import { TimeSlipTask, calculateTotal, getCalculatedInvoice } from "invoices";
+import InvoiceWeeklyTaskSettings from "components/Invoices/InvoiceWeeklyTaskSettings";
+import {
+  InvoiceNewItem,
+  InvoiceToggleItem,
+  calculateTotal,
+  getCalculatedInvoice,
+} from "invoices";
 import { ensure } from "typeHelpers";
 
 interface Props {
@@ -17,16 +24,15 @@ interface Props {
 
 function InvoiceCreateNew({ project, onIssue }: Props) {
   const [invoice, setInvoice] = useState<models.Invoice>();
-  const [isLoading, setIsLoading] = useState(true);
   const [timeTasks, setTimeTasks] = useState<models.Task[]>([]);
   const [fixedTasks, setFixedTasks] = useState<models.Task[]>([]);
+  const [newInvoiceItems, setNewInvoiceItems] = useState<InvoiceNewItem[]>([]);
   const [modifiers, setModifiers] = useState<models.InvoiceModifier[]>([]);
   const [timeSlips, setTimeSlips] = useState<models.TimeSlip[]>([]);
   const history = useHistory();
 
   useEffect(() => {
     const load = async () => {
-      setIsLoading(true);
       const api = getClient();
 
       const [
@@ -53,7 +59,6 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
       setFixedTasks(
         tasks.filter((t) => t.billingType === models.TaskBillingTypeEnum.Fixed)
       );
-      setIsLoading(false);
     };
 
     load();
@@ -71,7 +76,7 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
   }, [project, fixedTasks, timeSlips, modifiers]);
 
   const toggleTimeSlip = useCallback(
-    (item: TimeSlipTask) => {
+    (item: InvoiceToggleItem) => {
       if (invoice) {
         const invoiceTimeSlips = item.isActive
           ? invoice.timeslips.filter((id) => item.id !== id)
@@ -89,7 +94,7 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
   );
 
   const toggleTask = useCallback(
-    (item: TimeSlipTask) => {
+    (item: InvoiceToggleItem) => {
       if (invoice) {
         const changedTimeSlipIds = item.timeSlips.map((t) => t.id || 0);
         const invoiceTimeSlips = item.isActive
@@ -155,6 +160,30 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
     onIssue();
   }, [invoice, history, onIssue]);
 
+  const addWeeklyTasks = useCallback((tasks: models.Task[]) => {
+    setNewInvoiceItems(
+      tasks.map(
+        (task) =>
+          ({
+            title: task.name,
+            subTitle: "",
+            cost: task.cost,
+            hours: task.hoursSpent,
+            task,
+            isActive: true,
+          } as InvoiceNewItem)
+      )
+    );
+  }, []);
+
+  const toggleNewItem = useCallback(
+    (newItem: InvoiceNewItem) => {
+      newItem.isActive = !newItem.isActive;
+      setNewInvoiceItems([...newInvoiceItems]);
+    },
+    [newInvoiceItems]
+  );
+
   const allTasks = timeTasks.concat(fixedTasks);
 
   return (
@@ -166,6 +195,12 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
             project={project}
             onIssue={issueInvoice}
           />
+          {project.weeklyRate && (
+            <InvoiceWeeklyTaskSettings
+              project={project}
+              onAddTasks={addWeeklyTasks}
+            />
+          )}
           <div className="flex flex-wrap items-end justify-between mx-4 sm:mx-0">
             <InvoiceForm invoice={invoice} onUpdate={updateInvoice} />
             <InvoiceEditableTotals
@@ -182,6 +217,13 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
               timeSlips={timeSlips}
               onToggleTimeSlip={toggleTimeSlip}
               onToggleTask={toggleTask}
+            />
+          )}
+
+          {newInvoiceItems.length > 0 && (
+            <InvoiceNewItems
+              items={newInvoiceItems}
+              onToggleItem={toggleNewItem}
             />
           )}
         </React.Fragment>

@@ -2,15 +2,19 @@ import React, { useMemo } from "react";
 
 import * as models from "api/models";
 import InvoiceToggleableItem from "components/Invoices/InvoiceToggleableItem";
-import { TimeSlipTask, getGroupedByTask, getGroupedByTime } from "invoices";
+import {
+  InvoiceToggleItem,
+  getGroupedByTask,
+  getGroupedByTime,
+} from "invoices";
 
 interface Props {
   tasks: models.Task[];
   timeSlips: models.TimeSlip[];
   invoice: models.Invoice;
   project: models.Project;
-  onToggleTimeSlip: (item: TimeSlipTask) => void;
-  onToggleTask: (item: TimeSlipTask) => void;
+  onToggleTimeSlip: (item: InvoiceToggleItem) => void;
+  onToggleTask: (item: InvoiceToggleItem) => void;
 }
 
 function InvoiceEditableItems({

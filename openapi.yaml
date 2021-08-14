@@ -1526,6 +1526,12 @@ components:
           readOnly: true
         hourly_rate:
           type: number
+        weekly_rate:
+          type: number
+          multipleOf: 0.001
+          maximum: 1000
+          minimum: -1000
+          nullable: true
         archived:
           type: boolean
         currency:

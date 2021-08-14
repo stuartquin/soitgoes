@@ -2,7 +2,7 @@ import React from "react";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/outline";
 
 import * as models from "api/models";
-import { TimeSlipTask } from "invoices";
+import { InvoiceToggleItem } from "invoices";
 import { formatCurrency } from "currency";
 
 const getFormattedHours = (hours: number): string => {
@@ -10,14 +10,14 @@ const getFormattedHours = (hours: number): string => {
 };
 
 interface Props {
-  item: TimeSlipTask;
+  item: InvoiceToggleItem;
   project: models.Project;
-  onToggle: (item: TimeSlipTask) => void;
+  onToggle: (item: InvoiceToggleItem) => void;
 }
 
 function InvoiceToggleableItem({ project, item, onToggle }: Props) {
   return (
-    <div className={!item.isActive ? "opacity-25" : ""} key={item.id}>
+    <div className={!item.isActive ? "opacity-25" : ""}>
       <div className="flex my-3 px-2 sm:px-4 justify-between items-center hover:bg-blue-50">
         <div className="flex flex-wrap items-center flex-grow">
           <div className="text-gray-800 text-sm md:text-lg mr-2 w-full sm:w-auto">

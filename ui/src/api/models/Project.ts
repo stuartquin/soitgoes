@@ -63,6 +63,12 @@ export interface Project {
     hourlyRate?: number;
     /**
      * 
+     * @type {number}
+     * @memberof Project
+     */
+    weeklyRate?: number | null;
+    /**
+     * 
      * @type {boolean}
      * @memberof Project
      */
@@ -104,6 +110,7 @@ export function ProjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): P
         'uninvoicedHours': !exists(json, 'uninvoiced_hours') ? undefined : json['uninvoiced_hours'],
         'totalPaid': !exists(json, 'total_paid') ? undefined : json['total_paid'],
         'hourlyRate': !exists(json, 'hourly_rate') ? undefined : json['hourly_rate'],
+        'weeklyRate': !exists(json, 'weekly_rate') ? undefined : json['weekly_rate'],
         'archived': !exists(json, 'archived') ? undefined : json['archived'],
         'currency': !exists(json, 'currency') ? undefined : json['currency'],
         'defaultTask': !exists(json, 'default_task') ? undefined : json['default_task'],
@@ -123,6 +130,7 @@ export function ProjectToJSON(value?: Project | null): any {
         'name': value.name,
         'contact': value.contact,
         'hourly_rate': value.hourlyRate,
+        'weekly_rate': value.weeklyRate,
         'archived': value.archived,
         'currency': value.currency,
         'default_task': value.defaultTask,

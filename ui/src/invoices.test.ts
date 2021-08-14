@@ -90,3 +90,5 @@ describe("getGroupedByTask", () => {
 });
 
 describe("getCalculatedInvoice", () => {});
+
+describe("getWeeklyInvoiceTasks", () => {});

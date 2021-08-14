@@ -10,7 +10,7 @@ export enum InvoiceStatus {
   Overdue = "Overdue",
 }
 
-export interface TimeSlipTask {
+export interface InvoiceToggleItem {
   timeSlips: models.TimeSlip[];
   task: models.Task;
   hours: number;
@@ -22,11 +22,20 @@ export interface TimeSlipTask {
   isActive: boolean;
 }
 
+export interface InvoiceNewItem {
+  task: models.Task;
+  hours: number;
+  cost: number;
+  title: string;
+  subTitle: string;
+  isActive: boolean;
+}
+
 export const getGroupedByTime = (
   invoice: models.Invoice,
   tasks: models.Task[],
   timeSlips: models.TimeSlip[]
-): TimeSlipTask[] => {
+): InvoiceToggleItem[] => {
   return timeSlips.map((ts) => {
     const timeSlip = ensure(ts);
     const task = ensure(tasks.find((t) => t.id === timeSlip.task));
@@ -51,8 +60,8 @@ export const getGroupedByTime = (
 export const getGroupedByTask = (
   invoice: models.Invoice,
   tasks: models.Task[],
-  timeSlipItems: TimeSlipTask[]
-): TimeSlipTask[] => {
+  timeSlipItems: InvoiceToggleItem[]
+): InvoiceToggleItem[] => {
   const groupedTimeSlipItems = groupBy(timeSlipItems, (t) => t.task.id);
 
   return tasks
@@ -92,7 +101,7 @@ export const getGroupedByTask = (
         cost,
         isActive,
         type: "Task",
-      } as TimeSlipTask;
+      } as InvoiceToggleItem;
     });
 };
 

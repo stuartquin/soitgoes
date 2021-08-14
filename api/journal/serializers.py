@@ -48,6 +48,7 @@ class ProjectSerializer(LogActivity):
             "uninvoiced_hours",
             "total_paid",
             "hourly_rate",
+            "weekly_rate",
             "archived",
             "currency",
             "account",
