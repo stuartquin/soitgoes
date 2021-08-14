@@ -6,11 +6,9 @@ import { getClient } from "apiClient";
 import InvoiceActions from "components/Invoices/InvoiceActions";
 import InvoiceForm from "components/Invoices/InvoiceForm";
 import InvoiceEditableItems from "components/Invoices/InvoiceEditableItems";
-import InvoiceNewItems from "components/Invoices/InvoiceNewItems";
 import InvoiceEditableTotals from "components/Invoices/InvoiceEditableTotals";
 import InvoiceWeeklyTaskSettings from "components/Invoices/InvoiceWeeklyTaskSettings";
 import {
-  InvoiceNewItem,
   InvoiceToggleItem,
   calculateTotal,
   getCalculatedInvoice,
@@ -26,7 +24,6 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
   const [invoice, setInvoice] = useState<models.Invoice>();
   const [timeTasks, setTimeTasks] = useState<models.Task[]>([]);
   const [fixedTasks, setFixedTasks] = useState<models.Task[]>([]);
-  const [newInvoiceItems, setNewInvoiceItems] = useState<InvoiceNewItem[]>([]);
   const [modifiers, setModifiers] = useState<models.InvoiceModifier[]>([]);
   const [timeSlips, setTimeSlips] = useState<models.TimeSlip[]>([]);
   const history = useHistory();
@@ -155,33 +152,24 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
       ...invoice,
       status: models.InvoiceStatusEnum.Issued,
     } as models.Invoice;
-    const updatedInvoice = await api.createInvoice({ invoice: issuedInvoice });
-    history.push(`/invoices/${updatedInvoice.project}/${updatedInvoice.id}`);
+
+    const createdInvoice = await api.createInvoice({
+      invoice: issuedInvoice,
+    });
+    history.push(`/invoices/${createdInvoice.project}/${createdInvoice.id}`);
     onIssue();
   }, [invoice, history, onIssue]);
 
-  const addWeeklyTasks = useCallback((tasks: models.Task[]) => {
-    setNewInvoiceItems(
-      tasks.map(
-        (task) =>
-          ({
-            title: task.name,
-            subTitle: "",
-            cost: task.cost,
-            hours: task.hoursSpent,
-            task,
-            isActive: true,
-          } as InvoiceNewItem)
-      )
-    );
-  }, []);
+  const addWeeklyTasks = useCallback(
+    async (tasks: models.Task[]) => {
+      const api = getClient();
+      const newTasks = await Promise.all(
+        tasks.map((task) => api.createTask({ task }))
+      );
 
-  const toggleNewItem = useCallback(
-    (newItem: InvoiceNewItem) => {
-      newItem.isActive = !newItem.isActive;
-      setNewInvoiceItems([...newInvoiceItems]);
+      setFixedTasks(fixedTasks.concat(newTasks));
     },
-    [newInvoiceItems]
+    [fixedTasks]
   );
 
   const allTasks = timeTasks.concat(fixedTasks);
@@ -217,13 +205,6 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
               timeSlips={timeSlips}
               onToggleTimeSlip={toggleTimeSlip}
               onToggleTask={toggleTask}
-            />
-          )}
-
-          {newInvoiceItems.length > 0 && (
-            <InvoiceNewItems
-              items={newInvoiceItems}
-              onToggleItem={toggleNewItem}
             />
           )}
         </React.Fragment>

@@ -39,25 +39,26 @@ function InvoiceEditableItems({
 
   return (
     <React.Fragment>
-      {invoice.groupBy === models.InvoiceGroupByEnum.Timeslips && (
-        <div className="my-4">
-          <div className="uppercase bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-600 text-sm md:text-base text-left px-2 sm:px-4 justify-between items-center">
-            <div className="text-sm">Date</div>
-            <div className="flex sm:w-1/4 justify-between mr-8">
-              <div className="text-sm mr-3">Hours</div>
-              <div className="text-sm">Total</div>
+      {timeSlipItems.length > 0 &&
+        invoice.groupBy === models.InvoiceGroupByEnum.Timeslips && (
+          <div className="my-4">
+            <div className="uppercase bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-600 text-sm md:text-base text-left px-2 sm:px-4 justify-between items-center">
+              <div className="text-sm">Date</div>
+              <div className="flex sm:w-1/4 justify-between mr-8">
+                <div className="text-sm mr-3">Hours</div>
+                <div className="text-sm">Total</div>
+              </div>
             </div>
+            {timeSlipItems.map((item) => (
+              <InvoiceToggleableItem
+                key={item.id}
+                item={item}
+                project={project}
+                onToggle={onToggleTimeSlip}
+              />
+            ))}
           </div>
-          {timeSlipItems.map((item) => (
-            <InvoiceToggleableItem
-              key={item.id}
-              item={item}
-              project={project}
-              onToggle={onToggleTimeSlip}
-            />
-          ))}
-        </div>
-      )}
+        )}
 
       {taskItems.length > 0 && (
         <div className="my-4">
