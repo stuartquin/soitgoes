@@ -58,6 +58,7 @@ function InvoiceWeeklyTaskSettings({ project, onAddTasks }: Props) {
       billing_type: models.TaskBillingTypeEnum.Fixed,
       cost: project.weeklyRate,
       project: project.id,
+      state: models.TaskStateEnum.Done,
     });
   });
 
