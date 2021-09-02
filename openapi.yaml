@@ -1372,6 +1372,20 @@ paths:
           description: ''
       tags:
       - api
+  /api/currency/rates/:
+    get:
+      operationId: retrieveExchangeRate
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRate'
+          description: ''
+      tags:
+      - api
   /api/users/login/:
     post:
       operationId: createLogin
@@ -1529,8 +1543,8 @@ components:
         weekly_rate:
           type: number
           multipleOf: 0.001
-          maximum: 1000
-          minimum: -1000
+          maximum: 10000000
+          minimum: -10000000
           nullable: true
         archived:
           type: boolean
@@ -1632,6 +1646,11 @@ components:
         name:
           type: string
           readOnly: true
+        exchange_rate:
+          type: number
+        currency:
+          type: string
+          maxLength: 3
       required:
       - project
       - timeslips
@@ -1860,6 +1879,11 @@ components:
               name:
                 type: string
                 readOnly: true
+              exchange_rate:
+                type: number
+              currency:
+                type: string
+                maxLength: 3
             required:
             - project
             - timeslips
@@ -1978,6 +2002,12 @@ components:
           readOnly: true
         git_rev:
           type: string
+          readOnly: true
+    ExchangeRate:
+      type: object
+      properties:
+        rates:
+          type: object
           readOnly: true
     Login:
       type: object

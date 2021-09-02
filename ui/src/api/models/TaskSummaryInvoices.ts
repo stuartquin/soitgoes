@@ -133,6 +133,18 @@ export interface TaskSummaryInvoices {
      * @memberof TaskSummaryInvoices
      */
     readonly name?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof TaskSummaryInvoices
+     */
+    exchangeRate?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskSummaryInvoices
+     */
+    currency?: string;
 }
 
 /**
@@ -181,6 +193,8 @@ export function TaskSummaryInvoicesFromJSONTyped(json: any, ignoreDiscriminator:
         'modifier': !exists(json, 'modifier') ? undefined : json['modifier'],
         'pdfName': !exists(json, 'pdf_name') ? undefined : json['pdf_name'],
         'name': !exists(json, 'name') ? undefined : json['name'],
+        'exchangeRate': !exists(json, 'exchange_rate') ? undefined : json['exchange_rate'],
+        'currency': !exists(json, 'currency') ? undefined : json['currency'],
     };
 }
 
@@ -207,6 +221,8 @@ export function TaskSummaryInvoicesToJSON(value?: TaskSummaryInvoices | null): a
         'timeslips': value.timeslips,
         'tasks': value.tasks,
         'modifier': value.modifier,
+        'exchange_rate': value.exchangeRate,
+        'currency': value.currency,
     };
 }
 

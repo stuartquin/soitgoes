@@ -1,3 +1,4 @@
+from journal.currency import get_rates
 import os
 import json
 import zipfile
@@ -316,3 +317,10 @@ class VersionView(generics.RetrieveAPIView):
             "git_branch": os.environ.get("GIT_BRANCH"),
             "git_rev": os.environ.get("GIT_REV"),
         }
+
+
+class ExchangeRatesView(generics.RetrieveAPIView):
+    serializer_class = serializers.ExchangeRateSerializer
+
+    def get_object(self):
+        return {"rates": get_rates()}

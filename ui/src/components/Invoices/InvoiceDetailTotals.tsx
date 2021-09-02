@@ -11,6 +11,8 @@ interface Props {
 }
 
 function InvoiceDetailTotals({ invoice, modifiers }: Props) {
+  const totalDue = invoice.totalDue || 0;
+  const convertedTotal = totalDue * (invoice.exchangeRate || 1);
   return (
     <div className="uppercase text-sm text-gray-600 w-full sm:w-56 mt-3 sm:mt-0">
       <div className="grid grid-cols-2 gap-1">
@@ -28,10 +30,16 @@ function InvoiceDetailTotals({ invoice, modifiers }: Props) {
       </div>
       <div className="grid grid-cols-2 gap-1 mt-2 pt-2 border-t-2 border-solid border-gray-700">
         <div className="">Total</div>
-        <div className="text-right">
-          {formatCurrency(invoice.totalDue || 0)}
-        </div>
+        <div className="text-right">{formatCurrency(totalDue)}</div>
       </div>
+      {invoice.currency !== "GBP" && (
+        <div className="grid grid-cols-2 gap-1 uppercase">
+          <div className="">Total ({invoice.currency})</div>
+          <div className="text-right">
+            {formatCurrency(convertedTotal || 0, invoice.currency)}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

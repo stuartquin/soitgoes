@@ -33,6 +33,7 @@ urlpatterns = [
     url(r"api/companies/$", apiviews.CompanyList.as_view()),
     url(r"api/companies/(?P<pk>[0-9]+)$", apiviews.CompanyDetail.as_view()),
     url(r"api/version/$", apiviews.VersionView.as_view()),
+    url(r"api/currency/rates/$", apiviews.ExchangeRatesView.as_view()),
     url(r"api/logout/$", views.logout_user),
     # App Routing
     url(r"^$", views.landing),

@@ -9,8 +9,8 @@
     {% if timeslip.hours %}
       <tr>
         <td>{{ timeslip.hours|floatformat:1 }} Hours on {{ timeslip.date }}: {{ timeslip.project.name }}</td>
-        <td class="number">{{ timeslip.hourly_rate }}</td>
-        <td class="number">{{ timeslip.hourly_rate|multiply:timeslip.hours|floatformat:2 }}</td>
+        <td class="number">{{ timeslip.hourly_rate|multiply:exchange_rate|floatformat:2 }}</td>
+        <td class="number">{{ timeslip.hourly_rate|multiply:timeslip.hours|multiply:exchange_rate|floatformat:2 }}</td>
       </tr>
     {% endif %}
   {% endfor %}
@@ -27,19 +27,19 @@
   <tr class='total'>
     <td></td>
     <td class="number"><strong>Subtotal</strong></td>
-    <td class="number"><strong>{{ invoice.subtotal_due|floatformat:2 }}</strong></td>
+    <td class="number"><strong>{{ invoice.subtotal_due|multiply:exchange_rate|floatformat:2 }}</strong></td>
   </tr>
   <tr class='spacer'></tr>
   {% for item in modifiers %}
   <tr>
     <td>{{ item.name }}</td>
     <td class="number">{{ item.percent }}%</td>
-    <td class="number">{{ item.impact|floatformat:2  }}</td>
+    <td class="number">{{ item.impact|multiply:exchange_rate|floatformat:2  }}</td>
   </tr>
   {% endfor %}
   <tr class='total'>
     <td></td>
     <td class="number"><strong>Total</strong></td>
-    <td class="number"><strong>{{ invoice.total_due|floatformat:2}}</strong></td>
+    <td class="number"><strong>{{ invoice.total_due|multiply:exchange_rate|floatformat:2}}</strong></td>
   </tr>
 </table>

@@ -205,6 +205,8 @@ class InvoiceSerializer(serializers.ModelSerializer):
             "modifier",
             "pdf_name",
             "name",
+            "exchange_rate",
+            "currency",
         ]
 
 
@@ -234,3 +236,7 @@ class TaskSummarySerializer(serializers.Serializer):
 class VersionSerializer(serializers.Serializer):
     git_branch = serializers.CharField(read_only=True)
     git_rev = serializers.CharField(read_only=True)
+
+
+class ExchangeRateSerializer(serializers.Serializer):
+    rates = serializers.DictField(read_only=True)

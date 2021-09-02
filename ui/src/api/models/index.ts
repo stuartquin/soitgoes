@@ -2,6 +2,7 @@ export * from './Account';
 export * from './AccountCompany';
 export * from './Company';
 export * from './Contact';
+export * from './ExchangeRate';
 export * from './InlineResponse200';
 export * from './InlineResponse2001';
 export * from './InlineResponse2002';

@@ -21,6 +21,9 @@ import {
     Contact,
     ContactFromJSON,
     ContactToJSON,
+    ExchangeRate,
+    ExchangeRateFromJSON,
+    ExchangeRateToJSON,
     InlineResponse200,
     InlineResponse200FromJSON,
     InlineResponse200ToJSON,
@@ -1386,6 +1389,30 @@ export class ApiApi extends runtime.BaseAPI {
      */
     async retrieveContact(requestParameters: RetrieveContactRequest): Promise<Contact> {
         const response = await this.retrieveContactRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     */
+    async retrieveExchangeRateRaw(): Promise<runtime.ApiResponse<ExchangeRate>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/currency/rates/`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ExchangeRateFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async retrieveExchangeRate(): Promise<ExchangeRate> {
+        const response = await this.retrieveExchangeRateRaw();
         return await response.value();
     }
 

@@ -155,6 +155,8 @@ class Invoice(models.Model):
         choices=[("tasks", "Task"), ("timeslips", "Timeslip"),],
     )
     show_hours = models.BooleanField(default=True)
+    exchange_rate = models.FloatField(default=1.0)
+    currency = models.CharField(max_length=3, default="GBP")
 
     def get_modifier_value(self, value):
         impact = 0

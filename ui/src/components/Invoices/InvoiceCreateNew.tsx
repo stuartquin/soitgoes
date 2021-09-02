@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
+import { ExchangeRate } from "currency";
 import InvoiceActions from "components/Invoices/InvoiceActions";
 import InvoiceForm from "components/Invoices/InvoiceForm";
 import InvoiceEditableItems from "components/Invoices/InvoiceEditableItems";
@@ -26,6 +27,7 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
   const [fixedTasks, setFixedTasks] = useState<models.Task[]>([]);
   const [modifiers, setModifiers] = useState<models.InvoiceModifier[]>([]);
   const [timeSlips, setTimeSlips] = useState<models.TimeSlip[]>([]);
+  const [exchangeRates, setExchangeRates] = useState<ExchangeRate>({});
   const history = useHistory();
 
   useEffect(() => {
@@ -36,6 +38,7 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
         timeSlipResponse,
         modifierResponse,
         taskResponse,
+        exchangeRateResponse,
       ] = await Promise.all([
         api.listTimeSlips({
           project: `${project.id}`,
@@ -45,6 +48,7 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
         api.listTasks({
           project: `${project.id}`,
         }),
+        api.retrieveExchangeRate(),
       ]);
       const tasks = taskResponse.results || [];
 
@@ -56,21 +60,24 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
       setFixedTasks(
         tasks.filter((t) => t.billingType === models.TaskBillingTypeEnum.Fixed)
       );
+      setExchangeRates((exchangeRateResponse.rates as ExchangeRate) || {});
     };
 
     load();
   }, [project]);
 
   useEffect(() => {
+    const currency = project.currency || "GBP";
+
+    const initialInvoice = {
+      currency,
+      exchangeRate: exchangeRates[currency] || 1,
+      project: project.id,
+    } as models.Invoice;
     setInvoice(
-      getCalculatedInvoice(
-        { project: project.id } as models.Invoice,
-        fixedTasks,
-        timeSlips,
-        modifiers
-      )
+      getCalculatedInvoice(initialInvoice, fixedTasks, timeSlips, modifiers)
     );
-  }, [project, fixedTasks, timeSlips, modifiers]);
+  }, [project, exchangeRates, fixedTasks, timeSlips, modifiers]);
 
   const toggleTimeSlip = useCallback(
     (item: InvoiceToggleItem) => {

@@ -133,6 +133,18 @@ export interface Invoice {
      * @memberof Invoice
      */
     readonly name?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Invoice
+     */
+    exchangeRate?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Invoice
+     */
+    currency?: string;
 }
 
 /**
@@ -181,6 +193,8 @@ export function InvoiceFromJSONTyped(json: any, ignoreDiscriminator: boolean): I
         'modifier': !exists(json, 'modifier') ? undefined : json['modifier'],
         'pdfName': !exists(json, 'pdf_name') ? undefined : json['pdf_name'],
         'name': !exists(json, 'name') ? undefined : json['name'],
+        'exchangeRate': !exists(json, 'exchange_rate') ? undefined : json['exchange_rate'],
+        'currency': !exists(json, 'currency') ? undefined : json['currency'],
     };
 }
 
@@ -207,6 +221,8 @@ export function InvoiceToJSON(value?: Invoice | null): any {
         'timeslips': value.timeslips,
         'tasks': value.tasks,
         'modifier': value.modifier,
+        'exchange_rate': value.exchangeRate,
+        'currency': value.currency,
     };
 }
 

@@ -125,6 +125,8 @@ DATABASES = {
     }
 }
 
+CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache",}}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -176,3 +178,5 @@ JET_DEFAULT_THEME = "light-gray"
 SESSION_COOKIE_HTTPONLY = False
 
 CSRF_TRUSTED_ORIGINS = ["localhost", "localhost:8080", "localhost:8000"]
+
+OPEN_EXCHANGE_RATES_APP_ID = os.environ.get("OPEN_EXCHANGE_RATES_APP_ID")
