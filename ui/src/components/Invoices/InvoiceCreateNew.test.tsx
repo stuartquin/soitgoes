@@ -26,6 +26,16 @@ class MockApi extends Api.ApiApi {
       })
   );
 
+  async retrieveExchangeRate(): Promise<any> {
+    return {
+      rates: {
+        GBP: 1,
+        USD: 1.38,
+        SGD: 1.88,
+      },
+    };
+  }
+
   async listTimeSlips(args: any): Promise<any> {
     return {
       results: [
