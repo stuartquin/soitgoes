@@ -4,24 +4,25 @@ from django.http import HttpResponse
 
 from . import models
 
+
 @admin.register(models.Contact)
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'created_at')
+    list_display = ("name", "email", "created_at")
 
 
 @admin.register(models.Billing)
 class BillingAdmin(admin.ModelAdmin):
-    list_display = ('bank_name', 'created_at')
+    list_display = ("bank_name", "created_at")
 
 
 @admin.register(models.Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created_at')
+    list_display = ("name", "created_at")
 
 
 @admin.register(models.Account)
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created_at')
+    list_display = ("name", "created_at")
 
     def name(self, obj):
         return obj.company.name
@@ -34,8 +35,10 @@ class CompanyAdmin(admin.ModelAdmin):
 
 @admin.register(models.Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created_at')
-    list_filter = ('project', )
+    list_display = ("name", "created_at")
+    list_filter = ("project",)
+
+    admin_calendar_fields = [{"start": "due_date", "title": "name", "color": "red"}]
 
     def name(self, obj):
         return obj
@@ -43,7 +46,7 @@ class InvoiceAdmin(admin.ModelAdmin):
 
 @admin.register(models.InvoiceModifier)
 class InvoiceModifierAdmin(admin.ModelAdmin):
-    list_display = ('obj', 'created_at')
+    list_display = ("obj", "created_at")
 
     def obj(self, obj):
         return obj
@@ -51,8 +54,8 @@ class InvoiceModifierAdmin(admin.ModelAdmin):
 
 @admin.register(models.TimeSlip)
 class TimeSlipAdmin(admin.ModelAdmin):
-    list_display = ('name', 'hours', 'invoice', 'date')
-    list_filter = ('project', )
+    list_display = ("name", "hours", "invoice", "date")
+    list_filter = ("project",)
 
     def name(self, obj):
         return obj
@@ -64,10 +67,11 @@ class TaskNote(admin.StackedInline):
 
 @admin.register(models.Task)
 class Task(admin.ModelAdmin):
-    list_display = ('project', 'name', 'due_date')
-    list_filter = ('project', )
+    list_display = ("project", "name", "due_date")
+    list_filter = ("project",)
     inlines = [TaskNote]
+
 
 @admin.register(models.TaskInvoice)
 class TaskInvoiceAdmin(admin.ModelAdmin):
-    list_display = ('task', 'invoice', 'cost', 'created_at')
+    list_display = ("task", "invoice", "cost", "created_at")
