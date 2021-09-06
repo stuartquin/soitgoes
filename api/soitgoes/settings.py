@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "journal",
     "users",
     "crm",
+    "admincalendar",
     "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",

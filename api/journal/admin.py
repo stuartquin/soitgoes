@@ -4,6 +4,8 @@ from django.http import HttpResponse
 
 from . import models
 
+from admincalendar.admincalendar import register_admincalendar
+
 
 @admin.register(models.Contact)
 class ContactAdmin(admin.ModelAdmin):
@@ -38,10 +40,15 @@ class InvoiceAdmin(admin.ModelAdmin):
     list_display = ("name", "created_at")
     list_filter = ("project",)
 
-    admin_calendar_fields = [{"start": "due_date", "title": "name", "color": "red"}]
-
     def name(self, obj):
         return obj
+
+
+class InvoiceCalendar(admin.ModelAdmin):
+    admin_calendar_fields = [{"start": "due_date", "title": "name", "color": "red"}]
+
+
+register_admincalendar(InvoiceCalendar, models.Invoice)
 
 
 @admin.register(models.InvoiceModifier)
