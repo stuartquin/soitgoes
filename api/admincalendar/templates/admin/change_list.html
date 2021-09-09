@@ -2,38 +2,39 @@
 {% load i18n admin_urls static admin_list admincalendar_tags %}
 
 {% block content %}
-    {{ block.super }}
+  {% if cl.model_admin.admin_calendar %}
+      <span class="calendar-admin-prev-button">Previous</span>
+      <div id='calendar-admin'></div>
+      <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.css" rel="stylesheet" />
+      <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.js"></script>
 
+      <script type="text/javascript">
+      var BASE_URL = window.location.pathname;
 
-{% block result_list %}
-  {% if cl.model_admin.admin_calendar_fields %}
-    <div id='calendar-admin'></div>
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.js"></script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar-admin');
 
-    <script type="text/javascript">
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          initialDate: '2021-07-07',
+          headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          },
+          eventSources: [{
+            url: BASE_URL
+          }],
+          datesSet: function(dateInfo) {
+            console.log("datesSet", dateInfo);
+          }
+        });
 
-    var CALENDAR_ADMIN_EVENTS = {% calendar_admin_events cl %};
-
-    document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar-admin');
-
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        initialDate: '2021-07-07',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        events: CALENDAR_ADMIN_EVENTS,
+        calendar.render();
       });
 
-      calendar.render();
-    });
-    </script>
+      </script>
   {% else %}
     {{ block.super }}
   {% endif %}
-{% endblock %}
 {% endblock %}

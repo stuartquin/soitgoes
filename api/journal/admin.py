@@ -4,7 +4,7 @@ from django.http import HttpResponse
 
 from . import models
 
-from admincalendar.admincalendar import register_admincalendar
+from admincalendar.admincalendar import register_admincalendar, AdminCalendar
 
 
 @admin.register(models.Contact)
@@ -66,6 +66,15 @@ class TimeSlipAdmin(admin.ModelAdmin):
 
     def name(self, obj):
         return obj
+
+
+class TimeSlipCalendar(AdminCalendar):
+    admin_calendar_fields = [{"start": "start_date", "end": "end_date"}]
+    list_display = ("hours", "invoice", "date")
+    list_filter = ("project",)
+
+
+register_admincalendar(TimeSlipCalendar, models.TimeSlip)
 
 
 class TaskNote(admin.StackedInline):

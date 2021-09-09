@@ -255,6 +255,15 @@ class TimeSlip(models.Model):
     def cost(self):
         return float(self.hourly_rate) * float(self.hours)
 
+    @property
+    def start_date(self):
+        start_time = datetime.datetime.combine(self.date, datetime.datetime.min.time())
+        return start_time + datetime.timedelta(hours=8)
+
+    @property
+    def end_date(self):
+        return self.start_date + datetime.timedelta(hours=float(self.hours))
+
     def save(self, *args, **kwargs):
         if not self.hourly_rate:
             self.hourly_rate = self.project.hourly_rate
