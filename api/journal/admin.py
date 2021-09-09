@@ -44,8 +44,12 @@ class InvoiceAdmin(admin.ModelAdmin):
         return obj
 
 
-class InvoiceCalendar(admin.ModelAdmin):
-    admin_calendar_fields = [{"start": "due_date", "title": "name", "color": "red"}]
+class InvoiceCalendar(AdminCalendar):
+    admin_calendar_fields = [
+        {"start": "due_date", "title": "name", "color": "red"},
+        {"start": "issued_at", "title": "name", "color": "blue"},
+        {"start": "paid_at", "title": "name", "color": "green"},
+    ]
 
 
 register_admincalendar(InvoiceCalendar, models.Invoice)
@@ -69,7 +73,7 @@ class TimeSlipAdmin(admin.ModelAdmin):
 
 
 class TimeSlipCalendar(AdminCalendar):
-    admin_calendar_fields = [{"start": "start_date", "end": "end_date"}]
+    admin_calendar_fields = [{"start": "date", "end": "end_date"}]
     list_display = ("hours", "invoice", "date")
     list_filter = ("project",)
 

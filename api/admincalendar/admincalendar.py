@@ -3,6 +3,7 @@ from datetime import datetime
 
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
+from django.db.models import Q
 from django.http import JsonResponse
 from django.utils.safestring import mark_safe
 
@@ -19,23 +20,23 @@ def get_admin_calendar_events(cl):
     for item in cl.result_list:
         for field in admin_fields:
             start_date = getattr(item, field["start"])
+            if start_date:
 
-            if "title" in field:
-                title = getattr(item, field["title"])
-            else:
-                title = str(item)
+                if "title" in field:
+                    title = getattr(item, field["title"])
+                else:
+                    title = str(item)
+                event = {
+                    "start": start_date.isoformat(),
+                    "title": title,
+                    "color": field.get("color"),
+                    "url": cl.url_for_result(item),
+                }
 
-            event = {
-                "start": start_date.isoformat(),
-                "title": title,
-                "color": field.get("color"),
-                "url": cl.url_for_result(item),
-            }
+                if field.get("end"):
+                    event["end"] = getattr(item, field["end"]).isoformat()
 
-            if field.get("end"):
-                event["end"] = getattr(item, field["end"]).isoformat()
-
-            admin_events.append(event)
+                admin_events.append(event)
 
     return admin_events
 
@@ -72,6 +73,7 @@ class AdminCalendarChangeList(ChangeList):
 
 class AdminCalendar(admin.ModelAdmin):
     admin_calendar = True
+    admin_calendar_fields = []
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -79,7 +81,19 @@ class AdminCalendar(admin.ModelAdmin):
         end = request.GET.get("end")
 
         if start:
-            return qs.filter(date__gte=get_datetime(start), date__lte=get_datetime(end))
+            start_date = get_datetime(start)
+            end_date = get_datetime(end)
+            query = Q()
+
+            for field in self.admin_calendar_fields:
+                query |= Q(
+                    **{
+                        "{}__gte".format(field["start"]): start_date,
+                        "{}__lte".format(field["start"]): end_date,
+                    }
+                )
+
+            return qs.filter(query)
 
         return qs
 
