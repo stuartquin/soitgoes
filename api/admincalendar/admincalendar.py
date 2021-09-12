@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 
+from django.db import models
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.db.models import Q
@@ -12,7 +13,7 @@ ADMIN_CALENDAR_PARAMS = ["start", "end"]
 
 def get_admin_calendar_events(cl):
     if not hasattr(cl.model_admin, "admin_calendar_fields"):
-        return "[]"
+        return []
 
     admin_fields = cl.model_admin.admin_calendar_fields
 
@@ -41,11 +42,11 @@ def get_admin_calendar_events(cl):
     return admin_events
 
 
-def register_admincalendar(modeladmin, model):
+def register_admincalendar(modeladmin, model, name=None):
     class Meta:
         proxy = True
         app_label = model._meta.app_label
-        verbose_name = model._meta.verbose_name
+        verbose_name = name or model._meta.verbose_name
 
     attrs = {"__module__": "", "Meta": Meta}
 

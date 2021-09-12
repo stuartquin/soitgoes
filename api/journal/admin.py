@@ -45,9 +45,10 @@ class InvoiceAdmin(admin.ModelAdmin):
 
 
 class InvoiceCalendar(AdminCalendar):
+    admin_calendar_add_field = "paid_at"
     admin_calendar_fields = [
         {"start": "due_date", "title": "name", "color": "red"},
-        {"start": "issued_at", "title": "name", "color": "blue"},
+        {"start": "issued_at", "title": "name", "color": "pink"},
         {"start": "paid_at", "title": "name", "color": "green"},
     ]
 
@@ -73,12 +74,13 @@ class TimeSlipAdmin(admin.ModelAdmin):
 
 
 class TimeSlipCalendar(AdminCalendar):
+    admin_calendar_add_field = "date"
     admin_calendar_fields = [{"start": "date", "end": "end_date"}]
     list_display = ("hours", "invoice", "date")
     list_filter = ("project",)
 
 
-register_admincalendar(TimeSlipCalendar, models.TimeSlip)
+register_admincalendar(TimeSlipCalendar, models.TimeSlip, "Time Slip Calendar")
 
 
 class TaskNote(admin.StackedInline):
