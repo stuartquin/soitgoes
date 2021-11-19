@@ -24,10 +24,12 @@ function TimeSlip({ timeSlipEntry }: Props) {
   const disabled = Boolean(timeSlip.invoice);
 
   const hours = timeSlip.hours || 0;
+  const bgColor = timeSlip.id ? "bg-blue-100" : "";
+
   return (
     <div>
       <Input
-        className="block mx-1 w-16 text-center"
+        className={`${bgColor} block mx-1 w-16 text-center`}
         value={hours || ""}
         onChange={handleChange}
         disabled={disabled}
