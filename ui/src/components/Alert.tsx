@@ -12,6 +12,7 @@ const VARIANTS: { [variant: string]: string } = {
   primary: "bg-blue-50 text-blue-400",
   light: "bg-gray-50 text-gray-700",
   success: "bg-green-50 text-green-800",
+  error: "bg-red-50 text-red-800",
 };
 
 function Alert({ variant, children, className, onDismiss }: Props) {

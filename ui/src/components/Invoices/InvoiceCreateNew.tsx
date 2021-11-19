@@ -9,6 +9,7 @@ import InvoiceForm from "components/Invoices/InvoiceForm";
 import InvoiceEditableItems from "components/Invoices/InvoiceEditableItems";
 import InvoiceEditableTotals from "components/Invoices/InvoiceEditableTotals";
 import InvoiceWeeklyTaskSettings from "components/Invoices/InvoiceWeeklyTaskSettings";
+import Alert from "components/Alert";
 import {
   InvoiceToggleItem,
   calculateTotal,
@@ -28,6 +29,7 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
   const [modifiers, setModifiers] = useState<models.InvoiceModifier[]>([]);
   const [timeSlips, setTimeSlips] = useState<models.TimeSlip[]>([]);
   const [exchangeRates, setExchangeRates] = useState<ExchangeRate>({});
+  const [exchangeRateError, setExchangeRateError] = useState<String>();
   const history = useHistory();
 
   useEffect(() => {
@@ -68,6 +70,10 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
 
   useEffect(() => {
     const currency = project.currency || "GBP";
+
+    if (exchangeRates["GBP"] && !exchangeRates[currency]) {
+      setExchangeRateError(`Unable to load exchange rate for ${currency}`);
+    }
 
     const initialInvoice = {
       currency,
@@ -190,6 +196,11 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
             project={project}
             onIssue={issueInvoice}
           />
+          {exchangeRateError && (
+            <Alert variant="error" className="my-4">
+              {exchangeRateError}
+            </Alert>
+          )}
           {project.weeklyRate && (
             <InvoiceWeeklyTaskSettings
               project={project}
