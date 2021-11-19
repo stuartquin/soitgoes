@@ -19,6 +19,7 @@ import {
   saveTimeSheet,
   TimeSheetType,
   TimeSlipEntry,
+  getUpdatedTimeSheet,
 } from "components/TimeSheet/TimeSlipContext";
 import TimeSheetGrid from "components/TimeSheet/TimeSheetGrid";
 import TimeSheetLoading from "components/TimeSheet/TimeSheetLoading";
@@ -84,8 +85,9 @@ function TimeSheet({ user, projects }: Props) {
     [user, timeSheet]
   );
 
-  const save = useCallback(() => {
-    saveTimeSheet(timeSheet);
+  const save = useCallback(async () => {
+    const results = await saveTimeSheet(timeSheet);
+    setTimeSheet(getUpdatedTimeSheet(timeSheet, results));
   }, [timeSheet]);
 
   const closeSlideOver = useCallback(() => {

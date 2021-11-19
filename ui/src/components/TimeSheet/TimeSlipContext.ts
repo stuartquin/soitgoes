@@ -4,6 +4,7 @@ import { format, addDays, addHours, startOfMonth, endOfMonth } from "date-fns";
 
 import { getClient } from "apiClient";
 import * as models from "api/models";
+import { ensure } from "typeHelpers";
 
 const getDateRange = (date: Date): Date[] => {
   const startDate = addDays(startOfMonth(date), -7);
@@ -29,6 +30,27 @@ export type TimeSlipContextType = {
 export const TimeSlipContext = createContext<TimeSlipContextType>({
   updateHours: (entry: TimeSlipEntry, hours: number) => null,
 });
+
+export const getUpdatedTimeSheet = (
+  timeSheet: TimeSheetType,
+  timeSlips: models.TimeSlip[]
+): TimeSheetType => {
+  const updated = { ...timeSheet };
+
+  timeSlips.forEach((timeSlip) => {
+    const taskId = ensure(timeSlip.task);
+    const dateStr = format(timeSlip.date, "yyyy-MM-dd");
+    updated[taskId] = {
+      ...updated[taskId],
+      [dateStr]: {
+        timeSlip,
+        updated: false,
+        date: timeSlip.date,
+      },
+    };
+  });
+  return updated;
+};
 
 export const getTimeSheet = (
   start: Date,

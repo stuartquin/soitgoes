@@ -49,7 +49,12 @@ class Company(models.Model):
     vat_number = models.CharField(max_length=128, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    billing = models.ForeignKey(Billing, models.SET_NULL, blank=True, null=True,)
+    billing = models.ForeignKey(
+        Billing,
+        models.SET_NULL,
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         return "%s, %s" % (self.name, self.city)
@@ -58,7 +63,12 @@ class Company(models.Model):
 class Account(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     users = models.ManyToManyField(User)
-    company = models.ForeignKey(Company, models.SET_NULL, blank=True, null=True,)
+    company = models.ForeignKey(
+        Company,
+        models.SET_NULL,
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         if self.company:
@@ -117,7 +127,11 @@ class Project(models.Model):
     currency = models.CharField(max_length=3, default="GBP")
     archived = models.BooleanField(default=False)
     default_task = models.ForeignKey(
-        "Task", models.SET_NULL, blank=True, null=True, related_name="project_default",
+        "Task",
+        models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="project_default",
     )
 
     def get_uninvoiced_hours(self, *args, **kwargs):
@@ -152,7 +166,10 @@ class Invoice(models.Model):
     group_by = models.CharField(
         default="timeslips",
         max_length=128,
-        choices=[("tasks", "Task"), ("timeslips", "Timeslip"),],
+        choices=[
+            ("tasks", "Task"),
+            ("timeslips", "Timeslip"),
+        ],
     )
     show_hours = models.BooleanField(default=True)
     exchange_rate = models.FloatField(default=1.0)
@@ -204,13 +221,19 @@ class Task(models.Model):
     hours_spent = models.FloatField(default=0.0)
     hours_predicted = models.FloatField(default=0.0)
     billing_type = models.CharField(
-        max_length=256, choices=BILLING_TYPE_OPTIONS, default=BILLING_TYPE_TIME,
+        max_length=256,
+        choices=BILLING_TYPE_OPTIONS,
+        default=BILLING_TYPE_TIME,
     )
     state = models.CharField(
-        max_length=256, choices=TASK_STATUS, default=TASK_STATUS_OPEN,
+        max_length=256,
+        choices=TASK_STATUS,
+        default=TASK_STATUS_OPEN,
     )
     invoices = models.ManyToManyField(
-        Invoice, through="TaskInvoice", related_name="tasks",
+        Invoice,
+        through="TaskInvoice",
+        related_name="tasks",
     )
 
     def __str__(self):
@@ -248,7 +271,11 @@ class TimeSlip(models.Model):
     task = models.ForeignKey(Task, blank=True, null=True, on_delete=models.CASCADE)
     comment = models.CharField(max_length=512, blank=True, null=True)
     invoice = models.ForeignKey(
-        Invoice, models.SET_NULL, blank=True, null=True, related_name="timeslips",
+        Invoice,
+        models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="timeslips",
     )
 
     @property
@@ -291,7 +318,7 @@ class TaskNote(models.Model):
 
 
 class Activity(models.Model):
-    """ Activity feed of some sort """
+    """Activity feed of some sort"""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -322,4 +349,3 @@ class Activity(models.Model):
     @staticmethod
     def update(user, id, type, status=None):
         Activity._insert(user, id, type, "UPD", status)
-        due_date = (due_date,)
