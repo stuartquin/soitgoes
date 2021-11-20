@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import Button from "components/Button";
 import Input from "components/Form/Input";
@@ -11,7 +12,27 @@ import {
 } from "apiClient";
 
 function Login() {
+  const search = window.location.search;
   const [error, setError] = useState<string>();
+
+  useEffect(() => {
+    const ssoLogin = async () => {
+      const api = getClient();
+      const searchParams = new URLSearchParams(search);
+      const code = searchParams.get("code");
+      if (code) {
+        try {
+          const response = await api.createSSO({ sSO: { code } });
+          storeToken(response.token || "");
+          window.location.reload();
+        } catch (error) {
+          setError(await getAPIErrorMessage(error));
+        }
+      }
+    };
+    ssoLogin();
+  }, [search]);
+
   const login = async (event: React.FormEvent<HTMLFormElement>) => {
     const values = getFormValues(event);
     const api = getClient();

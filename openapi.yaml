@@ -1386,6 +1386,31 @@ paths:
           description: ''
       tags:
       - api
+  /api/users/sso/:
+    post:
+      operationId: createSSO
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SSO'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SSO'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SSO'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SSO'
+          description: ''
+      tags:
+      - api
   /api/users/login/:
     post:
       operationId: createLogin
@@ -2009,6 +2034,17 @@ components:
         rates:
           type: object
           readOnly: true
+    SSO:
+      type: object
+      properties:
+        code:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - code
     Login:
       type: object
       properties:

@@ -301,7 +301,10 @@ class InvoiceTaskDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class TaskSummary(generics.RetrieveAPIView):
-    schema = AutoSchema(component_name="TaskSummary", operation_id_base="TaskSummary",)
+    schema = AutoSchema(
+        component_name="TaskSummary",
+        operation_id_base="TaskSummary",
+    )
     queryset = models.Task.objects.all()
     serializer_class = serializers.TaskSummarySerializer
     permission_classes = (HasTaskAccess,)

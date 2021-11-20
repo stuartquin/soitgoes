@@ -72,6 +72,9 @@ import {
     Project,
     ProjectFromJSON,
     ProjectToJSON,
+    SSO,
+    SSOFromJSON,
+    SSOToJSON,
     Task,
     TaskFromJSON,
     TaskToJSON,
@@ -111,6 +114,10 @@ export interface CreateNoteRequest {
 
 export interface CreateProjectRequest {
     project?: Project;
+}
+
+export interface CreateSSORequest {
+    sSO?: SSO;
 }
 
 export interface CreateTaskRequest {
@@ -476,6 +483,33 @@ export class ApiApi extends runtime.BaseAPI {
      */
     async createProject(requestParameters: CreateProjectRequest): Promise<Project> {
         const response = await this.createProjectRaw(requestParameters);
+        return await response.value();
+    }
+
+    /**
+     */
+    async createSSORaw(requestParameters: CreateSSORequest): Promise<runtime.ApiResponse<SSO>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/api/users/sso/`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: SSOToJSON(requestParameters.sSO),
+        });
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SSOFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async createSSO(requestParameters: CreateSSORequest): Promise<SSO> {
+        const response = await this.createSSORaw(requestParameters);
         return await response.value();
     }
 

@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model, authenticate
+from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 
@@ -14,7 +15,8 @@ class LoginSerializer(serializers.Serializer):
 
     def get_token(self, initial_data):
         user = authenticate(
-            username=initial_data.get("email"), password=initial_data.get("password"),
+            username=initial_data.get("email"),
+            password=initial_data.get("password"),
         )
         if user is None:
             raise serializers.ValidationError(
@@ -27,6 +29,11 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 "Invalid username/password. Please try again!"
             )
+
+
+class SSOSerializer(serializers.Serializer):
+    code = serializers.CharField(required=True, write_only=True)
+    token = serializers.CharField(read_only=True)
 
 
 class UserSerializer(serializers.ModelSerializer):

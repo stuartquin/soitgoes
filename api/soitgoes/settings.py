@@ -98,7 +98,9 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "verbose": {"format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s",},
+        "verbose": {
+            "format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
+        },
     },
     "handlers": {
         "console": {
@@ -108,7 +110,13 @@ LOGGING = {
             "formatter": "verbose",
         },
     },
-    "loggers": {"": {"handlers": ["console"], "level": "INFO", "propagate": True,},},
+    "loggers": {
+        "": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": True,
+        },
+    },
 }
 
 
@@ -125,7 +133,11 @@ DATABASES = {
     }
 }
 
-CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache",}}
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    }
+}
 
 
 # Password validation
@@ -135,9 +147,15 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
 ]
 
 
@@ -180,3 +198,6 @@ SESSION_COOKIE_HTTPONLY = False
 CSRF_TRUSTED_ORIGINS = ["localhost", "localhost:8080", "localhost:8000"]
 
 OPEN_EXCHANGE_RATES_APP_ID = os.environ.get("OPEN_EXCHANGE_RATES_APP_ID")
+
+OSSSO_API_URL = os.environ.get("OSSSO_API_URL")
+OSSSO_API_TOKEN = os.environ.get("OSSSO_API_TOKEN")

@@ -20,6 +20,7 @@ export * from './Note';
 export * from './OneTimeToken';
 export * from './Project';
 export * from './ProjectSummary';
+export * from './SSO';
 export * from './Task';
 export * from './TaskNotes';
 export * from './TaskSummary';
