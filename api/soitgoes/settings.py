@@ -200,7 +200,4 @@ OPEN_EXCHANGE_RATES_APP_ID = os.environ.get("OPEN_EXCHANGE_RATES_APP_ID")
 
 OSSSO_API_URL = os.environ.get("OSSSO_API_URL")
 OSSSO_API_TOKEN = os.environ.get("OSSSO_API_TOKEN")
-OSSSO_GOOGLE_URL = os.environ.get(
-    "OSSSO_GOOGLE_URL",
-    "https://ossso-dev.cloud.stuartquin.com/sso/signin/15b7d8e0-31f0-423a-9619-739954150d76/",
-)
+OSSSO_GOOGLE_URL = os.environ.get("OSSSO_GOOGLE_URL")
