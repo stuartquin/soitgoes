@@ -69,6 +69,7 @@ class Account(models.Model):
         blank=True,
         null=True,
     )
+    sso_domain = models.CharField(max_length=256, blank=True, null=True)
 
     def __str__(self):
         if self.company:

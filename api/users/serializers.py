@@ -1,6 +1,4 @@
 from django.contrib.auth import get_user_model, authenticate
-from django.shortcuts import get_object_or_404
-from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 
 from users.models import OneTimeToken

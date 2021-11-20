@@ -11,6 +11,8 @@ import {
   getAPIErrorMessage,
 } from "apiClient";
 
+import GoogleButton from "./btn_google_signin_dark_normal_web@2x.png";
+
 function Login() {
   const search = window.location.search;
   const [error, setError] = useState<string>();
@@ -72,6 +74,10 @@ function Login() {
         <Button variant="success" type="submit" className="w-full mt-4">
           Login
         </Button>
+
+        <a href="/api/users/sso/">
+          <img src={GoogleButton} />
+        </a>
 
         {error && (
           <div className="rounded text-red-500 my-4 p-3 bg-red-100">
