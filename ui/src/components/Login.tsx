@@ -26,7 +26,7 @@ function Login() {
         try {
           const response = await api.createSSO({ sSO: { code } });
           storeToken(response.token || "");
-          window.location.reload();
+          window.location.href = "/";
         } catch (error) {
           setError(await getAPIErrorMessage(error));
         }
@@ -75,8 +75,8 @@ function Login() {
           Login
         </Button>
 
-        <a href="/api/users/sso/">
-          <img src={GoogleButton} />
+        <a href="/api/users/sso/redirect/?domain=quin.team">
+          <img src={GoogleButton} className="w-48" />
         </a>
 
         {error && (

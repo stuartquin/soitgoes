@@ -20,23 +20,39 @@ class OSSSOException(Exception):
     pass
 
 
-def get_saml_response(code: str) -> Optional[dict]:
+def get_json(url: str) -> dict:
     try:
         headers = {
             "Authorization": f"Token {settings.OSSSO_API_TOKEN}",
         }
-        url = f"{settings.OSSSO_API_URL}/v1/response/{code}/"
 
+        print(f"{headers=}")
         request = urllib.request.Request(url, headers=headers)
         response = urllib.request.urlopen(request)
         return json.loads(response.read().decode("utf-8"))
     except HTTPError as error:
         logger.error(error)
+        raise error
+
+
+def get_saml_response(code: str) -> Optional[dict]:
+    return get_json(f"{settings.OSSSO_API_URL}/v1/response/{code}")
 
 
 def get_sso_account(email: str) -> Account:
     domain = email.split("@")[1]
     return get_object_or_404(Account, sso_domain=domain)
+
+
+def get_sso_redirect_url(domain: str) -> str:
+    try:
+        response = get_json(
+            f"{settings.OSSSO_API_URL}/v1/connection/url?domain={domain}"
+        )
+
+    except HTTPError:
+        raise OSSSOException("Unable to establish OSSSO connection")
+    return response["redirect_url"]
 
 
 def perform_sso_login(code: str) -> User:

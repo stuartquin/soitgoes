@@ -44,3 +44,7 @@ class OneTimeTokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = OneTimeToken
         fields = ["key"]
+
+
+class SSORedirectSerializer(serializers.Serializer):
+    redirect_url = serializers.CharField(read_only=True)

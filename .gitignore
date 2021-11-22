@@ -122,3 +122,5 @@ version.txt
 .mypy_cache/
 
 api/pyrightconfig.json
+
+env_variables
