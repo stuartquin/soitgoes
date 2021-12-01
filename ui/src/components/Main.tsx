@@ -25,7 +25,7 @@ function Main({ user }: Props) {
       console.table(version);
 
       const response = await api.listProjects({});
-      setProjects((response.results || []).filter((p) => !p.archived));
+      setProjects(response.results || []);
       setIsLoading(false);
     };
 

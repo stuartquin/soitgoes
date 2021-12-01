@@ -12,12 +12,14 @@ interface Props {
 }
 
 function InvoiceSelectProject({ projects, projectSummaries }: Props) {
-  const projectsWithSummary = projectSummaries.map((summary) => {
-    return {
-      project: ensure(projects.find((p) => p.id === summary.project)),
-      summary,
-    };
-  });
+  const projectsWithSummary = projectSummaries
+    .map((summary) => {
+      return {
+        project: ensure(projects.find((p) => p.id === summary.project)),
+        summary,
+      };
+    })
+    .filter(({ project }) => !project.archived);
 
   return (
     <div>

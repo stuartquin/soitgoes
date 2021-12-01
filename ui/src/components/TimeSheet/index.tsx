@@ -95,6 +95,8 @@ function TimeSheet({ user, projects }: Props) {
     history.push(url);
   }, [startDate, history]);
 
+  const activeProjects = projects.filter((p) => !p.archived);
+
   const isOpen = Boolean(selectedTaskId);
 
   return (
@@ -108,7 +110,7 @@ function TimeSheet({ user, projects }: Props) {
             user={user}
             startDate={startDate}
             timeSheet={timeSheet}
-            projects={projects}
+            projects={activeProjects}
             tasks={tasks}
           />
         )}
@@ -116,7 +118,7 @@ function TimeSheet({ user, projects }: Props) {
       <SlideOver isOpen={isOpen} onClose={closeSlideOver}>
         <div>
           {selectedTaskId && (
-            <TaskDetail taskId={selectedTaskId} projects={projects} />
+            <TaskDetail taskId={selectedTaskId} projects={activeProjects} />
           )}
         </div>
       </SlideOver>
