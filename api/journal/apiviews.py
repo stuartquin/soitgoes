@@ -237,7 +237,7 @@ class ProjectSummary(generics.ListAPIView):
     serializer_class = serializers.ProjectSummarySerializer
 
     def get_queryset(self):
-        projects = get_allowed_projects(self.request).filter(archived=False)
+        projects = get_allowed_projects(self.request)
         summary = get_unbilled_summary(projects)
         return summary
 
