@@ -79,6 +79,7 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
       currency,
       exchangeRate: exchangeRates[currency] || 1,
       project: project.id,
+      showHours: false,
     } as models.Invoice;
     setInvoice(
       getCalculatedInvoice(initialInvoice, fixedTasks, timeSlips, modifiers)
