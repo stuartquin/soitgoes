@@ -25,6 +25,10 @@ BILLING_TYPE_OPTIONS = [
     (BILLING_TYPE_FIXED, "Fixed Cost"),
 ]
 
+BILLING_UNIT_HOUR = "HOUR"
+BILLING_UNIT_DAY = "DAY"
+BILLING_UNIT_WEEK = "WEEK"
+
 
 class Billing(models.Model):
     bank_name = models.CharField(max_length=512)
@@ -134,6 +138,17 @@ class Project(models.Model):
         null=True,
         related_name="project_default",
     )
+    billing_unit = models.CharField(
+        default=BILLING_UNIT_HOUR,
+        max_length=128,
+        choices=[
+            (BILLING_UNIT_HOUR, "Hour"),
+            (BILLING_UNIT_DAY, "Day"),
+            (BILLING_UNIT_WEEK, "Week"),
+        ],
+        blank=True,
+        null=True,
+    )
 
     def get_uninvoiced_hours(self, *args, **kwargs):
         timeslips = TimeSlip.objects.filter(project=self, invoice=None)
@@ -175,6 +190,17 @@ class Invoice(models.Model):
     show_hours = models.BooleanField(default=True)
     exchange_rate = models.FloatField(default=1.0)
     currency = models.CharField(max_length=3, default="GBP")
+    billing_unit = models.CharField(
+        default=BILLING_UNIT_HOUR,
+        max_length=128,
+        choices=[
+            (BILLING_UNIT_HOUR, "Hour"),
+            (BILLING_UNIT_DAY, "Day"),
+            (BILLING_UNIT_WEEK, "Week"),
+        ],
+        blank=True,
+        null=True,
+    )
 
     def get_modifier_value(self, value):
         impact = 0

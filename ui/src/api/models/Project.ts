@@ -91,6 +91,22 @@ export interface Project {
      * @memberof Project
      */
     readonly nextSequenceNum?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Project
+     */
+    billingUnit?: ProjectBillingUnitEnum;
+}
+
+/**
+* @export
+* @enum {string}
+*/
+export enum ProjectBillingUnitEnum {
+    Hour = 'HOUR',
+    Day = 'DAY',
+    Week = 'WEEK'
 }
 
 export function ProjectFromJSON(json: any): Project {
@@ -115,6 +131,7 @@ export function ProjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): P
         'currency': !exists(json, 'currency') ? undefined : json['currency'],
         'defaultTask': !exists(json, 'default_task') ? undefined : json['default_task'],
         'nextSequenceNum': !exists(json, 'next_sequence_num') ? undefined : json['next_sequence_num'],
+        'billingUnit': !exists(json, 'billing_unit') ? undefined : json['billing_unit'],
     };
 }
 
@@ -134,6 +151,7 @@ export function ProjectToJSON(value?: Project | null): any {
         'archived': value.archived,
         'currency': value.currency,
         'default_task': value.defaultTask,
+        'billing_unit': value.billingUnit,
     };
 }
 

@@ -70,6 +70,7 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
 
   useEffect(() => {
     const currency = project.currency || "GBP";
+    const billingUnit = project.billingUnit;
 
     if (exchangeRates["GBP"] && !exchangeRates[currency]) {
       setExchangeRateError(`Unable to load exchange rate for ${currency}`);
@@ -77,6 +78,7 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
 
     const initialInvoice = {
       currency,
+      billingUnit,
       exchangeRate: exchangeRates[currency] || 1,
       project: project.id,
       showHours: false,

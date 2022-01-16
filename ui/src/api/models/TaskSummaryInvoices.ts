@@ -145,6 +145,12 @@ export interface TaskSummaryInvoices {
      * @memberof TaskSummaryInvoices
      */
     currency?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskSummaryInvoices
+     */
+    billingUnit?: TaskSummaryInvoicesBillingUnitEnum;
 }
 
 /**
@@ -162,6 +168,14 @@ export enum TaskSummaryInvoicesStatusEnum {
 export enum TaskSummaryInvoicesGroupByEnum {
     Tasks = 'tasks',
     Timeslips = 'timeslips'
+}/**
+* @export
+* @enum {string}
+*/
+export enum TaskSummaryInvoicesBillingUnitEnum {
+    Hour = 'HOUR',
+    Day = 'DAY',
+    Week = 'WEEK'
 }
 
 export function TaskSummaryInvoicesFromJSON(json: any): TaskSummaryInvoices {
@@ -195,6 +209,7 @@ export function TaskSummaryInvoicesFromJSONTyped(json: any, ignoreDiscriminator:
         'name': !exists(json, 'name') ? undefined : json['name'],
         'exchangeRate': !exists(json, 'exchange_rate') ? undefined : json['exchange_rate'],
         'currency': !exists(json, 'currency') ? undefined : json['currency'],
+        'billingUnit': !exists(json, 'billing_unit') ? undefined : json['billing_unit'],
     };
 }
 
@@ -223,6 +238,7 @@ export function TaskSummaryInvoicesToJSON(value?: TaskSummaryInvoices | null): a
         'modifier': value.modifier,
         'exchange_rate': value.exchangeRate,
         'currency': value.currency,
+        'billing_unit': value.billingUnit,
     };
 }
 

@@ -54,6 +54,7 @@ class ProjectSerializer(LogActivity):
             "account",
             "default_task",
             "next_sequence_num",
+            "billing_unit",
         ]
 
 
@@ -207,6 +208,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
             "name",
             "exchange_rate",
             "currency",
+            "billing_unit",
         ]
 
 

@@ -1,4 +1,4 @@
-## Developing
+# Developing
 
 ```
 # Build and start server

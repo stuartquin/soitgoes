@@ -14,8 +14,12 @@
           {% endif %}
           {{ timeslip.date }}: {{ timeslip.project.name }}
         </td>
-        <td class="number">{{ timeslip.hourly_rate|multiply:exchange_rate|floatformat:2 }}</td>
-        <td class="number">{{ timeslip.hourly_rate|multiply:timeslip.hours|multiply:exchange_rate|floatformat:2 }}</td>
+        {% if invoice.billing_unit == 'HOUR' %}
+          <td class="number">{{ timeslip.hourly_rate|multiply:exchange_rate|floatformat:2 }}</td>
+        {% else %}
+          <td class="number">{{ timeslip.hourly_rate|multiply:timeslip.hours|multiply:exchange_rate|floatformat:2 }}</td>
+        {% endif %}
+          <td class="number">{{ timeslip.hourly_rate|multiply:timeslip.hours|multiply:exchange_rate|floatformat:2 }}</td>
       </tr>
     {% endif %}
   {% endfor %}

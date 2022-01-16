@@ -145,6 +145,12 @@ export interface Invoice {
      * @memberof Invoice
      */
     currency?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Invoice
+     */
+    billingUnit?: InvoiceBillingUnitEnum;
 }
 
 /**
@@ -162,6 +168,14 @@ export enum InvoiceStatusEnum {
 export enum InvoiceGroupByEnum {
     Tasks = 'tasks',
     Timeslips = 'timeslips'
+}/**
+* @export
+* @enum {string}
+*/
+export enum InvoiceBillingUnitEnum {
+    Hour = 'HOUR',
+    Day = 'DAY',
+    Week = 'WEEK'
 }
 
 export function InvoiceFromJSON(json: any): Invoice {
@@ -195,6 +209,7 @@ export function InvoiceFromJSONTyped(json: any, ignoreDiscriminator: boolean): I
         'name': !exists(json, 'name') ? undefined : json['name'],
         'exchangeRate': !exists(json, 'exchange_rate') ? undefined : json['exchange_rate'],
         'currency': !exists(json, 'currency') ? undefined : json['currency'],
+        'billingUnit': !exists(json, 'billing_unit') ? undefined : json['billing_unit'],
     };
 }
 
@@ -223,6 +238,7 @@ export function InvoiceToJSON(value?: Invoice | null): any {
         'modifier': value.modifier,
         'exchange_rate': value.exchangeRate,
         'currency': value.currency,
+        'billing_unit': value.billingUnit,
     };
 }
 

@@ -67,6 +67,31 @@ function InvoiceForm({ invoice, onUpdate }: Props) {
         </div>
       </div>
 
+      <div className="my-4">
+        <label
+          htmlFor="dueDate"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Billing Unit
+        </label>
+        <div className="mt-1">
+          <select
+            name="billingUnit"
+            id="billingUnit"
+            className="flex-1 block w-full sm:text-sm border border-gray-300 rounded p-2"
+            value={invoice.billingUnit}
+            onChange={updateInvoice}
+          >
+            <option value={models.InvoiceBillingUnitEnum.Hour}>
+              {models.InvoiceBillingUnitEnum.Hour}
+            </option>
+            <option value={models.InvoiceBillingUnitEnum.Day}>
+              {models.InvoiceBillingUnitEnum.Day}
+            </option>
+          </select>
+        </div>
+      </div>
+
       <div className="my-4 flex">
         <div className="flex-grow mr-3">
           <label
