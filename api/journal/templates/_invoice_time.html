@@ -28,8 +28,8 @@
     {% if not task.time_billing %}
       <tr>
         <td>{{ task.name }} </td>
-        <td class="number">{{ task.cost }}</td>
-        <td class="number">{{ task.cost }}</td>
+        <td class="number">{{ task.cost|multiply:exchange_rate|floatformat:2 }}</td>
+        <td class="number">{{ task.cost|multiply:exchange_rate|floatformat:2 }}</td>
       </tr>
     {% endif %}
   {% endfor %}
