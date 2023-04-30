@@ -4,10 +4,7 @@ import { render, act, fireEvent } from "@testing-library/react";
 
 import * as models from "api/models";
 import InvoiceCreateNew from "./InvoiceCreateNew";
-import * as api from "apiClient";
-import * as Api from "api";
-
-jest.mock("api");
+import { ApiApi } from "api/apis/ApiApi";
 
 const MOCK_HISTORY_PUSH = jest.fn();
 jest.mock("react-router-dom", () => ({
@@ -17,7 +14,7 @@ jest.mock("react-router-dom", () => ({
   }),
 }));
 
-class MockApi extends Api.ApiApi {
+class MockApi extends ApiApi {
   createInvoice = jest.fn(
     (args: any): Promise<any> =>
       Promise.resolve({
@@ -154,26 +151,24 @@ class MockApi extends Api.ApiApi {
   }
 }
 
-describe("InvoiceCreateNew", () => {
-  let mockGetClient: any;
-  let mockAPIInstance: any;
+jest.mock("apiClient", () => {
+  const originalModule = jest.requireActual("apiClient");
+  return {
+    ...originalModule,
+    getClient: () => {
+      return new MockApi();
+    },
+  };
+});
 
+describe("InvoiceCreateNew", () => {
   const project = {
     id: 1,
     name: "Test Project 1",
   } as models.Project;
 
   beforeEach(() => {
-    mockAPIInstance = new MockApi();
-
-    mockGetClient = jest
-      .spyOn(api, "getClient")
-      .mockImplementation(() => mockAPIInstance);
-  });
-
-  afterEach(() => {
-    mockGetClient.mockRestore();
-    MOCK_HISTORY_PUSH.mockClear();
+    jest.clearAllMocks();
   });
 
   test("Displays totals summary", async () => {
@@ -188,122 +183,4 @@ describe("InvoiceCreateNew", () => {
       await findByText("£1452");
     });
   });
-
-  // test("Toggling timeslip updates totals", async () => {
-  //   await act(async () => {
-  //     const { findByText, findAllByTitle } = render(
-  //       <BrowserRouter>
-  //         <InvoiceCreateNew project={project} onIssue={jest.fn()} />
-  //       </BrowserRouter>
-  //     );
-  //     const toggles = await findAllByTitle("Remove Item");
-  //     await fireEvent.click(toggles[0]);
-
-  //     await findByText("£885");
-  //     await findByText("£177");
-  //     await findByText("£1062");
-
-  //     await fireEvent.click(toggles[0]);
-  //     await findByText("£1210");
-  //     await findByText("£242");
-  //     await findByText("£1452");
-  //   });
-  // });
-
-  // test("Change Group By Display", async () => {
-  //   await act(async () => {
-  //     const { findByText, findByLabelText } = render(
-  //       <BrowserRouter>
-  //         <InvoiceCreateNew project={project} onIssue={jest.fn()} />
-  //       </BrowserRouter>
-  //     );
-  //     const groupBy = await findByLabelText("Group By");
-  //     await findByText("Date");
-  //     await findByText("2021-06-07");
-
-  //     await fireEvent.change(groupBy, { target: { value: "tasks" } });
-
-  //     await findByText("Task");
-  //     await findByText("Test Task 1");
-  //     await findByText("Test Task 2");
-  //   });
-  // });
-
-  // test("Toggle TIME based task", async () => {
-  //   await act(async () => {
-  //     const { findByText, findAllByTitle, findByLabelText } = render(
-  //       <BrowserRouter>
-  //         <InvoiceCreateNew project={project} onIssue={jest.fn()} />
-  //       </BrowserRouter>
-  //     );
-  //     const groupBy = await findByLabelText("Group By");
-  //     await fireEvent.change(groupBy, { target: { value: "tasks" } });
-
-  //     const toggles = await findAllByTitle("Remove Item");
-  //     await fireEvent.click(toggles[0]);
-
-  //     await findByText("£430");
-
-  //     await fireEvent.click(toggles[0]);
-  //     await findByText("£1210");
-  //   });
-  // });
-
-  // test("Toggle FIXED task", async () => {
-  //   await act(async () => {
-  //     const { findByText, findAllByTitle, findByLabelText } = render(
-  //       <BrowserRouter>
-  //         <InvoiceCreateNew project={project} onIssue={jest.fn()} />
-  //       </BrowserRouter>
-  //     );
-  //     const groupBy = await findByLabelText("Group By");
-  //     fireEvent.change(groupBy, { target: { value: "tasks" } });
-
-  //     const toggles = await findAllByTitle("Remove Item");
-  //     fireEvent.click(toggles[2]);
-  //     await findByText("£910");
-
-  //     fireEvent.click(toggles[2]);
-  //     await findByText("£1210");
-  //   });
-  // });
-
-  // test("Toggle Modifier", async () => {
-  //   await act(async () => {
-  //     const { findAllByText, findByText, findByTitle } = render(
-  //       <BrowserRouter>
-  //         <InvoiceCreateNew project={project} onIssue={jest.fn()} />
-  //       </BrowserRouter>
-  //     );
-  //     const toggle = await findByTitle("Remove");
-  //     fireEvent.click(toggle);
-  //     const totals = await findAllByText("£1210");
-  //     expect(totals.length).toBe(2);
-  //     await findByText("£242");
-
-  //     fireEvent.click(toggle);
-  //     await findByText("£1210");
-  //     await findByText("£242");
-  //     await findByText("£1452");
-  //   });
-  // });
-
-  // test("Issue Invoice", async () => {
-  //   await act(async () => {
-  //     const onIssue = jest.fn();
-  //     const { findByTitle } = render(
-  //       <BrowserRouter>
-  //         <InvoiceCreateNew project={project} onIssue={onIssue} />
-  //       </BrowserRouter>
-  //     );
-  //     fireEvent.click(await findByTitle("Issue Invoice"));
-
-  //     expect(MOCK_HISTORY_PUSH).toHaveBeenCalledWith("/invoices/1/2");
-
-  //     const arg = mockAPIInstance.createInvoice.mock.calls[0][0];
-  //     expect(arg["invoice"]["subtotalDue"]).toBe(1210);
-  //     expect(arg["invoice"]["timeslips"]).toEqual([2018, 2019, 2023, 2024]);
-  //     expect(onIssue).toHaveBeenCalled();
-  //   });
-  // });
 });

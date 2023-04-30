@@ -4,8 +4,6 @@ import { render, fireEvent } from "@testing-library/react";
 
 import InvoiceForm from "./InvoiceForm";
 
-jest.mock("api");
-
 describe("InvoiceForm", () => {
   test("Displays initial values", async () => {
     const invoice = {
@@ -21,11 +19,11 @@ describe("InvoiceForm", () => {
         <InvoiceForm invoice={invoice} onUpdate={jest.fn()} />
       </BrowserRouter>
     );
-    const reference = await findByLabelText("Reference");
-    expect(reference).toHaveValue("Test Reference");
+    const reference = (await findByLabelText("Reference")) as HTMLInputElement;
+    expect(reference.value).toBe("Test Reference");
 
-    const dueDate = await findByLabelText("Due Date");
-    expect(dueDate).toHaveValue("2021-05-09");
+    const dueDate = (await findByLabelText("Due Date")) as HTMLInputElement;
+    expect(dueDate.value).toBe("2021-05-09");
   });
 
   test("Update Due Date", async () => {
