@@ -3,7 +3,7 @@ FROM python:3.9
 RUN apt-get update
 RUN apt-get install -y zip unzip curl
 
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
 RUN apt-get install nodejs -y
 
 WORKDIR /app
