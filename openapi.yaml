@@ -478,6 +478,101 @@ paths:
           description: ''
       tags:
       - api
+  /api/timeslips/{id}:
+    get:
+      operationId: retrieveTimeSlip
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this time slip.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSlip'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateTimeSlip
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this time slip.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeSlip'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TimeSlip'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TimeSlip'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSlip'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateTimeSlip
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this time slip.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeSlip'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TimeSlip'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TimeSlip'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSlip'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyTimeSlip
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this time slip.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
   /api/invoices/{id}:
     get:
       operationId: retrieveInvoice
@@ -1433,67 +1528,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Login'
-          description: ''
-      tags:
-      - api
-  /api/timeslips/{id}:
-    put:
-      operationId: updateTimeSlip
-      description: ''
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this time slip.
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TimeSlip'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/TimeSlip'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/TimeSlip'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TimeSlip'
-          description: ''
-      tags:
-      - api
-    patch:
-      operationId: partialUpdateTimeSlip
-      description: ''
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this time slip.
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TimeSlip'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/TimeSlip'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/TimeSlip'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TimeSlip'
           description: ''
       tags:
       - api

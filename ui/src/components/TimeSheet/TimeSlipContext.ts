@@ -127,22 +127,30 @@ export const getUpdatedTimeSlips = (
     .map((entry) => entry.timeSlip);
 };
 
-export const saveTimeSheet = (
+export const saveTimeSheet = async (
   timeSheet: TimeSheetType
 ): Promise<models.TimeSlip[]> => {
   const updated = getUpdatedTimeSlips(timeSheet);
   const api = getClient();
 
-  const requests = updated.map((timeSlip) => {
-    return timeSlip.id
-      ? api.updateTimeSlip({
-          id: String(timeSlip.id),
-          timeSlip: { ...timeSlip, hours: timeSlip.hours || 0 },
-        })
-      : api.createTimeSlip({ timeSlip });
-  });
+  await Promise.all(
+    updated
+      .filter((timeSlip) => timeSlip.id && !timeSlip.hours)
+      .map((timeSlip) => api.destroyTimeSlip({ id: String(timeSlip.id) }))
+  );
 
-  return Promise.all(requests);
+  return Promise.all(
+    updated
+      .filter((timeSlip) => timeSlip.hours)
+      .map((timeSlip) => {
+        return timeSlip.id
+          ? api.updateTimeSlip({
+              id: String(timeSlip.id),
+              timeSlip: { ...timeSlip, hours: timeSlip.hours || 0 },
+            })
+          : api.createTimeSlip({ timeSlip });
+      })
+  );
 };
 
 export type WeekMonthTotals = {

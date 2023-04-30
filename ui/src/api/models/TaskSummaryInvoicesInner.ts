@@ -16,178 +16,178 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Invoice
+ * @interface TaskSummaryInvoicesInner
  */
-export interface Invoice {
+export interface TaskSummaryInvoicesInner {
     /**
      * 
      * @type {number}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     readonly id?: number;
     /**
      * 
      * @type {number}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     sequenceNum?: number;
     /**
      * 
      * @type {number}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     project: number;
     /**
      * 
      * @type {Date}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     readonly createdAt?: Date;
     /**
      * 
      * @type {Date}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     readonly issuedAt?: Date;
     /**
      * 
      * @type {Date}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     paidAt?: Date | null;
     /**
      * 
      * @type {Date}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     dueDate?: Date | null;
     /**
      * 
      * @type {number}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     totalPaid?: number | null;
     /**
      * 
      * @type {number}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     totalDue?: number | null;
     /**
      * 
      * @type {number}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     subtotalDue?: number | null;
     /**
      * 
      * @type {string}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
-    status?: InvoiceStatusEnum;
+    status?: TaskSummaryInvoicesInnerStatusEnum;
     /**
      * 
      * @type {string}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     reference?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
-    groupBy?: InvoiceGroupByEnum;
+    groupBy?: TaskSummaryInvoicesInnerGroupByEnum;
     /**
      * 
      * @type {boolean}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     showHours?: boolean;
     /**
      * 
      * @type {Array<number>}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     timeslips: Array<number>;
     /**
      * 
      * @type {Array<number>}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     tasks: Array<number>;
     /**
      * 
      * @type {Array<number>}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     modifier?: Array<number>;
     /**
      * 
      * @type {string}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     readonly pdfName?: string;
     /**
      * 
      * @type {string}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     readonly name?: string;
     /**
      * 
      * @type {number}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     exchangeRate?: number;
     /**
      * 
      * @type {string}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
     currency?: string;
     /**
      * 
      * @type {string}
-     * @memberof Invoice
+     * @memberof TaskSummaryInvoicesInner
      */
-    billingUnit?: InvoiceBillingUnitEnum;
+    billingUnit?: TaskSummaryInvoicesInnerBillingUnitEnum;
 }
 
 
 /**
  * @export
  */
-export const InvoiceStatusEnum = {
+export const TaskSummaryInvoicesInnerStatusEnum = {
     Draft: 'DRAFT',
     Issued: 'ISSUED',
     Paid: 'PAID'
 } as const;
-export type InvoiceStatusEnum = typeof InvoiceStatusEnum[keyof typeof InvoiceStatusEnum];
+export type TaskSummaryInvoicesInnerStatusEnum = typeof TaskSummaryInvoicesInnerStatusEnum[keyof typeof TaskSummaryInvoicesInnerStatusEnum];
 
 /**
  * @export
  */
-export const InvoiceGroupByEnum = {
+export const TaskSummaryInvoicesInnerGroupByEnum = {
     Tasks: 'tasks',
     Timeslips: 'timeslips'
 } as const;
-export type InvoiceGroupByEnum = typeof InvoiceGroupByEnum[keyof typeof InvoiceGroupByEnum];
+export type TaskSummaryInvoicesInnerGroupByEnum = typeof TaskSummaryInvoicesInnerGroupByEnum[keyof typeof TaskSummaryInvoicesInnerGroupByEnum];
 
 /**
  * @export
  */
-export const InvoiceBillingUnitEnum = {
+export const TaskSummaryInvoicesInnerBillingUnitEnum = {
     Hour: 'HOUR',
     Day: 'DAY',
     Week: 'WEEK'
 } as const;
-export type InvoiceBillingUnitEnum = typeof InvoiceBillingUnitEnum[keyof typeof InvoiceBillingUnitEnum];
+export type TaskSummaryInvoicesInnerBillingUnitEnum = typeof TaskSummaryInvoicesInnerBillingUnitEnum[keyof typeof TaskSummaryInvoicesInnerBillingUnitEnum];
 
 
 /**
- * Check if a given object implements the Invoice interface.
+ * Check if a given object implements the TaskSummaryInvoicesInner interface.
  */
-export function instanceOfInvoice(value: object): boolean {
+export function instanceOfTaskSummaryInvoicesInner(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "project" in value;
     isInstance = isInstance && "timeslips" in value;
@@ -196,11 +196,11 @@ export function instanceOfInvoice(value: object): boolean {
     return isInstance;
 }
 
-export function InvoiceFromJSON(json: any): Invoice {
-    return InvoiceFromJSONTyped(json, false);
+export function TaskSummaryInvoicesInnerFromJSON(json: any): TaskSummaryInvoicesInner {
+    return TaskSummaryInvoicesInnerFromJSONTyped(json, false);
 }
 
-export function InvoiceFromJSONTyped(json: any, ignoreDiscriminator: boolean): Invoice {
+export function TaskSummaryInvoicesInnerFromJSONTyped(json: any, ignoreDiscriminator: boolean): TaskSummaryInvoicesInner {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -231,7 +231,7 @@ export function InvoiceFromJSONTyped(json: any, ignoreDiscriminator: boolean): I
     };
 }
 
-export function InvoiceToJSON(value?: Invoice | null): any {
+export function TaskSummaryInvoicesInnerToJSON(value?: TaskSummaryInvoicesInner | null): any {
     if (value === undefined) {
         return undefined;
     }

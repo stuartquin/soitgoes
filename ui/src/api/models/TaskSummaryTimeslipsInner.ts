@@ -16,69 +16,69 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface TimeSlip
+ * @interface TaskSummaryTimeslipsInner
  */
-export interface TimeSlip {
+export interface TaskSummaryTimeslipsInner {
     /**
      * 
      * @type {number}
-     * @memberof TimeSlip
+     * @memberof TaskSummaryTimeslipsInner
      */
     readonly id?: number;
     /**
      * 
      * @type {number}
-     * @memberof TimeSlip
+     * @memberof TaskSummaryTimeslipsInner
      */
     user: number;
     /**
      * 
      * @type {number}
-     * @memberof TimeSlip
+     * @memberof TaskSummaryTimeslipsInner
      */
     hours?: number;
     /**
      * 
      * @type {number}
-     * @memberof TimeSlip
+     * @memberof TaskSummaryTimeslipsInner
      */
     hourlyRate?: number;
     /**
      * 
      * @type {number}
-     * @memberof TimeSlip
+     * @memberof TaskSummaryTimeslipsInner
      */
     project: number;
     /**
      * 
      * @type {number}
-     * @memberof TimeSlip
+     * @memberof TaskSummaryTimeslipsInner
      */
     task: number | null;
     /**
      * 
      * @type {number}
-     * @memberof TimeSlip
+     * @memberof TaskSummaryTimeslipsInner
      */
     invoice?: number | null;
     /**
      * 
      * @type {number}
-     * @memberof TimeSlip
+     * @memberof TaskSummaryTimeslipsInner
      */
     readonly cost?: number;
     /**
      * 
      * @type {Date}
-     * @memberof TimeSlip
+     * @memberof TaskSummaryTimeslipsInner
      */
     date: Date;
 }
 
 /**
- * Check if a given object implements the TimeSlip interface.
+ * Check if a given object implements the TaskSummaryTimeslipsInner interface.
  */
-export function instanceOfTimeSlip(value: object): boolean {
+export function instanceOfTaskSummaryTimeslipsInner(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "user" in value;
     isInstance = isInstance && "project" in value;
@@ -88,11 +88,11 @@ export function instanceOfTimeSlip(value: object): boolean {
     return isInstance;
 }
 
-export function TimeSlipFromJSON(json: any): TimeSlip {
-    return TimeSlipFromJSONTyped(json, false);
+export function TaskSummaryTimeslipsInnerFromJSON(json: any): TaskSummaryTimeslipsInner {
+    return TaskSummaryTimeslipsInnerFromJSONTyped(json, false);
 }
 
-export function TimeSlipFromJSONTyped(json: any, ignoreDiscriminator: boolean): TimeSlip {
+export function TaskSummaryTimeslipsInnerFromJSONTyped(json: any, ignoreDiscriminator: boolean): TaskSummaryTimeslipsInner {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -110,7 +110,7 @@ export function TimeSlipFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     };
 }
 
-export function TimeSlipToJSON(value?: TimeSlip | null): any {
+export function TaskSummaryTimeslipsInnerToJSON(value?: TaskSummaryTimeslipsInner | null): any {
     if (value === undefined) {
         return undefined;
     }

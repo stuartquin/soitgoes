@@ -182,7 +182,7 @@ class BulkInvoicePDF(APIView):
         return response
 
 
-class TimeSlipDetail(generics.UpdateAPIView):
+class TimeSlipDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.TimeSlip.objects.all()
     serializer_class = serializers.TimeSlipSerializer
 
@@ -204,7 +204,7 @@ class TimeSlipList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return models.TimeSlip.objects.filter(
-            project__in=get_allowed_projects(self.request)
+            project__in=get_allowed_projects(self.request), hours__gt=0
         )
 
 

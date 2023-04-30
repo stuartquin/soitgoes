@@ -98,6 +98,8 @@ function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
     return [];
   }, [tasks, invoice]);
 
+  console.log(displayTasks, timeSlips);
+
   return !isLoading && invoice ? (
     <div>
       <InvoiceSummary

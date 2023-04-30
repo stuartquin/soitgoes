@@ -28,6 +28,8 @@ function Invoices({ user, projects, isCreateNew = false }: Props) {
   const { projectId, invoiceId } = useParams<RouterProps>();
   const history = useHistory();
 
+  console.log("INVOICES", projectId, summary);
+
   const loadSummary = useCallback(async () => {
     const api = getClient();
     const response = await api.listProjectSummarys({});

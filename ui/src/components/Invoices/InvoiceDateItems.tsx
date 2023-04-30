@@ -17,14 +17,21 @@ interface Props {
 function InvoiceDateItems({ project, tasks, timeSlips }: Props) {
   const groupedTimeSlips = useMemo(
     () =>
-      timeSlips.map((timeSlip) => {
-        return {
-          timeSlip,
-          task: tasks.find((t) => t.id === timeSlip.task),
-        } as GroupedTimeSlip;
-      }),
+      timeSlips
+        .map((timeSlip) => {
+          return {
+            timeSlip,
+            task: tasks.find((t) => t.id === timeSlip.task),
+          } as GroupedTimeSlip;
+        })
+        .filter(
+          (groupedTimeSlip) =>
+            groupedTimeSlip.task.cost || groupedTimeSlip.timeSlip.hours
+        ),
     [tasks, timeSlips]
   );
+
+  console.log("GROUPED", groupedTimeSlips);
 
   return (
     <div className="my-4">
