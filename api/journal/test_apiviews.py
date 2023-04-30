@@ -36,7 +36,11 @@ class TimeSlipListTest(TestCase):
         project = baker.make("journal.Project", account=account)
         token = Token.objects.create(user=account.users.first())
 
-        timeslip_1 = baker.make("journal.TimeSlip", project=project)
+        timeslip_1 = baker.make(
+            "journal.TimeSlip",
+            project=project,
+            hours=2,
+        )
         timeslip_2 = baker.make(
             "journal.TimeSlip", project=project, _fill_optional=["invoice"]
         )
