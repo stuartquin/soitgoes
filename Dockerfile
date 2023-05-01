@@ -1,11 +1,5 @@
 FROM python:3.9
 
-RUN apt-get update
-RUN apt-get install -y zip unzip curl
-
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
-RUN apt-get install nodejs -y
-
 WORKDIR /app
 
 ADD install /app/install
@@ -17,8 +11,6 @@ RUN pip install -r /app/api/requirements.txt
 
 ADD ui/package.json /app/ui/package.json
 ADD ui/package-lock.json /app/ui/package-lock.json
-
-RUN npm --prefix=ui ci
 
 # TODO ideally should only do this on dev...
 # could uninstall it in the Jenkinsfile?
