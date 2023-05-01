@@ -43,7 +43,7 @@ function InvoiceDetail({ projects }: Props) {
     const load = async () => {
       setIsLoading(true);
       const api = getClient();
-      setInvoice(await api.retrieveInvoice({ id: invoiceId }));
+      setInvoice(await api.retrieveInvoice({ id: invoiceId || "" }));
 
       const timeSlipResponse = await api.listTimeSlips({ invoice: invoiceId });
       setTimeSlips(timeSlipResponse.results || []);

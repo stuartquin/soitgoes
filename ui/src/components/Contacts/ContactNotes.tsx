@@ -12,9 +12,12 @@ interface Props {
 
 function ContactNotes({ notes, onAdd }: Props) {
   const [content, setContent] = useState("");
-  const updateNote = useCallback((event) => {
-    setContent(event.target.value);
-  }, []);
+  const updateNote = useCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setContent(event.target.value);
+    },
+    []
+  );
 
   const addNote = () => {
     onAdd(content);

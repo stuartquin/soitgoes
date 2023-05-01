@@ -142,11 +142,11 @@ function InvoiceCreateNew({ projects }: Props) {
   );
 
   const toggleModifier = useCallback(
-    (modifier) => {
+    (modifier: models.InvoiceModifier) => {
       if (invoice && invoice.modifier) {
-        const updatedModifiers = invoice.modifier.includes(modifier.id)
+        const updatedModifiers = invoice.modifier.includes(modifier.id!)
           ? invoice.modifier.filter((id) => id !== modifier.id)
-          : invoice.modifier.concat([modifier.id]);
+          : invoice.modifier.concat([modifier.id!]);
 
         const invoiceModifiers = modifiers.filter((m) =>
           updatedModifiers.includes(ensure(m.id))

@@ -29,7 +29,7 @@ function TaskDetail({ taskId, projects }: Props) {
     load();
   }, [taskId]);
 
-  const updateTask = useCallback((task) => {
+  const updateTask = useCallback((task: models.Task) => {
     setTask(task);
     setHasChanged(true);
   }, []);

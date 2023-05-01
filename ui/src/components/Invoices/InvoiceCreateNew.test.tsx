@@ -175,7 +175,7 @@ describe("InvoiceCreateNew", () => {
     await act(async () => {
       const { findByText } = render(
         <BrowserRouter>
-          <InvoiceCreateNew project={project} onIssue={jest.fn()} />
+          <InvoiceCreateNew projects={[project]} />
         </BrowserRouter>
       );
       await findByText("£1210");

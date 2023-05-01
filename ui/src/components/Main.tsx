@@ -27,10 +27,8 @@ interface Props {
 
 function Main({ user }: Props) {
   const [projects, setProjects] = useState<models.Project[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const load = async () => {
-      setIsLoading(true);
       const api = getClient();
 
       const version = await api.retrieveVersion();
@@ -38,7 +36,6 @@ function Main({ user }: Props) {
 
       const response = await api.listProjects({});
       setProjects(response.results || []);
-      setIsLoading(false);
     };
 
     load();
@@ -78,8 +75,8 @@ function Main({ user }: Props) {
         path="time"
         element={<TimeSheet user={user} projects={projects} />}
       />
-      <Route path="contacts/:contactId" element={<Contacts user={user} />} />
-      <Route path="contacts" element={<Contacts user={user} />} />
+      <Route path="contacts/:contactId" element={<Contacts />} />
+      <Route path="contacts" element={<Contacts />} />
       <Route path="" element={<TimeSheet user={user} projects={projects} />} />
     </Route>
   );

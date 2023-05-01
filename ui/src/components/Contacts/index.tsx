@@ -15,22 +15,21 @@ interface RouterProps {
 }
 
 interface Props {
-  user: models.User;
   isCreateNew?: boolean;
 }
 
-function Contacts({ user, isCreateNew }: Props) {
+function Contacts({ isCreateNew }: Props) {
   const [contacts, setContacts] = useState<models.Contact[]>([]);
   const [search, setSearch] = useState("");
   const [projects, setProjects] = useState<models.Project[]>([]);
-  const { contactId } = useParams<RouterProps>();
+  const { contactId } = useParams();
   const navigate = useNavigate();
 
-  const loadContacts = useCallback(async (search) => {
+  const loadContacts = useCallback(async (searchTerm: string) => {
     const api = getClient();
 
     const contactResponse = await api.listContacts({
-      search,
+      search: searchTerm,
     });
     setContacts(contactResponse.results || []);
   }, []);
@@ -66,9 +65,12 @@ function Contacts({ user, isCreateNew }: Props) {
     navigate("/contacts/new");
   }, [navigate]);
 
-  const handleSearch = useCallback((event) => {
-    setSearch(event.target.value);
-  }, []);
+  const handleSearch = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearch(event.target.value);
+    },
+    []
+  );
 
   const reloadContacts = useCallback(() => {
     loadContacts(search);
@@ -112,7 +114,7 @@ function Contacts({ user, isCreateNew }: Props) {
             element={
               <ContactDetail
                 projects={projects}
-                contactId={contactId}
+                contactId={contactId || ""}
                 onSave={reloadContacts}
               />
             }

@@ -36,9 +36,12 @@ function InvoiceWeeklyTaskSettings({ project, onAddTasks }: Props) {
   const [startDate, setStartDate] = useState<Date>(getStartDate());
   const [endDate, setEndDate] = useState<Date>(getEndDate());
 
-  const updateStartDate = useCallback((event) => {
-    setStartDate(event.target.valueAsDate || new Date());
-  }, []);
+  const updateStartDate = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setStartDate(event.target.valueAsDate || new Date());
+    },
+    []
+  );
 
   const updateEndDate = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
