@@ -9,11 +9,11 @@ import InvoiceTaskItems from "components/Invoices/InvoiceTaskItems";
 import InvoiceDetailTotals from "components/Invoices/InvoiceDetailTotals";
 import InvoiceDetailLoading from "components/Invoices/InvoiceDetailLoading";
 import InvoiceSummary from "components/Invoices/InvoiceSummary";
+import { ensure } from "typeHelpers";
+import { useParams } from "react-router-dom";
 
 interface Props {
-  invoiceId: string;
-  project: models.Project;
-  onStatusUpdate: () => void;
+  projects: models.Project[];
 }
 
 const getStatusDate = (
@@ -26,13 +26,18 @@ const getStatusDate = (
   return format(dueDate || new Date(), "yyyy-MM-dd");
 };
 
-function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
+function InvoiceDetail({ projects }: Props) {
+  const { projectId, invoiceId } = useParams();
   const [token, setToken] = useState<models.OneTimeToken>();
   const [invoice, setInvoice] = useState<models.Invoice>();
   const [isLoading, setIsLoading] = useState(true);
   const [tasks, setTasks] = useState<models.Task[]>([]);
   const [timeSlips, setTimeSlips] = useState<models.TimeSlip[]>([]);
   const [modifiers, setModifiers] = useState<models.InvoiceModifier[]>([]);
+
+  const project = ensure(
+    projects.find((p) => p.id === parseInt(projectId || "", 10))
+  );
 
   useEffect(() => {
     const load = async () => {
@@ -83,9 +88,8 @@ function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
           },
         })
       );
-      onStatusUpdate();
     }
-  }, [invoice, onStatusUpdate]);
+  }, [invoice]);
 
   const displayTasks = useMemo(() => {
     if (invoice) {
@@ -97,8 +101,6 @@ function InvoiceDetail({ project, invoiceId, onStatusUpdate }: Props) {
     }
     return [];
   }, [tasks, invoice]);
-
-  console.log(displayTasks, timeSlips);
 
   return !isLoading && invoice ? (
     <div>

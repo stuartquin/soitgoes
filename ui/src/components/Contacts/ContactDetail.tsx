@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
@@ -17,7 +17,7 @@ function ContactDetail({ contactId, projects, onSave }: Props) {
   const [contact, setContact] = useState<models.Contact>();
   const [notes, setNotes] = useState<models.Note[]>([]);
   const [hasChanged, setHasChanged] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const loadNotes = useCallback(async () => {
     const api = getClient();
@@ -54,11 +54,11 @@ function ContactDetail({ contactId, projects, onSave }: Props) {
 
       const updatedContact = await method;
       setContact(updatedContact);
-      history.push(`/contacts/${updatedContact.id}`);
+      navigate(`/contacts/${updatedContact.id}`);
       setHasChanged(false);
       onSave();
     }
-  }, [contact, onSave, history]);
+  }, [contact, onSave, navigate]);
 
   const addNote = useCallback(
     async (content: string) => {

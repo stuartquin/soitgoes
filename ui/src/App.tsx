@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import { User } from "api/models";
 import { getClient } from "apiClient";
@@ -32,15 +32,7 @@ function App() {
   return (
     <div className="App">
       {loginRequired && <Login />}
-      {user && (
-        <Router>
-          <Switch>
-            <Route path="/">
-              <Main user={user} />
-            </Route>
-          </Switch>
-        </Router>
-      )}
+      {user && <Main user={user} />}
     </div>
   );
 }

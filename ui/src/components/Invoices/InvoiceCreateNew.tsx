@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate, useParams, useRevalidator } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
@@ -18,11 +18,11 @@ import {
 import { ensure } from "typeHelpers";
 
 interface Props {
-  project: models.Project;
-  onIssue: () => void;
+  projects: models.Project[];
 }
 
-function InvoiceCreateNew({ project, onIssue }: Props) {
+function InvoiceCreateNew({ projects }: Props) {
+  const { projectId } = useParams();
   const [invoice, setInvoice] = useState<models.Invoice>();
   const [timeTasks, setTimeTasks] = useState<models.Task[]>([]);
   const [fixedTasks, setFixedTasks] = useState<models.Task[]>([]);
@@ -30,7 +30,11 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
   const [timeSlips, setTimeSlips] = useState<models.TimeSlip[]>([]);
   const [exchangeRates, setExchangeRates] = useState<ExchangeRate>({});
   const [exchangeRateError, setExchangeRateError] = useState<String>();
-  const history = useHistory();
+  const navigate = useNavigate();
+
+  const project = ensure(
+    projects.find((p) => p.id === parseInt(projectId || "", 10))
+  );
 
   useEffect(() => {
     const load = async () => {
@@ -172,9 +176,8 @@ function InvoiceCreateNew({ project, onIssue }: Props) {
     const createdInvoice = await api.createInvoice({
       invoice: issuedInvoice,
     });
-    history.push(`/invoices/${createdInvoice.project}/${createdInvoice.id}`);
-    onIssue();
-  }, [invoice, history, onIssue]);
+    navigate(`/invoices/${createdInvoice.project}/${createdInvoice.id}`);
+  }, [invoice, navigate]);
 
   const addWeeklyTasks = useCallback(
     async (tasks: models.Task[]) => {

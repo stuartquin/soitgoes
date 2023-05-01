@@ -17,7 +17,6 @@ function Layout({ children, onLogout }: Props) {
                 <NavLink
                   to="/time"
                   className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  activeClassName="bg-gray-900 text-white"
                   aria-current="page"
                 >
                   Time
@@ -26,14 +25,12 @@ function Layout({ children, onLogout }: Props) {
                 <NavLink
                   to="/invoices"
                   className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  activeClassName="bg-gray-900 text-white"
                 >
                   Invoices
                 </NavLink>
                 <NavLink
                   to="/contacts"
                   className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  activeClassName="bg-gray-900 text-white"
                 >
                   Contacts
                 </NavLink>

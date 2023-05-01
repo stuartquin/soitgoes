@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useEffect, useMemo } from "react";
-import { useHistory, useParams, Switch, Route } from "react-router-dom";
-import { debounce } from "lodash";
+import { useParams, Routes, Route, useNavigate } from "react-router-dom";
 
 import { ensure } from "typeHelpers";
 import * as models from "api/models";
@@ -25,7 +24,7 @@ function Contacts({ user, isCreateNew }: Props) {
   const [search, setSearch] = useState("");
   const [projects, setProjects] = useState<models.Project[]>([]);
   const { contactId } = useParams<RouterProps>();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const loadContacts = useCallback(async (search) => {
     const api = getClient();
@@ -60,12 +59,12 @@ function Contacts({ user, isCreateNew }: Props) {
   }, [contacts, projects]);
 
   const closeSlideOver = useCallback(() => {
-    history.push("/contacts");
-  }, [history]);
+    navigate("/contacts");
+  }, [navigate]);
 
   const createNewContact = useCallback(() => {
-    history.push("/contacts/new");
-  }, [history]);
+    navigate("/contacts/new");
+  }, [navigate]);
 
   const handleSearch = useCallback((event) => {
     setSearch(event.target.value);
@@ -107,15 +106,18 @@ function Contacts({ user, isCreateNew }: Props) {
         </div>
       </div>
       <SlideOver isOpen={isOpen} onClose={closeSlideOver}>
-        <Switch>
-          <Route path="/contacts/:contactId">
-            <ContactDetail
-              projects={projects}
-              contactId={contactId}
-              onSave={reloadContacts}
-            />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route
+            path="/contacts/:contactId"
+            element={
+              <ContactDetail
+                projects={projects}
+                contactId={contactId}
+                onSave={reloadContacts}
+              />
+            }
+          />
+        </Routes>
       </SlideOver>
     </div>
   );

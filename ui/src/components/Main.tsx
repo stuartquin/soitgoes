@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient, removeToken } from "apiClient";
@@ -8,6 +8,9 @@ import Layout from "components/Layout";
 import TimeSheet from "components/TimeSheet";
 import Invoices from "components/Invoices";
 import Contacts from "components/Contacts";
+import InvoiceSelectProject from "./Invoices/InvoiceSelectProject";
+import InvoiceCreateNew from "./Invoices/InvoiceCreateNew";
+import InvoiceDetail from "./Invoices/InvoiceDetail";
 
 interface Props {
   user: models.User;
@@ -42,32 +45,40 @@ function Main({ user }: Props) {
     <Router>
       <Layout onLogout={logout}>
         {!isLoading && projects.length > 0 && (
-          <Switch>
-            <Route path="/invoices/:projectId/:invoiceId">
-              <Invoices user={user} projects={projects} />
-            </Route>
-            <Route path="/invoices/new">
-              <Invoices user={user} projects={projects} isCreateNew />
-            </Route>
-            <Route path="/invoices/:projectId">
-              <Invoices user={user} projects={projects} isCreateNew />
-            </Route>
-            <Route path="/invoices">
-              <Invoices user={user} projects={projects} />
-            </Route>
-            <Route path="/time">
-              <TimeSheet user={user} projects={projects} />
-            </Route>
-            <Route path="/contacts/:contactId">
-              <Contacts user={user} />
-            </Route>
-            <Route path="/contacts">
-              <Contacts user={user} />
-            </Route>
+          <Routes>
             <Route path="/">
-              <TimeSheet user={user} projects={projects} />
+              <Route
+                path="invoices"
+                element={<Invoices user={user} projects={projects} />}
+              >
+                <Route
+                  path=":projectId/:invoiceId"
+                  element={<InvoiceDetail projects={projects} />}
+                />
+                <Route
+                  path="new"
+                  element={<InvoiceSelectProject projects={projects} />}
+                />
+                <Route
+                  path=":projectId"
+                  element={<InvoiceCreateNew projects={projects} />}
+                />
+              </Route>
+              <Route
+                path="time"
+                element={<TimeSheet user={user} projects={projects} />}
+              />
+              <Route
+                path="contacts/:contactId"
+                element={<Contacts user={user} />}
+              />
+              <Route path="contacts" element={<Contacts user={user} />} />
+              <Route
+                path=""
+                element={<TimeSheet user={user} projects={projects} />}
+              />
             </Route>
-          </Switch>
+          </Routes>
         )}
       </Layout>
     </Router>

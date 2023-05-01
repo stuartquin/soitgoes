@@ -7,7 +7,7 @@ import {
   parse,
   endOfMonth,
 } from "date-fns";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
@@ -40,7 +40,7 @@ interface Props {
 
 function TimeSheet({ user, projects }: Props) {
   const search = useLocation().search;
-  const history = useHistory();
+  const navigate = useNavigate();
   const [tasks, setTasks] = useState<models.Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [timeSheet, setTimeSheet] = useState<TimeSheetType>({});
@@ -92,8 +92,8 @@ function TimeSheet({ user, projects }: Props) {
 
   const closeSlideOver = useCallback(() => {
     const url = `/time?date=${format(startDate, "yyyy-MM-dd")}`;
-    history.push(url);
-  }, [startDate, history]);
+    navigate(url);
+  }, [startDate, navigate]);
 
   const activeProjects = projects.filter((p) => !p.archived);
 

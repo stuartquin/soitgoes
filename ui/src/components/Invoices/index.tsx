@@ -1,13 +1,10 @@
 import React, { useCallback, useState, useEffect, useMemo } from "react";
-import { useHistory, useParams, Switch, Route } from "react-router-dom";
+import { useParams, useNavigate, Outlet, useLocation } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
 import { ensure } from "typeHelpers";
 import InvoiceRow from "components/Invoices/InvoiceRow";
-import InvoiceDetail from "components/Invoices/InvoiceDetail";
-import InvoiceSelectProject from "components/Invoices/InvoiceSelectProject";
-import InvoiceCreateNew from "components/Invoices/InvoiceCreateNew";
 import Button from "components/Button";
 import SlideOver from "components/SlideOver";
 
@@ -24,17 +21,10 @@ interface Props {
 
 function Invoices({ user, projects, isCreateNew = false }: Props) {
   const [invoices, setInvoices] = useState<models.Invoice[]>([]);
-  const [summary, setSummary] = useState<models.ProjectSummary[]>([]);
-  const { projectId, invoiceId } = useParams<RouterProps>();
-  const history = useHistory();
-
-  console.log("INVOICES", projectId, summary);
-
-  const loadSummary = useCallback(async () => {
-    const api = getClient();
-    const response = await api.listProjectSummarys({});
-    setSummary(response.results || []);
-  }, []);
+  const params = useParams<RouterProps>();
+  const location = useLocation();
+  const { projectId, invoiceId } = params;
+  const navigate = useNavigate();
 
   const loadInvoices = useCallback(async () => {
     const api = getClient();
@@ -48,8 +38,7 @@ function Invoices({ user, projects, isCreateNew = false }: Props) {
 
   useEffect(() => {
     loadInvoices();
-    loadSummary();
-  }, [loadInvoices, loadSummary]);
+  }, [loadInvoices]);
 
   const invoiceList = useMemo(() => {
     return invoices.map((invoice) => {
@@ -61,12 +50,12 @@ function Invoices({ user, projects, isCreateNew = false }: Props) {
   }, [invoices, projects]);
 
   const closeSlideOver = useCallback(() => {
-    history.push("/invoices");
-  }, [history]);
+    navigate("/invoices");
+  }, [navigate]);
 
   const createNewInvoice = useCallback(() => {
-    history.push("/invoices/new");
-  }, [history]);
+    navigate("/invoices/new");
+  }, [navigate]);
 
   const project = useMemo(() => {
     return projectId
@@ -74,7 +63,7 @@ function Invoices({ user, projects, isCreateNew = false }: Props) {
       : ({} as models.Project);
   }, [projects, projectId]);
 
-  const isOpen = isCreateNew || Boolean(projectId);
+  const isOpen = location.pathname.includes("/new") || Boolean(projectId);
 
   return (
     <div className="w-full">
@@ -94,24 +83,7 @@ function Invoices({ user, projects, isCreateNew = false }: Props) {
         </div>
       </div>
       <SlideOver isOpen={isOpen} onClose={closeSlideOver}>
-        <Switch>
-          <Route path="/invoices/:projectId/:invoiceId">
-            <InvoiceDetail
-              project={project}
-              invoiceId={invoiceId}
-              onStatusUpdate={loadInvoices}
-            />
-          </Route>
-          <Route path="/invoices/new">
-            <InvoiceSelectProject
-              projects={projects}
-              projectSummaries={summary}
-            />
-          </Route>
-          <Route path="/invoices/:projectId">
-            <InvoiceCreateNew project={project} onIssue={loadInvoices} />
-          </Route>
-        </Switch>
+        <Outlet />
       </SlideOver>
     </div>
   );
