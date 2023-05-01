@@ -1,12 +1,20 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import {
+  Await,
+  NavLink,
+  Outlet,
+  useAsyncValue,
+  useLoaderData,
+} from "react-router-dom";
 
 interface Props {
   onLogout: () => void;
-  children: React.ReactNode;
 }
 
-function Layout({ children, onLogout }: Props) {
+function Layout({ onLogout }: Props) {
+  const data = useAsyncValue();
+  console.log(data);
+
   return (
     <div>
       <nav className="bg-gray-800">
@@ -48,7 +56,14 @@ function Layout({ children, onLogout }: Props) {
       </nav>
 
       <div className="mx-auto" style={{ maxWidth: "1024px" }}>
-        {children}
+        <React.Suspense fallback={<p>Loading projects location...</p>}>
+          <Await
+            resolve={data}
+            errorElement={<p>Error loading package location!</p>}
+          >
+            <Outlet />
+          </Await>
+        </React.Suspense>
       </div>
     </div>
   );
