@@ -184,7 +184,7 @@ export function TaskToJSON(value?: Task | null): any {
         'name': value.name,
         'cost': value.cost,
         'completed_at': value.completedAt === undefined ? undefined : (value.completedAt === null ? null : value.completedAt.toISOString()),
-        'due_date': value.dueDate === undefined ? undefined : (value.dueDate === null ? null : value.dueDate.toISOString().substr(0,10)),
+        'due_date': value.dueDate === undefined ? undefined : (value.dueDate === null ? null : value.dueDate.toISOString().substring(0,10)),
         'hours_spent': value.hoursSpent,
         'hours_predicted': value.hoursPredicted,
         'billing_type': value.billingType,

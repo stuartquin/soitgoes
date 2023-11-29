@@ -40,7 +40,7 @@ import type {
   TimeSlip,
   User,
   Version,
-} from '../models';
+} from '../models/index';
 import {
     CompanyFromJSON,
     CompanyToJSON,
@@ -92,7 +92,7 @@ import {
     UserToJSON,
     VersionFromJSON,
     VersionToJSON,
-} from '../models';
+} from '../models/index';
 
 export interface CreateCompanyRequest {
     company?: Company;
@@ -212,6 +212,7 @@ export interface ListTasksRequest {
     project?: string;
     noInvoice?: string;
     billingType?: ListTasksBillingTypeEnum;
+    state?: ListTasksStateEnum;
 }
 
 export interface ListTimeSlipsRequest {
@@ -1168,6 +1169,10 @@ export class ApiApi extends runtime.BaseAPI {
             queryParameters['billing_type'] = requestParameters.billingType;
         }
 
+        if (requestParameters.state !== undefined) {
+            queryParameters['state'] = requestParameters.state;
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
@@ -2070,3 +2075,12 @@ export const ListTasksBillingTypeEnum = {
     Fixed: 'FIXED'
 } as const;
 export type ListTasksBillingTypeEnum = typeof ListTasksBillingTypeEnum[keyof typeof ListTasksBillingTypeEnum];
+/**
+ * @export
+ */
+export const ListTasksStateEnum = {
+    Open: 'OPEN',
+    Progress: 'PROGRESS',
+    Done: 'DONE'
+} as const;
+export type ListTasksStateEnum = typeof ListTasksStateEnum[keyof typeof ListTasksStateEnum];

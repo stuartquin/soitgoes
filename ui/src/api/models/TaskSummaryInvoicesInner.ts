@@ -243,7 +243,7 @@ export function TaskSummaryInvoicesInnerToJSON(value?: TaskSummaryInvoicesInner 
         'sequence_num': value.sequenceNum,
         'project': value.project,
         'paid_at': value.paidAt === undefined ? undefined : (value.paidAt === null ? null : value.paidAt.toISOString()),
-        'due_date': value.dueDate === undefined ? undefined : (value.dueDate === null ? null : value.dueDate.toISOString().substr(0,10)),
+        'due_date': value.dueDate === undefined ? undefined : (value.dueDate === null ? null : value.dueDate.toISOString().substring(0,10)),
         'total_paid': value.totalPaid,
         'total_due': value.totalDue,
         'subtotal_due': value.subtotalDue,

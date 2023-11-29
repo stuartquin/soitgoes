@@ -911,6 +911,16 @@ paths:
           enum:
           - TIME
           - FIXED
+      - name: state
+        required: false
+        in: query
+        description: state
+        schema:
+          type: string
+          enum:
+          - OPEN
+          - PROGRESS
+          - DONE
       responses:
         '200':
           content:

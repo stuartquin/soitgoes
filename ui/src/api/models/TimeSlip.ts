@@ -125,7 +125,7 @@ export function TimeSlipToJSON(value?: TimeSlip | null): any {
         'project': value.project,
         'task': value.task,
         'invoice': value.invoice,
-        'date': (value.date.toISOString().substr(0,10)),
+        'date': (value.date.toISOString().substring(0,10)),
     };
 }
 

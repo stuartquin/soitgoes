@@ -63,7 +63,7 @@ function TimeSheet({ user, projects }: Props) {
         end: format(endOfMonth(addMonths(startDate, 1)), "yyyy-MM-dd"),
       });
 
-      const taskResponse = await api.listTasks({});
+      const taskResponse = await api.listTasks({ state: "OPEN" });
       const activeTasks = (taskResponse.results || []).filter(
         (task) => (task.hoursSpent || 0) > 0 || task.state === "OPEN"
       );
