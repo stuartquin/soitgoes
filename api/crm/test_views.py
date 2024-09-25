@@ -20,9 +20,9 @@ class NoteListCreateViewTest(TestCase):
         )
 
         data = response.json()
-        self.assertEquals(response.status_code, 201)
-        self.assertEquals(data["content"], "test note")
-        self.assertEquals(data["contact"], contact.id)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(data["content"], "test note")
+        self.assertEqual(data["contact"], contact.id)
 
     def test_list(self):
         account = baker.make("journal.Account", make_m2m=True)
@@ -39,5 +39,5 @@ class NoteListCreateViewTest(TestCase):
         response = client.get(reverse("notes-list"), {"contact": contact_1.id})
 
         data = response.json()
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(data["count"], 2)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["count"], 2)

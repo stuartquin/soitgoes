@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "soitgoes"
+version = "0.1.0"
+description = ""
+authors = ["Stuart Quin <stuart.quin@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.1.1"
+django-filter = "^24.3"
+gunicorn = "^23.0.0"
+pyyaml = "^6.0.2"
+django-cors-headers = "^4.4.0"
+djangorestframework = "^3.15.2"
+
+
+[tool.poetry.group.dev.dependencies]
+model-bakery = "^1.19.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

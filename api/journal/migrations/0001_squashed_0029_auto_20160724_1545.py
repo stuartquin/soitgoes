@@ -6,7 +6,6 @@ import datetime
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-from django.utils.timezone import utc
 
 
 class Migration(migrations.Migration):
@@ -26,7 +25,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('tag', models.CharField(max_length=512, unique=True)),
                 ('user', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('created_at', models.DateTimeField(auto_now_add=True, default=datetime.datetime(2016, 1, 13, 11, 9, 0, 248389, tzinfo=utc))),
+                ('created_at', models.DateTimeField(auto_now_add=True, default=datetime.datetime(2016, 1, 13, 11, 9, 0, 248389, tzinfo=datetime.timezone.utc))),
             ],
         ),
         migrations.AlterUniqueTogether(
