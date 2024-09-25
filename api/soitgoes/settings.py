@@ -194,9 +194,18 @@ REST_FRAMEWORK = {
 # TODO Is ths OK?
 SESSION_COOKIE_HTTPONLY = False
 
-CSRF_TRUSTED_ORIGINS = ["localhost", "localhost:8080", "localhost:8000"]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost",
+    "http://localhost:8080",
+    "http://localhost:8000",
+    "https://tracking.cloud.stuartquin.com",
+    "https://tracking-dev.cloud.stuartquin.com"
+]
 
 OPEN_EXCHANGE_RATES_APP_ID = os.environ.get("OPEN_EXCHANGE_RATES_APP_ID")
 
 OSSSO_API_URL = os.environ.get("OSSSO_API_URL")
 OSSSO_API_TOKEN = os.environ.get("OSSSO_API_TOKEN")
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+

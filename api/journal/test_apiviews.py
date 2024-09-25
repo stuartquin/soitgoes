@@ -25,9 +25,9 @@ class TaskListTest(TestCase):
         )
 
         data = response.json()
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(data["count"], 1)
-        self.assertEquals(data["results"][0]["id"], task_1.id)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["id"], task_1.id)
 
 
 class TimeSlipListTest(TestCase):
@@ -52,9 +52,9 @@ class TimeSlipListTest(TestCase):
         )
 
         data = response.json()
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(data["count"], 1)
-        self.assertEquals(data["results"][0]["id"], timeslip_1.id)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["id"], timeslip_1.id)
 
 
 class TaskSummaryTest(TestCase):
@@ -79,12 +79,12 @@ class TaskSummaryTest(TestCase):
         data = response.json()
 
         invoices = data["invoices"]
-        self.assertEquals(len(invoices), 1)
-        self.assertEquals(invoices[0]["sequence_num"], invoice_1.sequence_num)
-        self.assertEquals(invoices[0]["project"], invoice_1.project.id)
+        self.assertEqual(len(invoices), 1)
+        self.assertEqual(invoices[0]["sequence_num"], invoice_1.sequence_num)
+        self.assertEqual(invoices[0]["project"], invoice_1.project.id)
 
         timeslips = data["timeslips"]
-        self.assertEquals(len(timeslips), 3)
+        self.assertEqual(len(timeslips), 3)
 
 
 class ContactListTest(TestCase):
@@ -99,10 +99,10 @@ class ContactListTest(TestCase):
         )
 
         data = response.json()
-        self.assertEquals(response.status_code, 201)
-        self.assertEquals(data["account"], account.pk)
-        self.assertEquals(data["name"], "test name")
-        self.assertEquals(data["email"], "test@email.com")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(data["account"], account.pk)
+        self.assertEqual(data["name"], "test name")
+        self.assertEqual(data["email"], "test@email.com")
 
     def test_update(self):
         account = baker.make("journal.Account", make_m2m=True)
@@ -117,10 +117,10 @@ class ContactListTest(TestCase):
         )
 
         data = response.json()
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(data["account"], account.pk)
-        self.assertEquals(data["name"], "updated name")
-        self.assertEquals(data["email"], "updated@email.com")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["account"], account.pk)
+        self.assertEqual(data["name"], "updated name")
+        self.assertEqual(data["email"], "updated@email.com")
 
     def test_update_permission_failure(self):
         account = baker.make("journal.Account", make_m2m=True)
@@ -136,4 +136,4 @@ class ContactListTest(TestCase):
         )
 
         data = response.json()
-        self.assertEquals(response.status_code, 403)
+        self.assertEqual(response.status_code, 403)

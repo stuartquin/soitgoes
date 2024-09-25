@@ -1,6 +1,6 @@
-from django.conf.urls import url
+from django.urls import path
 from crm import views
 
 urlpatterns = [
-    url(r"note/$", views.NoteListCreateView.as_view(), name="notes-list"),
+    path(r"note/", views.NoteListCreateView.as_view(), name="notes-list"),
 ]
