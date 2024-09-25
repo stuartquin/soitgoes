@@ -1650,6 +1650,93 @@ components:
         next_sequence_num:
           type: integer
           readOnly: true
+        previous_invoice:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            sequence_num:
+              type: integer
+            project:
+              type: integer
+            created_at:
+              type: string
+              format: date-time
+              readOnly: true
+            issued_at:
+              type: string
+              format: date-time
+              readOnly: true
+            paid_at:
+              type: string
+              format: date-time
+              nullable: true
+            due_date:
+              type: string
+              format: date
+              nullable: true
+            total_paid:
+              type: number
+              nullable: true
+            total_due:
+              type: number
+              nullable: true
+            subtotal_due:
+              type: number
+              nullable: true
+            status:
+              enum:
+              - DRAFT
+              - ISSUED
+              - PAID
+              type: string
+            reference:
+              type: string
+              nullable: true
+              maxLength: 256
+            group_by:
+              enum:
+              - tasks
+              - timeslips
+              type: string
+            show_hours:
+              type: boolean
+            timeslips:
+              type: array
+              items:
+                type: integer
+            tasks:
+              type: array
+              items:
+                type: integer
+            modifier:
+              type: array
+              items:
+                type: integer
+            pdf_name:
+              type: string
+              readOnly: true
+            name:
+              type: string
+              readOnly: true
+            exchange_rate:
+              type: number
+            currency:
+              type: string
+              maxLength: 3
+            billing_unit:
+              enum:
+              - HOUR
+              - DAY
+              - WEEK
+              type: string
+              nullable: true
+          required:
+          - project
+          - timeslips
+          - tasks
+          readOnly: true
       required:
       - project
     Invoice:

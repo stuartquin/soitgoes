@@ -1,4 +1,5 @@
 from __future__ import annotations
+import math
 import datetime
 
 from django.contrib.auth.models import User
@@ -286,6 +287,31 @@ class TaskInvoice(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     hours_spent = models.FloatField(default=0.0)
+
+    @property
+    def hours_summary(self):
+        project = self.invoice.project
+        if self.invoice.billing_unit == BILLING_UNIT_HOUR:
+            return f"{round(self.hours_spent)} Hours"
+
+        if self.invoice.billing_unit == BILLING_UNIT_DAY:
+            days = math.ceil(self.hours_spent / project.hours_per_day)
+            return f"{round(days)} Days"
+
+        return ""
+
+    @property
+    def subtotal_cost(self):
+        units = self.hours_spent
+        if self.invoice.billing_unit == BILLING_UNIT_DAY:
+            project = self.invoice.project
+            units = math.ceil(self.hours_spent / project.hours_per_day)
+
+        if units > 0:
+            return round(self.cost / units, 2)
+
+        return self.cost
+
 
 
 class TimeSlip(models.Model):

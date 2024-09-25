@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ProjectSummaryPreviousInvoice } from './ProjectSummaryPreviousInvoice';
+import {
+    ProjectSummaryPreviousInvoiceFromJSON,
+    ProjectSummaryPreviousInvoiceFromJSONTyped,
+    ProjectSummaryPreviousInvoiceToJSON,
+} from './ProjectSummaryPreviousInvoice';
+
 /**
  * 
  * @export
@@ -43,6 +50,12 @@ export interface ProjectSummary {
      * @memberof ProjectSummary
      */
     readonly nextSequenceNum?: number;
+    /**
+     * 
+     * @type {ProjectSummaryPreviousInvoice}
+     * @memberof ProjectSummary
+     */
+    previousInvoice?: ProjectSummaryPreviousInvoice;
 }
 
 /**
@@ -69,6 +82,7 @@ export function ProjectSummaryFromJSONTyped(json: any, ignoreDiscriminator: bool
         'hours': !exists(json, 'hours') ? undefined : json['hours'],
         'total': !exists(json, 'total') ? undefined : json['total'],
         'nextSequenceNum': !exists(json, 'next_sequence_num') ? undefined : json['next_sequence_num'],
+        'previousInvoice': !exists(json, 'previous_invoice') ? undefined : ProjectSummaryPreviousInvoiceFromJSON(json['previous_invoice']),
     };
 }
 
@@ -82,6 +96,7 @@ export function ProjectSummaryToJSON(value?: ProjectSummary | null): any {
     return {
         
         'project': value.project,
+        'previous_invoice': ProjectSummaryPreviousInvoiceToJSON(value.previousInvoice),
     };
 }
 

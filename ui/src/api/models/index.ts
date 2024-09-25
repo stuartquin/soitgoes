@@ -22,6 +22,7 @@ export * from './Note';
 export * from './OneTimeToken';
 export * from './Project';
 export * from './ProjectSummary';
+export * from './ProjectSummaryPreviousInvoice';
 export * from './SSO';
 export * from './Task';
 export * from './TaskNotesInner';

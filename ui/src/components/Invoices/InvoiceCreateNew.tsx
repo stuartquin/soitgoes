@@ -24,6 +24,7 @@ interface Props {
 function InvoiceCreateNew({ projects }: Props) {
   const { projectId } = useParams();
   const [invoice, setInvoice] = useState<models.Invoice>();
+  const [previousInvoice, setPreviousInvoice] = useState<models.Invoice>();
   const [timeTasks, setTimeTasks] = useState<models.Task[]>([]);
   const [fixedTasks, setFixedTasks] = useState<models.Task[]>([]);
   const [modifiers, setModifiers] = useState<models.InvoiceModifier[]>([]);
@@ -45,6 +46,7 @@ function InvoiceCreateNew({ projects }: Props) {
         modifierResponse,
         taskResponse,
         exchangeRateResponse,
+        summaryResponse,
       ] = await Promise.all([
         api.listTimeSlips({
           project: `${project.id}`,
@@ -55,8 +57,14 @@ function InvoiceCreateNew({ projects }: Props) {
           project: `${project.id}`,
         }),
         api.retrieveExchangeRate(),
+        api.listProjectSummarys(),
       ]);
       const tasks = taskResponse.results || [];
+
+      const projectSummary = (summaryResponse.results || []).find(
+        (s) => s.project === parseInt(projectId || "", 10)
+      );
+      setPreviousInvoice(projectSummary?.previousInvoice);
 
       setTimeSlips(timeSlipResponse.results || []);
       setModifiers(modifierResponse.results || []);
@@ -64,7 +72,11 @@ function InvoiceCreateNew({ projects }: Props) {
         tasks.filter((t) => t.billingType === models.TaskBillingTypeEnum.Time)
       );
       setFixedTasks(
-        tasks.filter((t) => t.billingType === models.TaskBillingTypeEnum.Fixed)
+        tasks.filter(
+          (t) =>
+            t.billingType === models.TaskBillingTypeEnum.Fixed &&
+            t.state !== models.TaskStateEnum.Done
+        )
       );
       setExchangeRates((exchangeRateResponse.rates as ExchangeRate) || {});
     };
@@ -74,7 +86,6 @@ function InvoiceCreateNew({ projects }: Props) {
 
   useEffect(() => {
     const currency = project.currency || "GBP";
-    const billingUnit = project.billingUnit;
 
     if (exchangeRates["GBP"] && !exchangeRates[currency]) {
       setExchangeRateError(`Unable to load exchange rate for ${currency}`);
@@ -82,15 +93,23 @@ function InvoiceCreateNew({ projects }: Props) {
 
     const initialInvoice = {
       currency,
-      billingUnit,
+      billingUnit: previousInvoice?.billingUnit || project.billingUnit,
       exchangeRate: exchangeRates[currency] || 1,
       project: project.id,
-      showHours: false,
+      showHours: previousInvoice?.showHours || false,
+      groupBy: previousInvoice?.groupBy,
     } as models.Invoice;
     setInvoice(
       getCalculatedInvoice(initialInvoice, fixedTasks, timeSlips, modifiers)
     );
-  }, [project, exchangeRates, fixedTasks, timeSlips, modifiers]);
+  }, [
+    project,
+    exchangeRates,
+    fixedTasks,
+    previousInvoice,
+    timeSlips,
+    modifiers,
+  ]);
 
   const toggleTimeSlip = useCallback(
     (item: InvoiceToggleItem) => {

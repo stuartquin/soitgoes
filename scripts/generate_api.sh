@@ -1,7 +1,5 @@
 #!/bin/bash
-docker exec -it soitgoes-soitgoes-1 python api/manage.py generateschema --file=openapi.yaml
-
-mv api/openapi.yaml .
+docker exec -it soitgoes-soitgoes-1 python api/manage.py generateschema > openapi.yaml
 
 docker run --rm \
   -v ${PWD}:/local openapitools/openapi-generator-cli generate \

@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/ApiApi.ts
 apis/index.ts
 index.ts
@@ -24,6 +23,7 @@ models/Note.ts
 models/OneTimeToken.ts
 models/Project.ts
 models/ProjectSummary.ts
+models/ProjectSummaryPreviousInvoice.ts
 models/SSO.ts
 models/Task.ts
 models/TaskNotesInner.ts

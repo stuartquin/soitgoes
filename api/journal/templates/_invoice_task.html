@@ -10,11 +10,17 @@
     <tr>
       <td>
         {{ ti.task.name }}
-        {% if invoice.show_hours and ti.task.hours_spent %}
-          {{ ti.task.hours_spent|floatformat:1 }} Hours
+        {% if invoice.show_hours and ti.hours_spent %}
+          ({{ ti.hours_summary }})
         {% endif %}
       </td>
-      <td class="number">{{ ti.cost|multiply:exchange_rate|floatformat:2 }}</td>
+      <td class="number">
+        {% if invoice.show_hours and ti.hours_spent %}
+          {{ ti.subtotal_cost|multiply:exchange_rate|floatformat:2 }}
+        {% else %}
+          {{ ti.cost|multiply:exchange_rate|floatformat:2 }}
+        {% endif %}
+      </td>
       <td class="number">{{ ti.cost|multiply:exchange_rate|floatformat:2 }}</td>
     </tr>
   {% endfor %}

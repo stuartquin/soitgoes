@@ -1,14 +1,8 @@
 from journal.currency import get_rates
 import os
-import json
-import zipfile
 import datetime
-from django.contrib import auth
-from django.core.exceptions import PermissionDenied
-from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpRequest
-from django.db.models import Q
 from django.db.models.query import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets, status
@@ -18,13 +12,11 @@ from rest_framework.schemas.openapi import AutoSchema
 
 from users.onetimetoken import OneTimeTokenAccess
 
-from journal import serializers, models, summary
-from journal.cookieauthentication import CookieAuthentication
+from journal import serializers, models
 from journal.project import get_unbilled_summary
 from journal.filters import TimeSlipFilter, TaskFilter, ContactFilter
 from journal.invoices import (
     save_invoice_tasks,
-    get_new_invoice,
     set_invoice_totals,
 )
 from journal.permissions import (

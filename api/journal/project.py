@@ -11,6 +11,17 @@ from journal.models import (
     TASK_STATUS_DONE,
 )
 
+def get_previous_invoice_summary(project: Project):
+    invoice = project.invoice_set.last()
+    if not invoice:
+        return None
+
+    return {
+        "reference": invoice.reference,
+        "show_hours": invoice.show_hours,
+        "billing_unit": invoice.billing_unit,
+    }
+
 
 def get_unbilled_summary(projects: list[Project]):
     task_costs = (
@@ -43,8 +54,6 @@ def get_unbilled_summary(projects: list[Project]):
         if cost > 0:
             total_cost[project] = float(total_cost.get(project, 0)) + float(cost)
 
-    keys = set(list(hours.keys()) + list(total_cost.keys()))
-
     return sorted(
         [
             dict(
@@ -52,6 +61,7 @@ def get_unbilled_summary(projects: list[Project]):
                 hours=hours.get(p.pk, 0),
                 total=total_cost.get(p.pk, 0),
                 next_sequence_num=Invoice.get_next_sequence_num(p.pk),
+                previous_invoice=p.invoice_set.last()
             )
             for p in projects
         ],
