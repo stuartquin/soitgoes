@@ -1,7 +1,7 @@
 import React from "react";
 
 interface Props {
-  children: React.ReactChild;
+  children: React.ReactNode;
   isOpen: boolean;
   onClose: () => void;
 }
