@@ -1,11 +1,10 @@
-import React, { useCallback, useState, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import {
   useParams,
   useNavigate,
   Outlet,
   useLocation,
   useRouteLoaderData,
-  useAsyncValue,
 } from "react-router-dom";
 
 import * as models from "api/models";
@@ -25,11 +24,7 @@ function Invoices({ projects }: Props) {
   const { projectId } = params;
   const navigate = useNavigate();
 
-  const data = useAsyncValue();
-  console.log("INVOICES....", data);
-
   const invoices = useRouteLoaderData("invoices") as models.Invoice[];
-  console.log("invoices", invoices);
 
   const invoiceList = useMemo(() => {
     return projects.length

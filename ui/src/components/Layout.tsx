@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Await,
-  NavLink,
-  Outlet,
-  useAsyncValue,
-  useLoaderData,
-} from "react-router-dom";
+import { Await, NavLink, Outlet, useAsyncValue } from "react-router-dom";
 
 interface Props {
   onLogout: () => void;
@@ -13,7 +7,6 @@ interface Props {
 
 function Layout({ onLogout }: Props) {
   const data = useAsyncValue();
-  console.log(data);
 
   return (
     <div>

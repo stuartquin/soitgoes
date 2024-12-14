@@ -31,9 +31,6 @@ function Main({ user }: Props) {
     const load = async () => {
       const api = getClient();
 
-      const version = await api.retrieveVersion();
-      console.table(version);
-
       const response = await api.listProjects({});
       setProjects(response.results || []);
     };

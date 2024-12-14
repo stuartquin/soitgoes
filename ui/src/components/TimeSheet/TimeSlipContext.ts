@@ -181,12 +181,14 @@ export const getTotalsByProject = (
   timeSlips.forEach((ts) => {
     const group = byProject[ts.project];
 
-    if (ts.hours && ts.date >= startDate && ts.date <= weekEndDate) {
-      group.week += ts.hours || 0;
-    }
+    if (group) {
+      if (ts.hours && ts.date >= startDate && ts.date <= weekEndDate) {
+        group.week += ts.hours || 0;
+      }
 
-    if (ts.hours && ts.date >= monthStartDate && ts.date <= monthEndDate) {
-      group.month += ts.hours || 0;
+      if (ts.hours && ts.date >= monthStartDate && ts.date <= monthEndDate) {
+        group.month += ts.hours || 0;
+      }
     }
   });
 
