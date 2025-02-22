@@ -125,3 +125,5 @@ api/pyrightconfig.json
 api/static
 
 env_variables
+
+api/financeapp/samples.py
