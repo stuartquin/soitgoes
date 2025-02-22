@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 import sys
-import logging
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,6 +42,7 @@ INSTALLED_APPS = [
     "journal",
     "users",
     "crm",
+    "financeapp",
     "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
@@ -183,6 +183,7 @@ STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesSto
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
@@ -199,7 +200,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8080",
     "http://localhost:8000",
     "https://tracking.cloud.stuartquin.com",
-    "https://tracking-dev.cloud.stuartquin.com"
+    "https://tracking-dev.cloud.stuartquin.com",
 ]
 
 OPEN_EXCHANGE_RATES_APP_ID = os.environ.get("OPEN_EXCHANGE_RATES_APP_ID")
@@ -208,4 +209,3 @@ OSSSO_API_URL = os.environ.get("OSSSO_API_URL")
 OSSSO_API_TOKEN = os.environ.get("OSSSO_API_TOKEN")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
