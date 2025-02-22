@@ -31,7 +31,7 @@ export interface ListTimeSlips200Response {
      * @type {number}
      * @memberof ListTimeSlips200Response
      */
-    count?: number;
+    count: number;
     /**
      * 
      * @type {string}
@@ -49,7 +49,7 @@ export interface ListTimeSlips200Response {
      * @type {Array<TimeSlip>}
      * @memberof ListTimeSlips200Response
      */
-    results?: Array<TimeSlip>;
+    results: Array<TimeSlip>;
 }
 
 /**
@@ -57,6 +57,8 @@ export interface ListTimeSlips200Response {
  */
 export function instanceOfListTimeSlips200Response(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "count" in value;
+    isInstance = isInstance && "results" in value;
 
     return isInstance;
 }
@@ -71,10 +73,10 @@ export function ListTimeSlips200ResponseFromJSONTyped(json: any, ignoreDiscrimin
     }
     return {
         
-        'count': !exists(json, 'count') ? undefined : json['count'],
+        'count': json['count'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(TimeSlipFromJSON)),
+        'results': ((json['results'] as Array<any>).map(TimeSlipFromJSON)),
     };
 }
 
@@ -90,7 +92,7 @@ export function ListTimeSlips200ResponseToJSON(value?: ListTimeSlips200Response 
         'count': value.count,
         'next': value.next,
         'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(TimeSlipToJSON)),
+        'results': ((value.results as Array<any>).map(TimeSlipToJSON)),
     };
 }
 

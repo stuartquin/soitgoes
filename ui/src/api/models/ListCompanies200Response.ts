@@ -23,62 +23,64 @@ import {
 /**
  * 
  * @export
- * @interface ListCompanys200Response
+ * @interface ListCompanies200Response
  */
-export interface ListCompanys200Response {
+export interface ListCompanies200Response {
     /**
      * 
      * @type {number}
-     * @memberof ListCompanys200Response
+     * @memberof ListCompanies200Response
      */
-    count?: number;
+    count: number;
     /**
      * 
      * @type {string}
-     * @memberof ListCompanys200Response
+     * @memberof ListCompanies200Response
      */
     next?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof ListCompanys200Response
+     * @memberof ListCompanies200Response
      */
     previous?: string | null;
     /**
      * 
      * @type {Array<Company>}
-     * @memberof ListCompanys200Response
+     * @memberof ListCompanies200Response
      */
-    results?: Array<Company>;
+    results: Array<Company>;
 }
 
 /**
- * Check if a given object implements the ListCompanys200Response interface.
+ * Check if a given object implements the ListCompanies200Response interface.
  */
-export function instanceOfListCompanys200Response(value: object): boolean {
+export function instanceOfListCompanies200Response(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "count" in value;
+    isInstance = isInstance && "results" in value;
 
     return isInstance;
 }
 
-export function ListCompanys200ResponseFromJSON(json: any): ListCompanys200Response {
-    return ListCompanys200ResponseFromJSONTyped(json, false);
+export function ListCompanies200ResponseFromJSON(json: any): ListCompanies200Response {
+    return ListCompanies200ResponseFromJSONTyped(json, false);
 }
 
-export function ListCompanys200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ListCompanys200Response {
+export function ListCompanies200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ListCompanies200Response {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'count': !exists(json, 'count') ? undefined : json['count'],
+        'count': json['count'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(CompanyFromJSON)),
+        'results': ((json['results'] as Array<any>).map(CompanyFromJSON)),
     };
 }
 
-export function ListCompanys200ResponseToJSON(value?: ListCompanys200Response | null): any {
+export function ListCompanies200ResponseToJSON(value?: ListCompanies200Response | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -90,7 +92,7 @@ export function ListCompanys200ResponseToJSON(value?: ListCompanys200Response | 
         'count': value.count,
         'next': value.next,
         'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(CompanyToJSON)),
+        'results': ((value.results as Array<any>).map(CompanyToJSON)),
     };
 }
 

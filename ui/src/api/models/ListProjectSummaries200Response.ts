@@ -23,62 +23,64 @@ import {
 /**
  * 
  * @export
- * @interface ListProjectSummarys200Response
+ * @interface ListProjectSummaries200Response
  */
-export interface ListProjectSummarys200Response {
+export interface ListProjectSummaries200Response {
     /**
      * 
      * @type {number}
-     * @memberof ListProjectSummarys200Response
+     * @memberof ListProjectSummaries200Response
      */
-    count?: number;
+    count: number;
     /**
      * 
      * @type {string}
-     * @memberof ListProjectSummarys200Response
+     * @memberof ListProjectSummaries200Response
      */
     next?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof ListProjectSummarys200Response
+     * @memberof ListProjectSummaries200Response
      */
     previous?: string | null;
     /**
      * 
      * @type {Array<ProjectSummary>}
-     * @memberof ListProjectSummarys200Response
+     * @memberof ListProjectSummaries200Response
      */
-    results?: Array<ProjectSummary>;
+    results: Array<ProjectSummary>;
 }
 
 /**
- * Check if a given object implements the ListProjectSummarys200Response interface.
+ * Check if a given object implements the ListProjectSummaries200Response interface.
  */
-export function instanceOfListProjectSummarys200Response(value: object): boolean {
+export function instanceOfListProjectSummaries200Response(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "count" in value;
+    isInstance = isInstance && "results" in value;
 
     return isInstance;
 }
 
-export function ListProjectSummarys200ResponseFromJSON(json: any): ListProjectSummarys200Response {
-    return ListProjectSummarys200ResponseFromJSONTyped(json, false);
+export function ListProjectSummaries200ResponseFromJSON(json: any): ListProjectSummaries200Response {
+    return ListProjectSummaries200ResponseFromJSONTyped(json, false);
 }
 
-export function ListProjectSummarys200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ListProjectSummarys200Response {
+export function ListProjectSummaries200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ListProjectSummaries200Response {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'count': !exists(json, 'count') ? undefined : json['count'],
+        'count': json['count'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(ProjectSummaryFromJSON)),
+        'results': ((json['results'] as Array<any>).map(ProjectSummaryFromJSON)),
     };
 }
 
-export function ListProjectSummarys200ResponseToJSON(value?: ListProjectSummarys200Response | null): any {
+export function ListProjectSummaries200ResponseToJSON(value?: ListProjectSummaries200Response | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -90,7 +92,7 @@ export function ListProjectSummarys200ResponseToJSON(value?: ListProjectSummarys
         'count': value.count,
         'next': value.next,
         'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(ProjectSummaryToJSON)),
+        'results': ((value.results as Array<any>).map(ProjectSummaryToJSON)),
     };
 }
 

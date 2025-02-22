@@ -13,49 +13,49 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { Account } from './Account';
+import type { BankTransaction } from './BankTransaction';
 import {
-    AccountFromJSON,
-    AccountFromJSONTyped,
-    AccountToJSON,
-} from './Account';
+    BankTransactionFromJSON,
+    BankTransactionFromJSONTyped,
+    BankTransactionToJSON,
+} from './BankTransaction';
 
 /**
  * 
  * @export
- * @interface ListAccounts200Response
+ * @interface ListBankTransactions200Response
  */
-export interface ListAccounts200Response {
+export interface ListBankTransactions200Response {
     /**
      * 
      * @type {number}
-     * @memberof ListAccounts200Response
+     * @memberof ListBankTransactions200Response
      */
     count: number;
     /**
      * 
      * @type {string}
-     * @memberof ListAccounts200Response
+     * @memberof ListBankTransactions200Response
      */
     next?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof ListAccounts200Response
+     * @memberof ListBankTransactions200Response
      */
     previous?: string | null;
     /**
      * 
-     * @type {Array<Account>}
-     * @memberof ListAccounts200Response
+     * @type {Array<BankTransaction>}
+     * @memberof ListBankTransactions200Response
      */
-    results: Array<Account>;
+    results: Array<BankTransaction>;
 }
 
 /**
- * Check if a given object implements the ListAccounts200Response interface.
+ * Check if a given object implements the ListBankTransactions200Response interface.
  */
-export function instanceOfListAccounts200Response(value: object): boolean {
+export function instanceOfListBankTransactions200Response(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "count" in value;
     isInstance = isInstance && "results" in value;
@@ -63,11 +63,11 @@ export function instanceOfListAccounts200Response(value: object): boolean {
     return isInstance;
 }
 
-export function ListAccounts200ResponseFromJSON(json: any): ListAccounts200Response {
-    return ListAccounts200ResponseFromJSONTyped(json, false);
+export function ListBankTransactions200ResponseFromJSON(json: any): ListBankTransactions200Response {
+    return ListBankTransactions200ResponseFromJSONTyped(json, false);
 }
 
-export function ListAccounts200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ListAccounts200Response {
+export function ListBankTransactions200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ListBankTransactions200Response {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -76,11 +76,11 @@ export function ListAccounts200ResponseFromJSONTyped(json: any, ignoreDiscrimina
         'count': json['count'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': ((json['results'] as Array<any>).map(AccountFromJSON)),
+        'results': ((json['results'] as Array<any>).map(BankTransactionFromJSON)),
     };
 }
 
-export function ListAccounts200ResponseToJSON(value?: ListAccounts200Response | null): any {
+export function ListBankTransactions200ResponseToJSON(value?: ListBankTransactions200Response | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -92,7 +92,7 @@ export function ListAccounts200ResponseToJSON(value?: ListAccounts200Response | 
         'count': value.count,
         'next': value.next,
         'previous': value.previous,
-        'results': ((value.results as Array<any>).map(AccountToJSON)),
+        'results': ((value.results as Array<any>).map(BankTransactionToJSON)),
     };
 }
 

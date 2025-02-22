@@ -61,7 +61,7 @@ export interface Task {
      * @type {Date}
      * @memberof Task
      */
-    readonly activityAt?: Date;
+    readonly activityAt?: Date | null;
     /**
      * 
      * @type {Date}
@@ -159,7 +159,7 @@ export function TaskFromJSONTyped(json: any, ignoreDiscriminator: boolean): Task
         'name': json['name'],
         'cost': !exists(json, 'cost') ? undefined : json['cost'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
-        'activityAt': !exists(json, 'activity_at') ? undefined : (new Date(json['activity_at'])),
+        'activityAt': !exists(json, 'activity_at') ? undefined : (json['activity_at'] === null ? null : new Date(json['activity_at'])),
         'completedAt': !exists(json, 'completed_at') ? undefined : (json['completed_at'] === null ? null : new Date(json['completed_at'])),
         'dueDate': !exists(json, 'due_date') ? undefined : (json['due_date'] === null ? null : new Date(json['due_date'])),
         'hoursSpent': !exists(json, 'hours_spent') ? undefined : json['hours_spent'],

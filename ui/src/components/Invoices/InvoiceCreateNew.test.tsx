@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import { render, act, fireEvent } from "@testing-library/react";
 
 import * as models from "api/models";
@@ -7,8 +7,8 @@ import InvoiceCreateNew from "./InvoiceCreateNew";
 import { ApiApi } from "api/apis/ApiApi";
 
 const MOCK_HISTORY_PUSH = jest.fn();
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+jest.mock("react-router", () => ({
+  ...jest.requireActual("react-router"),
   useHistory: () => ({
     push: MOCK_HISTORY_PUSH,
   }),

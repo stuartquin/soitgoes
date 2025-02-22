@@ -68,6 +68,9 @@ class Rule(models.Model):
 
 
 class Tag(models.Model):
+    account = models.ForeignKey(
+        Account, on_delete=models.CASCADE, related_name="finance_tags"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     bank_transaction = models.ForeignKey(
         BankTransaction, on_delete=models.CASCADE, related_name="tags"

@@ -48,7 +48,7 @@ export interface TaskSummaryInvoicesInner {
      * @type {Date}
      * @memberof TaskSummaryInvoicesInner
      */
-    readonly issuedAt?: Date;
+    readonly issuedAt?: Date | null;
     /**
      * 
      * @type {Date}
@@ -210,7 +210,7 @@ export function TaskSummaryInvoicesInnerFromJSONTyped(json: any, ignoreDiscrimin
         'sequenceNum': !exists(json, 'sequence_num') ? undefined : json['sequence_num'],
         'project': json['project'],
         'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
-        'issuedAt': !exists(json, 'issued_at') ? undefined : (new Date(json['issued_at'])),
+        'issuedAt': !exists(json, 'issued_at') ? undefined : (json['issued_at'] === null ? null : new Date(json['issued_at'])),
         'paidAt': !exists(json, 'paid_at') ? undefined : (json['paid_at'] === null ? null : new Date(json['paid_at'])),
         'dueDate': !exists(json, 'due_date') ? undefined : (json['due_date'] === null ? null : new Date(json['due_date'])),
         'totalPaid': !exists(json, 'total_paid') ? undefined : json['total_paid'],

@@ -13,49 +13,49 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { Account } from './Account';
+import type { TagType } from './TagType';
 import {
-    AccountFromJSON,
-    AccountFromJSONTyped,
-    AccountToJSON,
-} from './Account';
+    TagTypeFromJSON,
+    TagTypeFromJSONTyped,
+    TagTypeToJSON,
+} from './TagType';
 
 /**
  * 
  * @export
- * @interface ListAccounts200Response
+ * @interface ListTagTypes200Response
  */
-export interface ListAccounts200Response {
+export interface ListTagTypes200Response {
     /**
      * 
      * @type {number}
-     * @memberof ListAccounts200Response
+     * @memberof ListTagTypes200Response
      */
     count: number;
     /**
      * 
      * @type {string}
-     * @memberof ListAccounts200Response
+     * @memberof ListTagTypes200Response
      */
     next?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof ListAccounts200Response
+     * @memberof ListTagTypes200Response
      */
     previous?: string | null;
     /**
      * 
-     * @type {Array<Account>}
-     * @memberof ListAccounts200Response
+     * @type {Array<TagType>}
+     * @memberof ListTagTypes200Response
      */
-    results: Array<Account>;
+    results: Array<TagType>;
 }
 
 /**
- * Check if a given object implements the ListAccounts200Response interface.
+ * Check if a given object implements the ListTagTypes200Response interface.
  */
-export function instanceOfListAccounts200Response(value: object): boolean {
+export function instanceOfListTagTypes200Response(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "count" in value;
     isInstance = isInstance && "results" in value;
@@ -63,11 +63,11 @@ export function instanceOfListAccounts200Response(value: object): boolean {
     return isInstance;
 }
 
-export function ListAccounts200ResponseFromJSON(json: any): ListAccounts200Response {
-    return ListAccounts200ResponseFromJSONTyped(json, false);
+export function ListTagTypes200ResponseFromJSON(json: any): ListTagTypes200Response {
+    return ListTagTypes200ResponseFromJSONTyped(json, false);
 }
 
-export function ListAccounts200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ListAccounts200Response {
+export function ListTagTypes200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ListTagTypes200Response {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -76,11 +76,11 @@ export function ListAccounts200ResponseFromJSONTyped(json: any, ignoreDiscrimina
         'count': json['count'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': ((json['results'] as Array<any>).map(AccountFromJSON)),
+        'results': ((json['results'] as Array<any>).map(TagTypeFromJSON)),
     };
 }
 
-export function ListAccounts200ResponseToJSON(value?: ListAccounts200Response | null): any {
+export function ListTagTypes200ResponseToJSON(value?: ListTagTypes200Response | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -92,7 +92,7 @@ export function ListAccounts200ResponseToJSON(value?: ListAccounts200Response | 
         'count': value.count,
         'next': value.next,
         'previous': value.previous,
-        'results': ((value.results as Array<any>).map(AccountToJSON)),
+        'results': ((value.results as Array<any>).map(TagTypeToJSON)),
     };
 }
 

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams, useRevalidator } from "react-router-dom";
+import { useNavigate, useParams, useRevalidator } from "react-router";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
@@ -57,7 +57,7 @@ function InvoiceCreateNew({ projects }: Props) {
           project: `${project.id}`,
         }),
         api.retrieveExchangeRate(),
-        api.listProjectSummarys(),
+        api.listProjectSummaries(),
       ]);
       const tasks = taskResponse.results || [];
 

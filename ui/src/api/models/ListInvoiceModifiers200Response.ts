@@ -31,7 +31,7 @@ export interface ListInvoiceModifiers200Response {
      * @type {number}
      * @memberof ListInvoiceModifiers200Response
      */
-    count?: number;
+    count: number;
     /**
      * 
      * @type {string}
@@ -49,7 +49,7 @@ export interface ListInvoiceModifiers200Response {
      * @type {Array<InvoiceModifier>}
      * @memberof ListInvoiceModifiers200Response
      */
-    results?: Array<InvoiceModifier>;
+    results: Array<InvoiceModifier>;
 }
 
 /**
@@ -57,6 +57,8 @@ export interface ListInvoiceModifiers200Response {
  */
 export function instanceOfListInvoiceModifiers200Response(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "count" in value;
+    isInstance = isInstance && "results" in value;
 
     return isInstance;
 }
@@ -71,10 +73,10 @@ export function ListInvoiceModifiers200ResponseFromJSONTyped(json: any, ignoreDi
     }
     return {
         
-        'count': !exists(json, 'count') ? undefined : json['count'],
+        'count': json['count'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(InvoiceModifierFromJSON)),
+        'results': ((json['results'] as Array<any>).map(InvoiceModifierFromJSON)),
     };
 }
 
@@ -90,7 +92,7 @@ export function ListInvoiceModifiers200ResponseToJSON(value?: ListInvoiceModifie
         'count': value.count,
         'next': value.next,
         'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(InvoiceModifierToJSON)),
+        'results': ((value.results as Array<any>).map(InvoiceModifierToJSON)),
     };
 }
 

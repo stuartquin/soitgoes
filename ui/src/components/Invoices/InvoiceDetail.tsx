@@ -10,7 +10,7 @@ import InvoiceDetailTotals from "components/Invoices/InvoiceDetailTotals";
 import InvoiceDetailLoading from "components/Invoices/InvoiceDetailLoading";
 import InvoiceSummary from "components/Invoices/InvoiceSummary";
 import { ensure } from "typeHelpers";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 
 interface Props {
   projects: models.Project[];

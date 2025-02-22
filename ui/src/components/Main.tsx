@@ -1,12 +1,11 @@
 import React, { useCallback, useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
-  Routes,
   Route,
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
-} from "react-router-dom";
+} from "react-router";
 
 import * as models from "api/models";
 import { getClient, removeToken } from "apiClient";
@@ -20,6 +19,7 @@ import InvoiceSelectProject from "./Invoices/InvoiceSelectProject";
 import InvoiceCreateNew from "./Invoices/InvoiceCreateNew";
 import InvoiceDetail from "./Invoices/InvoiceDetail";
 import { fetchProjects } from "services/fetchProjects";
+import Finance, { financeLoader } from "./Finance";
 
 interface Props {
   user: models.User;
@@ -71,6 +71,11 @@ function Main({ user }: Props) {
       <Route
         path="time"
         element={<TimeSheet user={user} projects={projects} />}
+      />
+      <Route
+        path="finance"
+        loader={financeLoader}
+        element={<Finance user={user} projects={projects} />}
       />
       <Route path="contacts/:contactId" element={<Contacts />} />
       <Route path="contacts" element={<Contacts />} />

@@ -7,7 +7,7 @@ import {
   parse,
   endOfMonth,
 } from "date-fns";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
@@ -101,7 +101,7 @@ function TimeSheet({ user, projects }: Props) {
 
   return (
     <TimeSlipContext.Provider value={{ updateHours }}>
-      <div className="px-3 w-full">
+      <div className="mx-auto" style={{ maxWidth: "1024px" }}>
         <Actions onSave={save} />
         {isLoading ? (
           <TimeSheetLoading />

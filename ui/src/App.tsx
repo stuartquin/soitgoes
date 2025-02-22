@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router";
 
 import { User } from "api/models";
 import { getClient } from "apiClient";
@@ -30,7 +30,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className="App h-full">
       {loginRequired && <Login />}
       {user && <Main user={user} />}
     </div>

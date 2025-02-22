@@ -23,3 +23,15 @@ class BankTransactionSerializer(serializers.Serializer):
     description = serializers.CharField(read_only=True)
     transaction_type = serializers.CharField(read_only=True)
     tags = TagSerializer(many=True)
+
+
+class TagTypeSerializer(serializers.Serializer):
+    tag_type = serializers.CharField()
+    value = serializers.CharField()
+    count = serializers.IntegerField()
+
+
+class BankAccountSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    bank_name = serializers.CharField()

@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import { render, fireEvent } from "@testing-library/react";
 
 import InvoiceForm from "./InvoiceForm";

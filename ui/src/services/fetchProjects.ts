@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { LoaderFunctionArgs } from "react-router-dom";
+import { LoaderFunctionArgs } from "react-router";
 
 import { getClient } from "apiClient";
 import { Project } from "api";

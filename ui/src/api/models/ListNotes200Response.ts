@@ -31,7 +31,7 @@ export interface ListNotes200Response {
      * @type {number}
      * @memberof ListNotes200Response
      */
-    count?: number;
+    count: number;
     /**
      * 
      * @type {string}
@@ -49,7 +49,7 @@ export interface ListNotes200Response {
      * @type {Array<Note>}
      * @memberof ListNotes200Response
      */
-    results?: Array<Note>;
+    results: Array<Note>;
 }
 
 /**
@@ -57,6 +57,8 @@ export interface ListNotes200Response {
  */
 export function instanceOfListNotes200Response(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "count" in value;
+    isInstance = isInstance && "results" in value;
 
     return isInstance;
 }
@@ -71,10 +73,10 @@ export function ListNotes200ResponseFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'count': !exists(json, 'count') ? undefined : json['count'],
+        'count': json['count'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(NoteFromJSON)),
+        'results': ((json['results'] as Array<any>).map(NoteFromJSON)),
     };
 }
 
@@ -90,7 +92,7 @@ export function ListNotes200ResponseToJSON(value?: ListNotes200Response | null):
         'count': value.count,
         'next': value.next,
         'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(NoteToJSON)),
+        'results': ((value.results as Array<any>).map(NoteToJSON)),
     };
 }
 

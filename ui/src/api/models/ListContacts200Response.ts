@@ -31,7 +31,7 @@ export interface ListContacts200Response {
      * @type {number}
      * @memberof ListContacts200Response
      */
-    count?: number;
+    count: number;
     /**
      * 
      * @type {string}
@@ -49,7 +49,7 @@ export interface ListContacts200Response {
      * @type {Array<Contact>}
      * @memberof ListContacts200Response
      */
-    results?: Array<Contact>;
+    results: Array<Contact>;
 }
 
 /**
@@ -57,6 +57,8 @@ export interface ListContacts200Response {
  */
 export function instanceOfListContacts200Response(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "count" in value;
+    isInstance = isInstance && "results" in value;
 
     return isInstance;
 }
@@ -71,10 +73,10 @@ export function ListContacts200ResponseFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'count': !exists(json, 'count') ? undefined : json['count'],
+        'count': json['count'],
         'next': !exists(json, 'next') ? undefined : json['next'],
         'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(ContactFromJSON)),
+        'results': ((json['results'] as Array<any>).map(ContactFromJSON)),
     };
 }
 
@@ -90,7 +92,7 @@ export function ListContacts200ResponseToJSON(value?: ListContacts200Response | 
         'count': value.count,
         'next': value.next,
         'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(ContactToJSON)),
+        'results': ((value.results as Array<any>).map(ContactToJSON)),
     };
 }
 

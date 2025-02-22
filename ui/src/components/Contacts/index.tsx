@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect, useMemo } from "react";
-import { useParams, Routes, Route, useNavigate } from "react-router-dom";
+import { useParams, Routes, Route, useNavigate } from "react-router";
 
 import { ensure } from "typeHelpers";
 import * as models from "api/models";
@@ -79,7 +79,7 @@ function Contacts({ isCreateNew }: Props) {
   const isOpen = isCreateNew || Boolean(contactId);
 
   return (
-    <div className="w-full">
+    <div className="mx-auto" style={{ maxWidth: "1024px" }}>
       <div className="flex justify-between my-4 w-full px-2 sm:px-0">
         <div>
           <Input

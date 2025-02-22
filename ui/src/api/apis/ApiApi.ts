@@ -21,13 +21,16 @@ import type {
   Invoice,
   InvoiceModifier,
   ListAccounts200Response,
-  ListCompanys200Response,
+  ListBankAccounts200Response,
+  ListBankTransactions200Response,
+  ListCompanies200Response,
   ListContacts200Response,
   ListInvoiceModifiers200Response,
   ListInvoices200Response,
   ListNotes200Response,
-  ListProjectSummarys200Response,
+  ListProjectSummaries200Response,
   ListProjects200Response,
+  ListTagTypes200Response,
   ListTasks200Response,
   ListTimeSlips200Response,
   Login,
@@ -54,8 +57,12 @@ import {
     InvoiceModifierToJSON,
     ListAccounts200ResponseFromJSON,
     ListAccounts200ResponseToJSON,
-    ListCompanys200ResponseFromJSON,
-    ListCompanys200ResponseToJSON,
+    ListBankAccounts200ResponseFromJSON,
+    ListBankAccounts200ResponseToJSON,
+    ListBankTransactions200ResponseFromJSON,
+    ListBankTransactions200ResponseToJSON,
+    ListCompanies200ResponseFromJSON,
+    ListCompanies200ResponseToJSON,
     ListContacts200ResponseFromJSON,
     ListContacts200ResponseToJSON,
     ListInvoiceModifiers200ResponseFromJSON,
@@ -64,10 +71,12 @@ import {
     ListInvoices200ResponseToJSON,
     ListNotes200ResponseFromJSON,
     ListNotes200ResponseToJSON,
-    ListProjectSummarys200ResponseFromJSON,
-    ListProjectSummarys200ResponseToJSON,
+    ListProjectSummaries200ResponseFromJSON,
+    ListProjectSummaries200ResponseToJSON,
     ListProjects200ResponseFromJSON,
     ListProjects200ResponseToJSON,
+    ListTagTypes200ResponseFromJSON,
+    ListTagTypes200ResponseToJSON,
     ListTasks200ResponseFromJSON,
     ListTasks200ResponseToJSON,
     ListTimeSlips200ResponseFromJSON,
@@ -164,7 +173,21 @@ export interface ListAccountsRequest {
     offset?: number;
 }
 
-export interface ListCompanysRequest {
+export interface ListBankAccountsRequest {
+    limit?: number;
+    offset?: number;
+}
+
+export interface ListBankTransactionsRequest {
+    limit?: number;
+    offset?: number;
+    bankAccount?: string;
+    start?: string;
+    end?: string;
+    query?: string;
+}
+
+export interface ListCompaniesRequest {
     limit?: number;
     offset?: number;
 }
@@ -195,12 +218,17 @@ export interface ListNotesRequest {
     contact?: string;
 }
 
-export interface ListProjectSummarysRequest {
+export interface ListProjectSummariesRequest {
     limit?: number;
     offset?: number;
 }
 
 export interface ListProjectsRequest {
+    limit?: number;
+    offset?: number;
+}
+
+export interface ListTagTypesRequest {
     limit?: number;
     offset?: number;
 }
@@ -840,6 +868,90 @@ export class ApiApi extends runtime.BaseAPI {
     /**
      * 
      */
+    async listBankAccountsRaw(requestParameters: ListBankAccountsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListBankAccounts200Response>> {
+        const queryParameters: any = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/finance/bank_account/`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListBankAccounts200ResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     */
+    async listBankAccounts(requestParameters: ListBankAccountsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListBankAccounts200Response> {
+        const response = await this.listBankAccountsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     */
+    async listBankTransactionsRaw(requestParameters: ListBankTransactionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListBankTransactions200Response>> {
+        const queryParameters: any = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        if (requestParameters.bankAccount !== undefined) {
+            queryParameters['bank_account'] = requestParameters.bankAccount;
+        }
+
+        if (requestParameters.start !== undefined) {
+            queryParameters['start'] = requestParameters.start;
+        }
+
+        if (requestParameters.end !== undefined) {
+            queryParameters['end'] = requestParameters.end;
+        }
+
+        if (requestParameters.query !== undefined) {
+            queryParameters['query'] = requestParameters.query;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/finance/transactions/`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListBankTransactions200ResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     */
+    async listBankTransactions(requestParameters: ListBankTransactionsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListBankTransactions200Response> {
+        const response = await this.listBankTransactionsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     */
     async listBulkInvoicePDFsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<any>>> {
         const queryParameters: any = {};
 
@@ -866,7 +978,7 @@ export class ApiApi extends runtime.BaseAPI {
     /**
      * 
      */
-    async listCompanysRaw(requestParameters: ListCompanysRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCompanys200Response>> {
+    async listCompaniesRaw(requestParameters: ListCompaniesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCompanies200Response>> {
         const queryParameters: any = {};
 
         if (requestParameters.limit !== undefined) {
@@ -886,14 +998,14 @@ export class ApiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListCompanys200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListCompanies200ResponseFromJSON(jsonValue));
     }
 
     /**
      * 
      */
-    async listCompanys(requestParameters: ListCompanysRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCompanys200Response> {
-        const response = await this.listCompanysRaw(requestParameters, initOverrides);
+    async listCompanies(requestParameters: ListCompaniesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCompanies200Response> {
+        const response = await this.listCompaniesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1074,7 +1186,7 @@ export class ApiApi extends runtime.BaseAPI {
     /**
      * 
      */
-    async listProjectSummarysRaw(requestParameters: ListProjectSummarysRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListProjectSummarys200Response>> {
+    async listProjectSummariesRaw(requestParameters: ListProjectSummariesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListProjectSummaries200Response>> {
         const queryParameters: any = {};
 
         if (requestParameters.limit !== undefined) {
@@ -1094,14 +1206,14 @@ export class ApiApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListProjectSummarys200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListProjectSummaries200ResponseFromJSON(jsonValue));
     }
 
     /**
      * 
      */
-    async listProjectSummarys(requestParameters: ListProjectSummarysRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListProjectSummarys200Response> {
-        const response = await this.listProjectSummarysRaw(requestParameters, initOverrides);
+    async listProjectSummaries(requestParameters: ListProjectSummariesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListProjectSummaries200Response> {
+        const response = await this.listProjectSummariesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1136,6 +1248,40 @@ export class ApiApi extends runtime.BaseAPI {
      */
     async listProjects(requestParameters: ListProjectsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListProjects200Response> {
         const response = await this.listProjectsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     */
+    async listTagTypesRaw(requestParameters: ListTagTypesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListTagTypes200Response>> {
+        const queryParameters: any = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.offset !== undefined) {
+            queryParameters['offset'] = requestParameters.offset;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/finance/tag_type/`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListTagTypes200ResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     */
+    async listTagTypes(requestParameters: ListTagTypesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListTagTypes200Response> {
+        const response = await this.listTagTypesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

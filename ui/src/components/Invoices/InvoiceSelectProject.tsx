@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { ChevronRightIcon } from "@heroicons/react/outline";
 
 import * as models from "api/models";
@@ -16,7 +16,7 @@ function InvoiceSelectProject({ projects }: Props) {
 
   const loadSummary = useCallback(async () => {
     const api = getClient();
-    const response = await api.listProjectSummarys({});
+    const response = await api.listProjectSummaries({});
     setSummary(response.results || []);
   }, []);
 

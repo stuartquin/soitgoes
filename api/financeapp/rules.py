@@ -14,6 +14,7 @@ class Condition(TypedDict, total=False):
     field: str
     operator: str
     value: str
+    tag_type: str
     AND: list["Condition"]
     OR: list["Condition"]
 
@@ -92,6 +93,7 @@ def get_matching_invoice(transaction: BankTransaction, invoices: QuerySet[Invoic
 
 
 def get_system_tags(
+    account: Account,
     transaction: BankTransaction,
     projects: QuerySet[Project],
     invoices: QuerySet[Invoice],
@@ -106,6 +108,7 @@ def get_system_tags(
             project = invoice.project
             tags.append(
                 Tag(
+                    account=account,
                     bank_transaction_id=transaction.pk,
                     tag_type="invoice",
                     value=invoice.pk,
@@ -119,6 +122,7 @@ def get_system_tags(
         if project:
             tags.append(
                 Tag(
+                    account=account,
                     bank_transaction_id=transaction.pk,
                     tag_type="project",
                     value=project.pk,
@@ -130,6 +134,7 @@ def get_system_tags(
         if transfer_transaction:
             tags.append(
                 Tag(
+                    account=account,
                     bank_transaction_id=transaction.pk,
                     tag_type="transfer",
                     value=transfer_transaction.bank_account.pk,
@@ -150,7 +155,9 @@ def run_system_rules(account: Account, transactions: QuerySet[BankTransaction]):
     )
 
     for transaction in transactions:
-        tags = tags + get_system_tags(transaction, projects, invoices, all_transactions)
+        tags = tags + get_system_tags(
+            account, transaction, projects, invoices, all_transactions
+        )
 
     Tag.objects.bulk_create(tags)
 
@@ -189,12 +196,22 @@ def parse_conditions(conditions: Condition) -> Q:
             return Q(**{f"{field}__lte": value})
         else:
             raise ValueError(f"Unsupported operator: {operator_name}")
+    elif "tag_type" in conditions:
+        tag_type = conditions["tag_type"]
+        value = conditions.get("value")
+        if value:
+            tags = Tag.objects.filter(tag_type=tag_type, value=value)
+        else:
+            tags = Tag.objects.filter(tag_type=tag_type)
+
+        return Q(id__in=tags.values_list("bank_transaction", flat=True))
 
     return Q()
 
 
 def run_rule(
     rule: Rule,
+    account: Account,
     transactions: QuerySet[BankTransaction],
 ):
     matched_transactions = transactions.filter(parse_conditions(rule.conditions))
@@ -204,6 +221,7 @@ def run_rule(
         for tag_definition in rule.tag_definitions:
             tags.append(
                 Tag(
+                    account=account,
                     bank_transaction_id=transaction.pk,
                     rule=rule,
                     tag_type=tag_definition["tag_type"],

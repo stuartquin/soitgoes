@@ -1,5 +1,5 @@
 import React from "react";
-import { Await, NavLink, Outlet, useAsyncValue } from "react-router-dom";
+import { Await, NavLink, Outlet, useAsyncValue } from "react-router";
 
 interface Props {
   onLogout: () => void;
@@ -9,7 +9,7 @@ function Layout({ onLogout }: Props) {
   const data = useAsyncValue();
 
   return (
-    <div>
+    <div className="h-full">
       <nav className="bg-gray-800">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8  text-gray-300">
           <div className="relative flex items-center justify-between h-12">
@@ -35,6 +35,12 @@ function Layout({ onLogout }: Props) {
                 >
                   Contacts
                 </NavLink>
+                <NavLink
+                  to="/finance"
+                  className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Finance
+                </NavLink>
               </div>
             </div>
             <div
@@ -48,16 +54,14 @@ function Layout({ onLogout }: Props) {
         </div>
       </nav>
 
-      <div className="mx-auto" style={{ maxWidth: "1024px" }}>
-        <React.Suspense fallback={<p>Loading projects location...</p>}>
-          <Await
-            resolve={data}
-            errorElement={<p>Error loading package location!</p>}
-          >
-            <Outlet />
-          </Await>
-        </React.Suspense>
-      </div>
+      <React.Suspense fallback={<p>Loading projects location...</p>}>
+        <Await
+          resolve={data}
+          errorElement={<p>Error loading package location!</p>}
+        >
+          <Outlet />
+        </Await>
+      </React.Suspense>
     </div>
   );
 }

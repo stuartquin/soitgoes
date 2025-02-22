@@ -1,6 +1,6 @@
 import React from "react";
 import { parse } from "date-fns";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import { render, fireEvent } from "@testing-library/react";
 
 import * as models from "api/models";

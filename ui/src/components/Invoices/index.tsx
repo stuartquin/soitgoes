@@ -5,7 +5,7 @@ import {
   Outlet,
   useLocation,
   useRouteLoaderData,
-} from "react-router-dom";
+} from "react-router";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
@@ -48,7 +48,7 @@ function Invoices({ projects }: Props) {
   const isOpen = location.pathname.includes("/new") || Boolean(projectId);
 
   return (
-    <div className="w-full">
+    <div className="mx-auto" style={{ maxWidth: "1024px" }}>
       <div className="flex justify-end my-4 w-full px-2 sm:px-0">
         <Button variant="success" onClick={createNewInvoice}>
           Create Invoice
