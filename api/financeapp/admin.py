@@ -31,3 +31,13 @@ class TagAdmin(admin.ModelAdmin):
         "tag_type",
         "value",
     )
+
+
+@admin.register(models.Rule)
+class RuleAdmin(admin.ModelAdmin):
+    list_filter = ("account", "bank_account")
+    list_display = (
+        "account",
+        "conditions",
+        "description",
+    )

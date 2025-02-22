@@ -1,10 +1,26 @@
+import operator
 import re
 from datetime import datetime, timedelta, timezone
+from functools import reduce
+from typing import TypedDict
 
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 
-from financeapp.models import BankTransaction, Tag
+from financeapp.models import BankTransaction, Rule, Tag
 from journal.models import Account, Invoice, Project
+
+
+class Condition(TypedDict, total=False):
+    field: str
+    operator: str
+    value: str
+    AND: list["Condition"]
+    OR: list["Condition"]
+
+
+class TagDefinition(TypedDict):
+    tag_type: str
+    value: str
 
 
 def get_start_end_of_day(date: datetime) -> tuple[datetime, datetime]:
@@ -79,6 +95,7 @@ def get_system_tags(
     transaction: BankTransaction,
     projects: QuerySet[Project],
     invoices: QuerySet[Invoice],
+    all_transactions: QuerySet[BankTransaction],
 ):
     invoice = None
     project = None
@@ -89,7 +106,7 @@ def get_system_tags(
             project = invoice.project
             tags.append(
                 Tag(
-                    bank_transaction=transaction,
+                    bank_transaction_id=transaction.pk,
                     tag_type="invoice",
                     value=invoice.pk,
                 )
@@ -102,9 +119,21 @@ def get_system_tags(
         if project:
             tags.append(
                 Tag(
-                    bank_transaction=transaction,
+                    bank_transaction_id=transaction.pk,
                     tag_type="project",
                     value=project.pk,
+                )
+            )
+
+    if not transaction.tags.filter(tag_type="transfer").exists():
+        transfer_transaction = get_transfer(transaction, all_transactions)
+        if transfer_transaction:
+            tags.append(
+                Tag(
+                    bank_transaction_id=transaction.pk,
+                    tag_type="transfer",
+                    value=transfer_transaction.bank_account.pk,
+                    meta={"bank_transaction": transfer_transaction.pk},
                 )
             )
 
@@ -116,7 +145,70 @@ def run_system_rules(account: Account, transactions: QuerySet[BankTransaction]):
     invoices = Invoice.objects.filter(project__in=projects)
     tags = []
 
+    all_transactions = BankTransaction.objects.filter(
+        bank_account__in=account.bank_accounts.all()
+    )
+
     for transaction in transactions:
-        tags = tags + get_system_tags(transaction, projects, invoices)
+        tags = tags + get_system_tags(transaction, projects, invoices, all_transactions)
+
+    Tag.objects.bulk_create(tags)
+
+
+def parse_conditions(conditions: Condition) -> Q:
+    """
+    Parses a dictionary of conditions and returns a Django Q object.
+    Supports "AND" and "OR" logical operators, and "contains" operator for string fields
+    """
+    if "AND" in conditions:
+        return reduce(
+            operator.and_,
+            (parse_conditions(condition) for condition in conditions["AND"]),
+        )
+    elif "OR" in conditions:
+        return reduce(
+            operator.or_,
+            (parse_conditions(condition) for condition in conditions["OR"]),
+        )
+    elif "field" in conditions and "operator" in conditions and "value" in conditions:
+        field = conditions["field"]
+        operator_name = conditions["operator"]
+        value = conditions["value"]
+
+        if operator_name == "contains":
+            return Q(**{f"{field}__icontains": value})
+        elif operator_name == "exact":
+            return Q(**{field: value})
+        elif operator_name == "gt":
+            return Q(**{f"{field}__gt": value})
+        elif operator_name == "lt":
+            return Q(**{f"{field}__lt": value})
+        elif operator_name == "gte":
+            return Q(**{f"{field}__gte": value})
+        elif operator_name == "lte":
+            return Q(**{f"{field}__lte": value})
+        else:
+            raise ValueError(f"Unsupported operator: {operator_name}")
+
+    return Q()
+
+
+def run_rule(
+    rule: Rule,
+    transactions: QuerySet[BankTransaction],
+):
+    matched_transactions = transactions.filter(parse_conditions(rule.conditions))
+
+    tags = []
+    for transaction in matched_transactions:
+        for tag_definition in rule.tag_definitions:
+            tags.append(
+                Tag(
+                    bank_transaction_id=transaction.pk,
+                    rule=rule,
+                    tag_type=tag_definition["tag_type"],
+                    value=tag_definition["value"],
+                )
+            )
 
     Tag.objects.bulk_create(tags)

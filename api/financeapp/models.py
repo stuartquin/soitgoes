@@ -49,7 +49,22 @@ class BankTransaction(models.Model):
 
 
 class Rule(models.Model):
-    pass
+    tags: "models.QuerySet[Tag]"
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    description = models.TextField(blank=True, null=True)
+    conditions = models.JSONField()
+    account = models.ForeignKey(
+        Account, on_delete=models.CASCADE, related_name="finance_rules"
+    )
+    tag_definitions = models.JSONField()
+    bank_account = models.ForeignKey(
+        BankAccount,
+        on_delete=models.CASCADE,
+        related_name="rules",
+        blank=True,
+        null=True,
+    )
 
 
 class Tag(models.Model):
@@ -57,7 +72,9 @@ class Tag(models.Model):
     bank_transaction = models.ForeignKey(
         BankTransaction, on_delete=models.CASCADE, related_name="tags"
     )
-    rule = models.ForeignKey(Rule, on_delete=models.SET_NULL, null=True, blank=True)
+    rule = models.ForeignKey(
+        Rule, on_delete=models.SET_NULL, null=True, blank=True, related_name="tags"
+    )
     tag_type = models.TextField(db_index=True)
     value = models.TextField()
     meta = models.JSONField(null=True, blank=True)
