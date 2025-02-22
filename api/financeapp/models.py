@@ -26,6 +26,8 @@ class BankAccount(models.Model):
 
 
 class BankTransaction(models.Model):
+    tags: "models.QuerySet[Tag]"
+
     created_at = models.DateTimeField(auto_now_add=True)
     bank_account = models.ForeignKey(
         BankAccount, on_delete=models.CASCADE, related_name="bank_transactions"
@@ -40,3 +42,25 @@ class BankTransaction(models.Model):
 
     def __str__(self):
         return f"{self.bank_account} {self.date} {self.amount}"
+
+    @property
+    def amount_pounds(self):
+        return float(self.amount / 100.0)
+
+
+class Rule(models.Model):
+    pass
+
+
+class Tag(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    bank_transaction = models.ForeignKey(
+        BankTransaction, on_delete=models.CASCADE, related_name="tags"
+    )
+    rule = models.ForeignKey(Rule, on_delete=models.SET_NULL, null=True, blank=True)
+    tag_type = models.TextField(db_index=True)
+    value = models.TextField()
+    meta = models.JSONField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.tag_type}={self.value} ({self.bank_transaction})"

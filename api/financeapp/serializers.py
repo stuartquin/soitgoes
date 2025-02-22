@@ -1,6 +1,14 @@
 from rest_framework import serializers
 
-from financeapp.models import BankAccount
+from financeapp.models import BankAccount, Rule
+
+
+class TagSerializer(serializers.Serializer):
+    created_at = serializers.DateTimeField()
+    rule = serializers.PrimaryKeyRelatedField(queryset=Rule.objects.all())
+    tag_type = serializers.CharField()
+    value = serializers.CharField()
+    meta = serializers.JSONField(required=False)
 
 
 class BankTransactionSerializer(serializers.Serializer):
@@ -14,3 +22,4 @@ class BankTransactionSerializer(serializers.Serializer):
     source = serializers.CharField(read_only=True)
     description = serializers.CharField(read_only=True)
     transaction_type = serializers.CharField(read_only=True)
+    tags = TagSerializer(many=True)
