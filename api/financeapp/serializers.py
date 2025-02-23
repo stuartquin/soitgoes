@@ -9,6 +9,7 @@ class TagSerializer(serializers.Serializer):
     tag_type = serializers.CharField()
     value = serializers.CharField()
     meta = serializers.JSONField(required=False)
+    display_value = serializers.CharField()
 
 
 class BankTransactionSerializer(serializers.Serializer):
@@ -22,12 +23,15 @@ class BankTransactionSerializer(serializers.Serializer):
     source = serializers.CharField(read_only=True)
     description = serializers.CharField(read_only=True)
     transaction_type = serializers.CharField(read_only=True)
-    tags = TagSerializer(many=True)
+    tags = TagSerializer(
+        many=True,
+    )
 
 
 class TagTypeSerializer(serializers.Serializer):
     tag_type = serializers.CharField()
     value = serializers.CharField()
+    display_value = serializers.CharField()
     count = serializers.IntegerField()
 
 

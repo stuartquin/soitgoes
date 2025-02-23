@@ -6,11 +6,16 @@ const SYMBOL_LOOKUP: any = {
 
 export const formatCurrency = (
   total: number,
-  currency: string = "GBP"
+  currency: string = "GBP",
+  locale: string = "en-GB"
 ): string => {
-  const symbol = SYMBOL_LOOKUP[currency] || "£";
+  const value = parseInt(`${total}`);
 
-  return `${symbol}${parseInt(`${total}`)}`;
+  const formatter = new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+  });
+  return formatter.format(value);
 };
 
 export interface ExchangeRate {

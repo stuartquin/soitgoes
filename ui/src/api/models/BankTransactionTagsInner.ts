@@ -49,6 +49,12 @@ export interface BankTransactionTagsInner {
      * @memberof BankTransactionTagsInner
      */
     meta?: object;
+    /**
+     * 
+     * @type {string}
+     * @memberof BankTransactionTagsInner
+     */
+    displayValue: string;
 }
 
 /**
@@ -60,6 +66,7 @@ export function instanceOfBankTransactionTagsInner(value: object): boolean {
     isInstance = isInstance && "rule" in value;
     isInstance = isInstance && "tagType" in value;
     isInstance = isInstance && "value" in value;
+    isInstance = isInstance && "displayValue" in value;
 
     return isInstance;
 }
@@ -79,6 +86,7 @@ export function BankTransactionTagsInnerFromJSONTyped(json: any, ignoreDiscrimin
         'tagType': json['tag_type'],
         'value': json['value'],
         'meta': !exists(json, 'meta') ? undefined : json['meta'],
+        'displayValue': json['display_value'],
     };
 }
 
@@ -96,6 +104,7 @@ export function BankTransactionTagsInnerToJSON(value?: BankTransactionTagsInner 
         'tag_type': value.tagType,
         'value': value.value,
         'meta': value.meta,
+        'display_value': value.displayValue,
     };
 }
 

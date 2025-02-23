@@ -33,6 +33,12 @@ export interface TagType {
     value: string;
     /**
      * 
+     * @type {string}
+     * @memberof TagType
+     */
+    displayValue: string;
+    /**
+     * 
      * @type {number}
      * @memberof TagType
      */
@@ -46,6 +52,7 @@ export function instanceOfTagType(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "tagType" in value;
     isInstance = isInstance && "value" in value;
+    isInstance = isInstance && "displayValue" in value;
     isInstance = isInstance && "count" in value;
 
     return isInstance;
@@ -63,6 +70,7 @@ export function TagTypeFromJSONTyped(json: any, ignoreDiscriminator: boolean): T
         
         'tagType': json['tag_type'],
         'value': json['value'],
+        'displayValue': json['display_value'],
         'count': json['count'],
     };
 }
@@ -78,6 +86,7 @@ export function TagTypeToJSON(value?: TagType | null): any {
         
         'tag_type': value.tagType,
         'value': value.value,
+        'display_value': value.displayValue,
         'count': value.count,
     };
 }

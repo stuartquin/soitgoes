@@ -72,11 +72,7 @@ function Main({ user }: Props) {
         path="time"
         element={<TimeSheet user={user} projects={projects} />}
       />
-      <Route
-        path="finance"
-        loader={financeLoader}
-        element={<Finance user={user} projects={projects} />}
-      />
+      <Route path="finance" loader={financeLoader} element={<Finance />} />
       <Route path="contacts/:contactId" element={<Contacts />} />
       <Route path="contacts" element={<Contacts />} />
       <Route path="" element={<TimeSheet user={user} projects={projects} />} />

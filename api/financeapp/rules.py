@@ -12,7 +12,7 @@ from journal.models import Account, Invoice, Project
 
 class Condition(TypedDict, total=False):
     field: str
-    operator: str
+    comparator: str
     value: str
     tag_type: str
     AND: list["Condition"]
@@ -177,25 +177,25 @@ def parse_conditions(conditions: Condition) -> Q:
             operator.or_,
             (parse_conditions(condition) for condition in conditions["OR"]),
         )
-    elif "field" in conditions and "operator" in conditions and "value" in conditions:
+    elif "field" in conditions and "comparator" in conditions and "value" in conditions:
         field = conditions["field"]
-        operator_name = conditions["operator"]
+        comparator_name = conditions["comparator"]
         value = conditions["value"]
 
-        if operator_name == "contains":
+        if comparator_name == "contains" or comparator_name == "~":
             return Q(**{f"{field}__icontains": value})
-        elif operator_name == "exact":
+        elif comparator_name == "exact" or comparator_name == "=":
             return Q(**{field: value})
-        elif operator_name == "gt":
+        elif comparator_name == "gt" or comparator_name == ">":
             return Q(**{f"{field}__gt": value})
-        elif operator_name == "lt":
+        elif comparator_name == "lt" or comparator_name == "<":
             return Q(**{f"{field}__lt": value})
-        elif operator_name == "gte":
+        elif comparator_name == "gte" or comparator_name == ">=":
             return Q(**{f"{field}__gte": value})
-        elif operator_name == "lte":
+        elif comparator_name == "lte" or comparator_name == "<=":
             return Q(**{f"{field}__lte": value})
         else:
-            raise ValueError(f"Unsupported operator: {operator_name}")
+            raise ValueError(f"Unsupported comparator: {comparator_name}")
     elif "tag_type" in conditions:
         tag_type = conditions["tag_type"]
         value = conditions.get("value")

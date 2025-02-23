@@ -143,15 +143,17 @@ def get_cleaned_keys(row: dict[str, str]) -> dict[str, str]:
     return lowered
 
 
-def parse_unique_id(row: dict[str, str]):
+def parse_unique_id(row: dict, item: dict[str, Union[str, None, int, datetime]]):
     for key in UNIQUE_ID_COLS:
         if key in row:
             return row[key]
 
-    return generate_hash_id(row, HASH_KEYS)
+    return generate_hash_id(item, HASH_KEYS)
 
 
-def generate_hash_id(row: dict[str, str], hash_keys: list[str]) -> str:
+def generate_hash_id(
+    item: dict[str, Union[str, None, int, datetime]], hash_keys: list[str]
+) -> str:
     """
     Generates an MD5 hash from the values in a dictionary based on the provided keys.
 
@@ -162,7 +164,7 @@ def generate_hash_id(row: dict[str, str], hash_keys: list[str]) -> str:
     Returns:
         str: The hexadecimal representation of the MD5 hash.
     """
-    text = "".join(str(row[key]) for key in hash_keys if key in row and row[key])
+    text = "".join(str(item[key]) for key in hash_keys if key in item and item[key])
     hash_object = hashlib.md5(text.encode())
     return hash_object.hexdigest()
 
@@ -186,24 +188,24 @@ def parse_csv(bank_account: BankAccount, content: io.TextIOWrapper):
         item["type"] = parse_type(lowered_keys)
         item["balance"] = parse_currency_value(lowered_keys, BALANCE_COLS)
 
-        amount = parse_currency_value(lowered_keys, AMOUNT_COLS)
-        date = parse_date(lowered_keys)
-        transaction_id = parse_unique_id(lowered_keys)
+        item["amount"] = parse_currency_value(lowered_keys, AMOUNT_COLS)
+        item["date"] = parse_date(lowered_keys)
+        transaction_id = parse_unique_id(lowered_keys, item)
 
         if (
-            amount is not None
-            and date is not None
+            item["amount"] is not None
+            and item["date"] is not None
             and transaction_id not in existing_ids
         ):
             transactions.append(
                 BankTransaction(
                     transaction_id=transaction_id,
                     bank_account=bank_account,
-                    amount=amount,
-                    date=date,
-                    description=parse_description(lowered_keys),
-                    balance=parse_currency_value(lowered_keys, BALANCE_COLS),
-                    transaction_type=parse_type(lowered_keys),
+                    amount=item["amount"],
+                    date=item["date"],
+                    description=item["description"],
+                    balance=item["balance"],
+                    transaction_type=item["type"],
                     source="CSV_IMPORT",
                 )
             )

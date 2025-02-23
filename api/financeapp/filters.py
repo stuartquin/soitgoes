@@ -9,7 +9,10 @@ from financeapp.rules import parse_conditions
 
 
 def filter_query(queryset: QuerySet[BankTransaction], name, value):
+    print(f"{value=}")
     conditions = json.loads(value)
+    print(f"{conditions=}")
+    print(parse_conditions(conditions))
     return queryset.filter(parse_conditions(conditions))
 
 

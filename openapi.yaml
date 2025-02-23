@@ -1824,11 +1824,14 @@ components:
                 type: string
               meta:
                 type: object
+              display_value:
+                type: string
             required:
             - created_at
             - rule
             - tag_type
             - value
+            - display_value
       required:
       - bank_account
       - tags
@@ -1839,11 +1842,14 @@ components:
           type: string
         value:
           type: string
+        display_value:
+          type: string
         count:
           type: integer
       required:
       - tag_type
       - value
+      - display_value
       - count
     BankAccount:
       type: object

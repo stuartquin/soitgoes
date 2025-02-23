@@ -1,4 +1,4 @@
-from django.db.models import Count, QuerySet
+from django.db.models import Count, Prefetch, QuerySet
 from django.http import HttpRequest
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
@@ -6,6 +6,7 @@ from rest_framework import generics
 from financeapp import serializers
 from financeapp.filters import BankTransactionFilter
 from financeapp.models import BankAccount, BankTransaction, Tag
+from financeapp.tag_types import get_tags_with_display_value
 
 
 def get_allowed_bank_accounts(request: HttpRequest) -> QuerySet[BankAccount]:
@@ -32,6 +33,9 @@ class BankTransactionListView(generics.ListAPIView):
                 bank_account__in=get_allowed_bank_accounts(self.request)
             )
             .select_related("bank_account")
+            .prefetch_related(
+                Prefetch("tags", get_tags_with_display_value(Tag.objects))
+            )
             .order_by("-date")
         )
 
@@ -40,7 +44,7 @@ class TagTypeListView(generics.ListAPIView):
     serializer_class = serializers.TagTypeSerializer
 
     def get_queryset(self):
-        return (
+        return get_tags_with_display_value(
             Tag.objects.filter(account__in=self.request.user.account_set.all())
             .values("tag_type", "value")
             .annotate(count=Count("tag_type"))
