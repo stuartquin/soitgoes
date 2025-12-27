@@ -4,12 +4,13 @@
   "private": true,
   "dependencies": {
     "@heroicons/react": "^1.0.1",
+    "@tanstack/react-router": "^1.95.0",
+    "@tanstack/router-vite-plugin": "^1.95.0",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/user-event": "^12.7.1",
     "@types/react": "^19.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.0.2",
     "typescript": "^5.0.4",
     "web-vitals": "^1.1.0"
   },
@@ -42,7 +43,6 @@
     "@types/jest": "^26.0.23",
     "@types/lodash": "^4.14.168",
     "@types/react-dom": "^19.0.2",
-    "@types/react-router-dom": "^5.1.7",
     "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^9.8.8",
     "date-fns": "^4.1.0",

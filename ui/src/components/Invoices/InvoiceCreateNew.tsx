@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams, useRevalidator } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
@@ -19,10 +19,10 @@ import { ensure } from "typeHelpers";
 
 interface Props {
   projects: models.Project[];
+  projectId?: string;
 }
 
-function InvoiceCreateNew({ projects }: Props) {
-  const { projectId } = useParams();
+function InvoiceCreateNew({ projects, projectId }: Props) {
   const [invoice, setInvoice] = useState<models.Invoice>();
   const [previousInvoice, setPreviousInvoice] = useState<models.Invoice>();
   const [timeTasks, setTimeTasks] = useState<models.Task[]>([]);
@@ -195,7 +195,9 @@ function InvoiceCreateNew({ projects }: Props) {
     const createdInvoice = await api.createInvoice({
       invoice: issuedInvoice,
     });
-    navigate(`/invoices/${createdInvoice.project}/${createdInvoice.id}`);
+    navigate({
+      to: `/invoices/${createdInvoice.project}/${createdInvoice.id}`,
+    });
   }, [invoice, navigate]);
 
   const addWeeklyTasks = useCallback(

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   format,
   startOfWeek,
@@ -7,7 +7,6 @@ import {
   parse,
   endOfMonth,
 } from "date-fns";
-import { useLocation, useNavigate } from "react-router-dom";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
@@ -36,24 +35,18 @@ const getStartDate = (dateStr: string): Date => {
 interface Props {
   user: models.User;
   projects: models.Project[];
+  dateStr?: string;
+  selectedTaskId?: string;
+  onClose: (startDate: Date) => void;
 }
 
-function TimeSheet({ user, projects }: Props) {
-  const search = useLocation().search;
-  const navigate = useNavigate();
+function TimeSheet({ user, projects, dateStr, selectedTaskId, onClose }: Props) {
   const [tasks, setTasks] = useState<models.Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [timeSheet, setTimeSheet] = useState<TimeSheetType>({});
-  const searchParams = new URLSearchParams(search);
-  const dateStr = searchParams.get("date");
   const startDate = useMemo(() => {
     return getStartDate(dateStr || "");
   }, [dateStr]);
-
-  const selectedTaskId = useMemo(() => {
-    const searchParams = new URLSearchParams(search);
-    return searchParams.get("task");
-  }, [search]);
 
   useEffect(() => {
     const load = async () => {
@@ -91,9 +84,8 @@ function TimeSheet({ user, projects }: Props) {
   }, [timeSheet]);
 
   const closeSlideOver = useCallback(() => {
-    const url = `/time?date=${format(startDate, "yyyy-MM-dd")}`;
-    navigate(url);
-  }, [startDate, navigate]);
+    onClose(startDate);
+  }, [onClose, startDate]);
 
   const activeProjects = projects.filter((p) => !p.archived);
 

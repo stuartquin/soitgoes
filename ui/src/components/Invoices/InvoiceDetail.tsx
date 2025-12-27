@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { format, formatDistance } from "date-fns";
 
 import * as models from "api/models";
@@ -10,10 +10,11 @@ import InvoiceDetailTotals from "components/Invoices/InvoiceDetailTotals";
 import InvoiceDetailLoading from "components/Invoices/InvoiceDetailLoading";
 import InvoiceSummary from "components/Invoices/InvoiceSummary";
 import { ensure } from "typeHelpers";
-import { useParams } from "react-router-dom";
 
 interface Props {
   projects: models.Project[];
+  projectId: string;
+  invoiceId: string;
 }
 
 const getStatusDate = (
@@ -26,8 +27,7 @@ const getStatusDate = (
   return format(dueDate || new Date(), "yyyy-MM-dd");
 };
 
-function InvoiceDetail({ projects }: Props) {
-  const { projectId, invoiceId } = useParams();
+function InvoiceDetail({ projects, projectId, invoiceId }: Props) {
   const [token, setToken] = useState<models.OneTimeToken>();
   const [invoice, setInvoice] = useState<models.Invoice>();
   const [isLoading, setIsLoading] = useState(true);

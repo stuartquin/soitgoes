@@ -1,17 +1,13 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
-import { render, act, fireEvent } from "@testing-library/react";
+import { render, act } from "@testing-library/react";
 
 import * as models from "api/models";
 import InvoiceCreateNew from "./InvoiceCreateNew";
 import { ApiApi } from "api/apis/ApiApi";
 
-const MOCK_HISTORY_PUSH = jest.fn();
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useHistory: () => ({
-    push: MOCK_HISTORY_PUSH,
-  }),
+const MOCK_NAVIGATE = jest.fn();
+jest.mock("@tanstack/react-router", () => ({
+  useNavigate: () => MOCK_NAVIGATE,
 }));
 
 class MockApi extends ApiApi {
@@ -174,9 +170,7 @@ describe("InvoiceCreateNew", () => {
   test("Displays totals summary", async () => {
     await act(async () => {
       const { findByText } = render(
-        <BrowserRouter>
-          <InvoiceCreateNew projects={[project]} />
-        </BrowserRouter>
+        <InvoiceCreateNew projects={[project]} projectId="1" />
       );
       await findByText("£1210");
       await findByText("£242");

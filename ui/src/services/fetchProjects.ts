@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import { LoaderFunctionArgs } from "react-router-dom";
 
 import { getClient } from "apiClient";
 import { Project } from "api";
@@ -10,7 +9,7 @@ export const fetcher = async (): Promise<Project[]> => {
   return response.results || [];
 };
 
-export const fetchProjects = async ({ request }: LoaderFunctionArgs) => {
+export const fetchProjects = async () => {
   return {
     projects: fetcher,
   };

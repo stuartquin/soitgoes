@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import { LoaderFunctionArgs } from "react-router-dom";
 
 import { getClient } from "apiClient";
 import { Invoice } from "api";
@@ -13,6 +12,6 @@ export const getInvoices = async (): Promise<Invoice[]> => {
   return response.results || [];
 };
 
-export const fetchInvoicesFor = async ({ request }: LoaderFunctionArgs) => {
+export const fetchInvoicesFor = async () => {
   return await getInvoices();
 };

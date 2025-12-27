@@ -1,14 +1,11 @@
 import { useCallback, useMemo } from "react";
 import {
-  useParams,
-  useNavigate,
   Outlet,
-  useLocation,
-  useRouteLoaderData,
-} from "react-router-dom";
+  useNavigate,
+  useRouterState,
+} from "@tanstack/react-router";
 
 import * as models from "api/models";
-import { getClient } from "apiClient";
 import { ensure } from "typeHelpers";
 import InvoiceRow from "components/Invoices/InvoiceRow";
 import Button from "components/Button";
@@ -16,15 +13,12 @@ import SlideOver from "components/SlideOver";
 
 interface Props {
   projects: models.Project[];
+  invoices: models.Invoice[];
 }
 
-function Invoices({ projects }: Props) {
-  const params = useParams();
-  const location = useLocation();
-  const { projectId } = params;
+function Invoices({ projects, invoices }: Props) {
   const navigate = useNavigate();
-
-  const invoices = useRouteLoaderData("invoices") as models.Invoice[];
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
 
   const invoiceList = useMemo(() => {
     return projects.length
@@ -38,14 +32,14 @@ function Invoices({ projects }: Props) {
   }, [invoices, projects]);
 
   const closeSlideOver = useCallback(() => {
-    navigate("/invoices");
+    navigate({ to: "/invoices" });
   }, [navigate]);
 
   const createNewInvoice = useCallback(() => {
-    navigate("/invoices/new");
+    navigate({ to: "/invoices/new" });
   }, [navigate]);
 
-  const isOpen = location.pathname.includes("/new") || Boolean(projectId);
+  const isOpen = pathname.startsWith("/invoices/");
 
   return (
     <div className="w-full">
