@@ -21,12 +21,12 @@ import type {
   Invoice,
   InvoiceModifier,
   ListAccounts200Response,
-  ListCompanys200Response,
+  ListCompanies200Response,
   ListContacts200Response,
   ListInvoiceModifiers200Response,
   ListInvoices200Response,
   ListNotes200Response,
-  ListProjectSummarys200Response,
+  ListProjectSummaries200Response,
   ListProjects200Response,
   ListTasks200Response,
   ListTimeSlips200Response,
@@ -54,8 +54,8 @@ import {
     InvoiceModifierToJSON,
     ListAccounts200ResponseFromJSON,
     ListAccounts200ResponseToJSON,
-    ListCompanys200ResponseFromJSON,
-    ListCompanys200ResponseToJSON,
+    ListCompanies200ResponseFromJSON,
+    ListCompanies200ResponseToJSON,
     ListContacts200ResponseFromJSON,
     ListContacts200ResponseToJSON,
     ListInvoiceModifiers200ResponseFromJSON,
@@ -64,8 +64,8 @@ import {
     ListInvoices200ResponseToJSON,
     ListNotes200ResponseFromJSON,
     ListNotes200ResponseToJSON,
-    ListProjectSummarys200ResponseFromJSON,
-    ListProjectSummarys200ResponseToJSON,
+    ListProjectSummaries200ResponseFromJSON,
+    ListProjectSummaries200ResponseToJSON,
     ListProjects200ResponseFromJSON,
     ListProjects200ResponseToJSON,
     ListTasks200ResponseFromJSON,
@@ -95,39 +95,39 @@ import {
 } from '../models/index';
 
 export interface CreateCompanyRequest {
-    company?: Company;
+    company?: Omit<Company, 'id'>;
 }
 
 export interface CreateContactRequest {
-    contact?: Contact;
+    contact?: Omit<Contact, 'id'|'created_at'|'account'>;
 }
 
 export interface CreateInvoiceRequest {
-    invoice?: Invoice;
+    invoice?: Omit<Invoice, 'id'|'created_at'|'issued_at'|'pdf_name'|'name'>;
 }
 
 export interface CreateLoginRequest {
-    login?: Login;
+    login?: Omit<Login, 'token'>;
 }
 
 export interface CreateNoteRequest {
-    note?: Note;
+    note?: Omit<Note, 'id'|'created_at'>;
 }
 
 export interface CreateProjectRequest {
-    project?: Project;
+    project?: Omit<Project, 'id'|'created_at'|'uninvoiced_hours'|'total_paid'|'next_sequence_num'>;
 }
 
 export interface CreateSSORequest {
-    sSO?: SSO;
+    sSO?: Omit<SSO, 'token'>;
 }
 
 export interface CreateTaskRequest {
-    task?: Task;
+    task?: Omit<Task, 'id'|'created_at'|'activity_at'|'invoices'|'notes'>;
 }
 
 export interface CreateTimeSlipRequest {
-    timeSlip?: TimeSlip;
+    timeSlip?: Omit<TimeSlip, 'id'|'cost'>;
 }
 
 export interface DestroyCompanyRequest {
@@ -164,7 +164,7 @@ export interface ListAccountsRequest {
     offset?: number;
 }
 
-export interface ListCompanysRequest {
+export interface ListCompaniesRequest {
     limit?: number;
     offset?: number;
 }
@@ -195,7 +195,7 @@ export interface ListNotesRequest {
     contact?: string;
 }
 
-export interface ListProjectSummarysRequest {
+export interface ListProjectSummariesRequest {
     limit?: number;
     offset?: number;
 }
@@ -227,38 +227,38 @@ export interface ListTimeSlipsRequest {
 
 export interface PartialUpdateCompanyRequest {
     id: string;
-    company?: Company;
+    company?: Omit<Company, 'id'>;
 }
 
 export interface PartialUpdateContactRequest {
     id: string;
-    contact?: Contact;
+    contact?: Omit<Contact, 'id'|'created_at'|'account'>;
 }
 
 export interface PartialUpdateInvoiceRequest {
     id: string;
-    invoice?: Invoice;
+    invoice?: Omit<Invoice, 'id'|'created_at'|'issued_at'|'pdf_name'|'name'>;
 }
 
 export interface PartialUpdateInvoiceModifierRequest {
     id: string;
     modifier: string;
-    invoiceModifier?: InvoiceModifier;
+    invoiceModifier?: Omit<InvoiceModifier, 'id'|'created_at'>;
 }
 
 export interface PartialUpdateProjectRequest {
     id: string;
-    project?: Project;
+    project?: Omit<Project, 'id'|'created_at'|'uninvoiced_hours'|'total_paid'|'next_sequence_num'>;
 }
 
 export interface PartialUpdateTaskRequest {
     id: string;
-    task?: Task;
+    task?: Omit<Task, 'id'|'created_at'|'activity_at'|'invoices'|'notes'>;
 }
 
 export interface PartialUpdateTimeSlipRequest {
     id: string;
-    timeSlip?: TimeSlip;
+    timeSlip?: Omit<TimeSlip, 'id'|'cost'>;
 }
 
 export interface RetrieveCompanyRequest {
@@ -296,38 +296,38 @@ export interface RetrieveTimeSlipRequest {
 
 export interface UpdateCompanyRequest {
     id: string;
-    company?: Company;
+    company?: Omit<Company, 'id'>;
 }
 
 export interface UpdateContactRequest {
     id: string;
-    contact?: Contact;
+    contact?: Omit<Contact, 'id'|'created_at'|'account'>;
 }
 
 export interface UpdateInvoiceRequest {
     id: string;
-    invoice?: Invoice;
+    invoice?: Omit<Invoice, 'id'|'created_at'|'issued_at'|'pdf_name'|'name'>;
 }
 
 export interface UpdateInvoiceModifierRequest {
     id: string;
     modifier: string;
-    invoiceModifier?: InvoiceModifier;
+    invoiceModifier?: Omit<InvoiceModifier, 'id'|'created_at'>;
 }
 
 export interface UpdateProjectRequest {
     id: string;
-    project?: Project;
+    project?: Omit<Project, 'id'|'created_at'|'uninvoiced_hours'|'total_paid'|'next_sequence_num'>;
 }
 
 export interface UpdateTaskRequest {
     id: string;
-    task?: Task;
+    task?: Omit<Task, 'id'|'created_at'|'activity_at'|'invoices'|'notes'>;
 }
 
 export interface UpdateTimeSlipRequest {
     id: string;
-    timeSlip?: TimeSlip;
+    timeSlip?: Omit<TimeSlip, 'id'|'cost'>;
 }
 
 /**
@@ -345,12 +345,15 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/companies/`;
+
         const response = await this.request({
-            path: `/api/companies/`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CompanyToJSON(requestParameters.company),
+            body: CompanyToJSON(requestParameters['company']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => CompanyFromJSON(jsonValue));
@@ -374,12 +377,15 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/contacts/`;
+
         const response = await this.request({
-            path: `/api/contacts/`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ContactToJSON(requestParameters.contact),
+            body: ContactToJSON(requestParameters['contact']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ContactFromJSON(jsonValue));
@@ -403,12 +409,15 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/invoices/`;
+
         const response = await this.request({
-            path: `/api/invoices/`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: InvoiceToJSON(requestParameters.invoice),
+            body: InvoiceToJSON(requestParameters['invoice']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceFromJSON(jsonValue));
@@ -432,12 +441,15 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/users/login/`;
+
         const response = await this.request({
-            path: `/api/users/login/`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: LoginToJSON(requestParameters.login),
+            body: LoginToJSON(requestParameters['login']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LoginFromJSON(jsonValue));
@@ -461,12 +473,15 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/crm/note/`;
+
         const response = await this.request({
-            path: `/api/crm/note/`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NoteToJSON(requestParameters.note),
+            body: NoteToJSON(requestParameters['note']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => NoteFromJSON(jsonValue));
@@ -490,12 +505,15 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/projects/`;
+
         const response = await this.request({
-            path: `/api/projects/`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ProjectToJSON(requestParameters.project),
+            body: ProjectToJSON(requestParameters['project']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ProjectFromJSON(jsonValue));
@@ -519,12 +537,15 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/users/sso/`;
+
         const response = await this.request({
-            path: `/api/users/sso/`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: SSOToJSON(requestParameters.sSO),
+            body: SSOToJSON(requestParameters['sSO']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => SSOFromJSON(jsonValue));
@@ -548,12 +569,15 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/tasks/`;
+
         const response = await this.request({
-            path: `/api/tasks/`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: TaskToJSON(requestParameters.task),
+            body: TaskToJSON(requestParameters['task']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => TaskFromJSON(jsonValue));
@@ -577,12 +601,15 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/timeslips/`;
+
         const response = await this.request({
-            path: `/api/timeslips/`,
+            path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: TimeSlipToJSON(requestParameters.timeSlip),
+            body: TimeSlipToJSON(requestParameters['timeSlip']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => TimeSlipFromJSON(jsonValue));
@@ -600,16 +627,23 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async destroyCompanyRaw(requestParameters: DestroyCompanyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling destroyCompany.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling destroyCompany().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/companies/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/companies/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -629,16 +663,23 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async destroyContactRaw(requestParameters: DestroyContactRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling destroyContact.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling destroyContact().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/contacts/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/contacts/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -658,16 +699,23 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async destroyInvoiceRaw(requestParameters: DestroyInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling destroyInvoice.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling destroyInvoice().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/invoices/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/invoices/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -687,20 +735,31 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async destroyInvoiceModifierRaw(requestParameters: DestroyInvoiceModifierRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling destroyInvoiceModifier.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling destroyInvoiceModifier().'
+            );
         }
 
-        if (requestParameters.modifier === null || requestParameters.modifier === undefined) {
-            throw new runtime.RequiredError('modifier','Required parameter requestParameters.modifier was null or undefined when calling destroyInvoiceModifier.');
+        if (requestParameters['modifier'] == null) {
+            throw new runtime.RequiredError(
+                'modifier',
+                'Required parameter "modifier" was null or undefined when calling destroyInvoiceModifier().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/invoices/{id}/modifiers/{modifier}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+        urlPath = urlPath.replace(`{${"modifier"}}`, encodeURIComponent(String(requestParameters['modifier'])));
+
         const response = await this.request({
-            path: `/api/invoices/{id}/modifiers/{modifier}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"modifier"}}`, encodeURIComponent(String(requestParameters.modifier))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -720,16 +779,23 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async destroyProjectRaw(requestParameters: DestroyProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling destroyProject.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling destroyProject().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/projects/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/projects/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -749,16 +815,23 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async destroyTaskRaw(requestParameters: DestroyTaskRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling destroyTask.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling destroyTask().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/tasks/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/tasks/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -778,16 +851,23 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async destroyTimeSlipRaw(requestParameters: DestroyTimeSlipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling destroyTimeSlip.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling destroyTimeSlip().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/timeslips/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/timeslips/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -809,18 +889,21 @@ export class ApiApi extends runtime.BaseAPI {
     async listAccountsRaw(requestParameters: ListAccountsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListAccounts200Response>> {
         const queryParameters: any = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
         }
 
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/accounts/`;
+
         const response = await this.request({
-            path: `/api/accounts/`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -845,8 +928,11 @@ export class ApiApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/invoices/zip`;
+
         const response = await this.request({
-            path: `/api/invoices/zip`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -866,34 +952,37 @@ export class ApiApi extends runtime.BaseAPI {
     /**
      * 
      */
-    async listCompanysRaw(requestParameters: ListCompanysRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCompanys200Response>> {
+    async listCompaniesRaw(requestParameters: ListCompaniesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCompanies200Response>> {
         const queryParameters: any = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
         }
 
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/companies/`;
+
         const response = await this.request({
-            path: `/api/companies/`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListCompanys200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListCompanies200ResponseFromJSON(jsonValue));
     }
 
     /**
      * 
      */
-    async listCompanys(requestParameters: ListCompanysRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCompanys200Response> {
-        const response = await this.listCompanysRaw(requestParameters, initOverrides);
+    async listCompanies(requestParameters: ListCompaniesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCompanies200Response> {
+        const response = await this.listCompaniesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -903,22 +992,25 @@ export class ApiApi extends runtime.BaseAPI {
     async listContactsRaw(requestParameters: ListContactsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListContacts200Response>> {
         const queryParameters: any = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
         }
 
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
         }
 
-        if (requestParameters.search !== undefined) {
-            queryParameters['search'] = requestParameters.search;
+        if (requestParameters['search'] != null) {
+            queryParameters['search'] = requestParameters['search'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/contacts/`;
+
         const response = await this.request({
-            path: `/api/contacts/`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -941,18 +1033,21 @@ export class ApiApi extends runtime.BaseAPI {
     async listInvoiceModifiersRaw(requestParameters: ListInvoiceModifiersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListInvoiceModifiers200Response>> {
         const queryParameters: any = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
         }
 
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/modifiers/`;
+
         const response = await this.request({
-            path: `/api/modifiers/`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -973,16 +1068,23 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async listInvoicePDFsRaw(requestParameters: ListInvoicePDFsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<any>>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling listInvoicePDFs.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listInvoicePDFs().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/invoices/{id}/pdf`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/invoices/{id}/pdf`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1005,18 +1107,21 @@ export class ApiApi extends runtime.BaseAPI {
     async listInvoicesRaw(requestParameters: ListInvoicesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListInvoices200Response>> {
         const queryParameters: any = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
         }
 
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/invoices/`;
+
         const response = await this.request({
-            path: `/api/invoices/`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1039,22 +1144,25 @@ export class ApiApi extends runtime.BaseAPI {
     async listNotesRaw(requestParameters: ListNotesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListNotes200Response>> {
         const queryParameters: any = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
         }
 
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
         }
 
-        if (requestParameters.contact !== undefined) {
-            queryParameters['contact'] = requestParameters.contact;
+        if (requestParameters['contact'] != null) {
+            queryParameters['contact'] = requestParameters['contact'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/crm/note/`;
+
         const response = await this.request({
-            path: `/api/crm/note/`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1074,34 +1182,37 @@ export class ApiApi extends runtime.BaseAPI {
     /**
      * 
      */
-    async listProjectSummarysRaw(requestParameters: ListProjectSummarysRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListProjectSummarys200Response>> {
+    async listProjectSummariesRaw(requestParameters: ListProjectSummariesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListProjectSummaries200Response>> {
         const queryParameters: any = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
         }
 
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/projects/summary/`;
+
         const response = await this.request({
-            path: `/api/projects/summary/`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListProjectSummarys200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListProjectSummaries200ResponseFromJSON(jsonValue));
     }
 
     /**
      * 
      */
-    async listProjectSummarys(requestParameters: ListProjectSummarysRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListProjectSummarys200Response> {
-        const response = await this.listProjectSummarysRaw(requestParameters, initOverrides);
+    async listProjectSummaries(requestParameters: ListProjectSummariesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListProjectSummaries200Response> {
+        const response = await this.listProjectSummariesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1111,18 +1222,21 @@ export class ApiApi extends runtime.BaseAPI {
     async listProjectsRaw(requestParameters: ListProjectsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListProjects200Response>> {
         const queryParameters: any = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
         }
 
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/projects/`;
+
         const response = await this.request({
-            path: `/api/projects/`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1145,38 +1259,41 @@ export class ApiApi extends runtime.BaseAPI {
     async listTasksRaw(requestParameters: ListTasksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListTasks200Response>> {
         const queryParameters: any = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
         }
 
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
         }
 
-        if (requestParameters.invoices !== undefined) {
-            queryParameters['invoices'] = requestParameters.invoices;
+        if (requestParameters['invoices'] != null) {
+            queryParameters['invoices'] = requestParameters['invoices'];
         }
 
-        if (requestParameters.project !== undefined) {
-            queryParameters['project'] = requestParameters.project;
+        if (requestParameters['project'] != null) {
+            queryParameters['project'] = requestParameters['project'];
         }
 
-        if (requestParameters.noInvoice !== undefined) {
-            queryParameters['no_invoice'] = requestParameters.noInvoice;
+        if (requestParameters['noInvoice'] != null) {
+            queryParameters['no_invoice'] = requestParameters['noInvoice'];
         }
 
-        if (requestParameters.billingType !== undefined) {
-            queryParameters['billing_type'] = requestParameters.billingType;
+        if (requestParameters['billingType'] != null) {
+            queryParameters['billing_type'] = requestParameters['billingType'];
         }
 
-        if (requestParameters.state !== undefined) {
-            queryParameters['state'] = requestParameters.state;
+        if (requestParameters['state'] != null) {
+            queryParameters['state'] = requestParameters['state'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/tasks/`;
+
         const response = await this.request({
-            path: `/api/tasks/`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1199,38 +1316,41 @@ export class ApiApi extends runtime.BaseAPI {
     async listTimeSlipsRaw(requestParameters: ListTimeSlipsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListTimeSlips200Response>> {
         const queryParameters: any = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
         }
 
-        if (requestParameters.offset !== undefined) {
-            queryParameters['offset'] = requestParameters.offset;
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
         }
 
-        if (requestParameters.invoice !== undefined) {
-            queryParameters['invoice'] = requestParameters.invoice;
+        if (requestParameters['invoice'] != null) {
+            queryParameters['invoice'] = requestParameters['invoice'];
         }
 
-        if (requestParameters.project !== undefined) {
-            queryParameters['project'] = requestParameters.project;
+        if (requestParameters['project'] != null) {
+            queryParameters['project'] = requestParameters['project'];
         }
 
-        if (requestParameters.start !== undefined) {
-            queryParameters['start'] = requestParameters.start;
+        if (requestParameters['start'] != null) {
+            queryParameters['start'] = requestParameters['start'];
         }
 
-        if (requestParameters.end !== undefined) {
-            queryParameters['end'] = requestParameters.end;
+        if (requestParameters['end'] != null) {
+            queryParameters['end'] = requestParameters['end'];
         }
 
-        if (requestParameters.noInvoice !== undefined) {
-            queryParameters['no_invoice'] = requestParameters.noInvoice;
+        if (requestParameters['noInvoice'] != null) {
+            queryParameters['no_invoice'] = requestParameters['noInvoice'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/timeslips/`;
+
         const response = await this.request({
-            path: `/api/timeslips/`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1251,8 +1371,11 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async partialUpdateCompanyRaw(requestParameters: PartialUpdateCompanyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Company>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling partialUpdateCompany.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling partialUpdateCompany().'
+            );
         }
 
         const queryParameters: any = {};
@@ -1261,12 +1384,16 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/companies/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/companies/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: CompanyToJSON(requestParameters.company),
+            body: CompanyToJSON(requestParameters['company']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => CompanyFromJSON(jsonValue));
@@ -1284,8 +1411,11 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async partialUpdateContactRaw(requestParameters: PartialUpdateContactRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Contact>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling partialUpdateContact.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling partialUpdateContact().'
+            );
         }
 
         const queryParameters: any = {};
@@ -1294,12 +1424,16 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/contacts/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/contacts/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: ContactToJSON(requestParameters.contact),
+            body: ContactToJSON(requestParameters['contact']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ContactFromJSON(jsonValue));
@@ -1317,8 +1451,11 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async partialUpdateInvoiceRaw(requestParameters: PartialUpdateInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Invoice>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling partialUpdateInvoice.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling partialUpdateInvoice().'
+            );
         }
 
         const queryParameters: any = {};
@@ -1327,12 +1464,16 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/invoices/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/invoices/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: InvoiceToJSON(requestParameters.invoice),
+            body: InvoiceToJSON(requestParameters['invoice']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceFromJSON(jsonValue));
@@ -1350,12 +1491,18 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async partialUpdateInvoiceModifierRaw(requestParameters: PartialUpdateInvoiceModifierRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InvoiceModifier>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling partialUpdateInvoiceModifier.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling partialUpdateInvoiceModifier().'
+            );
         }
 
-        if (requestParameters.modifier === null || requestParameters.modifier === undefined) {
-            throw new runtime.RequiredError('modifier','Required parameter requestParameters.modifier was null or undefined when calling partialUpdateInvoiceModifier.');
+        if (requestParameters['modifier'] == null) {
+            throw new runtime.RequiredError(
+                'modifier',
+                'Required parameter "modifier" was null or undefined when calling partialUpdateInvoiceModifier().'
+            );
         }
 
         const queryParameters: any = {};
@@ -1364,12 +1511,17 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/invoices/{id}/modifiers/{modifier}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+        urlPath = urlPath.replace(`{${"modifier"}}`, encodeURIComponent(String(requestParameters['modifier'])));
+
         const response = await this.request({
-            path: `/api/invoices/{id}/modifiers/{modifier}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"modifier"}}`, encodeURIComponent(String(requestParameters.modifier))),
+            path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: InvoiceModifierToJSON(requestParameters.invoiceModifier),
+            body: InvoiceModifierToJSON(requestParameters['invoiceModifier']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceModifierFromJSON(jsonValue));
@@ -1387,8 +1539,11 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async partialUpdateProjectRaw(requestParameters: PartialUpdateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling partialUpdateProject.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling partialUpdateProject().'
+            );
         }
 
         const queryParameters: any = {};
@@ -1397,12 +1552,16 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/projects/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/projects/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: ProjectToJSON(requestParameters.project),
+            body: ProjectToJSON(requestParameters['project']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ProjectFromJSON(jsonValue));
@@ -1420,8 +1579,11 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async partialUpdateTaskRaw(requestParameters: PartialUpdateTaskRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling partialUpdateTask.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling partialUpdateTask().'
+            );
         }
 
         const queryParameters: any = {};
@@ -1430,12 +1592,16 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/tasks/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/tasks/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: TaskToJSON(requestParameters.task),
+            body: TaskToJSON(requestParameters['task']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => TaskFromJSON(jsonValue));
@@ -1453,8 +1619,11 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async partialUpdateTimeSlipRaw(requestParameters: PartialUpdateTimeSlipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TimeSlip>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling partialUpdateTimeSlip.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling partialUpdateTimeSlip().'
+            );
         }
 
         const queryParameters: any = {};
@@ -1463,12 +1632,16 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/timeslips/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/timeslips/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: TimeSlipToJSON(requestParameters.timeSlip),
+            body: TimeSlipToJSON(requestParameters['timeSlip']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => TimeSlipFromJSON(jsonValue));
@@ -1486,16 +1659,23 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async retrieveCompanyRaw(requestParameters: RetrieveCompanyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Company>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling retrieveCompany.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling retrieveCompany().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/companies/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/companies/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1516,16 +1696,23 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async retrieveContactRaw(requestParameters: RetrieveContactRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Contact>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling retrieveContact.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling retrieveContact().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/contacts/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/contacts/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1550,8 +1737,11 @@ export class ApiApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/currency/rates/`;
+
         const response = await this.request({
-            path: `/api/currency/rates/`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1572,16 +1762,23 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async retrieveInvoiceRaw(requestParameters: RetrieveInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Invoice>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling retrieveInvoice.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling retrieveInvoice().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/invoices/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/invoices/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1602,20 +1799,31 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async retrieveInvoiceModifierRaw(requestParameters: RetrieveInvoiceModifierRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InvoiceModifier>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling retrieveInvoiceModifier.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling retrieveInvoiceModifier().'
+            );
         }
 
-        if (requestParameters.modifier === null || requestParameters.modifier === undefined) {
-            throw new runtime.RequiredError('modifier','Required parameter requestParameters.modifier was null or undefined when calling retrieveInvoiceModifier.');
+        if (requestParameters['modifier'] == null) {
+            throw new runtime.RequiredError(
+                'modifier',
+                'Required parameter "modifier" was null or undefined when calling retrieveInvoiceModifier().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/invoices/{id}/modifiers/{modifier}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+        urlPath = urlPath.replace(`{${"modifier"}}`, encodeURIComponent(String(requestParameters['modifier'])));
+
         const response = await this.request({
-            path: `/api/invoices/{id}/modifiers/{modifier}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"modifier"}}`, encodeURIComponent(String(requestParameters.modifier))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1640,8 +1848,11 @@ export class ApiApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/users/token/`;
+
         const response = await this.request({
-            path: `/api/users/token/`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1662,16 +1873,23 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async retrieveProjectRaw(requestParameters: RetrieveProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling retrieveProject.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling retrieveProject().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/projects/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/projects/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1692,16 +1910,23 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async retrieveTaskRaw(requestParameters: RetrieveTaskRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling retrieveTask.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling retrieveTask().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/tasks/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/tasks/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1722,16 +1947,23 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async retrieveTaskSummaryRaw(requestParameters: RetrieveTaskSummaryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TaskSummary>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling retrieveTaskSummary.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling retrieveTaskSummary().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/tasks/{id}/summary`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/tasks/{id}/summary`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1752,16 +1984,23 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async retrieveTimeSlipRaw(requestParameters: RetrieveTimeSlipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TimeSlip>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling retrieveTimeSlip.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling retrieveTimeSlip().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/timeslips/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/timeslips/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1786,8 +2025,11 @@ export class ApiApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/users/`;
+
         const response = await this.request({
-            path: `/api/users/`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1812,8 +2054,11 @@ export class ApiApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/api/version/`;
+
         const response = await this.request({
-            path: `/api/version/`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1834,8 +2079,11 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async updateCompanyRaw(requestParameters: UpdateCompanyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Company>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateCompany.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateCompany().'
+            );
         }
 
         const queryParameters: any = {};
@@ -1844,12 +2092,16 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/companies/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/companies/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: CompanyToJSON(requestParameters.company),
+            body: CompanyToJSON(requestParameters['company']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => CompanyFromJSON(jsonValue));
@@ -1867,8 +2119,11 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async updateContactRaw(requestParameters: UpdateContactRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Contact>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateContact.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateContact().'
+            );
         }
 
         const queryParameters: any = {};
@@ -1877,12 +2132,16 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/contacts/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/contacts/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: ContactToJSON(requestParameters.contact),
+            body: ContactToJSON(requestParameters['contact']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ContactFromJSON(jsonValue));
@@ -1900,8 +2159,11 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async updateInvoiceRaw(requestParameters: UpdateInvoiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Invoice>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateInvoice.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateInvoice().'
+            );
         }
 
         const queryParameters: any = {};
@@ -1910,12 +2172,16 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/invoices/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/invoices/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: InvoiceToJSON(requestParameters.invoice),
+            body: InvoiceToJSON(requestParameters['invoice']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceFromJSON(jsonValue));
@@ -1933,12 +2199,18 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async updateInvoiceModifierRaw(requestParameters: UpdateInvoiceModifierRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InvoiceModifier>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateInvoiceModifier.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateInvoiceModifier().'
+            );
         }
 
-        if (requestParameters.modifier === null || requestParameters.modifier === undefined) {
-            throw new runtime.RequiredError('modifier','Required parameter requestParameters.modifier was null or undefined when calling updateInvoiceModifier.');
+        if (requestParameters['modifier'] == null) {
+            throw new runtime.RequiredError(
+                'modifier',
+                'Required parameter "modifier" was null or undefined when calling updateInvoiceModifier().'
+            );
         }
 
         const queryParameters: any = {};
@@ -1947,12 +2219,17 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/invoices/{id}/modifiers/{modifier}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+        urlPath = urlPath.replace(`{${"modifier"}}`, encodeURIComponent(String(requestParameters['modifier'])));
+
         const response = await this.request({
-            path: `/api/invoices/{id}/modifiers/{modifier}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))).replace(`{${"modifier"}}`, encodeURIComponent(String(requestParameters.modifier))),
+            path: urlPath,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: InvoiceModifierToJSON(requestParameters.invoiceModifier),
+            body: InvoiceModifierToJSON(requestParameters['invoiceModifier']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => InvoiceModifierFromJSON(jsonValue));
@@ -1970,8 +2247,11 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async updateProjectRaw(requestParameters: UpdateProjectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Project>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateProject.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateProject().'
+            );
         }
 
         const queryParameters: any = {};
@@ -1980,12 +2260,16 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/projects/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/projects/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: ProjectToJSON(requestParameters.project),
+            body: ProjectToJSON(requestParameters['project']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ProjectFromJSON(jsonValue));
@@ -2003,8 +2287,11 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async updateTaskRaw(requestParameters: UpdateTaskRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Task>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateTask.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateTask().'
+            );
         }
 
         const queryParameters: any = {};
@@ -2013,12 +2300,16 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/tasks/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/tasks/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: TaskToJSON(requestParameters.task),
+            body: TaskToJSON(requestParameters['task']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => TaskFromJSON(jsonValue));
@@ -2036,8 +2327,11 @@ export class ApiApi extends runtime.BaseAPI {
      * 
      */
     async updateTimeSlipRaw(requestParameters: UpdateTimeSlipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TimeSlip>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateTimeSlip.');
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateTimeSlip().'
+            );
         }
 
         const queryParameters: any = {};
@@ -2046,12 +2340,16 @@ export class ApiApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
+
+        let urlPath = `/api/timeslips/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
         const response = await this.request({
-            path: `/api/timeslips/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: urlPath,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: TimeSlipToJSON(requestParameters.timeSlip),
+            body: TimeSlipToJSON(requestParameters['timeSlip']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => TimeSlipFromJSON(jsonValue));

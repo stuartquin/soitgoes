@@ -60,6 +60,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -128,6 +131,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -175,7 +181,7 @@ paths:
       - api
   /api/projects/summary/:
     get:
-      operationId: listProjectSummarys
+      operationId: listProjectSummaries
       description: ''
       parameters:
       - name: limit
@@ -196,6 +202,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -335,6 +344,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -433,6 +445,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -846,6 +861,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -927,6 +945,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -1116,6 +1137,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -1279,6 +1303,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -1302,7 +1329,7 @@ paths:
       - api
   /api/companies/:
     get:
-      operationId: listCompanys
+      operationId: listCompanies
       description: ''
       parameters:
       - name: limit
@@ -1323,6 +1350,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -1658,6 +1688,9 @@ components:
               readOnly: true
             sequence_num:
               type: integer
+              maximum: 9223372036854775807
+              minimum: -9223372036854775808
+              format: int64
             project:
               type: integer
             created_at:
@@ -1668,6 +1701,7 @@ components:
               type: string
               format: date-time
               readOnly: true
+              nullable: true
             paid_at:
               type: string
               format: date-time
@@ -1747,6 +1781,9 @@ components:
           readOnly: true
         sequence_num:
           type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
         project:
           type: integer
         created_at:
@@ -1757,6 +1794,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         paid_at:
           type: string
           format: date-time
@@ -1930,6 +1968,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         completed_at:
           type: string
           format: date-time
@@ -1987,6 +2026,9 @@ components:
                 readOnly: true
               sequence_num:
                 type: integer
+                maximum: 9223372036854775807
+                minimum: -9223372036854775808
+                format: int64
               project:
                 type: integer
               created_at:
@@ -1997,6 +2039,7 @@ components:
                 type: string
                 format: date-time
                 readOnly: true
+                nullable: true
               paid_at:
                 type: string
                 format: date-time

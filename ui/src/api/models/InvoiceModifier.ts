@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -48,11 +48,9 @@ export interface InvoiceModifier {
 /**
  * Check if a given object implements the InvoiceModifier interface.
  */
-export function instanceOfInvoiceModifier(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "name" in value;
-
-    return isInstance;
+export function instanceOfInvoiceModifier(value: object): value is InvoiceModifier {
+    if (!('name' in value) || value['name'] === undefined) return false;
+    return true;
 }
 
 export function InvoiceModifierFromJSON(json: any): InvoiceModifier {
@@ -60,29 +58,31 @@ export function InvoiceModifierFromJSON(json: any): InvoiceModifier {
 }
 
 export function InvoiceModifierFromJSONTyped(json: any, ignoreDiscriminator: boolean): InvoiceModifier {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'name': json['name'],
-        'percent': !exists(json, 'percent') ? undefined : json['percent'],
-        'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
+        'percent': json['percent'] == null ? undefined : json['percent'],
+        'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
     };
 }
 
-export function InvoiceModifierToJSON(value?: InvoiceModifier | null): any {
-    if (value === undefined) {
-        return undefined;
+export function InvoiceModifierToJSON(json: any): InvoiceModifier {
+    return InvoiceModifierToJSONTyped(json, false);
+}
+
+export function InvoiceModifierToJSONTyped(value?: Omit<InvoiceModifier, 'id'|'created_at'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'name': value.name,
-        'percent': value.percent,
+        'name': value['name'],
+        'percent': value['percent'],
     };
 }
 

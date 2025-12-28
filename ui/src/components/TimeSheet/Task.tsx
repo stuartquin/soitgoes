@@ -9,20 +9,27 @@ import { TimeSheetType } from "components/TimeSheet/TimeSlipContext";
 
 interface Props {
   task: models.Task;
-  project: models.Project;
   dateRange: Date[];
   timeSheet: TimeSheetType;
 }
 
-function Task({ task, timeSheet, project, dateRange }: Props) {
+function Task({ task, timeSheet, dateRange }: Props) {
   const taskEntries = timeSheet[task.id || -1];
   const entries = useMemo(() => {
-    return dateRange
-      .map((date) => {
-        const dateStr = format(date, "yyyy-MM-dd");
-        return taskEntries[dateStr];
-      })
-      .filter((entry) => entry);
+    return dateRange.map((date) => {
+      const dateStr = format(date, "yyyy-MM-dd");
+      return (
+        taskEntries[dateStr] || {
+          timeSlip: {
+            project: task.project,
+            task: task.id,
+            hours: 0,
+            invoice: null,
+          },
+          date,
+        }
+      );
+    });
   }, [dateRange, taskEntries]);
 
   const url = `/time?task=${task.id}&date=${format(

@@ -1,15 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  format,
-  startOfWeek,
-  startOfMonth,
-  addMonths,
-  parse,
-  endOfMonth,
-} from "date-fns";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import * as models from "api/models";
-import { getClient } from "apiClient";
 
 import {
   TimeSlipContext,
@@ -21,55 +12,33 @@ import {
   getUpdatedTimeSheet,
 } from "components/TimeSheet/TimeSlipContext";
 import TimeSheetGrid from "components/TimeSheet/TimeSheetGrid";
-import TimeSheetLoading from "components/TimeSheet/TimeSheetLoading";
 import Actions from "components/TimeSheet/Actions";
 import SlideOver from "components/SlideOver";
 import TaskDetail from "components/Tasks/TaskDetail";
-
-const getStartDate = (dateStr: string): Date => {
-  const date = dateStr ? parse(dateStr, "yyyy-MM-dd", new Date()) : new Date();
-
-  return startOfWeek(date, { weekStartsOn: 1 });
-};
+import { Task, TimeSlip } from "apiv3";
+import { useSearch } from "@tanstack/react-router";
 
 interface Props {
   user: models.User;
   projects: models.Project[];
-  dateStr?: string;
-  selectedTaskId?: string;
+  startDate: Date;
+  timeSlips: TimeSlip[];
+  tasks: Task[];
   onClose: (startDate: Date) => void;
 }
 
-function TimeSheet({ user, projects, dateStr, selectedTaskId, onClose }: Props) {
-  const [tasks, setTasks] = useState<models.Task[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [timeSheet, setTimeSheet] = useState<TimeSheetType>({});
-  const startDate = useMemo(() => {
-    return getStartDate(dateStr || "");
-  }, [dateStr]);
-
-  useEffect(() => {
-    const load = async () => {
-      const api = getClient();
-      const timeSlipResponse = await api.listTimeSlips({
-        start: format(startOfMonth(addMonths(startDate, -1)), "yyyy-MM-dd"),
-        end: format(endOfMonth(addMonths(startDate, 1)), "yyyy-MM-dd"),
-      });
-
-      const taskResponse = await api.listTasks({ state: "OPEN" });
-      const activeTasks = (taskResponse.results || []).filter(
-        (task) => (task.hoursSpent || 0) > 0 || task.state === "OPEN"
-      );
-      setTasks(activeTasks);
-
-      setTimeSheet(
-        getTimeSheet(startDate, activeTasks, timeSlipResponse.results || [])
-      );
-      setIsLoading(false);
-    };
-
-    load();
-  }, [startDate]);
+function TimeSheet({
+  user,
+  projects,
+  startDate,
+  timeSlips,
+  tasks,
+  onClose,
+}: Props) {
+  const search = useSearch({ from: "/time" });
+  const [timeSheet, setTimeSheet] = useState<TimeSheetType>(
+    getTimeSheet(startDate, tasks, timeSlips)
+  );
 
   const updateHours = useCallback(
     (entry: TimeSlipEntry, hours: number) => {
@@ -87,30 +56,36 @@ function TimeSheet({ user, projects, dateStr, selectedTaskId, onClose }: Props) 
     onClose(startDate);
   }, [onClose, startDate]);
 
-  const activeProjects = projects.filter((p) => !p.archived);
+  const activeTasks = useMemo(() => {
+    return tasks.filter(
+      (task) => (task.hours_spent || 0) > 0 || task.state === "OPEN"
+    );
+  }, [tasks]);
 
-  const isOpen = Boolean(selectedTaskId);
+  useEffect(() => {
+    setTimeSheet((timeSheet) => {
+      return getUpdatedTimeSheet(timeSheet, timeSlips);
+    });
+  }, [timeSlips]);
+
+  const activeProjects = projects.filter((p) => !p.archived);
 
   return (
     <TimeSlipContext.Provider value={{ updateHours }}>
       <div className="px-3 w-full">
         <Actions onSave={save} />
-        {isLoading ? (
-          <TimeSheetLoading />
-        ) : (
-          <TimeSheetGrid
-            user={user}
-            startDate={startDate}
-            timeSheet={timeSheet}
-            projects={activeProjects}
-            tasks={tasks}
-          />
-        )}
+        <TimeSheetGrid
+          user={user}
+          startDate={startDate}
+          timeSheet={timeSheet}
+          projects={activeProjects}
+          tasks={activeTasks}
+        />
       </div>
-      <SlideOver isOpen={isOpen} onClose={closeSlideOver}>
+      <SlideOver isOpen={Boolean(search.task)} onClose={closeSlideOver}>
         <div>
-          {selectedTaskId && (
-            <TaskDetail taskId={selectedTaskId} projects={activeProjects} />
+          {search.task && (
+            <TaskDetail taskId={search.task} projects={activeProjects} />
           )}
         </div>
       </SlideOver>

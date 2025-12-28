@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -78,14 +78,12 @@ export interface TimeSlip {
 /**
  * Check if a given object implements the TimeSlip interface.
  */
-export function instanceOfTimeSlip(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "user" in value;
-    isInstance = isInstance && "project" in value;
-    isInstance = isInstance && "task" in value;
-    isInstance = isInstance && "date" in value;
-
-    return isInstance;
+export function instanceOfTimeSlip(value: object): value is TimeSlip {
+    if (!('user' in value) || value['user'] === undefined) return false;
+    if (!('project' in value) || value['project'] === undefined) return false;
+    if (!('task' in value) || value['task'] === undefined) return false;
+    if (!('date' in value) || value['date'] === undefined) return false;
+    return true;
 }
 
 export function TimeSlipFromJSON(json: any): TimeSlip {
@@ -93,39 +91,41 @@ export function TimeSlipFromJSON(json: any): TimeSlip {
 }
 
 export function TimeSlipFromJSONTyped(json: any, ignoreDiscriminator: boolean): TimeSlip {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'user': json['user'],
-        'hours': !exists(json, 'hours') ? undefined : json['hours'],
-        'hourlyRate': !exists(json, 'hourly_rate') ? undefined : json['hourly_rate'],
+        'hours': json['hours'] == null ? undefined : json['hours'],
+        'hourlyRate': json['hourly_rate'] == null ? undefined : json['hourly_rate'],
         'project': json['project'],
         'task': json['task'],
-        'invoice': !exists(json, 'invoice') ? undefined : json['invoice'],
-        'cost': !exists(json, 'cost') ? undefined : json['cost'],
+        'invoice': json['invoice'] == null ? undefined : json['invoice'],
+        'cost': json['cost'] == null ? undefined : json['cost'],
         'date': (new Date(json['date'])),
     };
 }
 
-export function TimeSlipToJSON(value?: TimeSlip | null): any {
-    if (value === undefined) {
-        return undefined;
+export function TimeSlipToJSON(json: any): TimeSlip {
+    return TimeSlipToJSONTyped(json, false);
+}
+
+export function TimeSlipToJSONTyped(value?: Omit<TimeSlip, 'id'|'cost'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'user': value.user,
-        'hours': value.hours,
-        'hourly_rate': value.hourlyRate,
-        'project': value.project,
-        'task': value.task,
-        'invoice': value.invoice,
-        'date': (value.date.toISOString().substring(0,10)),
+        'user': value['user'],
+        'hours': value['hours'],
+        'hourly_rate': value['hourlyRate'],
+        'project': value['project'],
+        'task': value['task'],
+        'invoice': value['invoice'],
+        'date': value['date'].toISOString().substring(0,10),
     };
 }
 

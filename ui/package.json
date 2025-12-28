@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@heroicons/react": "^1.0.1",
+    "@tanstack/react-query": "^5.90.14",
     "@tanstack/react-router": "^1.95.0",
     "@tanstack/router-vite-plugin": "^1.95.0",
     "@testing-library/jest-dom": "^5.11.9",

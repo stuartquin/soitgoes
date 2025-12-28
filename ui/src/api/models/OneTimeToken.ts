@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -30,11 +30,9 @@ export interface OneTimeToken {
 /**
  * Check if a given object implements the OneTimeToken interface.
  */
-export function instanceOfOneTimeToken(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "key" in value;
-
-    return isInstance;
+export function instanceOfOneTimeToken(value: object): value is OneTimeToken {
+    if (!('key' in value) || value['key'] === undefined) return false;
+    return true;
 }
 
 export function OneTimeTokenFromJSON(json: any): OneTimeToken {
@@ -42,7 +40,7 @@ export function OneTimeTokenFromJSON(json: any): OneTimeToken {
 }
 
 export function OneTimeTokenFromJSONTyped(json: any, ignoreDiscriminator: boolean): OneTimeToken {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
@@ -51,16 +49,18 @@ export function OneTimeTokenFromJSONTyped(json: any, ignoreDiscriminator: boolea
     };
 }
 
-export function OneTimeTokenToJSON(value?: OneTimeToken | null): any {
-    if (value === undefined) {
-        return undefined;
+export function OneTimeTokenToJSON(json: any): OneTimeToken {
+    return OneTimeTokenToJSONTyped(json, false);
+}
+
+export function OneTimeTokenToJSONTyped(value?: OneTimeToken | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'key': value.key,
+        'key': value['key'],
     };
 }
 

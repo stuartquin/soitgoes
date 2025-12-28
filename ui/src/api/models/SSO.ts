@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -36,11 +36,9 @@ export interface SSO {
 /**
  * Check if a given object implements the SSO interface.
  */
-export function instanceOfSSO(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "code" in value;
-
-    return isInstance;
+export function instanceOfSSO(value: object): value is SSO {
+    if (!('code' in value) || value['code'] === undefined) return false;
+    return true;
 }
 
 export function SSOFromJSON(json: any): SSO {
@@ -48,26 +46,28 @@ export function SSOFromJSON(json: any): SSO {
 }
 
 export function SSOFromJSONTyped(json: any, ignoreDiscriminator: boolean): SSO {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
         'code': json['code'],
-        'token': !exists(json, 'token') ? undefined : json['token'],
+        'token': json['token'] == null ? undefined : json['token'],
     };
 }
 
-export function SSOToJSON(value?: SSO | null): any {
-    if (value === undefined) {
-        return undefined;
+export function SSOToJSON(json: any): SSO {
+    return SSOToJSONTyped(json, false);
+}
+
+export function SSOToJSONTyped(value?: Omit<SSO, 'token'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'code': value.code,
+        'code': value['code'],
     };
 }
 

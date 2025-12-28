@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -48,7 +48,7 @@ export interface ProjectSummaryPreviousInvoice {
      * @type {Date}
      * @memberof ProjectSummaryPreviousInvoice
      */
-    readonly issuedAt?: Date;
+    readonly issuedAt?: Date | null;
     /**
      * 
      * @type {Date}
@@ -150,7 +150,7 @@ export interface ProjectSummaryPreviousInvoice {
      * @type {string}
      * @memberof ProjectSummaryPreviousInvoice
      */
-    billingUnit?: ProjectSummaryPreviousInvoiceBillingUnitEnum;
+    billingUnit?: ProjectSummaryPreviousInvoiceBillingUnitEnum | null;
 }
 
 
@@ -187,13 +187,11 @@ export type ProjectSummaryPreviousInvoiceBillingUnitEnum = typeof ProjectSummary
 /**
  * Check if a given object implements the ProjectSummaryPreviousInvoice interface.
  */
-export function instanceOfProjectSummaryPreviousInvoice(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "project" in value;
-    isInstance = isInstance && "timeslips" in value;
-    isInstance = isInstance && "tasks" in value;
-
-    return isInstance;
+export function instanceOfProjectSummaryPreviousInvoice(value: object): value is ProjectSummaryPreviousInvoice {
+    if (!('project' in value) || value['project'] === undefined) return false;
+    if (!('timeslips' in value) || value['timeslips'] === undefined) return false;
+    if (!('tasks' in value) || value['tasks'] === undefined) return false;
+    return true;
 }
 
 export function ProjectSummaryPreviousInvoiceFromJSON(json: any): ProjectSummaryPreviousInvoice {
@@ -201,62 +199,64 @@ export function ProjectSummaryPreviousInvoiceFromJSON(json: any): ProjectSummary
 }
 
 export function ProjectSummaryPreviousInvoiceFromJSONTyped(json: any, ignoreDiscriminator: boolean): ProjectSummaryPreviousInvoice {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'sequenceNum': !exists(json, 'sequence_num') ? undefined : json['sequence_num'],
+        'id': json['id'] == null ? undefined : json['id'],
+        'sequenceNum': json['sequence_num'] == null ? undefined : json['sequence_num'],
         'project': json['project'],
-        'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
-        'issuedAt': !exists(json, 'issued_at') ? undefined : (new Date(json['issued_at'])),
-        'paidAt': !exists(json, 'paid_at') ? undefined : (json['paid_at'] === null ? null : new Date(json['paid_at'])),
-        'dueDate': !exists(json, 'due_date') ? undefined : (json['due_date'] === null ? null : new Date(json['due_date'])),
-        'totalPaid': !exists(json, 'total_paid') ? undefined : json['total_paid'],
-        'totalDue': !exists(json, 'total_due') ? undefined : json['total_due'],
-        'subtotalDue': !exists(json, 'subtotal_due') ? undefined : json['subtotal_due'],
-        'status': !exists(json, 'status') ? undefined : json['status'],
-        'reference': !exists(json, 'reference') ? undefined : json['reference'],
-        'groupBy': !exists(json, 'group_by') ? undefined : json['group_by'],
-        'showHours': !exists(json, 'show_hours') ? undefined : json['show_hours'],
+        'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
+        'issuedAt': json['issued_at'] == null ? undefined : (new Date(json['issued_at'])),
+        'paidAt': json['paid_at'] == null ? undefined : (new Date(json['paid_at'])),
+        'dueDate': json['due_date'] == null ? undefined : (new Date(json['due_date'])),
+        'totalPaid': json['total_paid'] == null ? undefined : json['total_paid'],
+        'totalDue': json['total_due'] == null ? undefined : json['total_due'],
+        'subtotalDue': json['subtotal_due'] == null ? undefined : json['subtotal_due'],
+        'status': json['status'] == null ? undefined : json['status'],
+        'reference': json['reference'] == null ? undefined : json['reference'],
+        'groupBy': json['group_by'] == null ? undefined : json['group_by'],
+        'showHours': json['show_hours'] == null ? undefined : json['show_hours'],
         'timeslips': json['timeslips'],
         'tasks': json['tasks'],
-        'modifier': !exists(json, 'modifier') ? undefined : json['modifier'],
-        'pdfName': !exists(json, 'pdf_name') ? undefined : json['pdf_name'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'exchangeRate': !exists(json, 'exchange_rate') ? undefined : json['exchange_rate'],
-        'currency': !exists(json, 'currency') ? undefined : json['currency'],
-        'billingUnit': !exists(json, 'billing_unit') ? undefined : json['billing_unit'],
+        'modifier': json['modifier'] == null ? undefined : json['modifier'],
+        'pdfName': json['pdf_name'] == null ? undefined : json['pdf_name'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'exchangeRate': json['exchange_rate'] == null ? undefined : json['exchange_rate'],
+        'currency': json['currency'] == null ? undefined : json['currency'],
+        'billingUnit': json['billing_unit'] == null ? undefined : json['billing_unit'],
     };
 }
 
-export function ProjectSummaryPreviousInvoiceToJSON(value?: ProjectSummaryPreviousInvoice | null): any {
-    if (value === undefined) {
-        return undefined;
+export function ProjectSummaryPreviousInvoiceToJSON(json: any): ProjectSummaryPreviousInvoice {
+    return ProjectSummaryPreviousInvoiceToJSONTyped(json, false);
+}
+
+export function ProjectSummaryPreviousInvoiceToJSONTyped(value?: Omit<ProjectSummaryPreviousInvoice, 'id'|'created_at'|'issued_at'|'pdf_name'|'name'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'sequence_num': value.sequenceNum,
-        'project': value.project,
-        'paid_at': value.paidAt === undefined ? undefined : (value.paidAt === null ? null : value.paidAt.toISOString()),
-        'due_date': value.dueDate === undefined ? undefined : (value.dueDate === null ? null : value.dueDate.toISOString().substring(0,10)),
-        'total_paid': value.totalPaid,
-        'total_due': value.totalDue,
-        'subtotal_due': value.subtotalDue,
-        'status': value.status,
-        'reference': value.reference,
-        'group_by': value.groupBy,
-        'show_hours': value.showHours,
-        'timeslips': value.timeslips,
-        'tasks': value.tasks,
-        'modifier': value.modifier,
-        'exchange_rate': value.exchangeRate,
-        'currency': value.currency,
-        'billing_unit': value.billingUnit,
+        'sequence_num': value['sequenceNum'],
+        'project': value['project'],
+        'paid_at': value['paidAt'] == null ? value['paidAt'] : value['paidAt'].toISOString(),
+        'due_date': value['dueDate'] == null ? value['dueDate'] : value['dueDate'].toISOString().substring(0,10),
+        'total_paid': value['totalPaid'],
+        'total_due': value['totalDue'],
+        'subtotal_due': value['subtotalDue'],
+        'status': value['status'],
+        'reference': value['reference'],
+        'group_by': value['groupBy'],
+        'show_hours': value['showHours'],
+        'timeslips': value['timeslips'],
+        'tasks': value['tasks'],
+        'modifier': value['modifier'],
+        'exchange_rate': value['exchangeRate'],
+        'currency': value['currency'],
+        'billing_unit': value['billingUnit'],
     };
 }
 

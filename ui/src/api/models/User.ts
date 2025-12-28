@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -42,11 +42,9 @@ export interface User {
 /**
  * Check if a given object implements the User interface.
  */
-export function instanceOfUser(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "username" in value;
-
-    return isInstance;
+export function instanceOfUser(value: object): value is User {
+    if (!('username' in value) || value['username'] === undefined) return false;
+    return true;
 }
 
 export function UserFromJSON(json: any): User {
@@ -54,28 +52,30 @@ export function UserFromJSON(json: any): User {
 }
 
 export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'username': json['username'],
-        'lastLogin': !exists(json, 'last_login') ? undefined : (json['last_login'] === null ? null : new Date(json['last_login'])),
+        'lastLogin': json['last_login'] == null ? undefined : (new Date(json['last_login'])),
     };
 }
 
-export function UserToJSON(value?: User | null): any {
-    if (value === undefined) {
-        return undefined;
+export function UserToJSON(json: any): User {
+    return UserToJSONTyped(json, false);
+}
+
+export function UserToJSONTyped(value?: Omit<User, 'id'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'username': value.username,
-        'last_login': value.lastLogin === undefined ? undefined : (value.lastLogin === null ? null : value.lastLogin.toISOString()),
+        'username': value['username'],
+        'last_login': value['lastLogin'] == null ? value['lastLogin'] : value['lastLogin'].toISOString(),
     };
 }
 

@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { TimeSlip } from './TimeSlip';
 import {
     TimeSlipFromJSON,
     TimeSlipFromJSONTyped,
     TimeSlipToJSON,
+    TimeSlipToJSONTyped,
 } from './TimeSlip';
 
 /**
@@ -31,7 +32,7 @@ export interface ListTimeSlips200Response {
      * @type {number}
      * @memberof ListTimeSlips200Response
      */
-    count?: number;
+    count: number;
     /**
      * 
      * @type {string}
@@ -49,16 +50,16 @@ export interface ListTimeSlips200Response {
      * @type {Array<TimeSlip>}
      * @memberof ListTimeSlips200Response
      */
-    results?: Array<TimeSlip>;
+    results: Array<TimeSlip>;
 }
 
 /**
  * Check if a given object implements the ListTimeSlips200Response interface.
  */
-export function instanceOfListTimeSlips200Response(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfListTimeSlips200Response(value: object): value is ListTimeSlips200Response {
+    if (!('count' in value) || value['count'] === undefined) return false;
+    if (!('results' in value) || value['results'] === undefined) return false;
+    return true;
 }
 
 export function ListTimeSlips200ResponseFromJSON(json: any): ListTimeSlips200Response {
@@ -66,31 +67,33 @@ export function ListTimeSlips200ResponseFromJSON(json: any): ListTimeSlips200Res
 }
 
 export function ListTimeSlips200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ListTimeSlips200Response {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'count': !exists(json, 'count') ? undefined : json['count'],
-        'next': !exists(json, 'next') ? undefined : json['next'],
-        'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(TimeSlipFromJSON)),
+        'count': json['count'],
+        'next': json['next'] == null ? undefined : json['next'],
+        'previous': json['previous'] == null ? undefined : json['previous'],
+        'results': ((json['results'] as Array<any>).map(TimeSlipFromJSON)),
     };
 }
 
-export function ListTimeSlips200ResponseToJSON(value?: ListTimeSlips200Response | null): any {
-    if (value === undefined) {
-        return undefined;
+export function ListTimeSlips200ResponseToJSON(json: any): ListTimeSlips200Response {
+    return ListTimeSlips200ResponseToJSONTyped(json, false);
+}
+
+export function ListTimeSlips200ResponseToJSONTyped(value?: ListTimeSlips200Response | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'count': value.count,
-        'next': value.next,
-        'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(TimeSlipToJSON)),
+        'count': value['count'],
+        'next': value['next'],
+        'previous': value['previous'],
+        'results': ((value['results'] as Array<any>).map(TimeSlipToJSON)),
     };
 }
 

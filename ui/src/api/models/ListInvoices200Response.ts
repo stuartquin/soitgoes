@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { Invoice } from './Invoice';
 import {
     InvoiceFromJSON,
     InvoiceFromJSONTyped,
     InvoiceToJSON,
+    InvoiceToJSONTyped,
 } from './Invoice';
 
 /**
@@ -31,7 +32,7 @@ export interface ListInvoices200Response {
      * @type {number}
      * @memberof ListInvoices200Response
      */
-    count?: number;
+    count: number;
     /**
      * 
      * @type {string}
@@ -49,16 +50,16 @@ export interface ListInvoices200Response {
      * @type {Array<Invoice>}
      * @memberof ListInvoices200Response
      */
-    results?: Array<Invoice>;
+    results: Array<Invoice>;
 }
 
 /**
  * Check if a given object implements the ListInvoices200Response interface.
  */
-export function instanceOfListInvoices200Response(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfListInvoices200Response(value: object): value is ListInvoices200Response {
+    if (!('count' in value) || value['count'] === undefined) return false;
+    if (!('results' in value) || value['results'] === undefined) return false;
+    return true;
 }
 
 export function ListInvoices200ResponseFromJSON(json: any): ListInvoices200Response {
@@ -66,31 +67,33 @@ export function ListInvoices200ResponseFromJSON(json: any): ListInvoices200Respo
 }
 
 export function ListInvoices200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ListInvoices200Response {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'count': !exists(json, 'count') ? undefined : json['count'],
-        'next': !exists(json, 'next') ? undefined : json['next'],
-        'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(InvoiceFromJSON)),
+        'count': json['count'],
+        'next': json['next'] == null ? undefined : json['next'],
+        'previous': json['previous'] == null ? undefined : json['previous'],
+        'results': ((json['results'] as Array<any>).map(InvoiceFromJSON)),
     };
 }
 
-export function ListInvoices200ResponseToJSON(value?: ListInvoices200Response | null): any {
-    if (value === undefined) {
-        return undefined;
+export function ListInvoices200ResponseToJSON(json: any): ListInvoices200Response {
+    return ListInvoices200ResponseToJSONTyped(json, false);
+}
+
+export function ListInvoices200ResponseToJSONTyped(value?: ListInvoices200Response | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'count': value.count,
-        'next': value.next,
-        'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(InvoiceToJSON)),
+        'count': value['count'],
+        'next': value['next'],
+        'previous': value['previous'],
+        'results': ((value['results'] as Array<any>).map(InvoiceToJSON)),
     };
 }
 

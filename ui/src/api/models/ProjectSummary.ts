@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { ProjectSummaryPreviousInvoice } from './ProjectSummaryPreviousInvoice';
 import {
     ProjectSummaryPreviousInvoiceFromJSON,
     ProjectSummaryPreviousInvoiceFromJSONTyped,
     ProjectSummaryPreviousInvoiceToJSON,
+    ProjectSummaryPreviousInvoiceToJSONTyped,
 } from './ProjectSummaryPreviousInvoice';
 
 /**
@@ -61,11 +62,9 @@ export interface ProjectSummary {
 /**
  * Check if a given object implements the ProjectSummary interface.
  */
-export function instanceOfProjectSummary(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "project" in value;
-
-    return isInstance;
+export function instanceOfProjectSummary(value: object): value is ProjectSummary {
+    if (!('project' in value) || value['project'] === undefined) return false;
+    return true;
 }
 
 export function ProjectSummaryFromJSON(json: any): ProjectSummary {
@@ -73,30 +72,32 @@ export function ProjectSummaryFromJSON(json: any): ProjectSummary {
 }
 
 export function ProjectSummaryFromJSONTyped(json: any, ignoreDiscriminator: boolean): ProjectSummary {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
         'project': json['project'],
-        'hours': !exists(json, 'hours') ? undefined : json['hours'],
-        'total': !exists(json, 'total') ? undefined : json['total'],
-        'nextSequenceNum': !exists(json, 'next_sequence_num') ? undefined : json['next_sequence_num'],
-        'previousInvoice': !exists(json, 'previous_invoice') ? undefined : ProjectSummaryPreviousInvoiceFromJSON(json['previous_invoice']),
+        'hours': json['hours'] == null ? undefined : json['hours'],
+        'total': json['total'] == null ? undefined : json['total'],
+        'nextSequenceNum': json['next_sequence_num'] == null ? undefined : json['next_sequence_num'],
+        'previousInvoice': json['previous_invoice'] == null ? undefined : ProjectSummaryPreviousInvoiceFromJSON(json['previous_invoice']),
     };
 }
 
-export function ProjectSummaryToJSON(value?: ProjectSummary | null): any {
-    if (value === undefined) {
-        return undefined;
+export function ProjectSummaryToJSON(json: any): ProjectSummary {
+    return ProjectSummaryToJSONTyped(json, false);
+}
+
+export function ProjectSummaryToJSONTyped(value?: Omit<ProjectSummary, 'hours'|'total'|'next_sequence_num'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'project': value.project,
-        'previous_invoice': ProjectSummaryPreviousInvoiceToJSON(value.previousInvoice),
+        'project': value['project'],
+        'previous_invoice': ProjectSummaryPreviousInvoiceToJSON(value['previousInvoice']),
     };
 }
 
