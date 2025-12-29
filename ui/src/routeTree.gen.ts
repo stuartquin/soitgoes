@@ -10,8 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TimeRouteImport } from './routes/time'
+import { Route as InvoicesRouteRouteImport } from './routes/invoices/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as InvoicesIndexRouteImport } from './routes/invoices/index'
 import { Route as ContactsIndexRouteImport } from './routes/contacts/index'
 import { Route as InvoicesNewRouteImport } from './routes/invoices/new'
 import { Route as ContactsContactIdRouteImport } from './routes/contacts/$contactId'
@@ -23,14 +23,14 @@ const TimeRoute = TimeRouteImport.update({
   path: '/time',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InvoicesRouteRoute = InvoicesRouteRouteImport.update({
+  id: '/invoices',
+  path: '/invoices',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvoicesIndexRoute = InvoicesIndexRouteImport.update({
-  id: '/invoices/',
-  path: '/invoices/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactsIndexRoute = ContactsIndexRouteImport.update({
@@ -39,9 +39,9 @@ const ContactsIndexRoute = ContactsIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvoicesNewRoute = InvoicesNewRouteImport.update({
-  id: '/invoices/new',
-  path: '/invoices/new',
-  getParentRoute: () => rootRouteImport,
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => InvoicesRouteRoute,
 } as any)
 const ContactsContactIdRoute = ContactsContactIdRouteImport.update({
   id: '/contacts/$contactId',
@@ -49,45 +49,45 @@ const ContactsContactIdRoute = ContactsContactIdRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvoicesProjectIdIndexRoute = InvoicesProjectIdIndexRouteImport.update({
-  id: '/invoices/$projectId/',
-  path: '/invoices/$projectId/',
-  getParentRoute: () => rootRouteImport,
+  id: '/$projectId/',
+  path: '/$projectId/',
+  getParentRoute: () => InvoicesRouteRoute,
 } as any)
 const InvoicesProjectIdInvoiceIdRoute =
   InvoicesProjectIdInvoiceIdRouteImport.update({
-    id: '/invoices/$projectId/$invoiceId',
-    path: '/invoices/$projectId/$invoiceId',
-    getParentRoute: () => rootRouteImport,
+    id: '/$projectId/$invoiceId',
+    path: '/$projectId/$invoiceId',
+    getParentRoute: () => InvoicesRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/invoices': typeof InvoicesRouteRouteWithChildren
   '/time': typeof TimeRoute
   '/contacts/$contactId': typeof ContactsContactIdRoute
   '/invoices/new': typeof InvoicesNewRoute
   '/contacts': typeof ContactsIndexRoute
-  '/invoices': typeof InvoicesIndexRoute
   '/invoices/$projectId/$invoiceId': typeof InvoicesProjectIdInvoiceIdRoute
   '/invoices/$projectId': typeof InvoicesProjectIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/invoices': typeof InvoicesRouteRouteWithChildren
   '/time': typeof TimeRoute
   '/contacts/$contactId': typeof ContactsContactIdRoute
   '/invoices/new': typeof InvoicesNewRoute
   '/contacts': typeof ContactsIndexRoute
-  '/invoices': typeof InvoicesIndexRoute
   '/invoices/$projectId/$invoiceId': typeof InvoicesProjectIdInvoiceIdRoute
   '/invoices/$projectId': typeof InvoicesProjectIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/invoices': typeof InvoicesRouteRouteWithChildren
   '/time': typeof TimeRoute
   '/contacts/$contactId': typeof ContactsContactIdRoute
   '/invoices/new': typeof InvoicesNewRoute
   '/contacts/': typeof ContactsIndexRoute
-  '/invoices/': typeof InvoicesIndexRoute
   '/invoices/$projectId/$invoiceId': typeof InvoicesProjectIdInvoiceIdRoute
   '/invoices/$projectId/': typeof InvoicesProjectIdIndexRoute
 }
@@ -95,44 +95,41 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/invoices'
     | '/time'
     | '/contacts/$contactId'
     | '/invoices/new'
     | '/contacts'
-    | '/invoices'
     | '/invoices/$projectId/$invoiceId'
     | '/invoices/$projectId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/invoices'
     | '/time'
     | '/contacts/$contactId'
     | '/invoices/new'
     | '/contacts'
-    | '/invoices'
     | '/invoices/$projectId/$invoiceId'
     | '/invoices/$projectId'
   id:
     | '__root__'
     | '/'
+    | '/invoices'
     | '/time'
     | '/contacts/$contactId'
     | '/invoices/new'
     | '/contacts/'
-    | '/invoices/'
     | '/invoices/$projectId/$invoiceId'
     | '/invoices/$projectId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  InvoicesRouteRoute: typeof InvoicesRouteRouteWithChildren
   TimeRoute: typeof TimeRoute
   ContactsContactIdRoute: typeof ContactsContactIdRoute
-  InvoicesNewRoute: typeof InvoicesNewRoute
   ContactsIndexRoute: typeof ContactsIndexRoute
-  InvoicesIndexRoute: typeof InvoicesIndexRoute
-  InvoicesProjectIdInvoiceIdRoute: typeof InvoicesProjectIdInvoiceIdRoute
-  InvoicesProjectIdIndexRoute: typeof InvoicesProjectIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -144,18 +141,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TimeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/invoices': {
+      id: '/invoices'
+      path: '/invoices'
+      fullPath: '/invoices'
+      preLoaderRoute: typeof InvoicesRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/invoices/': {
-      id: '/invoices/'
-      path: '/invoices'
-      fullPath: '/invoices'
-      preLoaderRoute: typeof InvoicesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contacts/': {
@@ -167,10 +164,10 @@ declare module '@tanstack/react-router' {
     }
     '/invoices/new': {
       id: '/invoices/new'
-      path: '/invoices/new'
+      path: '/new'
       fullPath: '/invoices/new'
       preLoaderRoute: typeof InvoicesNewRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof InvoicesRouteRoute
     }
     '/contacts/$contactId': {
       id: '/contacts/$contactId'
@@ -181,30 +178,43 @@ declare module '@tanstack/react-router' {
     }
     '/invoices/$projectId/': {
       id: '/invoices/$projectId/'
-      path: '/invoices/$projectId'
+      path: '/$projectId'
       fullPath: '/invoices/$projectId'
       preLoaderRoute: typeof InvoicesProjectIdIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof InvoicesRouteRoute
     }
     '/invoices/$projectId/$invoiceId': {
       id: '/invoices/$projectId/$invoiceId'
-      path: '/invoices/$projectId/$invoiceId'
+      path: '/$projectId/$invoiceId'
       fullPath: '/invoices/$projectId/$invoiceId'
       preLoaderRoute: typeof InvoicesProjectIdInvoiceIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof InvoicesRouteRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  TimeRoute: TimeRoute,
-  ContactsContactIdRoute: ContactsContactIdRoute,
+interface InvoicesRouteRouteChildren {
+  InvoicesNewRoute: typeof InvoicesNewRoute
+  InvoicesProjectIdInvoiceIdRoute: typeof InvoicesProjectIdInvoiceIdRoute
+  InvoicesProjectIdIndexRoute: typeof InvoicesProjectIdIndexRoute
+}
+
+const InvoicesRouteRouteChildren: InvoicesRouteRouteChildren = {
   InvoicesNewRoute: InvoicesNewRoute,
-  ContactsIndexRoute: ContactsIndexRoute,
-  InvoicesIndexRoute: InvoicesIndexRoute,
   InvoicesProjectIdInvoiceIdRoute: InvoicesProjectIdInvoiceIdRoute,
   InvoicesProjectIdIndexRoute: InvoicesProjectIdIndexRoute,
+}
+
+const InvoicesRouteRouteWithChildren = InvoicesRouteRoute._addFileChildren(
+  InvoicesRouteRouteChildren,
+)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  InvoicesRouteRoute: InvoicesRouteRouteWithChildren,
+  TimeRoute: TimeRoute,
+  ContactsContactIdRoute: ContactsContactIdRoute,
+  ContactsIndexRoute: ContactsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

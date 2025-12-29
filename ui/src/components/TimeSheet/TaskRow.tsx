@@ -2,18 +2,17 @@ import React, { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { format } from "date-fns";
 
-import * as models from "api/models";
-
 import TimeSlip from "components/TimeSheet/TimeSlip";
 import { TimeSheetType } from "components/TimeSheet/TimeSlipContext";
+import { Task } from "apiv3";
 
 interface Props {
-  task: models.Task;
+  task: Task;
   dateRange: Date[];
   timeSheet: TimeSheetType;
 }
 
-function Task({ task, timeSheet, dateRange }: Props) {
+export default function TaskRow({ task, timeSheet, dateRange }: Props) {
   const taskEntries = timeSheet[task.id || -1];
   const entries = useMemo(() => {
     return dateRange.map((date) => {
@@ -54,5 +53,3 @@ function Task({ task, timeSheet, dateRange }: Props) {
     </div>
   );
 }
-
-export default Task;

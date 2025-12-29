@@ -1,16 +1,15 @@
 import React, { useCallback, useContext, useMemo } from "react";
 import { format, sub } from "date-fns";
 
-import * as models from "api/models";
-
-import Task from "components/TimeSheet/Task";
+import TaskRow from "components/TimeSheet/TaskRow";
 import { TimeSheetType } from "components/TimeSheet/TimeSlipContext";
 import CopyIcon from "components/CopyIcon";
 import { TimeSlipContext } from "components/TimeSheet/TimeSlipContext";
+import { Project, Task } from "apiv3";
 
 interface Props {
-  tasks: models.Task[];
-  project: models.Project;
+  tasks: Task[];
+  project: Project;
   dateRange: Date[];
   weekTotal: number;
   monthTotal: number;
@@ -68,7 +67,7 @@ function ProjectTasks({
       </div>
       {projectTasks.map((task) => (
         <div className="pl-4" key={task.id}>
-          <Task
+          <TaskRow
             timeSheet={timeSheet}
             project={project}
             dateRange={dateRange}

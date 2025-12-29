@@ -1,24 +1,23 @@
 import { useCallback, useMemo } from "react";
-import {
-  Outlet,
-  useNavigate,
-  useRouterState,
-} from "@tanstack/react-router";
+import { Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 
-import * as models from "api/models";
 import { ensure } from "typeHelpers";
 import InvoiceRow from "components/Invoices/InvoiceRow";
 import Button from "components/Button";
 import SlideOver from "components/SlideOver";
+import { Invoice, Project, ProjectSummary } from "apiv3";
 
 interface Props {
-  projects: models.Project[];
-  invoices: models.Invoice[];
+  projects: Project[];
+  invoices: Invoice[];
+  summaries: ProjectSummary[];
 }
 
-function Invoices({ projects, invoices }: Props) {
+function Invoices({ projects, summaries, invoices }: Props) {
   const navigate = useNavigate();
-  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  });
 
   const invoiceList = useMemo(() => {
     return projects.length
@@ -40,6 +39,22 @@ function Invoices({ projects, invoices }: Props) {
   }, [navigate]);
 
   const isOpen = pathname.startsWith("/invoices/");
+
+  const projectsWithSummary = useMemo(
+    () =>
+      summaries
+        .filter((s) => s.total)
+        .map((s) => {
+          return {
+            project: ensure(projects.find((p) => p.id === s.project)),
+            s,
+          };
+        })
+        .filter(({ project }) => !project.archived),
+    [summaries]
+  );
+
+  console.log("projectsWithSummary", projectsWithSummary);
 
   return (
     <div className="w-full">

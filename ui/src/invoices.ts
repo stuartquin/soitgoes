@@ -1,5 +1,6 @@
-import * as models from "api/models";
+import { Invoice, InvoiceModifier, Task, TimeSlip } from "apiv3";
 import { addDays, format, isAfter } from "date-fns";
+import { getDate } from "lib/date";
 import { groupBy, sumBy } from "lodash";
 import { ensure } from "typeHelpers";
 
@@ -11,8 +12,8 @@ export enum InvoiceStatus {
 }
 
 export interface InvoiceToggleItem {
-  timeSlips: models.TimeSlip[];
-  task: models.Task;
+  timeSlips: TimeSlip[];
+  task: Task;
   hours: number;
   cost: number;
   id: number;
@@ -23,7 +24,7 @@ export interface InvoiceToggleItem {
 }
 
 export interface InvoiceNewItem {
-  task: models.Task;
+  task: Task;
   hours: number;
   cost: number;
   title: string;
@@ -32,9 +33,9 @@ export interface InvoiceNewItem {
 }
 
 export const getGroupedByTime = (
-  invoice: models.Invoice,
-  tasks: models.Task[],
-  timeSlips: models.TimeSlip[]
+  invoice: Invoice,
+  tasks: Task[],
+  timeSlips: TimeSlip[]
 ): InvoiceToggleItem[] => {
   return timeSlips.map((ts) => {
     const timeSlip = ensure(ts);
@@ -58,17 +59,15 @@ export const getGroupedByTime = (
 };
 
 export const getGroupedByTask = (
-  invoice: models.Invoice,
-  tasks: models.Task[],
+  invoice: Invoice,
+  tasks: Task[],
   timeSlipItems: InvoiceToggleItem[]
 ): InvoiceToggleItem[] => {
   const groupedTimeSlipItems = groupBy(timeSlipItems, (t) => t.task.id);
 
   return tasks
     .filter(
-      (t) =>
-        groupedTimeSlipItems[ensure(t.id)] ||
-        t.billingType === models.TaskBillingTypeEnum.Fixed
+      (t) => groupedTimeSlipItems[ensure(t.id)] || t.billing_type === "FIXED"
     )
     .map((task) => {
       const id = ensure(task.id);
@@ -76,17 +75,15 @@ export const getGroupedByTask = (
       const activeTimeSlipItems = taskTimeSlipItems.filter((t) => t.isActive);
       const activeTimeSlips = activeTimeSlipItems.map((t) => t.timeSlips[0]);
       const hours =
-        task.billingType === models.TaskBillingTypeEnum.Fixed
-          ? 0
-          : sumBy(activeTimeSlips, "hours");
+        task.billing_type === "FIXED" ? 0 : sumBy(activeTimeSlips, "hours");
 
       const cost =
-        task.billingType === models.TaskBillingTypeEnum.Fixed
+        task.billing_type === "FIXED"
           ? task.cost
           : sumBy(activeTimeSlips, "cost");
 
       const title = task.name;
-      const subTitle = `${task.billingType}`;
+      const subTitle = `${task.billing_type}`;
       const isActive =
         invoice.tasks.includes(ensure(task.id)) ||
         activeTimeSlipItems.length > 0;
@@ -119,7 +116,7 @@ const STATUS_COLORS = {
 };
 
 export const getInvoiceStatus = (
-  issuedAt?: Date,
+  issuedAt?: Date | null,
   paidAt?: Date | null,
   dueDate?: Date | null
 ): InvoiceStatus => {
@@ -142,13 +139,13 @@ export const getStatusColor = (status: InvoiceStatus): string => {
 };
 
 export const calculateSubTotal = (
-  tasks: models.Task[],
-  timeSlips: models.TimeSlip[]
+  tasks: Task[],
+  timeSlips: TimeSlip[]
 ): number => {
   return (
     sumBy(timeSlips, (t) => t.cost || 0) +
     sumBy(
-      tasks.filter((t) => t.billingType === models.TaskBillingTypeEnum.Fixed),
+      tasks.filter((t) => t.billing_type === "FIXED"),
       (t) => t.cost || 0
     )
   );
@@ -156,14 +153,14 @@ export const calculateSubTotal = (
 
 export const calculateModifierImpact = (
   subtotalDue: number,
-  modifier: models.InvoiceModifier
+  modifier: InvoiceModifier
 ): number => {
   return (subtotalDue / 100.0) * (modifier.percent || 0);
 };
 
 export const calculateTotal = (
   subtotalDue: number,
-  modifiers: models.InvoiceModifier[]
+  modifiers: InvoiceModifier[]
 ): number => {
   return (
     subtotalDue +
@@ -174,35 +171,34 @@ export const calculateTotal = (
   );
 };
 
-export const getModifierLabel = (modifier: models.InvoiceModifier): string =>
+export const getModifierLabel = (modifier: InvoiceModifier): string =>
   `${modifier.name} ${modifier.percent}%`;
 
 export const getCalculatedInvoice = (
-  invoice: models.Invoice,
-  fixedTasks: models.Task[],
-  timeSlips: models.TimeSlip[],
-  modifiers: models.InvoiceModifier[]
-): models.Invoice => {
+  invoice: Invoice,
+  fixedTasks: Task[],
+  timeSlips: TimeSlip[],
+  modifiers: InvoiceModifier[]
+): Invoice => {
   const invoiceModifiers = invoice.modifier
     ? modifiers.filter((m) => ensure(invoice.modifier).includes(ensure(m.id)))
     : modifiers;
 
   const subtotalDue = calculateSubTotal(fixedTasks, timeSlips);
   const dueDate =
-    invoice && invoice.dueDate ? invoice.dueDate : addDays(new Date(), 14);
-  const groupBy =
-    invoice && invoice.groupBy
-      ? invoice.groupBy
-      : models.InvoiceGroupByEnum.Timeslips;
+    invoice && invoice.due_date
+      ? getDate(invoice.due_date)
+      : addDays(new Date(), 14);
+  const groupBy = invoice && invoice.group_by ? invoice.group_by : "timeslips";
 
   return {
     ...invoice,
-    subtotalDue,
-    dueDate,
-    groupBy,
+    subtotal_due: subtotalDue,
+    due_date: format(dueDate, "yyyy-MM-dd"),
+    group_by: groupBy,
     tasks: fixedTasks.map((t) => t.id || 0),
     timeslips: timeSlips.map((t) => ensure(t.id)),
     modifier: invoiceModifiers.map((m) => ensure(m.id)),
-    totalDue: calculateTotal(subtotalDue, modifiers),
+    total_due: calculateTotal(subtotalDue, modifiers),
   };
 };

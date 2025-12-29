@@ -1,30 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronRightIcon } from "@heroicons/react/outline";
 
-import * as models from "api/models";
 import { formatCurrency } from "currency";
 import { ensure } from "typeHelpers";
-import { getClient } from "apiClient";
+import { Project, ProjectSummary } from "apiv3";
 
 interface Props {
-  projects: models.Project[];
+  projects: Project[];
+  summaries: ProjectSummary[];
 }
 
-function InvoiceSelectProject({ projects }: Props) {
-  const [summary, setSummary] = useState<models.ProjectSummary[]>([]);
-
-  const loadSummary = useCallback(async () => {
-    const api = getClient();
-    const response = await api.listProjectSummarys({});
-    setSummary(response.results || []);
-  }, []);
-
-  useEffect(() => {
-    loadSummary();
-  }, [loadSummary]);
-
-  const projectsWithSummary = summary
+function InvoiceSelectProject({ projects, summaries }: Props) {
+  const projectsWithSummary = summaries
     .map((s) => {
       return {
         project: ensure(projects.find((p) => p.id === s.project)),
@@ -37,7 +24,8 @@ function InvoiceSelectProject({ projects }: Props) {
     <div>
       {projectsWithSummary.map(({ project, s }) => (
         <Link
-          to={`/invoices/${s.project}`}
+          to={"/invoices/$projectId"}
+          params={{ projectId: String(project.id) }}
           className={`cursor-pointer flex justify-between hover:bg-blue-50 shadow overflow-hidden border-b border-gray-200 bg-white sm:rounded-lg my-4`}
           key={s.project}
         >

@@ -7,10 +7,12 @@ import { ensure } from "typeHelpers";
 import {
   createTimeSlip,
   destroyTimeSlip,
+  Project,
   Task,
   TimeSlip,
   updateTimeSlip,
 } from "apiv3";
+import { getDate } from "lib/date";
 
 const getDateRange = (date: Date): Date[] => {
   const startDate = addDays(startOfMonth(date), -7);
@@ -172,8 +174,8 @@ export type WeekMonthTotals = {
 
 export const getTotalsByProject = (
   startDate: Date,
-  projects: models.Project[],
-  timeSlips: models.TimeSlip[]
+  projects: Project[],
+  timeSlips: TimeSlip[]
 ) => {
   const monthStartDate = startOfMonth(startDate);
   const monthEndDate = endOfMonth(startDate);
@@ -191,14 +193,15 @@ export const getTotalsByProject = (
   );
 
   timeSlips.forEach((ts) => {
+    const date = getDate(ts.date);
     const group = byProject[ts.project];
 
     if (group) {
-      if (ts.hours && ts.date >= startDate && ts.date <= weekEndDate) {
+      if (ts.hours && date >= startDate && date <= weekEndDate) {
         group.week += ts.hours || 0;
       }
 
-      if (ts.hours && ts.date >= monthStartDate && ts.date <= monthEndDate) {
+      if (ts.hours && date >= monthStartDate && date <= monthEndDate) {
         group.month += ts.hours || 0;
       }
     }

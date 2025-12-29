@@ -2,8 +2,6 @@ import React, { useMemo } from "react";
 import { range } from "lodash";
 import { format, addDays, addHours } from "date-fns";
 
-import * as models from "api/models";
-
 import DateRange from "components/TimeSheet/DateRange";
 import ProjectTasks from "components/TimeSheet/ProjectTasks";
 import Button from "components/Button";
@@ -12,16 +10,16 @@ import {
   TimeSheetType,
   getTotalsByProject,
 } from "components/TimeSheet/TimeSlipContext";
+import { Project, Task } from "apiv3";
 
 interface Props {
-  user: models.User;
   startDate: Date;
-  projects: models.Project[];
+  projects: Project[];
   timeSheet: TimeSheetType;
-  tasks: models.Task[];
+  tasks: Task[];
 }
 
-function TimeSheetGrid({ user, tasks, timeSheet, startDate, projects }: Props) {
+function TimeSheetGrid({ tasks, timeSheet, startDate, projects }: Props) {
   const dateRange = useMemo(() => {
     return range(7).map((day) => addHours(addDays(startDate, day), 12));
   }, [startDate]);

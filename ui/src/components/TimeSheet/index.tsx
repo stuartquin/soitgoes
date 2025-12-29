@@ -17,6 +17,11 @@ import SlideOver from "components/SlideOver";
 import TaskDetail from "components/Tasks/TaskDetail";
 import { Task, TimeSlip } from "apiv3";
 import { useSearch } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  listProjectSummariesOptions,
+  listTimeSlipsOptions,
+} from "apiv3/@tanstack/react-query.gen";
 
 interface Props {
   user: models.User;
@@ -35,6 +40,7 @@ function TimeSheet({
   tasks,
   onClose,
 }: Props) {
+  const queryClient = useQueryClient();
   const search = useSearch({ from: "/time" });
   const [timeSheet, setTimeSheet] = useState<TimeSheetType>(
     getTimeSheet(startDate, tasks, timeSlips)
@@ -49,6 +55,8 @@ function TimeSheet({
 
   const save = useCallback(async () => {
     const results = await saveTimeSheet(timeSheet);
+    queryClient.invalidateQueries(listTimeSlipsOptions());
+    queryClient.invalidateQueries(listProjectSummariesOptions());
     setTimeSheet(getUpdatedTimeSheet(timeSheet, results));
   }, [timeSheet]);
 

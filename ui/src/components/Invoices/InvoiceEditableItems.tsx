@@ -7,10 +7,11 @@ import {
   getGroupedByTask,
   getGroupedByTime,
 } from "invoices";
+import { TimeSlip } from "apiv3";
 
 interface Props {
   tasks: models.Task[];
-  timeSlips: models.TimeSlip[];
+  timeSlips: TimeSlip[];
   invoice: models.Invoice;
   project: models.Project;
   onToggleTimeSlip: (item: InvoiceToggleItem) => void;
