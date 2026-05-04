@@ -3,7 +3,8 @@ name: Test and Release
 on:
   push:
     tags: v[0-9]+.[0-9]+.[0-9]+
-    branches: master
+    branches:
+      - master
 
 jobs:
   test-api:
@@ -13,7 +14,7 @@ jobs:
         python-version: [3.12]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
@@ -38,7 +39,7 @@ jobs:
     needs: [test-api]
     steps:
       - name: Cloning repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Install SSH key
@@ -64,7 +65,7 @@ jobs:
     needs: [test-api]
     steps:
       - name: Cloning repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
