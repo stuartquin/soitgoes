@@ -11,10 +11,12 @@ function InvoiceDetailRoute() {
   const { projects } = Route.useRouteContext();
 
   return (
-    <InvoiceDetail
-      projects={projects}
-      projectId={projectId}
-      invoiceId={invoiceId}
-    />
+    projects?.length && (
+      <InvoiceDetail
+        projects={projects}
+        projectId={projectId}
+        invoiceId={invoiceId}
+      />
+    )
   );
 }

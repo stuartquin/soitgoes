@@ -10,6 +10,8 @@ import InvoiceDetailTotals from "components/Invoices/InvoiceDetailTotals";
 import InvoiceDetailLoading from "components/Invoices/InvoiceDetailLoading";
 import InvoiceSummary from "components/Invoices/InvoiceSummary";
 import { ensure } from "typeHelpers";
+import { useQueryClient } from "@tanstack/react-query";
+import { listInvoicesOptions } from "apiv3/@tanstack/react-query.gen";
 
 interface Props {
   projects: models.Project[];
@@ -28,6 +30,7 @@ const getStatusDate = (
 };
 
 function InvoiceDetail({ projects, projectId, invoiceId }: Props) {
+  const queryClient = useQueryClient();
   const [token, setToken] = useState<models.OneTimeToken>();
   const [invoice, setInvoice] = useState<models.Invoice>();
   const [isLoading, setIsLoading] = useState(true);
@@ -88,8 +91,11 @@ function InvoiceDetail({ projects, projectId, invoiceId }: Props) {
           },
         })
       );
+      queryClient.invalidateQueries(
+        listInvoicesOptions({ query: { limit: 50 } })
+      );
     }
-  }, [invoice]);
+  }, [invoice, queryClient]);
 
   const displayTasks = useMemo(() => {
     if (invoice) {

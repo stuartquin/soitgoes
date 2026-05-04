@@ -54,8 +54,6 @@ function Invoices({ projects, summaries, invoices }: Props) {
     [summaries]
   );
 
-  console.log("projectsWithSummary", projectsWithSummary);
-
   return (
     <div className="w-full">
       <div className="flex justify-end my-4 w-full px-2 sm:px-0">

@@ -55,7 +55,7 @@ function Button({
       {children}
     </Link>
   ) : (
-    <button className={disabledClasses} {...props}>
+    <button className={disabledClasses} disabled={disabled} {...props}>
       {children}
     </button>
   );

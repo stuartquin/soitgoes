@@ -15,7 +15,7 @@ export const Route = createFileRoute("/invoices")({
       queryClient.fetchQuery(listProjectSummariesOptions()),
       queryClient.fetchQuery(
         listInvoicesOptions({
-          query: { limit: 50 },
+          query: { limit: 100 },
         })
       ),
     ]);
