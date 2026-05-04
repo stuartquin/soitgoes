@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from django.db.models import Q, F, Sum
+from django.db.models import Q, F, QuerySet, Sum
 from journal.models import (
     Project,
     Task,
@@ -23,7 +23,7 @@ def get_previous_invoice_summary(project: Project):
     }
 
 
-def get_unbilled_summary(projects: list[Project]):
+def get_unbilled_summary(projects: QuerySet[Project]):
     task_costs = (
         Task.objects.filter(
             billing_type=BILLING_TYPE_FIXED, invoices=None, project__in=projects

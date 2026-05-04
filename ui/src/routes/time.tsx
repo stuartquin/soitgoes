@@ -62,6 +62,8 @@ function TimeRoute() {
     [navigate]
   );
 
+  if (!user) return null;
+
   return (
     <TimeSheet
       user={user}

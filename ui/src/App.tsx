@@ -41,9 +41,9 @@ export const router = createRouter({
 
 export default function App() {
   const [projects, setProjects] = useState<models.Project[]>([]);
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
   const [loginRequired, setLoginRequired] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
@@ -66,6 +66,9 @@ export default function App() {
   }, []);
 
   console.log("loginRequired", loginRequired);
+
+  if (loading) return null;
+
   return loginRequired ? (
     <Login />
   ) : (

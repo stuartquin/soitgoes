@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpRequest
 from django.db.models.query import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets, status
-from rest_framework.views import APIView
+from rest_framework.views import APIView, Request
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 
@@ -35,7 +35,7 @@ def get_allowed_contacts(request: HttpRequest) -> "QuerySet[models.Contact]":
     return models.Contact.objects.filter(account__in=request.user.account_set.all())
 
 
-def get_allowed_projects(request: HttpRequest) -> "QuerySet[models.Project]":
+def get_allowed_projects(request: Request) -> "QuerySet[models.Project]":
     if not request or not request.user or not request.user.is_authenticated:
         return models.Project.objects.none()
     return models.Project.objects.filter(account__in=request.user.account_set.all())
@@ -228,7 +228,7 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
 class ProjectSummary(generics.ListAPIView):
     serializer_class = serializers.ProjectSummarySerializer
 
-    def get_queryset(self):
+    def get_queryset(self, *args, **kwargs):
         projects = get_allowed_projects(self.request)
         summary = get_unbilled_summary(projects)
         return summary

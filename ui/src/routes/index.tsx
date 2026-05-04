@@ -1,37 +1,7 @@
-import React, { useCallback } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { format } from "date-fns";
-
-import TimeSheet from "components/TimeSheet";
-import { validateTimeSearch } from "routes/timeSearch";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
-  validateSearch: validateTimeSearch,
-  component: IndexRoute,
+  beforeLoad: () => {
+    throw redirect({ to: "/time" });
+  },
 });
-
-function IndexRoute() {
-  const { user, projects } = Route.useRouteContext();
-  const { date, task } = Route.useSearch();
-  const navigate = useNavigate();
-
-  const handleClose = useCallback(
-    (startDate: Date) => {
-      navigate({
-        to: "/time",
-        search: { date: format(startDate, "yyyy-MM-dd") },
-      });
-    },
-    [navigate]
-  );
-
-  return (
-    <TimeSheet
-      user={user}
-      projects={projects}
-      dateStr={date}
-      selectedTaskId={task}
-      onClose={handleClose}
-    />
-  );
-}
