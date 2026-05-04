@@ -1,5 +1,5 @@
 
-# ProjectSummaryPreviousInvoice
+# ProjectSummaryUnbilledInnerPreviousInvoice
 
 
 ## Properties
@@ -32,7 +32,7 @@ Name | Type
 ## Example
 
 ```typescript
-import type { ProjectSummaryPreviousInvoice } from ''
+import type { ProjectSummaryUnbilledInnerPreviousInvoice } from ''
 
 // TODO: Update the object below with actual values
 const example = {
@@ -58,7 +58,7 @@ const example = {
   "exchangeRate": null,
   "currency": null,
   "billingUnit": null,
-} satisfies ProjectSummaryPreviousInvoice
+} satisfies ProjectSummaryUnbilledInnerPreviousInvoice
 
 console.log(example)
 
@@ -67,7 +67,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as ProjectSummaryPreviousInvoice
+const exampleParsed = JSON.parse(exampleJSON) as ProjectSummaryUnbilledInnerPreviousInvoice
 console.log(exampleParsed)
 ```
 

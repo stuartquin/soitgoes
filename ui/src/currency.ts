@@ -10,7 +10,7 @@ export const formatCurrency = (
 ): string => {
   const symbol = SYMBOL_LOOKUP[currency] || "£";
 
-  return `${symbol}${parseInt(`${total}`)}`;
+  return `${symbol}${total.toLocaleString("en", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 };
 
 export interface ExchangeRate {

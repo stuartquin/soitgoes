@@ -10,7 +10,7 @@ import {
 export const Route = createFileRoute("/invoices")({
   component: InvoicesRoute,
   loader: async ({ context: { queryClient } }) => {
-    const [projects, summaries, invoices] = await Promise.all([
+    const [projects, summary, invoices] = await Promise.all([
       queryClient.fetchQuery(listProjectsOptions()),
       queryClient.fetchQuery(listProjectSummariesOptions()),
       queryClient.fetchQuery(
@@ -23,15 +23,12 @@ export const Route = createFileRoute("/invoices")({
     return {
       projects: projects.results,
       invoices: invoices.results,
-      summaries: summaries.results,
+      summary,
     };
   },
 });
 
 function InvoicesRoute() {
-  const { projects, summaries, invoices } = Route.useLoaderData();
-
-  return (
-    <Invoices projects={projects} invoices={invoices} summaries={summaries} />
-  );
+  const { projects, summary, invoices } = Route.useLoaderData();
+  return <Invoices projects={projects} invoices={invoices} summary={summary} />;
 }

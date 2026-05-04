@@ -6,11 +6,8 @@
 
 Name | Type
 ------------ | -------------
-`project` | number
-`hours` | number
-`total` | number
-`nextSequenceNum` | number
-`previousInvoice` | [ProjectSummaryPreviousInvoice](ProjectSummaryPreviousInvoice.md)
+`unbilled` | [Array&lt;ProjectSummaryUnbilledInner&gt;](ProjectSummaryUnbilledInner.md)
+`invoices` | [Array&lt;ProjectSummaryInvoicesInner&gt;](ProjectSummaryInvoicesInner.md)
 
 ## Example
 
@@ -19,11 +16,8 @@ import type { ProjectSummary } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "project": null,
-  "hours": null,
-  "total": null,
-  "nextSequenceNum": null,
-  "previousInvoice": null,
+  "unbilled": null,
+  "invoices": null,
 } satisfies ProjectSummary
 
 console.log(example)

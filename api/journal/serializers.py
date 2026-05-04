@@ -223,12 +223,27 @@ class TaskInvoiceSerializer(serializers.ModelSerializer):
         fields = ["id", "created_at", "invoice", "cost", "task", "hours_spent"]
 
 
-class ProjectSummarySerializer(serializers.Serializer):
-    project = serializers.PrimaryKeyRelatedField(queryset=models.Project.objects.all())
+class ProjectUnbilledSummarySerializer(serializers.Serializer):
+    project = ProjectSerializer(read_only=True)
     hours = serializers.FloatField(read_only=True)
     total = serializers.FloatField(read_only=True)
     next_sequence_num = serializers.IntegerField(read_only=True)
     previous_invoice = InvoiceSerializer(read_only=True)
+
+class ProjectInvoicesSummarySerializer(serializers.Serializer):
+    project = ProjectSerializer(read_only=True)
+    total_invoiced = serializers.FloatField(read_only=True)
+    total_paid = serializers.FloatField(read_only=True)
+    total_unpaid = serializers.FloatField(read_only=True)
+    invoice_count = serializers.IntegerField(read_only=True)
+    six_month_total_invoiced = serializers.FloatField(read_only=True)
+    six_month_total_paid = serializers.FloatField(read_only=True)
+    six_month_total_unpaid = serializers.FloatField(read_only=True)
+    six_month_invoice_count = serializers.IntegerField(read_only=True)
+
+class ProjectSummarySerializer(serializers.Serializer):
+    unbilled = ProjectUnbilledSummarySerializer(many=True)
+    invoices = ProjectInvoicesSummarySerializer(many=True)
 
 
 class TaskSummarySerializer(serializers.Serializer):

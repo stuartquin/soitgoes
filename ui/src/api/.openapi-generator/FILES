@@ -24,7 +24,10 @@ docs/Note.md
 docs/OneTimeToken.md
 docs/Project.md
 docs/ProjectSummary.md
-docs/ProjectSummaryPreviousInvoice.md
+docs/ProjectSummaryInvoicesInner.md
+docs/ProjectSummaryUnbilledInner.md
+docs/ProjectSummaryUnbilledInnerPreviousInvoice.md
+docs/ProjectSummaryUnbilledInnerProject.md
 docs/SSO.md
 docs/Task.md
 docs/TaskNotesInner.md
@@ -57,7 +60,10 @@ models/Note.ts
 models/OneTimeToken.ts
 models/Project.ts
 models/ProjectSummary.ts
-models/ProjectSummaryPreviousInvoice.ts
+models/ProjectSummaryInvoicesInner.ts
+models/ProjectSummaryUnbilledInner.ts
+models/ProjectSummaryUnbilledInnerPreviousInvoice.ts
+models/ProjectSummaryUnbilledInnerProject.ts
 models/SSO.ts
 models/Task.ts
 models/TaskNotesInner.ts

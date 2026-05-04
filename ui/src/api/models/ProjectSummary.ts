@@ -13,13 +13,20 @@
  */
 
 import { mapValues } from '../runtime';
-import type { ProjectSummaryPreviousInvoice } from './ProjectSummaryPreviousInvoice';
+import type { ProjectSummaryInvoicesInner } from './ProjectSummaryInvoicesInner';
 import {
-    ProjectSummaryPreviousInvoiceFromJSON,
-    ProjectSummaryPreviousInvoiceFromJSONTyped,
-    ProjectSummaryPreviousInvoiceToJSON,
-    ProjectSummaryPreviousInvoiceToJSONTyped,
-} from './ProjectSummaryPreviousInvoice';
+    ProjectSummaryInvoicesInnerFromJSON,
+    ProjectSummaryInvoicesInnerFromJSONTyped,
+    ProjectSummaryInvoicesInnerToJSON,
+    ProjectSummaryInvoicesInnerToJSONTyped,
+} from './ProjectSummaryInvoicesInner';
+import type { ProjectSummaryUnbilledInner } from './ProjectSummaryUnbilledInner';
+import {
+    ProjectSummaryUnbilledInnerFromJSON,
+    ProjectSummaryUnbilledInnerFromJSONTyped,
+    ProjectSummaryUnbilledInnerToJSON,
+    ProjectSummaryUnbilledInnerToJSONTyped,
+} from './ProjectSummaryUnbilledInner';
 
 /**
  * 
@@ -29,41 +36,24 @@ import {
 export interface ProjectSummary {
     /**
      * 
-     * @type {number}
+     * @type {Array<ProjectSummaryUnbilledInner>}
      * @memberof ProjectSummary
      */
-    project: number;
+    unbilled: Array<ProjectSummaryUnbilledInner>;
     /**
      * 
-     * @type {number}
+     * @type {Array<ProjectSummaryInvoicesInner>}
      * @memberof ProjectSummary
      */
-    readonly hours?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ProjectSummary
-     */
-    readonly total?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ProjectSummary
-     */
-    readonly nextSequenceNum?: number;
-    /**
-     * 
-     * @type {ProjectSummaryPreviousInvoice}
-     * @memberof ProjectSummary
-     */
-    previousInvoice?: ProjectSummaryPreviousInvoice;
+    invoices: Array<ProjectSummaryInvoicesInner>;
 }
 
 /**
  * Check if a given object implements the ProjectSummary interface.
  */
 export function instanceOfProjectSummary(value: object): value is ProjectSummary {
-    if (!('project' in value) || value['project'] === undefined) return false;
+    if (!('unbilled' in value) || value['unbilled'] === undefined) return false;
+    if (!('invoices' in value) || value['invoices'] === undefined) return false;
     return true;
 }
 
@@ -77,11 +67,8 @@ export function ProjectSummaryFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'project': json['project'],
-        'hours': json['hours'] == null ? undefined : json['hours'],
-        'total': json['total'] == null ? undefined : json['total'],
-        'nextSequenceNum': json['next_sequence_num'] == null ? undefined : json['next_sequence_num'],
-        'previousInvoice': json['previous_invoice'] == null ? undefined : ProjectSummaryPreviousInvoiceFromJSON(json['previous_invoice']),
+        'unbilled': ((json['unbilled'] as Array<any>).map(ProjectSummaryUnbilledInnerFromJSON)),
+        'invoices': ((json['invoices'] as Array<any>).map(ProjectSummaryInvoicesInnerFromJSON)),
     };
 }
 
@@ -89,15 +76,15 @@ export function ProjectSummaryToJSON(json: any): ProjectSummary {
     return ProjectSummaryToJSONTyped(json, false);
 }
 
-export function ProjectSummaryToJSONTyped(value?: Omit<ProjectSummary, 'hours'|'total'|'next_sequence_num'> | null, ignoreDiscriminator: boolean = false): any {
+export function ProjectSummaryToJSONTyped(value?: ProjectSummary | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
         
-        'project': value['project'],
-        'previous_invoice': ProjectSummaryPreviousInvoiceToJSON(value['previousInvoice']),
+        'unbilled': ((value['unbilled'] as Array<any>).map(ProjectSummaryUnbilledInnerToJSON)),
+        'invoices': ((value['invoices'] as Array<any>).map(ProjectSummaryInvoicesInnerToJSON)),
     };
 }
 

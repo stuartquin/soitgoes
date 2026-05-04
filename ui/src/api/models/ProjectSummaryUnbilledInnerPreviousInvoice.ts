@@ -16,189 +16,189 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface ProjectSummaryPreviousInvoice
+ * @interface ProjectSummaryUnbilledInnerPreviousInvoice
  */
-export interface ProjectSummaryPreviousInvoice {
+export interface ProjectSummaryUnbilledInnerPreviousInvoice {
     /**
      * 
      * @type {number}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     readonly id?: number;
     /**
      * 
      * @type {number}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     sequenceNum?: number;
     /**
      * 
      * @type {number}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     project: number;
     /**
      * 
      * @type {Date}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     readonly createdAt?: Date;
     /**
      * 
      * @type {Date}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     readonly issuedAt?: Date | null;
     /**
      * 
      * @type {Date}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     paidAt?: Date | null;
     /**
      * 
      * @type {Date}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     dueDate?: Date | null;
     /**
      * 
      * @type {number}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     totalPaid?: number | null;
     /**
      * 
      * @type {number}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     totalDue?: number | null;
     /**
      * 
      * @type {number}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     subtotalDue?: number | null;
     /**
      * 
      * @type {string}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
-    status?: ProjectSummaryPreviousInvoiceStatusEnum;
+    status?: ProjectSummaryUnbilledInnerPreviousInvoiceStatusEnum;
     /**
      * 
      * @type {string}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     reference?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
-    groupBy?: ProjectSummaryPreviousInvoiceGroupByEnum;
+    groupBy?: ProjectSummaryUnbilledInnerPreviousInvoiceGroupByEnum;
     /**
      * 
      * @type {boolean}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     showHours?: boolean;
     /**
      * 
      * @type {Array<number>}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     timeslips: Array<number>;
     /**
      * 
      * @type {Array<number>}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     tasks: Array<number>;
     /**
      * 
      * @type {Array<number>}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     modifier?: Array<number>;
     /**
      * 
      * @type {string}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     readonly pdfName?: string;
     /**
      * 
      * @type {string}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     readonly name?: string;
     /**
      * 
      * @type {number}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     exchangeRate?: number;
     /**
      * 
      * @type {string}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
     currency?: string;
     /**
      * 
      * @type {string}
-     * @memberof ProjectSummaryPreviousInvoice
+     * @memberof ProjectSummaryUnbilledInnerPreviousInvoice
      */
-    billingUnit?: ProjectSummaryPreviousInvoiceBillingUnitEnum | null;
+    billingUnit?: ProjectSummaryUnbilledInnerPreviousInvoiceBillingUnitEnum | null;
 }
 
 
 /**
  * @export
  */
-export const ProjectSummaryPreviousInvoiceStatusEnum = {
+export const ProjectSummaryUnbilledInnerPreviousInvoiceStatusEnum = {
     Draft: 'DRAFT',
     Issued: 'ISSUED',
     Paid: 'PAID'
 } as const;
-export type ProjectSummaryPreviousInvoiceStatusEnum = typeof ProjectSummaryPreviousInvoiceStatusEnum[keyof typeof ProjectSummaryPreviousInvoiceStatusEnum];
+export type ProjectSummaryUnbilledInnerPreviousInvoiceStatusEnum = typeof ProjectSummaryUnbilledInnerPreviousInvoiceStatusEnum[keyof typeof ProjectSummaryUnbilledInnerPreviousInvoiceStatusEnum];
 
 /**
  * @export
  */
-export const ProjectSummaryPreviousInvoiceGroupByEnum = {
+export const ProjectSummaryUnbilledInnerPreviousInvoiceGroupByEnum = {
     Tasks: 'tasks',
     Timeslips: 'timeslips'
 } as const;
-export type ProjectSummaryPreviousInvoiceGroupByEnum = typeof ProjectSummaryPreviousInvoiceGroupByEnum[keyof typeof ProjectSummaryPreviousInvoiceGroupByEnum];
+export type ProjectSummaryUnbilledInnerPreviousInvoiceGroupByEnum = typeof ProjectSummaryUnbilledInnerPreviousInvoiceGroupByEnum[keyof typeof ProjectSummaryUnbilledInnerPreviousInvoiceGroupByEnum];
 
 /**
  * @export
  */
-export const ProjectSummaryPreviousInvoiceBillingUnitEnum = {
+export const ProjectSummaryUnbilledInnerPreviousInvoiceBillingUnitEnum = {
     Hour: 'HOUR',
     Day: 'DAY',
     Week: 'WEEK'
 } as const;
-export type ProjectSummaryPreviousInvoiceBillingUnitEnum = typeof ProjectSummaryPreviousInvoiceBillingUnitEnum[keyof typeof ProjectSummaryPreviousInvoiceBillingUnitEnum];
+export type ProjectSummaryUnbilledInnerPreviousInvoiceBillingUnitEnum = typeof ProjectSummaryUnbilledInnerPreviousInvoiceBillingUnitEnum[keyof typeof ProjectSummaryUnbilledInnerPreviousInvoiceBillingUnitEnum];
 
 
 /**
- * Check if a given object implements the ProjectSummaryPreviousInvoice interface.
+ * Check if a given object implements the ProjectSummaryUnbilledInnerPreviousInvoice interface.
  */
-export function instanceOfProjectSummaryPreviousInvoice(value: object): value is ProjectSummaryPreviousInvoice {
+export function instanceOfProjectSummaryUnbilledInnerPreviousInvoice(value: object): value is ProjectSummaryUnbilledInnerPreviousInvoice {
     if (!('project' in value) || value['project'] === undefined) return false;
     if (!('timeslips' in value) || value['timeslips'] === undefined) return false;
     if (!('tasks' in value) || value['tasks'] === undefined) return false;
     return true;
 }
 
-export function ProjectSummaryPreviousInvoiceFromJSON(json: any): ProjectSummaryPreviousInvoice {
-    return ProjectSummaryPreviousInvoiceFromJSONTyped(json, false);
+export function ProjectSummaryUnbilledInnerPreviousInvoiceFromJSON(json: any): ProjectSummaryUnbilledInnerPreviousInvoice {
+    return ProjectSummaryUnbilledInnerPreviousInvoiceFromJSONTyped(json, false);
 }
 
-export function ProjectSummaryPreviousInvoiceFromJSONTyped(json: any, ignoreDiscriminator: boolean): ProjectSummaryPreviousInvoice {
+export function ProjectSummaryUnbilledInnerPreviousInvoiceFromJSONTyped(json: any, ignoreDiscriminator: boolean): ProjectSummaryUnbilledInnerPreviousInvoice {
     if (json == null) {
         return json;
     }
@@ -229,11 +229,11 @@ export function ProjectSummaryPreviousInvoiceFromJSONTyped(json: any, ignoreDisc
     };
 }
 
-export function ProjectSummaryPreviousInvoiceToJSON(json: any): ProjectSummaryPreviousInvoice {
-    return ProjectSummaryPreviousInvoiceToJSONTyped(json, false);
+export function ProjectSummaryUnbilledInnerPreviousInvoiceToJSON(json: any): ProjectSummaryUnbilledInnerPreviousInvoice {
+    return ProjectSummaryUnbilledInnerPreviousInvoiceToJSONTyped(json, false);
 }
 
-export function ProjectSummaryPreviousInvoiceToJSONTyped(value?: Omit<ProjectSummaryPreviousInvoice, 'id'|'created_at'|'issued_at'|'pdf_name'|'name'> | null, ignoreDiscriminator: boolean = false): any {
+export function ProjectSummaryUnbilledInnerPreviousInvoiceToJSONTyped(value?: Omit<ProjectSummaryUnbilledInnerPreviousInvoice, 'id'|'created_at'|'issued_at'|'pdf_name'|'name'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
