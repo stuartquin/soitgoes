@@ -622,6 +622,14 @@ export type ListInvoicesData = {
          * The initial index from which to return the results.
          */
         offset?: number;
+        /**
+         * Filter by invoice status.
+         */
+        status?: 'DRAFT' | 'ISSUED' | 'PAID';
+        /**
+         * Filter by project ID.
+         */
+        project?: number;
     };
     url: '/api/invoices/';
 };

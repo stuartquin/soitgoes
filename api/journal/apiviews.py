@@ -120,6 +120,8 @@ class InvoiceListCreate(generics.ListCreateAPIView):
         filters = {}
         if "project" in self.request.query_params:
             filters["project"] = self.request.query_params["project"]
+        if "status" in self.request.query_params:
+            filters["status"] = self.request.query_params["status"]
 
         return models.Invoice.objects.filter(**filters).order_by("-issued_at")
 
