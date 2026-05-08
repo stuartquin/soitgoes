@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 
 import * as models from "api/models";
 import { getClient } from "apiClient";
@@ -54,7 +54,7 @@ function ContactDetail({ contactId, projects, onSave }: Props) {
 
       const updatedContact = await method;
       setContact(updatedContact);
-      navigate(`/contacts/${updatedContact.id}`);
+      navigate({ to: `/contacts/${updatedContact.id}` });
       setHasChanged(false);
       onSave();
     }

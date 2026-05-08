@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 
 type Props = {
   children: React.ReactNode;
@@ -55,7 +55,7 @@ function Button({
       {children}
     </Link>
   ) : (
-    <button className={disabledClasses} {...props}>
+    <button className={disabledClasses} disabled={disabled} {...props}>
       {children}
     </button>
   );

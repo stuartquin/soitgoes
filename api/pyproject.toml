@@ -13,6 +13,8 @@ gunicorn = "^23.0.0"
 pyyaml = "^6.0.2"
 django-cors-headers = "^4.4.0"
 djangorestframework = "^3.15.2"
+uritemplate = "^4.2.0"
+inflection = "^0.5.1"
 
 
 [tool.poetry.group.dev.dependencies]

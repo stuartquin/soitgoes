@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -36,10 +36,8 @@ export interface Version {
 /**
  * Check if a given object implements the Version interface.
  */
-export function instanceOfVersion(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfVersion(value: object): value is Version {
+    return true;
 }
 
 export function VersionFromJSON(json: any): Version {
@@ -47,23 +45,25 @@ export function VersionFromJSON(json: any): Version {
 }
 
 export function VersionFromJSONTyped(json: any, ignoreDiscriminator: boolean): Version {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'gitBranch': !exists(json, 'git_branch') ? undefined : json['git_branch'],
-        'gitRev': !exists(json, 'git_rev') ? undefined : json['git_rev'],
+        'gitBranch': json['git_branch'] == null ? undefined : json['git_branch'],
+        'gitRev': json['git_rev'] == null ? undefined : json['git_rev'],
     };
 }
 
-export function VersionToJSON(value?: Version | null): any {
-    if (value === undefined) {
-        return undefined;
+export function VersionToJSON(json: any): Version {
+    return VersionToJSONTyped(json, false);
+}
+
+export function VersionToJSONTyped(value?: Omit<Version, 'git_branch'|'git_rev'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
     };

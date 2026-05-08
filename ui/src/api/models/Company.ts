@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -54,12 +54,10 @@ export interface Company {
 /**
  * Check if a given object implements the Company interface.
  */
-export function instanceOfCompany(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "name" in value;
-    isInstance = isInstance && "contacts" in value;
-
-    return isInstance;
+export function instanceOfCompany(value: object): value is Company {
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('contacts' in value) || value['contacts'] === undefined) return false;
+    return true;
 }
 
 export function CompanyFromJSON(json: any): Company {
@@ -67,32 +65,34 @@ export function CompanyFromJSON(json: any): Company {
 }
 
 export function CompanyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Company {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'name': json['name'],
-        'billing': !exists(json, 'billing') ? undefined : json['billing'],
-        'logoImage': !exists(json, 'logo_image') ? undefined : json['logo_image'],
+        'billing': json['billing'] == null ? undefined : json['billing'],
+        'logoImage': json['logo_image'] == null ? undefined : json['logo_image'],
         'contacts': json['contacts'],
     };
 }
 
-export function CompanyToJSON(value?: Company | null): any {
-    if (value === undefined) {
-        return undefined;
+export function CompanyToJSON(json: any): Company {
+    return CompanyToJSONTyped(json, false);
+}
+
+export function CompanyToJSONTyped(value?: Omit<Company, 'id'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'name': value.name,
-        'billing': value.billing,
-        'logo_image': value.logoImage,
-        'contacts': value.contacts,
+        'name': value['name'],
+        'billing': value['billing'],
+        'logo_image': value['logoImage'],
+        'contacts': value['contacts'],
     };
 }
 

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -84,12 +84,10 @@ export interface Contact {
 /**
  * Check if a given object implements the Contact interface.
  */
-export function instanceOfContact(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "name" in value;
-    isInstance = isInstance && "email" in value;
-
-    return isInstance;
+export function instanceOfContact(value: object): value is Contact {
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('email' in value) || value['email'] === undefined) return false;
+    return true;
 }
 
 export function ContactFromJSON(json: any): Contact {
@@ -97,40 +95,42 @@ export function ContactFromJSON(json: any): Contact {
 }
 
 export function ContactFromJSONTyped(json: any, ignoreDiscriminator: boolean): Contact {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'name': json['name'],
         'email': json['email'],
-        'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
-        'account': !exists(json, 'account') ? undefined : json['account'],
-        'address1': !exists(json, 'address1') ? undefined : json['address1'],
-        'address2': !exists(json, 'address2') ? undefined : json['address2'],
-        'city': !exists(json, 'city') ? undefined : json['city'],
-        'postCode': !exists(json, 'post_code') ? undefined : json['post_code'],
-        'company': !exists(json, 'company') ? undefined : json['company'],
+        'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
+        'account': json['account'] == null ? undefined : json['account'],
+        'address1': json['address1'] == null ? undefined : json['address1'],
+        'address2': json['address2'] == null ? undefined : json['address2'],
+        'city': json['city'] == null ? undefined : json['city'],
+        'postCode': json['post_code'] == null ? undefined : json['post_code'],
+        'company': json['company'] == null ? undefined : json['company'],
     };
 }
 
-export function ContactToJSON(value?: Contact | null): any {
-    if (value === undefined) {
-        return undefined;
+export function ContactToJSON(json: any): Contact {
+    return ContactToJSONTyped(json, false);
+}
+
+export function ContactToJSONTyped(value?: Omit<Contact, 'id'|'created_at'|'account'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'name': value.name,
-        'email': value.email,
-        'address1': value.address1,
-        'address2': value.address2,
-        'city': value.city,
-        'post_code': value.postCode,
-        'company': value.company,
+        'name': value['name'],
+        'email': value['email'],
+        'address1': value['address1'],
+        'address2': value['address2'],
+        'city': value['city'],
+        'post_code': value['postCode'],
+        'company': value['company'],
     };
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { format } from "date-fns";
 
 import * as models from "api/models";
@@ -16,7 +16,7 @@ function ContactRow({ contact, projects }: Props) {
 
   return (
     <Link
-      to={`/contacts/${contact.id}`}
+      to={`/contacts/${contact?.id || ""}`}
       className={`cursor-pointer border-l-4 flex hover:bg-blue-50 justify-between my-2 py-3 px-4 ${borderClass}`}
     >
       <div className="flex-grow">

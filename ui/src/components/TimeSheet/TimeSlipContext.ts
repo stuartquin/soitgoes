@@ -2,9 +2,17 @@ import { createContext } from "react";
 import { groupBy, range } from "lodash";
 import { format, addDays, addHours, startOfMonth, endOfMonth } from "date-fns";
 
-import { getClient } from "apiClient";
 import * as models from "api/models";
 import { ensure } from "typeHelpers";
+import {
+  createTimeSlip,
+  destroyTimeSlip,
+  Project,
+  Task,
+  TimeSlip,
+  updateTimeSlip,
+} from "apiv3";
+import { getDate } from "lib/date";
 
 const getDateRange = (date: Date): Date[] => {
   const startDate = addDays(startOfMonth(date), -7);
@@ -12,7 +20,7 @@ const getDateRange = (date: Date): Date[] => {
 };
 
 export type TimeSlipEntry = {
-  timeSlip: models.TimeSlip;
+  timeSlip: TimeSlip;
   updated: boolean;
   date: Date;
 };
@@ -33,7 +41,7 @@ export const TimeSlipContext = createContext<TimeSlipContextType>({
 
 export const getUpdatedTimeSheet = (
   timeSheet: TimeSheetType,
-  timeSlips: models.TimeSlip[]
+  timeSlips: TimeSlip[]
 ): TimeSheetType => {
   const updated = { ...timeSheet };
 
@@ -45,7 +53,7 @@ export const getUpdatedTimeSheet = (
       [dateStr]: {
         timeSlip,
         updated: false,
-        date: timeSlip.date,
+        date: new Date(timeSlip.date),
       },
     };
   });
@@ -54,13 +62,13 @@ export const getUpdatedTimeSheet = (
 
 export const getTimeSheet = (
   start: Date,
-  tasks: models.Task[],
-  timeSlips: models.TimeSlip[]
+  tasks: Task[],
+  timeSlips: TimeSlip[]
 ): TimeSheetType => {
   const dateRange = getDateRange(start);
   const groupedByTask = groupBy(timeSlips, "task");
 
-  return tasks.reduce((acc, task: models.Task) => {
+  return tasks.reduce((acc, task) => {
     const groupedByDate = groupBy(groupedByTask[task.id || ""] || [], (ts) =>
       format(ts.date, "yyyy-MM-dd")
     );
@@ -115,28 +123,27 @@ export const getUpdatedTimeSheetHours = (
   };
 };
 
-export const getUpdatedTimeSlips = (
-  timeSheet: TimeSheetType
-): models.TimeSlip[] => {
+const getUpdatedTimeSlips = (timeSheet: TimeSheetType): TimeSlip[] => {
   return Object.values(timeSheet)
     .reduce(
       (acc, val) => [...acc, ...Object.values(val)],
       [] as TimeSlipEntry[]
     )
     .filter((entry) => entry.updated)
-    .map((entry) => entry.timeSlip);
+    .map((entry) => ({
+      ...entry.timeSlip,
+      date: format(entry.date, "yyyy-MM-dd"),
+    }));
 };
 
 export const saveTimeSheet = async (
   timeSheet: TimeSheetType
-): Promise<models.TimeSlip[]> => {
+): Promise<TimeSlip[]> => {
   const updated = getUpdatedTimeSlips(timeSheet);
-  const api = getClient();
-
   await Promise.all(
     updated
       .filter((timeSlip) => timeSlip.id && !timeSlip.hours)
-      .map((timeSlip) => api.destroyTimeSlip({ id: String(timeSlip.id) }))
+      .map((timeSlip) => destroyTimeSlip({ path: { id: String(timeSlip.id) } }))
   );
 
   return Promise.all(
@@ -144,13 +151,20 @@ export const saveTimeSheet = async (
       .filter((timeSlip) => timeSlip.hours)
       .map((timeSlip) => {
         return timeSlip.id
-          ? api.updateTimeSlip({
-              id: String(timeSlip.id),
-              timeSlip: { ...timeSlip, hours: timeSlip.hours || 0 },
+          ? updateTimeSlip({
+              path: {
+                id: String(timeSlip.id),
+              },
+              body: {
+                ...timeSlip,
+                hours: timeSlip.hours || 0,
+              },
             })
-          : api.createTimeSlip({ timeSlip });
+          : createTimeSlip({
+              body: timeSlip,
+            }).then((res) => res.data);
       })
-  );
+  ) as Promise<TimeSlip[]>;
 };
 
 export type WeekMonthTotals = {
@@ -160,8 +174,8 @@ export type WeekMonthTotals = {
 
 export const getTotalsByProject = (
   startDate: Date,
-  projects: models.Project[],
-  timeSlips: models.TimeSlip[]
+  projects: Project[],
+  timeSlips: TimeSlip[]
 ) => {
   const monthStartDate = startOfMonth(startDate);
   const monthEndDate = endOfMonth(startDate);
@@ -179,14 +193,15 @@ export const getTotalsByProject = (
   );
 
   timeSlips.forEach((ts) => {
+    const date = getDate(ts.date);
     const group = byProject[ts.project];
 
     if (group) {
-      if (ts.hours && ts.date >= startDate && ts.date <= weekEndDate) {
+      if (ts.hours && date >= startDate && date <= weekEndDate) {
         group.week += ts.hours || 0;
       }
 
-      if (ts.hours && ts.date >= monthStartDate && ts.date <= monthEndDate) {
+      if (ts.hours && date >= monthStartDate && date <= monthEndDate) {
         group.month += ts.hours || 0;
       }
     }

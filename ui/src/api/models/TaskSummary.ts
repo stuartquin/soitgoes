@@ -12,18 +12,20 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { TaskSummaryInvoicesInner } from './TaskSummaryInvoicesInner';
 import {
     TaskSummaryInvoicesInnerFromJSON,
     TaskSummaryInvoicesInnerFromJSONTyped,
     TaskSummaryInvoicesInnerToJSON,
+    TaskSummaryInvoicesInnerToJSONTyped,
 } from './TaskSummaryInvoicesInner';
 import type { TaskSummaryTimeslipsInner } from './TaskSummaryTimeslipsInner';
 import {
     TaskSummaryTimeslipsInnerFromJSON,
     TaskSummaryTimeslipsInnerFromJSONTyped,
     TaskSummaryTimeslipsInnerToJSON,
+    TaskSummaryTimeslipsInnerToJSONTyped,
 } from './TaskSummaryTimeslipsInner';
 
 /**
@@ -49,12 +51,10 @@ export interface TaskSummary {
 /**
  * Check if a given object implements the TaskSummary interface.
  */
-export function instanceOfTaskSummary(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "invoices" in value;
-    isInstance = isInstance && "timeslips" in value;
-
-    return isInstance;
+export function instanceOfTaskSummary(value: object): value is TaskSummary {
+    if (!('invoices' in value) || value['invoices'] === undefined) return false;
+    if (!('timeslips' in value) || value['timeslips'] === undefined) return false;
+    return true;
 }
 
 export function TaskSummaryFromJSON(json: any): TaskSummary {
@@ -62,7 +62,7 @@ export function TaskSummaryFromJSON(json: any): TaskSummary {
 }
 
 export function TaskSummaryFromJSONTyped(json: any, ignoreDiscriminator: boolean): TaskSummary {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
@@ -72,17 +72,19 @@ export function TaskSummaryFromJSONTyped(json: any, ignoreDiscriminator: boolean
     };
 }
 
-export function TaskSummaryToJSON(value?: TaskSummary | null): any {
-    if (value === undefined) {
-        return undefined;
+export function TaskSummaryToJSON(json: any): TaskSummary {
+    return TaskSummaryToJSONTyped(json, false);
+}
+
+export function TaskSummaryToJSONTyped(value?: TaskSummary | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'invoices': ((value.invoices as Array<any>).map(TaskSummaryInvoicesInnerToJSON)),
-        'timeslips': ((value.timeslips as Array<any>).map(TaskSummaryTimeslipsInnerToJSON)),
+        'invoices': ((value['invoices'] as Array<any>).map(TaskSummaryInvoicesInnerToJSON)),
+        'timeslips': ((value['timeslips'] as Array<any>).map(TaskSummaryTimeslipsInnerToJSON)),
     };
 }
 

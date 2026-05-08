@@ -60,6 +60,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -128,6 +131,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -175,7 +181,7 @@ paths:
       - api
   /api/projects/summary/:
     get:
-      operationId: listProjectSummarys
+      operationId: listProjectSummaries
       description: ''
       parameters:
       - name: limit
@@ -196,6 +202,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -329,12 +338,31 @@ paths:
         description: The initial index from which to return the results.
         schema:
           type: integer
+      - name: status
+        required: false
+        in: query
+        description: Filter by invoice status.
+        schema:
+          type: string
+          enum:
+          - DRAFT
+          - ISSUED
+          - PAID
+      - name: project
+        required: false
+        in: query
+        description: Filter by project ID.
+        schema:
+          type: integer
       responses:
         '200':
           content:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -433,6 +461,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -846,6 +877,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -927,6 +961,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -1116,6 +1153,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -1279,6 +1319,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -1302,7 +1345,7 @@ paths:
       - api
   /api/companies/:
     get:
-      operationId: listCompanys
+      operationId: listCompanies
       description: ''
       parameters:
       - name: limit
@@ -1323,6 +1366,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - count
+                - results
                 properties:
                   count:
                     type: integer
@@ -1639,106 +1685,245 @@ components:
     ProjectSummary:
       type: object
       properties:
-        project:
-          type: integer
-        hours:
-          type: number
-          readOnly: true
-        total:
-          type: number
-          readOnly: true
-        next_sequence_num:
-          type: integer
-          readOnly: true
-        previous_invoice:
-          type: object
-          properties:
-            id:
-              type: integer
-              readOnly: true
-            sequence_num:
-              type: integer
-            project:
-              type: integer
-            created_at:
-              type: string
-              format: date-time
-              readOnly: true
-            issued_at:
-              type: string
-              format: date-time
-              readOnly: true
-            paid_at:
-              type: string
-              format: date-time
-              nullable: true
-            due_date:
-              type: string
-              format: date
-              nullable: true
-            total_paid:
-              type: number
-              nullable: true
-            total_due:
-              type: number
-              nullable: true
-            subtotal_due:
-              type: number
-              nullable: true
-            status:
-              enum:
-              - DRAFT
-              - ISSUED
-              - PAID
-              type: string
-            reference:
-              type: string
-              nullable: true
-              maxLength: 256
-            group_by:
-              enum:
-              - tasks
-              - timeslips
-              type: string
-            show_hours:
-              type: boolean
-            timeslips:
-              type: array
-              items:
+        unbilled:
+          type: array
+          items:
+            type: object
+            properties:
+              project:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 512
+                  contact:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  uninvoiced_hours:
+                    type: integer
+                    readOnly: true
+                  total_paid:
+                    type: integer
+                    readOnly: true
+                  hourly_rate:
+                    type: number
+                  weekly_rate:
+                    type: number
+                    multipleOf: 0.001
+                    maximum: 10000000
+                    minimum: -10000000
+                    nullable: true
+                  archived:
+                    type: boolean
+                  currency:
+                    type: string
+                    maxLength: 3
+                  default_task:
+                    type: integer
+                    nullable: true
+                  next_sequence_num:
+                    type: string
+                    readOnly: true
+                  billing_unit:
+                    enum:
+                    - HOUR
+                    - DAY
+                    - WEEK
+                    type: string
+                    nullable: true
+                required:
+                - name
+                - contact
+                readOnly: true
+              hours:
+                type: number
+                readOnly: true
+              total:
+                type: number
+                readOnly: true
+              next_sequence_num:
                 type: integer
-            tasks:
-              type: array
-              items:
+                readOnly: true
+              previous_invoice:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  sequence_num:
+                    type: integer
+                    maximum: 9223372036854775807
+                    minimum: -9223372036854775808
+                    format: int64
+                  project:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  issued_at:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                    nullable: true
+                  paid_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  due_date:
+                    type: string
+                    format: date
+                    nullable: true
+                  total_paid:
+                    type: number
+                    nullable: true
+                  total_due:
+                    type: number
+                    nullable: true
+                  subtotal_due:
+                    type: number
+                    nullable: true
+                  status:
+                    enum:
+                    - DRAFT
+                    - ISSUED
+                    - PAID
+                    type: string
+                  reference:
+                    type: string
+                    nullable: true
+                    maxLength: 256
+                  group_by:
+                    enum:
+                    - tasks
+                    - timeslips
+                    type: string
+                  show_hours:
+                    type: boolean
+                  timeslips:
+                    type: array
+                    items:
+                      type: integer
+                  tasks:
+                    type: array
+                    items:
+                      type: integer
+                  modifier:
+                    type: array
+                    items:
+                      type: integer
+                  pdf_name:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    readOnly: true
+                  exchange_rate:
+                    type: number
+                  currency:
+                    type: string
+                    maxLength: 3
+                  billing_unit:
+                    enum:
+                    - HOUR
+                    - DAY
+                    - WEEK
+                    type: string
+                    nullable: true
+                required:
+                - project
+                - timeslips
+                - tasks
+                readOnly: true
+        invoices:
+          type: array
+          items:
+            type: object
+            properties:
+              project:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 512
+                  contact:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  uninvoiced_hours:
+                    type: integer
+                    readOnly: true
+                  total_paid:
+                    type: integer
+                    readOnly: true
+                  hourly_rate:
+                    type: number
+                  weekly_rate:
+                    type: number
+                    multipleOf: 0.001
+                    maximum: 10000000
+                    minimum: -10000000
+                    nullable: true
+                  archived:
+                    type: boolean
+                  currency:
+                    type: string
+                    maxLength: 3
+                  default_task:
+                    type: integer
+                    nullable: true
+                  next_sequence_num:
+                    type: string
+                    readOnly: true
+                  billing_unit:
+                    enum:
+                    - HOUR
+                    - DAY
+                    - WEEK
+                    type: string
+                    nullable: true
+                required:
+                - name
+                - contact
+                readOnly: true
+              total_invoiced:
+                type: number
+                readOnly: true
+              total_paid:
+                type: number
+                readOnly: true
+              total_unpaid:
+                type: number
+                readOnly: true
+              invoice_count:
                 type: integer
-            modifier:
-              type: array
-              items:
+                readOnly: true
+              six_month_total_invoiced:
+                type: number
+                readOnly: true
+              six_month_total_paid:
+                type: number
+                readOnly: true
+              six_month_total_unpaid:
+                type: number
+                readOnly: true
+              six_month_invoice_count:
                 type: integer
-            pdf_name:
-              type: string
-              readOnly: true
-            name:
-              type: string
-              readOnly: true
-            exchange_rate:
-              type: number
-            currency:
-              type: string
-              maxLength: 3
-            billing_unit:
-              enum:
-              - HOUR
-              - DAY
-              - WEEK
-              type: string
-              nullable: true
-          required:
-          - project
-          - timeslips
-          - tasks
-          readOnly: true
+                readOnly: true
       required:
-      - project
+      - unbilled
+      - invoices
     Invoice:
       type: object
       properties:
@@ -1747,6 +1932,9 @@ components:
           readOnly: true
         sequence_num:
           type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
         project:
           type: integer
         created_at:
@@ -1757,6 +1945,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         paid_at:
           type: string
           format: date-time
@@ -1930,6 +2119,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          nullable: true
         completed_at:
           type: string
           format: date-time
@@ -1987,6 +2177,9 @@ components:
                 readOnly: true
               sequence_num:
                 type: integer
+                maximum: 9223372036854775807
+                minimum: -9223372036854775808
+                format: int64
               project:
                 type: integer
               created_at:
@@ -1997,6 +2190,7 @@ components:
                 type: string
                 format: date-time
                 readOnly: true
+                nullable: true
               paid_at:
                 type: string
                 format: date-time

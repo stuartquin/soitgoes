@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { Task } from './Task';
 import {
     TaskFromJSON,
     TaskFromJSONTyped,
     TaskToJSON,
+    TaskToJSONTyped,
 } from './Task';
 
 /**
@@ -31,7 +32,7 @@ export interface ListTasks200Response {
      * @type {number}
      * @memberof ListTasks200Response
      */
-    count?: number;
+    count: number;
     /**
      * 
      * @type {string}
@@ -49,16 +50,16 @@ export interface ListTasks200Response {
      * @type {Array<Task>}
      * @memberof ListTasks200Response
      */
-    results?: Array<Task>;
+    results: Array<Task>;
 }
 
 /**
  * Check if a given object implements the ListTasks200Response interface.
  */
-export function instanceOfListTasks200Response(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfListTasks200Response(value: object): value is ListTasks200Response {
+    if (!('count' in value) || value['count'] === undefined) return false;
+    if (!('results' in value) || value['results'] === undefined) return false;
+    return true;
 }
 
 export function ListTasks200ResponseFromJSON(json: any): ListTasks200Response {
@@ -66,31 +67,33 @@ export function ListTasks200ResponseFromJSON(json: any): ListTasks200Response {
 }
 
 export function ListTasks200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ListTasks200Response {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'count': !exists(json, 'count') ? undefined : json['count'],
-        'next': !exists(json, 'next') ? undefined : json['next'],
-        'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(TaskFromJSON)),
+        'count': json['count'],
+        'next': json['next'] == null ? undefined : json['next'],
+        'previous': json['previous'] == null ? undefined : json['previous'],
+        'results': ((json['results'] as Array<any>).map(TaskFromJSON)),
     };
 }
 
-export function ListTasks200ResponseToJSON(value?: ListTasks200Response | null): any {
-    if (value === undefined) {
-        return undefined;
+export function ListTasks200ResponseToJSON(json: any): ListTasks200Response {
+    return ListTasks200ResponseToJSONTyped(json, false);
+}
+
+export function ListTasks200ResponseToJSONTyped(value?: ListTasks200Response | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'count': value.count,
-        'next': value.next,
-        'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(TaskToJSON)),
+        'count': value['count'],
+        'next': value['next'],
+        'previous': value['previous'],
+        'results': ((value['results'] as Array<any>).map(TaskToJSON)),
     };
 }
 

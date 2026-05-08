@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { AccountCompany } from './AccountCompany';
 import {
     AccountCompanyFromJSON,
     AccountCompanyFromJSONTyped,
     AccountCompanyToJSON,
+    AccountCompanyToJSONTyped,
 } from './AccountCompany';
 
 /**
@@ -43,11 +44,9 @@ export interface Account {
 /**
  * Check if a given object implements the Account interface.
  */
-export function instanceOfAccount(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "company" in value;
-
-    return isInstance;
+export function instanceOfAccount(value: object): value is Account {
+    if (!('company' in value) || value['company'] === undefined) return false;
+    return true;
 }
 
 export function AccountFromJSON(json: any): Account {
@@ -55,26 +54,28 @@ export function AccountFromJSON(json: any): Account {
 }
 
 export function AccountFromJSONTyped(json: any, ignoreDiscriminator: boolean): Account {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'company': AccountCompanyFromJSON(json['company']),
     };
 }
 
-export function AccountToJSON(value?: Account | null): any {
-    if (value === undefined) {
-        return undefined;
+export function AccountToJSON(json: any): Account {
+    return AccountToJSONTyped(json, false);
+}
+
+export function AccountToJSONTyped(value?: Omit<Account, 'id'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'company': AccountCompanyToJSON(value.company),
+        'company': AccountCompanyToJSON(value['company']),
     };
 }
 

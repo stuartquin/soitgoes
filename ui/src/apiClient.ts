@@ -1,4 +1,31 @@
+import { client } from "apiv3/client.gen";
 import * as Api from "./api";
+
+const API_BASE_URL = `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
+client.setConfig({
+  baseUrl: API_BASE_URL,
+  headers: {
+    "X-Client-Version": 3,
+  },
+});
+
+client.interceptors.request.use((request) => {
+  const accessToken = window.localStorage.getItem("token");
+  if (!accessToken) {
+    location.href = "/login";
+    return request;
+  }
+  request.headers.set("Authorization", `Token ${accessToken}`);
+  return request;
+});
+
+client.interceptors.response.use((response) => {
+  if ([401, 403].includes(response.status)) {
+    removeToken();
+    location.href = "/login";
+  }
+  return response;
+});
 
 export const getAPIErrorMessage = async (error: any): Promise<string> => {
   if (error.status === 500) {
@@ -20,7 +47,7 @@ export const getAPIErrorMessage = async (error: any): Promise<string> => {
 };
 
 export const getBaseUrl = (): string => {
-  return `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
+  return API_BASE_URL;
 };
 
 export const storeToken = (token: string) => {

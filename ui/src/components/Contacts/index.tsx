@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useEffect, useMemo } from "react";
-import { useParams, Routes, Route, useNavigate } from "react-router-dom";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 
 import { ensure } from "typeHelpers";
 import * as models from "api/models";
@@ -10,19 +10,14 @@ import Input from "components/Form/Input";
 import ContactRow from "components/Contacts/ContactRow";
 import ContactDetail from "components/Contacts/ContactDetail";
 
-interface RouterProps {
-  contactId: string;
-}
-
 interface Props {
-  isCreateNew?: boolean;
+  contactId?: string;
 }
 
-function Contacts({ isCreateNew }: Props) {
+function Contacts({ contactId }: Props) {
   const [contacts, setContacts] = useState<models.Contact[]>([]);
   const [search, setSearch] = useState("");
   const [projects, setProjects] = useState<models.Project[]>([]);
-  const { contactId } = useParams();
   const navigate = useNavigate();
 
   const loadContacts = useCallback(async (searchTerm: string) => {
@@ -42,7 +37,7 @@ function Contacts({ isCreateNew }: Props) {
 
   useEffect(() => {
     loadProjects();
-  }, [loadContacts, loadProjects]);
+  }, [loadProjects]);
 
   useEffect(() => {
     loadContacts(search);
@@ -58,11 +53,11 @@ function Contacts({ isCreateNew }: Props) {
   }, [contacts, projects]);
 
   const closeSlideOver = useCallback(() => {
-    navigate("/contacts");
+    navigate({ to: "/contacts" });
   }, [navigate]);
 
   const createNewContact = useCallback(() => {
-    navigate("/contacts/new");
+    navigate({ to: "/contacts/new" });
   }, [navigate]);
 
   const handleSearch = useCallback(
@@ -76,7 +71,7 @@ function Contacts({ isCreateNew }: Props) {
     loadContacts(search);
   }, [loadContacts, search]);
 
-  const isOpen = isCreateNew || Boolean(contactId);
+  const isOpen = Boolean(contactId);
 
   return (
     <div className="w-full">
@@ -108,18 +103,13 @@ function Contacts({ isCreateNew }: Props) {
         </div>
       </div>
       <SlideOver isOpen={isOpen} onClose={closeSlideOver}>
-        <Routes>
-          <Route
-            path="/contacts/:contactId"
-            element={
-              <ContactDetail
-                projects={projects}
-                contactId={contactId || ""}
-                onSave={reloadContacts}
-              />
-            }
+        {contactId && (
+          <ContactDetail
+            projects={projects}
+            contactId={contactId}
+            onSave={reloadContacts}
           />
-        </Routes>
+        )}
       </SlideOver>
     </div>
   );

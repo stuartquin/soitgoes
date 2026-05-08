@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -42,12 +42,10 @@ export interface Login {
 /**
  * Check if a given object implements the Login interface.
  */
-export function instanceOfLogin(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "email" in value;
-    isInstance = isInstance && "password" in value;
-
-    return isInstance;
+export function instanceOfLogin(value: object): value is Login {
+    if (!('email' in value) || value['email'] === undefined) return false;
+    if (!('password' in value) || value['password'] === undefined) return false;
+    return true;
 }
 
 export function LoginFromJSON(json: any): Login {
@@ -55,28 +53,30 @@ export function LoginFromJSON(json: any): Login {
 }
 
 export function LoginFromJSONTyped(json: any, ignoreDiscriminator: boolean): Login {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
         'email': json['email'],
         'password': json['password'],
-        'token': !exists(json, 'token') ? undefined : json['token'],
+        'token': json['token'] == null ? undefined : json['token'],
     };
 }
 
-export function LoginToJSON(value?: Login | null): any {
-    if (value === undefined) {
-        return undefined;
+export function LoginToJSON(json: any): Login {
+    return LoginToJSONTyped(json, false);
+}
+
+export function LoginToJSONTyped(value?: Omit<Login, 'token'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'email': value.email,
-        'password': value.password,
+        'email': value['email'],
+        'password': value['password'],
     };
 }
 

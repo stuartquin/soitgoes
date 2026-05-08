@@ -1,6 +1,5 @@
 import React from "react";
 import { parse } from "date-fns";
-import { BrowserRouter } from "react-router-dom";
 import { render, fireEvent } from "@testing-library/react";
 
 import * as models from "api/models";
@@ -10,6 +9,22 @@ import {
   TimeSheetType,
   TimeSlipEntry,
 } from "components/TimeSheet/TimeSlipContext";
+
+jest.mock("@tanstack/react-router", () => ({
+  Link: ({
+    to,
+    children,
+    ...props
+  }: {
+    to: string;
+    children: React.ReactNode;
+    [key: string]: any;
+  }) => (
+    <a href={to} {...props}>
+      {children}
+    </a>
+  ),
+}));
 
 const getTimeSheetEntry = (
   date: Date,
@@ -66,17 +81,15 @@ test("Displays hour totals, updates", async () => {
   const updateHours = jest.fn();
 
   const { getByText, getByDisplayValue } = render(
-    <BrowserRouter>
-      <TimeSlipContext.Provider value={{ updateHours }}>
-        <TimeSheetGrid
-          timeSheet={timeSheet}
-          user={user}
-          startDate={startDate}
-          projects={projects}
-          tasks={tasks}
-        />
-      </TimeSlipContext.Provider>
-    </BrowserRouter>
+    <TimeSlipContext.Provider value={{ updateHours }}>
+      <TimeSheetGrid
+        timeSheet={timeSheet}
+        user={user}
+        startDate={startDate}
+        projects={projects}
+        tasks={tasks}
+      />
+    </TimeSlipContext.Provider>
   );
 
   getByText("Test Project 1");
@@ -110,15 +123,13 @@ test("Navigate Previous/Next month", async () => {
   };
 
   const { getByText } = render(
-    <BrowserRouter>
-      <TimeSheetGrid
-        timeSheet={timeSheet}
-        user={{} as models.User}
-        startDate={startDate}
-        projects={projects}
-        tasks={tasks}
-      />
-    </BrowserRouter>
+    <TimeSheetGrid
+      timeSheet={timeSheet}
+      user={{} as models.User}
+      startDate={startDate}
+      projects={projects}
+      tasks={tasks}
+    />
   );
 
   const prev = getByText("Prev") as HTMLAnchorElement;

@@ -1,14 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams, useRevalidator } from "react-router-dom";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 
-import * as models from "api/models";
-import { getClient } from "apiClient";
-import { ExchangeRate } from "currency";
 import InvoiceActions from "components/Invoices/InvoiceActions";
 import InvoiceForm from "components/Invoices/InvoiceForm";
 import InvoiceEditableItems from "components/Invoices/InvoiceEditableItems";
 import InvoiceEditableTotals from "components/Invoices/InvoiceEditableTotals";
-import InvoiceWeeklyTaskSettings from "components/Invoices/InvoiceWeeklyTaskSettings";
 import Alert from "components/Alert";
 import {
   InvoiceToggleItem,
@@ -16,20 +12,43 @@ import {
   getCalculatedInvoice,
 } from "invoices";
 import { ensure } from "typeHelpers";
+import {
+  createInvoice,
+  Invoice,
+  InvoiceModifier,
+  Project,
+  ProjectSummary,
+  Task,
+  TimeSlip,
+} from "apiv3";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  listInvoicesOptions,
+  listProjectSummariesOptions,
+  listTimeSlipsOptions,
+} from "apiv3/@tanstack/react-query.gen";
 
 interface Props {
-  projects: models.Project[];
+  projects: Project[];
+  timeSlips: TimeSlip[];
+  tasks: Task[];
+  modifiers: InvoiceModifier[];
+  exchangeRates: Record<string, unknown>;
+  summaries: ProjectSummary[];
+  projectId?: string;
 }
 
-function InvoiceCreateNew({ projects }: Props) {
-  const { projectId } = useParams();
-  const [invoice, setInvoice] = useState<models.Invoice>();
-  const [previousInvoice, setPreviousInvoice] = useState<models.Invoice>();
-  const [timeTasks, setTimeTasks] = useState<models.Task[]>([]);
-  const [fixedTasks, setFixedTasks] = useState<models.Task[]>([]);
-  const [modifiers, setModifiers] = useState<models.InvoiceModifier[]>([]);
-  const [timeSlips, setTimeSlips] = useState<models.TimeSlip[]>([]);
-  const [exchangeRates, setExchangeRates] = useState<ExchangeRate>({});
+function InvoiceCreateNew({
+  projects,
+  summaries,
+  timeSlips,
+  projectId,
+  tasks,
+  modifiers,
+  exchangeRates,
+}: Props) {
+  const queryClient = useQueryClient();
+  const [invoice, setInvoice] = useState<Invoice>();
   const [exchangeRateError, setExchangeRateError] = useState<String>();
   const navigate = useNavigate();
 
@@ -37,52 +56,22 @@ function InvoiceCreateNew({ projects }: Props) {
     projects.find((p) => p.id === parseInt(projectId || "", 10))
   );
 
-  useEffect(() => {
-    const load = async () => {
-      const api = getClient();
+  const timeTasks = useMemo(() => {
+    return tasks.filter((t) => t.billing_type === "TIME");
+  }, [tasks]);
 
-      const [
-        timeSlipResponse,
-        modifierResponse,
-        taskResponse,
-        exchangeRateResponse,
-        summaryResponse,
-      ] = await Promise.all([
-        api.listTimeSlips({
-          project: `${project.id}`,
-          noInvoice: "true",
-        }),
-        api.listInvoiceModifiers({}),
-        api.listTasks({
-          project: `${project.id}`,
-        }),
-        api.retrieveExchangeRate(),
-        api.listProjectSummarys(),
-      ]);
-      const tasks = taskResponse.results || [];
+  const fixedTasks = useMemo(() => {
+    return tasks.filter(
+      (t) => t.billing_type === "FIXED" && t.state !== "DONE"
+    );
+  }, [tasks]);
 
-      const projectSummary = (summaryResponse.results || []).find(
-        (s) => s.project === parseInt(projectId || "", 10)
-      );
-      setPreviousInvoice(projectSummary?.previousInvoice);
-
-      setTimeSlips(timeSlipResponse.results || []);
-      setModifiers(modifierResponse.results || []);
-      setTimeTasks(
-        tasks.filter((t) => t.billingType === models.TaskBillingTypeEnum.Time)
-      );
-      setFixedTasks(
-        tasks.filter(
-          (t) =>
-            t.billingType === models.TaskBillingTypeEnum.Fixed &&
-            t.state !== models.TaskStateEnum.Done
-        )
-      );
-      setExchangeRates((exchangeRateResponse.rates as ExchangeRate) || {});
-    };
-
-    load();
-  }, [project]);
+  const previousInvoice = useMemo(() => {
+    const projectSummary = (summaries || []).find(
+      (s) => s.project === parseInt(projectId || "", 10)
+    );
+    return projectSummary?.previous_invoice;
+  }, [projectId, summaries]);
 
   useEffect(() => {
     const currency = project.currency || "GBP";
@@ -93,12 +82,13 @@ function InvoiceCreateNew({ projects }: Props) {
 
     const initialInvoice = {
       currency,
-      billingUnit: previousInvoice?.billingUnit || project.billingUnit,
-      exchangeRate: exchangeRates[currency] || 1,
+      billing_unit: previousInvoice?.billing_unit || project.billing_unit,
+      exchange_rate: exchangeRates[currency] || 1,
       project: project.id,
-      showHours: previousInvoice?.showHours || false,
-      groupBy: previousInvoice?.groupBy,
-    } as models.Invoice;
+      show_hours: previousInvoice?.show_hours || false,
+      group_by: previousInvoice?.group_by,
+    } as Invoice;
+
     setInvoice(
       getCalculatedInvoice(initialInvoice, fixedTasks, timeSlips, modifiers)
     );
@@ -161,7 +151,7 @@ function InvoiceCreateNew({ projects }: Props) {
   );
 
   const toggleModifier = useCallback(
-    (modifier: models.InvoiceModifier) => {
+    (modifier: InvoiceModifier) => {
       if (invoice && invoice.modifier) {
         const updatedModifiers = invoice.modifier.includes(modifier.id!)
           ? invoice.modifier.filter((id) => id !== modifier.id)
@@ -174,41 +164,34 @@ function InvoiceCreateNew({ projects }: Props) {
         setInvoice({
           ...invoice,
           modifier: updatedModifiers,
-          totalDue: calculateTotal(invoice.subtotalDue || 0, invoiceModifiers),
-        } as models.Invoice);
+          totalDue: calculateTotal(invoice.subtotal_due || 0, invoiceModifiers),
+        } as Invoice);
       }
     },
     [invoice, modifiers]
   );
 
-  const updateInvoice = useCallback((invoice: models.Invoice) => {
+  const updateInvoice = useCallback((invoice: Invoice) => {
     setInvoice(invoice);
   }, []);
 
   const issueInvoice = useCallback(async () => {
-    const api = getClient();
-    const issuedInvoice = {
-      ...invoice,
-      status: models.InvoiceStatusEnum.Issued,
-    } as models.Invoice;
-
-    const createdInvoice = await api.createInvoice({
-      invoice: issuedInvoice,
+    const response = await createInvoice({
+      body: {
+        ...invoice,
+        status: "ISSUED",
+      } as Invoice,
     });
-    navigate(`/invoices/${createdInvoice.project}/${createdInvoice.id}`);
+    const createdInvoice = response.data;
+    if (createdInvoice) {
+      queryClient.invalidateQueries(listProjectSummariesOptions());
+      queryClient.invalidateQueries(listInvoicesOptions());
+      queryClient.invalidateQueries(listTimeSlipsOptions());
+      navigate({
+        to: "/invoices",
+      });
+    }
   }, [invoice, navigate]);
-
-  const addWeeklyTasks = useCallback(
-    async (tasks: models.Task[]) => {
-      const api = getClient();
-      const newTasks = await Promise.all(
-        tasks.map((task) => api.createTask({ task }))
-      );
-
-      setFixedTasks(fixedTasks.concat(newTasks));
-    },
-    [fixedTasks]
-  );
 
   const allTasks = timeTasks.concat(fixedTasks);
 
@@ -225,12 +208,6 @@ function InvoiceCreateNew({ projects }: Props) {
             <Alert variant="error" className="my-4">
               {exchangeRateError}
             </Alert>
-          )}
-          {project.weeklyRate && (
-            <InvoiceWeeklyTaskSettings
-              project={project}
-              onAddTasks={addWeeklyTasks}
-            />
           )}
           <div className="flex flex-wrap items-end justify-between mx-4 sm:mx-0">
             <InvoiceForm invoice={invoice} onUpdate={updateInvoice} />

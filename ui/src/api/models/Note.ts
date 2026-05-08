@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -48,12 +48,10 @@ export interface Note {
 /**
  * Check if a given object implements the Note interface.
  */
-export function instanceOfNote(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "content" in value;
-    isInstance = isInstance && "contact" in value;
-
-    return isInstance;
+export function instanceOfNote(value: object): value is Note {
+    if (!('content' in value) || value['content'] === undefined) return false;
+    if (!('contact' in value) || value['contact'] === undefined) return false;
+    return true;
 }
 
 export function NoteFromJSON(json: any): Note {
@@ -61,29 +59,31 @@ export function NoteFromJSON(json: any): Note {
 }
 
 export function NoteFromJSONTyped(json: any, ignoreDiscriminator: boolean): Note {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'content': json['content'],
         'contact': json['contact'],
-        'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
+        'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
     };
 }
 
-export function NoteToJSON(value?: Note | null): any {
-    if (value === undefined) {
-        return undefined;
+export function NoteToJSON(json: any): Note {
+    return NoteToJSONTyped(json, false);
+}
+
+export function NoteToJSONTyped(value?: Omit<Note, 'id'|'created_at'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'content': value.content,
-        'contact': value.contact,
+        'content': value['content'],
+        'contact': value['contact'],
     };
 }
 

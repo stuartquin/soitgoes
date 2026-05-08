@@ -1,5 +1,4 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
 import { render, fireEvent } from "@testing-library/react";
 
 import InvoiceForm from "./InvoiceForm";
@@ -15,9 +14,7 @@ describe("InvoiceForm", () => {
     };
 
     const { findByLabelText } = render(
-      <BrowserRouter>
-        <InvoiceForm invoice={invoice} onUpdate={jest.fn()} />
-      </BrowserRouter>
+      <InvoiceForm invoice={invoice} onUpdate={jest.fn()} />
     );
     const reference = (await findByLabelText("Reference")) as HTMLInputElement;
     expect(reference.value).toBe("Test Reference");
@@ -36,9 +33,7 @@ describe("InvoiceForm", () => {
     };
     const onUpdate = jest.fn();
     const { findByLabelText } = render(
-      <BrowserRouter>
-        <InvoiceForm invoice={invoice} onUpdate={onUpdate} />
-      </BrowserRouter>
+      <InvoiceForm invoice={invoice} onUpdate={onUpdate} />
     );
 
     await fireEvent.change(await findByLabelText("Due Date"), {
@@ -61,9 +56,7 @@ describe("InvoiceForm", () => {
     };
     const onUpdate = jest.fn();
     const { findByLabelText } = render(
-      <BrowserRouter>
-        <InvoiceForm invoice={invoice} onUpdate={onUpdate} />
-      </BrowserRouter>
+      <InvoiceForm invoice={invoice} onUpdate={onUpdate} />
     );
 
     await fireEvent.click(await findByLabelText("Show Hours"));

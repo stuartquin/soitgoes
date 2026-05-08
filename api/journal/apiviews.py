@@ -2,18 +2,18 @@ from journal.currency import get_rates
 import os
 import datetime
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.db.models.query import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets, status
-from rest_framework.views import APIView
+from rest_framework.views import APIView, Request
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 
 from users.onetimetoken import OneTimeTokenAccess
 
 from journal import serializers, models
-from journal.project import get_unbilled_summary
+from journal.project import get_unbilled_summary, get_invoices_summary
 from journal.filters import TimeSlipFilter, TaskFilter, ContactFilter
 from journal.invoices import (
     save_invoice_tasks,
@@ -35,7 +35,7 @@ def get_allowed_contacts(request: HttpRequest) -> "QuerySet[models.Contact]":
     return models.Contact.objects.filter(account__in=request.user.account_set.all())
 
 
-def get_allowed_projects(request: HttpRequest) -> "QuerySet[models.Project]":
+def get_allowed_projects(request: Request) -> "QuerySet[models.Project]":
     if not request or not request.user or not request.user.is_authenticated:
         return models.Project.objects.none()
     return models.Project.objects.filter(account__in=request.user.account_set.all())
@@ -120,6 +120,8 @@ class InvoiceListCreate(generics.ListCreateAPIView):
         filters = {}
         if "project" in self.request.query_params:
             filters["project"] = self.request.query_params["project"]
+        if "status" in self.request.query_params:
+            filters["status"] = self.request.query_params["status"]
 
         return models.Invoice.objects.filter(**filters).order_by("-issued_at")
 
@@ -225,13 +227,17 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
         return self.serializer_class(*args, **kwargs)
 
 
-class ProjectSummary(generics.ListAPIView):
+class ProjectSummary(generics.GenericAPIView):
     serializer_class = serializers.ProjectSummarySerializer
 
-    def get_queryset(self):
-        projects = get_allowed_projects(self.request)
-        summary = get_unbilled_summary(projects)
-        return summary
+    def get(self, request, pk=None):
+        projects = get_allowed_projects(request)
+        data = {
+            "unbilled": get_unbilled_summary(projects),
+            "invoices": get_invoices_summary(projects),
+        }
+        serializer = self.get_serializer(data)
+        return Response(serializer.data)
 
 
 class CompanyList(generics.ListCreateAPIView):

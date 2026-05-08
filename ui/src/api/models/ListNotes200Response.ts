@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { Note } from './Note';
 import {
     NoteFromJSON,
     NoteFromJSONTyped,
     NoteToJSON,
+    NoteToJSONTyped,
 } from './Note';
 
 /**
@@ -31,7 +32,7 @@ export interface ListNotes200Response {
      * @type {number}
      * @memberof ListNotes200Response
      */
-    count?: number;
+    count: number;
     /**
      * 
      * @type {string}
@@ -49,16 +50,16 @@ export interface ListNotes200Response {
      * @type {Array<Note>}
      * @memberof ListNotes200Response
      */
-    results?: Array<Note>;
+    results: Array<Note>;
 }
 
 /**
  * Check if a given object implements the ListNotes200Response interface.
  */
-export function instanceOfListNotes200Response(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfListNotes200Response(value: object): value is ListNotes200Response {
+    if (!('count' in value) || value['count'] === undefined) return false;
+    if (!('results' in value) || value['results'] === undefined) return false;
+    return true;
 }
 
 export function ListNotes200ResponseFromJSON(json: any): ListNotes200Response {
@@ -66,31 +67,33 @@ export function ListNotes200ResponseFromJSON(json: any): ListNotes200Response {
 }
 
 export function ListNotes200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ListNotes200Response {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'count': !exists(json, 'count') ? undefined : json['count'],
-        'next': !exists(json, 'next') ? undefined : json['next'],
-        'previous': !exists(json, 'previous') ? undefined : json['previous'],
-        'results': !exists(json, 'results') ? undefined : ((json['results'] as Array<any>).map(NoteFromJSON)),
+        'count': json['count'],
+        'next': json['next'] == null ? undefined : json['next'],
+        'previous': json['previous'] == null ? undefined : json['previous'],
+        'results': ((json['results'] as Array<any>).map(NoteFromJSON)),
     };
 }
 
-export function ListNotes200ResponseToJSON(value?: ListNotes200Response | null): any {
-    if (value === undefined) {
-        return undefined;
+export function ListNotes200ResponseToJSON(json: any): ListNotes200Response {
+    return ListNotes200ResponseToJSONTyped(json, false);
+}
+
+export function ListNotes200ResponseToJSONTyped(value?: ListNotes200Response | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'count': value.count,
-        'next': value.next,
-        'previous': value.previous,
-        'results': value.results === undefined ? undefined : ((value.results as Array<any>).map(NoteToJSON)),
+        'count': value['count'],
+        'next': value['next'],
+        'previous': value['previous'],
+        'results': ((value['results'] as Array<any>).map(NoteToJSON)),
     };
 }
 

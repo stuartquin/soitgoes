@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -30,10 +30,8 @@ export interface ExchangeRate {
 /**
  * Check if a given object implements the ExchangeRate interface.
  */
-export function instanceOfExchangeRate(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfExchangeRate(value: object): value is ExchangeRate {
+    return true;
 }
 
 export function ExchangeRateFromJSON(json: any): ExchangeRate {
@@ -41,22 +39,24 @@ export function ExchangeRateFromJSON(json: any): ExchangeRate {
 }
 
 export function ExchangeRateFromJSONTyped(json: any, ignoreDiscriminator: boolean): ExchangeRate {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'rates': !exists(json, 'rates') ? undefined : json['rates'],
+        'rates': json['rates'] == null ? undefined : json['rates'],
     };
 }
 
-export function ExchangeRateToJSON(value?: ExchangeRate | null): any {
-    if (value === undefined) {
-        return undefined;
+export function ExchangeRateToJSON(json: any): ExchangeRate {
+    return ExchangeRateToJSONTyped(json, false);
+}
+
+export function ExchangeRateToJSONTyped(value?: Omit<ExchangeRate, 'rates'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
     };

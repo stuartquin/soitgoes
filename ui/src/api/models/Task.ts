@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { TaskNotesInner } from './TaskNotesInner';
 import {
     TaskNotesInnerFromJSON,
     TaskNotesInnerFromJSONTyped,
     TaskNotesInnerToJSON,
+    TaskNotesInnerToJSONTyped,
 } from './TaskNotesInner';
 
 /**
@@ -61,7 +62,7 @@ export interface Task {
      * @type {Date}
      * @memberof Task
      */
-    readonly activityAt?: Date;
+    readonly activityAt?: Date | null;
     /**
      * 
      * @type {Date}
@@ -136,12 +137,10 @@ export type TaskStateEnum = typeof TaskStateEnum[keyof typeof TaskStateEnum];
 /**
  * Check if a given object implements the Task interface.
  */
-export function instanceOfTask(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "project" in value;
-    isInstance = isInstance && "name" in value;
-
-    return isInstance;
+export function instanceOfTask(value: object): value is Task {
+    if (!('project' in value) || value['project'] === undefined) return false;
+    if (!('name' in value) || value['name'] === undefined) return false;
+    return true;
 }
 
 export function TaskFromJSON(json: any): Task {
@@ -149,46 +148,48 @@ export function TaskFromJSON(json: any): Task {
 }
 
 export function TaskFromJSONTyped(json: any, ignoreDiscriminator: boolean): Task {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'project': json['project'],
         'name': json['name'],
-        'cost': !exists(json, 'cost') ? undefined : json['cost'],
-        'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
-        'activityAt': !exists(json, 'activity_at') ? undefined : (new Date(json['activity_at'])),
-        'completedAt': !exists(json, 'completed_at') ? undefined : (json['completed_at'] === null ? null : new Date(json['completed_at'])),
-        'dueDate': !exists(json, 'due_date') ? undefined : (json['due_date'] === null ? null : new Date(json['due_date'])),
-        'hoursSpent': !exists(json, 'hours_spent') ? undefined : json['hours_spent'],
-        'hoursPredicted': !exists(json, 'hours_predicted') ? undefined : json['hours_predicted'],
-        'billingType': !exists(json, 'billing_type') ? undefined : json['billing_type'],
-        'state': !exists(json, 'state') ? undefined : json['state'],
-        'invoices': !exists(json, 'invoices') ? undefined : json['invoices'],
-        'notes': !exists(json, 'notes') ? undefined : ((json['notes'] as Array<any>).map(TaskNotesInnerFromJSON)),
+        'cost': json['cost'] == null ? undefined : json['cost'],
+        'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
+        'activityAt': json['activity_at'] == null ? undefined : (new Date(json['activity_at'])),
+        'completedAt': json['completed_at'] == null ? undefined : (new Date(json['completed_at'])),
+        'dueDate': json['due_date'] == null ? undefined : (new Date(json['due_date'])),
+        'hoursSpent': json['hours_spent'] == null ? undefined : json['hours_spent'],
+        'hoursPredicted': json['hours_predicted'] == null ? undefined : json['hours_predicted'],
+        'billingType': json['billing_type'] == null ? undefined : json['billing_type'],
+        'state': json['state'] == null ? undefined : json['state'],
+        'invoices': json['invoices'] == null ? undefined : json['invoices'],
+        'notes': json['notes'] == null ? undefined : ((json['notes'] as Array<any>).map(TaskNotesInnerFromJSON)),
     };
 }
 
-export function TaskToJSON(value?: Task | null): any {
-    if (value === undefined) {
-        return undefined;
+export function TaskToJSON(json: any): Task {
+    return TaskToJSONTyped(json, false);
+}
+
+export function TaskToJSONTyped(value?: Omit<Task, 'id'|'created_at'|'activity_at'|'invoices'|'notes'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'project': value.project,
-        'name': value.name,
-        'cost': value.cost,
-        'completed_at': value.completedAt === undefined ? undefined : (value.completedAt === null ? null : value.completedAt.toISOString()),
-        'due_date': value.dueDate === undefined ? undefined : (value.dueDate === null ? null : value.dueDate.toISOString().substring(0,10)),
-        'hours_spent': value.hoursSpent,
-        'hours_predicted': value.hoursPredicted,
-        'billing_type': value.billingType,
-        'state': value.state,
+        'project': value['project'],
+        'name': value['name'],
+        'cost': value['cost'],
+        'completed_at': value['completedAt'] == null ? value['completedAt'] : value['completedAt'].toISOString(),
+        'due_date': value['dueDate'] == null ? value['dueDate'] : value['dueDate'].toISOString().substring(0,10),
+        'hours_spent': value['hoursSpent'],
+        'hours_predicted': value['hoursPredicted'],
+        'billing_type': value['billingType'],
+        'state': value['state'],
     };
 }
 

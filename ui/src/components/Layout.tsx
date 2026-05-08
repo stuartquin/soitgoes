@@ -1,13 +1,10 @@
-import React from "react";
-import { Await, NavLink, Outlet, useAsyncValue } from "react-router-dom";
+import { Link, Outlet } from "@tanstack/react-router";
 
 interface Props {
   onLogout: () => void;
 }
 
 function Layout({ onLogout }: Props) {
-  const data = useAsyncValue();
-
   return (
     <div>
       <nav className="bg-gray-800">
@@ -15,26 +12,27 @@ function Layout({ onLogout }: Props) {
           <div className="relative flex items-center justify-between h-12">
             <div className="flex-1 flex items-center justify-start ">
               <div className="flex space-x-4">
-                <NavLink
+                <Link
                   to="/time"
                   className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   aria-current="page"
                 >
                   Time
-                </NavLink>
+                </Link>
 
-                <NavLink
+                <Link
                   to="/invoices"
+                  search={{}}
                   className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Invoices
-                </NavLink>
-                <NavLink
+                </Link>
+                <Link
                   to="/contacts"
                   className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Contacts
-                </NavLink>
+                </Link>
               </div>
             </div>
             <div
@@ -49,14 +47,7 @@ function Layout({ onLogout }: Props) {
       </nav>
 
       <div className="mx-auto" style={{ maxWidth: "1024px" }}>
-        <React.Suspense fallback={<p>Loading projects location...</p>}>
-          <Await
-            resolve={data}
-            errorElement={<p>Error loading package location!</p>}
-          >
-            <Outlet />
-          </Await>
-        </React.Suspense>
+        <Outlet />
       </div>
     </div>
   );

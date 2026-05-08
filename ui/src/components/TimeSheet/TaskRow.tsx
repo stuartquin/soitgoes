@@ -1,28 +1,34 @@
 import React, { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { format } from "date-fns";
-
-import * as models from "api/models";
 
 import TimeSlip from "components/TimeSheet/TimeSlip";
 import { TimeSheetType } from "components/TimeSheet/TimeSlipContext";
+import { Task } from "apiv3";
 
 interface Props {
-  task: models.Task;
-  project: models.Project;
+  task: Task;
   dateRange: Date[];
   timeSheet: TimeSheetType;
 }
 
-function Task({ task, timeSheet, project, dateRange }: Props) {
+export default function TaskRow({ task, timeSheet, dateRange }: Props) {
   const taskEntries = timeSheet[task.id || -1];
   const entries = useMemo(() => {
-    return dateRange
-      .map((date) => {
-        const dateStr = format(date, "yyyy-MM-dd");
-        return taskEntries[dateStr];
-      })
-      .filter((entry) => entry);
+    return dateRange.map((date) => {
+      const dateStr = format(date, "yyyy-MM-dd");
+      return (
+        taskEntries[dateStr] || {
+          timeSlip: {
+            project: task.project,
+            task: task.id,
+            hours: 0,
+            invoice: null,
+          },
+          date,
+        }
+      );
+    });
   }, [dateRange, taskEntries]);
 
   const url = `/time?task=${task.id}&date=${format(
@@ -47,5 +53,3 @@ function Task({ task, timeSheet, project, dateRange }: Props) {
     </div>
   );
 }
-
-export default Task;

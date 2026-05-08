@@ -1,23 +1,59 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import { User } from "api/models";
-import { getClient } from "apiClient";
+
+import { RouterProvider } from "@tanstack/react-router";
+
+import * as models from "api/models";
+import { getClient, removeToken } from "apiClient";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import { createRouter } from "@tanstack/react-router";
+
+import { routeTree } from "./routeTree.gen";
 import Login from "components/Login";
-import Main from "components/Main";
 
-import "./App.css";
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
 
-function App() {
-  const [user, setUser] = useState<User>();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 2 * 60 * 60 * 1000,
+    },
+  },
+});
+
+const onLogout = () => {
+  removeToken();
+  window.location.reload();
+};
+
+export const router = createRouter({
+  routeTree,
+  defaultPreload: "intent",
+  context: { onLogout, queryClient, user: null, projects: [] },
+});
+
+export default function App() {
+  const [projects, setProjects] = useState<models.Project[]>([]);
+  const [user, setUser] = useState<User | null>(null);
   const [loginRequired, setLoginRequired] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       setLoading(true);
       const api = getClient();
+
       try {
+        const response = await api.listProjects({});
+        setProjects(response.results || []);
+
         setUser(await api.retrieveUser());
       } catch (err) {
         console.error(err);
@@ -29,12 +65,18 @@ function App() {
     load();
   }, []);
 
-  return (
-    <div className="App">
-      {loginRequired && <Login />}
-      {user && <Main user={user} />}
-    </div>
+  console.log("loginRequired", loginRequired);
+
+  if (loading) return null;
+
+  return loginRequired ? (
+    <Login />
+  ) : (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider
+        router={router}
+        context={{ user, projects, onLogout, queryClient }}
+      />
+    </QueryClientProvider>
   );
 }
-
-export default App;

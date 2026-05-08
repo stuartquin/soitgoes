@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -96,7 +96,7 @@ export interface Project {
      * @type {string}
      * @memberof Project
      */
-    billingUnit?: ProjectBillingUnitEnum;
+    billingUnit?: ProjectBillingUnitEnum | null;
 }
 
 
@@ -114,12 +114,10 @@ export type ProjectBillingUnitEnum = typeof ProjectBillingUnitEnum[keyof typeof 
 /**
  * Check if a given object implements the Project interface.
  */
-export function instanceOfProject(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "name" in value;
-    isInstance = isInstance && "contact" in value;
-
-    return isInstance;
+export function instanceOfProject(value: object): value is Project {
+    if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('contact' in value) || value['contact'] === undefined) return false;
+    return true;
 }
 
 export function ProjectFromJSON(json: any): Project {
@@ -127,44 +125,46 @@ export function ProjectFromJSON(json: any): Project {
 }
 
 export function ProjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): Project {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'name': json['name'],
         'contact': json['contact'],
-        'createdAt': !exists(json, 'created_at') ? undefined : (new Date(json['created_at'])),
-        'uninvoicedHours': !exists(json, 'uninvoiced_hours') ? undefined : json['uninvoiced_hours'],
-        'totalPaid': !exists(json, 'total_paid') ? undefined : json['total_paid'],
-        'hourlyRate': !exists(json, 'hourly_rate') ? undefined : json['hourly_rate'],
-        'weeklyRate': !exists(json, 'weekly_rate') ? undefined : json['weekly_rate'],
-        'archived': !exists(json, 'archived') ? undefined : json['archived'],
-        'currency': !exists(json, 'currency') ? undefined : json['currency'],
-        'defaultTask': !exists(json, 'default_task') ? undefined : json['default_task'],
-        'nextSequenceNum': !exists(json, 'next_sequence_num') ? undefined : json['next_sequence_num'],
-        'billingUnit': !exists(json, 'billing_unit') ? undefined : json['billing_unit'],
+        'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
+        'uninvoicedHours': json['uninvoiced_hours'] == null ? undefined : json['uninvoiced_hours'],
+        'totalPaid': json['total_paid'] == null ? undefined : json['total_paid'],
+        'hourlyRate': json['hourly_rate'] == null ? undefined : json['hourly_rate'],
+        'weeklyRate': json['weekly_rate'] == null ? undefined : json['weekly_rate'],
+        'archived': json['archived'] == null ? undefined : json['archived'],
+        'currency': json['currency'] == null ? undefined : json['currency'],
+        'defaultTask': json['default_task'] == null ? undefined : json['default_task'],
+        'nextSequenceNum': json['next_sequence_num'] == null ? undefined : json['next_sequence_num'],
+        'billingUnit': json['billing_unit'] == null ? undefined : json['billing_unit'],
     };
 }
 
-export function ProjectToJSON(value?: Project | null): any {
-    if (value === undefined) {
-        return undefined;
+export function ProjectToJSON(json: any): Project {
+    return ProjectToJSONTyped(json, false);
+}
+
+export function ProjectToJSONTyped(value?: Omit<Project, 'id'|'created_at'|'uninvoiced_hours'|'total_paid'|'next_sequence_num'> | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'name': value.name,
-        'contact': value.contact,
-        'hourly_rate': value.hourlyRate,
-        'weekly_rate': value.weeklyRate,
-        'archived': value.archived,
-        'currency': value.currency,
-        'default_task': value.defaultTask,
-        'billing_unit': value.billingUnit,
+        'name': value['name'],
+        'contact': value['contact'],
+        'hourly_rate': value['hourlyRate'],
+        'weekly_rate': value['weeklyRate'],
+        'archived': value['archived'],
+        'currency': value['currency'],
+        'default_task': value['defaultTask'],
+        'billing_unit': value['billingUnit'],
     };
 }
 

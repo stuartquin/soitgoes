@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -46,10 +46,8 @@ export type TaskNotesInnerContentTypeEnum = typeof TaskNotesInnerContentTypeEnum
 /**
  * Check if a given object implements the TaskNotesInner interface.
  */
-export function instanceOfTaskNotesInner(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfTaskNotesInner(value: object): value is TaskNotesInner {
+    return true;
 }
 
 export function TaskNotesInnerFromJSON(json: any): TaskNotesInner {
@@ -57,27 +55,29 @@ export function TaskNotesInnerFromJSON(json: any): TaskNotesInner {
 }
 
 export function TaskNotesInnerFromJSONTyped(json: any, ignoreDiscriminator: boolean): TaskNotesInner {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'content': !exists(json, 'content') ? undefined : json['content'],
-        'contentType': !exists(json, 'content_type') ? undefined : json['content_type'],
+        'content': json['content'] == null ? undefined : json['content'],
+        'contentType': json['content_type'] == null ? undefined : json['content_type'],
     };
 }
 
-export function TaskNotesInnerToJSON(value?: TaskNotesInner | null): any {
-    if (value === undefined) {
-        return undefined;
+export function TaskNotesInnerToJSON(json: any): TaskNotesInner {
+    return TaskNotesInnerToJSONTyped(json, false);
+}
+
+export function TaskNotesInnerToJSONTyped(value?: TaskNotesInner | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'content': value.content,
-        'content_type': value.contentType,
+        'content': value['content'],
+        'content_type': value['contentType'],
     };
 }
 
