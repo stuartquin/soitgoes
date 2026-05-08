@@ -196,6 +196,22 @@ paths:
         description: The initial index from which to return the results.
         schema:
           type: integer
+      - name: status
+        required: false
+        in: query
+        description: Filter invoice summaries by status.
+        schema:
+          type: string
+          enum:
+          - DRAFT
+          - ISSUED
+          - PAID
+      - name: project
+        required: false
+        in: query
+        description: Filter by project ID.
+        schema:
+          type: integer
       responses:
         '200':
           content:

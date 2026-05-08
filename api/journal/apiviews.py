@@ -232,9 +232,12 @@ class ProjectSummary(generics.GenericAPIView):
 
     def get(self, request, pk=None):
         projects = get_allowed_projects(request)
+        if "project" in request.query_params:
+            projects = projects.filter(pk=request.query_params["project"])
+        status = request.query_params.get("status")
         data = {
             "unbilled": get_unbilled_summary(projects),
-            "invoices": get_invoices_summary(projects),
+            "invoices": get_invoices_summary(projects, status=status),
         }
         serializer = self.get_serializer(data)
         return Response(serializer.data)

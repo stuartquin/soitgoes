@@ -30,7 +30,14 @@ export const Route = createFileRoute("/invoices")({
   }) => {
     const [projects, summary, invoices] = await Promise.all([
       queryClient.fetchQuery(listProjectsOptions()),
-      queryClient.fetchQuery(listProjectSummariesOptions()),
+      queryClient.fetchQuery(
+        listProjectSummariesOptions({
+          query: {
+            ...(status ? { status } : {}),
+            ...(project ? { project } : {}),
+          },
+        })
+      ),
       queryClient.fetchQuery(
         listInvoicesOptions({
           query: {

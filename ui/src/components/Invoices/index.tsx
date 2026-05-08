@@ -4,6 +4,7 @@ import { Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { ensure } from "typeHelpers";
 import InvoiceRow from "components/Invoices/InvoiceRow";
 import InvoiceSummaryPanel from "components/Invoices/InvoiceSummaryPanel";
+import UnbilledProjectsPanel from "components/Invoices/UnbilledProjectsPanel";
 import Button from "components/Button";
 import SlideOver from "components/SlideOver";
 import { Invoice, Project, ProjectSummary } from "apiv3";
@@ -111,6 +112,11 @@ function Invoices({ projects, summary, invoices, filters }: Props) {
           Create Invoice
         </Button>
       </div>
+      <div className="px-2 sm:px-0">
+        <div className="lg:hidden my-4">
+          <UnbilledProjectsPanel summary={summary} />
+        </div>
+      </div>
       <div className="px-2 sm:px-0 flex flex-col lg:flex-row lg:gap-4">
         <div className="border-1 bg-gray-50 border-radius-sm my-4 lg:w-2/3">
           <div className="bg-gray-100 flex flex-grow flex-wrap py-2 text-gray-700 text-sm md:text-base text-left p-4 justify-between items-center">
@@ -120,7 +126,8 @@ function Invoices({ projects, summary, invoices, filters }: Props) {
             <InvoiceRow key={invoice.id} invoice={invoice} project={project} />
           ))}
         </div>
-        <div className="my-4 lg:w-1/3">
+        <div className="my-4 lg:w-1/3 space-y-4 hidden lg:block">
+          <UnbilledProjectsPanel summary={summary} />
           <InvoiceSummaryPanel summary={summary} />
         </div>
       </div>

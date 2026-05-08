@@ -523,6 +523,14 @@ export type ListProjectSummariesData = {
          * The initial index from which to return the results.
          */
         offset?: number;
+        /**
+         * Filter invoice summaries by status.
+         */
+        status?: 'DRAFT' | 'ISSUED' | 'PAID';
+        /**
+         * Filter by project ID.
+         */
+        project?: number;
     };
     url: '/api/projects/summary/';
 };

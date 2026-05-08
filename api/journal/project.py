@@ -77,11 +77,15 @@ def _get_totals(key, r):
     return invoiced, paid, invoiced - paid, count
 
 
-def get_invoices_summary(projects: QuerySet[Project]):
+def get_invoices_summary(projects: QuerySet[Project], status: str | None = None):
     six_months_ago = date.today() - timedelta(days=182)
 
+    base_filters: dict = {"project__in": projects}
+    if status:
+        base_filters["status"] = status
+
     all_results = (
-        Invoice.objects.filter(project__in=projects)
+        Invoice.objects.filter(**base_filters)
         .values("project")
         .annotate(
             total_invoiced=Coalesce(Sum("total_due"), Value(0.0)),
@@ -91,7 +95,7 @@ def get_invoices_summary(projects: QuerySet[Project]):
     )
 
     recent_results = (
-        Invoice.objects.filter(project__in=projects, issued_at__gte=six_months_ago)
+        Invoice.objects.filter(**base_filters, issued_at__gte=six_months_ago)
         .values("project")
         .annotate(
             total_invoiced=Coalesce(Sum("total_due"), Value(0.0)),
