@@ -48,7 +48,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: ${{ secrets.SSH_HOST_KEY }}
       - name: Push to Dokku Prod
-        if: startsWith( github.ref, 'refs/tags/v')
+        if: ${{ github.ref == 'refs/heads/master' }}
         run: |
           ssh dokku@cloud.stuartquin.com -t "dokku config:set --no-restart tracking GIT_BRANCH=${GITHUB_REF}"
           git remote add dokku dokku@cloud.stuartquin.com:tracking
@@ -72,7 +72,7 @@ jobs:
         run: npm run build --if-present
 
       - name: Deploy UI via SCP-action
-        if: startsWith( github.ref, 'refs/tags/v')
+        if: ${{ github.ref == 'refs/heads/master' }}
         uses: appleboy/scp-action@98930d398ce425af0148ea8a0e3295cd04fe2b7a
         with:
           host: cloud.stuartquin.com
