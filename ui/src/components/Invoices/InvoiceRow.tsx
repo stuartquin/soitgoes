@@ -5,6 +5,7 @@ import { InvoiceStatus, getInvoiceStatus, getStatusColor } from "invoices";
 import { formatCurrency } from "currency";
 import { Invoice, Project } from "apiv3";
 import { getDate } from "lib/date";
+import DownloadButton from "components/Invoices/DownloadButton";
 
 interface Props {
   invoice: Invoice;
@@ -33,16 +34,19 @@ function InvoiceRow({ invoice, project }: Props) {
           {format(issuedAt || new Date(), "yyyy-MM-dd")}
         </div>
       </div>
-      <div className="text-right">
-        <div className="text-sm md:text-lg text-gray-800">
-          {formatCurrency(invoice.total_due || 0)}
+      <div className="flex items-center">
+        <div className="text-right mr-4">
+          <div className="text-sm md:text-lg text-gray-800">
+            {formatCurrency(invoice.total_due || 0)}
+          </div>
+          <div className={`capitalize text-sm ${textClass}`}>
+            {status}
+            <span className="pl-1">
+              {format(date || new Date(), "yyyy-MM-dd")}
+            </span>
+          </div>
         </div>
-        <div className={`capitalize text-sm ${textClass}`}>
-          {status}
-          <span className="pl-1">
-            {format(date || new Date(), "yyyy-MM-dd")}
-          </span>
-        </div>
+        <DownloadButton invoiceId={invoice.id} pdfName={invoice.pdf_name} />
       </div>
     </Link>
   );

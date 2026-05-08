@@ -31,7 +31,6 @@ const getStatusDate = (
 
 function InvoiceDetail({ projects, projectId, invoiceId }: Props) {
   const queryClient = useQueryClient();
-  const [token, setToken] = useState<models.OneTimeToken>();
   const [invoice, setInvoice] = useState<models.Invoice>();
   const [isLoading, setIsLoading] = useState(true);
   const [tasks, setTasks] = useState<models.Task[]>([]);
@@ -56,8 +55,6 @@ function InvoiceDetail({ projects, projectId, invoiceId }: Props) {
 
       const modifierResponse = await api.listInvoiceModifiers({});
       setModifiers(modifierResponse.results || []);
-
-      setToken(await api.retrieveOneTimeToken());
 
       setIsLoading(false);
     };
@@ -92,7 +89,7 @@ function InvoiceDetail({ projects, projectId, invoiceId }: Props) {
         })
       );
       queryClient.invalidateQueries(
-        listInvoicesOptions({ query: { limit: 50 } })
+        listInvoicesOptions({ query: { limit: 30 } })
       );
     }
   }, [invoice, queryClient]);
@@ -111,7 +108,6 @@ function InvoiceDetail({ projects, projectId, invoiceId }: Props) {
   return !isLoading && invoice ? (
     <div>
       <InvoiceSummary
-        token={token}
         invoice={invoice}
         project={project}
         onSetPaid={handleSetPaid}

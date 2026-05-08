@@ -33,20 +33,27 @@ function InvoiceSummaryPanel({ summary }: Props) {
         paid: acc.paid + (entry.total_paid || 0),
         unpaid: acc.unpaid + (entry.total_unpaid || 0),
         count: acc.count + (entry.invoice_count || 0),
-        sixMonthInvoiced: acc.sixMonthInvoiced + (entry.six_month_total_invoiced || 0),
+        sixMonthInvoiced:
+          acc.sixMonthInvoiced + (entry.six_month_total_invoiced || 0),
         sixMonthPaid: acc.sixMonthPaid + (entry.six_month_total_paid || 0),
-        sixMonthUnpaid: acc.sixMonthUnpaid + (entry.six_month_total_unpaid || 0),
+        sixMonthUnpaid:
+          acc.sixMonthUnpaid + (entry.six_month_total_unpaid || 0),
         sixMonthCount: acc.sixMonthCount + (entry.six_month_invoice_count || 0),
       }),
       {
-        invoiced: 0, paid: 0, unpaid: 0, count: 0,
-        sixMonthInvoiced: 0, sixMonthPaid: 0, sixMonthUnpaid: 0, sixMonthCount: 0,
+        invoiced: 0,
+        paid: 0,
+        unpaid: 0,
+        count: 0,
+        sixMonthInvoiced: 0,
+        sixMonthPaid: 0,
+        sixMonthUnpaid: 0,
+        sixMonthCount: 0,
       }
     );
   }, [summary.invoices]);
 
-  const unpaidColor =
-    totals.unpaid > 0 ? "text-red-600" : "text-green-600";
+  const unpaidColor = totals.unpaid > 0 ? "text-red-600" : "text-green-600";
   const sixMonthUnpaidColor =
     totals.sixMonthUnpaid > 0 ? "text-red-600" : "text-green-600";
 
@@ -71,35 +78,7 @@ function InvoiceSummaryPanel({ summary }: Props) {
             value={formatCurrency(totals.sixMonthUnpaid)}
             className={sixMonthUnpaidColor}
           />
-          <SummaryRow
-            label="Invoices"
-            value={totals.sixMonthCount}
-          />
-        </div>
-      </div>
-      <div>
-        <h3 className="font-semibold text-gray-700 text-sm md:text-base mb-3">
-          All Time
-        </h3>
-        <div>
-          <SummaryRow
-            label="Invoiced"
-            value={formatCurrency(totals.invoiced)}
-          />
-          <SummaryRow
-            label="Paid"
-            value={formatCurrency(totals.paid)}
-            className="text-green-600"
-          />
-          <SummaryRow
-            label="Unpaid"
-            value={formatCurrency(totals.unpaid)}
-            className={unpaidColor}
-          />
-          <SummaryRow
-            label="Invoices"
-            value={totals.count}
-          />
+          <SummaryRow label="Invoices" value={totals.sixMonthCount} />
         </div>
       </div>
     </div>

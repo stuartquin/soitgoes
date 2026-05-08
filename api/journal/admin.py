@@ -35,7 +35,7 @@ class CompanyAdmin(admin.ModelAdmin):
 @admin.register(models.Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
     list_display = ('name', 'created_at')
-    list_filter = ('project', )
+    list_filter = ('project', 'status')
 
     def name(self, obj):
         return obj

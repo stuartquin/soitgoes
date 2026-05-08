@@ -24,10 +24,7 @@ export const Route = createFileRoute("/invoices")({
     };
   },
   loaderDeps: ({ search: { status, project } }) => ({ status, project }),
-  loader: async ({
-    deps: { status, project },
-    context: { queryClient },
-  }) => {
+  loader: async ({ deps: { status, project }, context: { queryClient } }) => {
     const [projects, summary, invoices] = await Promise.all([
       queryClient.fetchQuery(listProjectsOptions()),
       queryClient.fetchQuery(
@@ -41,7 +38,7 @@ export const Route = createFileRoute("/invoices")({
       queryClient.fetchQuery(
         listInvoicesOptions({
           query: {
-            limit: 100,
+            limit: 30,
             ...(status ? { status } : {}),
             ...(project ? { project } : {}),
           },
