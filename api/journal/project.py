@@ -70,13 +70,6 @@ def get_unbilled_summary(projects: QuerySet[Project]):
     )
 
 
-def _get_totals(key, r):
-    invoiced = r[key].get("total_invoiced", 0) or 0
-    paid = r[key].get("total_paid", 0) or 0
-    count = r[key].get("invoice_count", 0)
-    return invoiced, paid, invoiced - paid, count
-
-
 def get_invoices_summary(projects: QuerySet[Project], status: str | None = None):
     six_months_ago = date.today() - timedelta(days=182)
 
@@ -88,6 +81,7 @@ def get_invoices_summary(projects: QuerySet[Project], status: str | None = None)
         Invoice.objects.filter(**base_filters)
         .values("project")
         .annotate(
+            subtotal_invoiced=Coalesce(Sum("subtotal_due"), Value(0.0)),
             total_invoiced=Coalesce(Sum("total_due"), Value(0.0)),
             total_paid=Coalesce(Sum("total_paid"), Value(0.0)),
             invoice_count=Count("id"),
@@ -98,6 +92,7 @@ def get_invoices_summary(projects: QuerySet[Project], status: str | None = None)
         Invoice.objects.filter(**base_filters, issued_at__gte=six_months_ago)
         .values("project")
         .annotate(
+            subtotal_invoiced=Coalesce(Sum("subtotal_due"), Value(0.0)),
             total_invoiced=Coalesce(Sum("total_due"), Value(0.0)),
             total_paid=Coalesce(Sum("total_paid"), Value(0.0)),
             invoice_count=Count("id"),
@@ -106,7 +101,7 @@ def get_invoices_summary(projects: QuerySet[Project], status: str | None = None)
 
     totals = {r["project"]: r for r in all_results}
     recent = {r["project"]: r for r in recent_results}
-    empty = {"total_invoiced": 0, "total_paid": 0, "invoice_count": 0}
+    empty = {"total_invoiced": 0, "total_paid": 0, "invoice_count": 0, "subtotal_invoiced": 0}
 
     def _safe(lookup, pk):
         return lookup.get(pk, empty)
@@ -116,6 +111,7 @@ def get_invoices_summary(projects: QuerySet[Project], status: str | None = None)
             dict(
                 project=p,
                 total_invoiced=_safe(totals, p.pk)["total_invoiced"],
+                subtotal_invoiced=_safe(totals, p.pk)["subtotal_invoiced"],
                 total_paid=_safe(totals, p.pk)["total_paid"],
                 total_unpaid=(_safe(totals, p.pk)["total_invoiced"] or 0) - (_safe(totals, p.pk)["total_paid"] or 0),
                 invoice_count=_safe(totals, p.pk)["invoice_count"],

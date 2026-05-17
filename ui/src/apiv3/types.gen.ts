@@ -102,6 +102,7 @@ export type ProjectSummary = {
             billing_unit?: 'HOUR' | 'DAY' | 'WEEK';
         };
         readonly total_invoiced?: number;
+        readonly subtotal_invoiced?: number;
         readonly total_paid?: number;
         readonly total_unpaid?: number;
         readonly invoice_count?: number;
@@ -523,14 +524,6 @@ export type ListProjectSummariesData = {
          * The initial index from which to return the results.
          */
         offset?: number;
-        /**
-         * Filter invoice summaries by status.
-         */
-        status?: 'DRAFT' | 'ISSUED' | 'PAID';
-        /**
-         * Filter by project ID.
-         */
-        project?: number;
     };
     url: '/api/projects/summary/';
 };
@@ -630,14 +623,6 @@ export type ListInvoicesData = {
          * The initial index from which to return the results.
          */
         offset?: number;
-        /**
-         * Filter by invoice status.
-         */
-        status?: 'DRAFT' | 'ISSUED' | 'PAID';
-        /**
-         * Filter by project ID.
-         */
-        project?: number;
     };
     url: '/api/invoices/';
 };

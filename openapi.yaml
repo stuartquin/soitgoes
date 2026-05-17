@@ -196,22 +196,6 @@ paths:
         description: The initial index from which to return the results.
         schema:
           type: integer
-      - name: status
-        required: false
-        in: query
-        description: Filter invoice summaries by status.
-        schema:
-          type: string
-          enum:
-          - DRAFT
-          - ISSUED
-          - PAID
-      - name: project
-        required: false
-        in: query
-        description: Filter by project ID.
-        schema:
-          type: integer
       responses:
         '200':
           content:
@@ -352,22 +336,6 @@ paths:
         required: false
         in: query
         description: The initial index from which to return the results.
-        schema:
-          type: integer
-      - name: status
-        required: false
-        in: query
-        description: Filter by invoice status.
-        schema:
-          type: string
-          enum:
-          - DRAFT
-          - ISSUED
-          - PAID
-      - name: project
-        required: false
-        in: query
-        description: Filter by project ID.
         schema:
           type: integer
       responses:
@@ -1914,6 +1882,9 @@ components:
                 - contact
                 readOnly: true
               total_invoiced:
+                type: number
+                readOnly: true
+              subtotal_invoiced:
                 type: number
                 readOnly: true
               total_paid:

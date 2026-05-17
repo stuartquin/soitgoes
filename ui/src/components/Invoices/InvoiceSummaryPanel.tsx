@@ -29,7 +29,7 @@ function InvoiceSummaryPanel({ summary }: Props) {
   const totals = useMemo(() => {
     return summary.invoices.reduce(
       (acc, entry) => ({
-        invoiced: acc.invoiced + (entry.total_invoiced || 0),
+        invoiced: acc.invoiced + (entry.subtotal_invoiced || 0),
         paid: acc.paid + (entry.total_paid || 0),
         unpaid: acc.unpaid + (entry.total_unpaid || 0),
         count: acc.count + (entry.invoice_count || 0),
@@ -60,16 +60,31 @@ function InvoiceSummaryPanel({ summary }: Props) {
   return (
     <div className="border bg-gray-50 rounded p-4 space-y-5">
       <div>
-        <h3 className="font-semibold text-gray-700 text-sm md:text-base mb-3">
-          Last 6 Months
-        </h3>
+        <div className="mb-3 flex justify-between items-center">
+          <h3 className="font-semibold text-gray-700 text-sm md:text-base">
+            Last 6 Months
+          </h3>
+          <div className="text-sm text-gray-500">
+            ({totals.sixMonthCount} invoices)
+          </div>
+        </div>
         <div>
           <SummaryRow
             label="Invoiced"
             value={formatCurrency(totals.sixMonthInvoiced)}
           />
           <SummaryRow
-            label="Paid"
+            label="Average weekly"
+            value={formatCurrency(totals.sixMonthPaid / 26)}
+            className="text-gray-500"
+          />
+          <SummaryRow
+            label="Average monthly"
+            value={formatCurrency(totals.sixMonthPaid / 6)}
+            className="text-gray-500"
+          />
+          <SummaryRow
+            label="Paid (+VAT)"
             value={formatCurrency(totals.sixMonthPaid)}
             className="text-green-600"
           />
@@ -78,7 +93,6 @@ function InvoiceSummaryPanel({ summary }: Props) {
             value={formatCurrency(totals.sixMonthUnpaid)}
             className={sixMonthUnpaidColor}
           />
-          <SummaryRow label="Invoices" value={totals.sixMonthCount} />
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ Name | Type
 ------------ | -------------
 `project` | [ProjectSummaryUnbilledInnerProject](ProjectSummaryUnbilledInnerProject.md)
 `totalInvoiced` | number
+`subtotalInvoiced` | number
 `totalPaid` | number
 `totalUnpaid` | number
 `invoiceCount` | number
@@ -25,6 +26,7 @@ import type { ProjectSummaryInvoicesInner } from ''
 const example = {
   "project": null,
   "totalInvoiced": null,
+  "subtotalInvoiced": null,
   "totalPaid": null,
   "totalUnpaid": null,
   "invoiceCount": null,

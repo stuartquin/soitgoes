@@ -44,6 +44,12 @@ export interface ProjectSummaryInvoicesInner {
      * @type {number}
      * @memberof ProjectSummaryInvoicesInner
      */
+    readonly subtotalInvoiced?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ProjectSummaryInvoicesInner
+     */
     readonly totalPaid?: number;
     /**
      * 
@@ -102,6 +108,7 @@ export function ProjectSummaryInvoicesInnerFromJSONTyped(json: any, ignoreDiscri
         
         'project': json['project'] == null ? undefined : ProjectSummaryUnbilledInnerProjectFromJSON(json['project']),
         'totalInvoiced': json['total_invoiced'] == null ? undefined : json['total_invoiced'],
+        'subtotalInvoiced': json['subtotal_invoiced'] == null ? undefined : json['subtotal_invoiced'],
         'totalPaid': json['total_paid'] == null ? undefined : json['total_paid'],
         'totalUnpaid': json['total_unpaid'] == null ? undefined : json['total_unpaid'],
         'invoiceCount': json['invoice_count'] == null ? undefined : json['invoice_count'],
@@ -116,7 +123,7 @@ export function ProjectSummaryInvoicesInnerToJSON(json: any): ProjectSummaryInvo
     return ProjectSummaryInvoicesInnerToJSONTyped(json, false);
 }
 
-export function ProjectSummaryInvoicesInnerToJSONTyped(value?: Omit<ProjectSummaryInvoicesInner, 'total_invoiced'|'total_paid'|'total_unpaid'|'invoice_count'|'six_month_total_invoiced'|'six_month_total_paid'|'six_month_total_unpaid'|'six_month_invoice_count'> | null, ignoreDiscriminator: boolean = false): any {
+export function ProjectSummaryInvoicesInnerToJSONTyped(value?: Omit<ProjectSummaryInvoicesInner, 'total_invoiced'|'subtotal_invoiced'|'total_paid'|'total_unpaid'|'invoice_count'|'six_month_total_invoiced'|'six_month_total_paid'|'six_month_total_unpaid'|'six_month_invoice_count'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

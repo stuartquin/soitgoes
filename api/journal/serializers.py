@@ -233,6 +233,7 @@ class ProjectUnbilledSummarySerializer(serializers.Serializer):
 class ProjectInvoicesSummarySerializer(serializers.Serializer):
     project = ProjectSerializer(read_only=True)
     total_invoiced = serializers.FloatField(read_only=True)
+    subtotal_invoiced = serializers.FloatField(read_only=True)
     total_paid = serializers.FloatField(read_only=True)
     total_unpaid = serializers.FloatField(read_only=True)
     invoice_count = serializers.IntegerField(read_only=True)
