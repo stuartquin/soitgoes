@@ -22,18 +22,22 @@ function InvoiceRow({ invoice, project }: Props) {
   const date = status === InvoiceStatus.Paid ? paidAt : dueDate;
 
   return (
-    <Link
-      to={`/invoices/${invoice.project}/${invoice.id}`}
+    <div
       className={`cursor-pointer border-l-4 flex hover:bg-blue-50 justify-between my-2 py-3 px-4 ${borderClass}`}
     >
-      <div className="flex-grow">
-        <div className="text-gray-800 text-sm md:text-lg">
-          #{invoice.sequence_num} {project.name}
+      <Link
+        to={`/invoices/${invoice.project}/${invoice.id}`}
+        className="flex-grow"
+      >
+        <div className="flex-grow">
+          <div className="text-gray-800 text-sm md:text-lg">
+            #{invoice.sequence_num} {project.name}
+          </div>
+          <div className="text-gray-500 text-sm">
+            {format(issuedAt || new Date(), "yyyy-MM-dd")}
+          </div>
         </div>
-        <div className="text-gray-500 text-sm">
-          {format(issuedAt || new Date(), "yyyy-MM-dd")}
-        </div>
-      </div>
+      </Link>
       <div className="flex items-center">
         <div className="text-right mr-4">
           <div className="text-sm md:text-lg text-gray-800">
@@ -46,9 +50,9 @@ function InvoiceRow({ invoice, project }: Props) {
             </span>
           </div>
         </div>
-        <DownloadButton invoiceId={invoice.id} pdfName={invoice.pdf_name} />
       </div>
-    </Link>
+      <DownloadButton invoiceId={invoice.id} pdfName={invoice.pdf_name} />
+    </div>
   );
 }
 

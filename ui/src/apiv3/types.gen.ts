@@ -85,33 +85,13 @@ export type ProjectSummary = {
             billing_unit?: 'HOUR' | 'DAY' | 'WEEK';
         };
     }>;
-    invoices: Array<{
-        readonly project?: {
-            readonly id?: number;
-            name: string;
-            contact: number;
-            readonly created_at?: string;
-            readonly uninvoiced_hours?: number;
-            readonly total_paid?: number;
-            hourly_rate?: number;
-            weekly_rate?: number | null;
-            archived?: boolean;
-            currency?: string;
-            default_task?: number | null;
-            readonly next_sequence_num?: string;
-            billing_unit?: 'HOUR' | 'DAY' | 'WEEK';
-        };
-        readonly total_invoiced?: number;
+    invoices: {
         readonly subtotal_invoiced?: number;
+        readonly total_invoiced?: number;
         readonly total_paid?: number;
         readonly total_unpaid?: number;
         readonly invoice_count?: number;
-        readonly six_month_subtotal_invoiced?: number;
-        readonly six_month_total_invoiced?: number;
-        readonly six_month_total_paid?: number;
-        readonly six_month_total_unpaid?: number;
-        readonly six_month_invoice_count?: number;
-    }>;
+    };
 };
 
 export type Invoice = {
@@ -296,7 +276,6 @@ export type ProjectWritable = {
 
 export type ProjectSummaryWritable = {
     unbilled: Array<unknown>;
-    invoices: Array<unknown>;
 };
 
 export type InvoiceWritable = {

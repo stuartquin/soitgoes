@@ -77,21 +77,9 @@ def get_invoices_summary(projects: QuerySet[Project], status: str | None = None)
     if status:
         base_filters["status"] = status
 
-    all_results = (
-        Invoice.objects.filter(**base_filters)
-        .values("project")
-        .annotate(
-            subtotal_invoiced=Coalesce(Sum("subtotal_due"), Value(0.0)),
-            total_invoiced=Coalesce(Sum("total_due"), Value(0.0)),
-            total_paid=Coalesce(Sum("total_paid"), Value(0.0)),
-            invoice_count=Count("id"),
-        )
-    )
-
     recent_results = (
         Invoice.objects.filter(**base_filters, issued_at__gte=six_months_ago)
-        .values("project")
-        .annotate(
+        .aggregate(
             subtotal_invoiced=Coalesce(Sum("subtotal_due"), Value(0.0)),
             total_invoiced=Coalesce(Sum("total_due"), Value(0.0)),
             total_paid=Coalesce(Sum("total_paid"), Value(0.0)),
@@ -99,30 +87,4 @@ def get_invoices_summary(projects: QuerySet[Project], status: str | None = None)
         )
     )
 
-    totals = {r["project"]: r for r in all_results}
-    recent = {r["project"]: r for r in recent_results}
-    empty = {"total_invoiced": 0, "total_paid": 0, "invoice_count": 0, "subtotal_invoiced": 0}
-
-    def _safe(lookup, pk):
-        return lookup.get(pk, empty)
-
-    return sorted(
-        [
-            dict(
-                project=p,
-                total_invoiced=_safe(totals, p.pk)["total_invoiced"],
-                subtotal_invoiced=_safe(totals, p.pk)["subtotal_invoiced"],
-                total_paid=_safe(totals, p.pk)["total_paid"],
-                total_unpaid=(_safe(totals, p.pk)["total_invoiced"] or 0) - (_safe(totals, p.pk)["total_paid"] or 0),
-                invoice_count=_safe(totals, p.pk)["invoice_count"],
-                six_month_subtotal_invoiced=_safe(recent, p.pk)["total_invoiced"],
-                six_month_total_invoiced=_safe(recent, p.pk)["total_invoiced"],
-                six_month_total_paid=_safe(recent, p.pk)["total_paid"],
-                six_month_total_unpaid=(_safe(recent, p.pk)["total_invoiced"] or 0) - (_safe(recent, p.pk)["total_paid"] or 0),
-                six_month_invoice_count=_safe(recent, p.pk)["invoice_count"],
-            )
-            for p in projects
-        ],
-        key=lambda a: a["total_invoiced"],
-        reverse=True,
-    )
+    return recent_results

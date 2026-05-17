@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { formatCurrency } from "currency";
 import { ProjectSummary } from "apiv3";
 
@@ -26,36 +25,11 @@ function SummaryRow({
 }
 
 function InvoiceSummaryPanel({ summary }: Props) {
-  const totals = useMemo(() => {
-    return summary.invoices.reduce(
-      (acc, entry) => ({
-        invoiced: acc.invoiced + (entry.subtotal_invoiced || 0),
-        paid: acc.paid + (entry.total_paid || 0),
-        unpaid: acc.unpaid + (entry.total_unpaid || 0),
-        count: acc.count + (entry.invoice_count || 0),
-        sixMonthInvoiced:
-          acc.sixMonthInvoiced + (entry.six_month_subtotal_invoiced || 0),
-        sixMonthPaid: acc.sixMonthPaid + (entry.six_month_total_paid || 0),
-        sixMonthUnpaid:
-          acc.sixMonthUnpaid + (entry.six_month_total_unpaid || 0),
-        sixMonthCount: acc.sixMonthCount + (entry.six_month_invoice_count || 0),
-      }),
-      {
-        invoiced: 0,
-        paid: 0,
-        unpaid: 0,
-        count: 0,
-        sixMonthInvoiced: 0,
-        sixMonthPaid: 0,
-        sixMonthUnpaid: 0,
-        sixMonthCount: 0,
-      }
-    );
-  }, [summary.invoices]);
+  const { invoices } = summary;
 
-  const unpaidColor = totals.unpaid > 0 ? "text-red-600" : "text-green-600";
-  const sixMonthUnpaidColor =
-    totals.sixMonthUnpaid > 0 ? "text-red-600" : "text-green-600";
+  const unPaid = (invoices.total_invoiced || 0) - (invoices.total_paid || 0);
+  const sixMonthUnpaidColor = unPaid > 0 ? "text-red-600" : "text-green-600";
+  const sixMonthInvoiced = invoices?.subtotal_invoiced || 0;
 
   return (
     <div className="border bg-gray-50 rounded p-4 space-y-5">
@@ -65,32 +39,32 @@ function InvoiceSummaryPanel({ summary }: Props) {
             Last 6 Months
           </h3>
           <div className="text-sm text-gray-500">
-            ({totals.sixMonthCount} invoices)
+            ({invoices.invoice_count} invoices)
           </div>
         </div>
         <div>
           <SummaryRow
             label="Invoiced"
-            value={formatCurrency(totals.sixMonthInvoiced)}
+            value={formatCurrency(sixMonthInvoiced)}
           />
           <SummaryRow
             label="Average weekly"
-            value={formatCurrency(totals.sixMonthInvoiced / 26)}
+            value={formatCurrency(sixMonthInvoiced / 26)}
             className="text-gray-500"
           />
           <SummaryRow
             label="Average monthly"
-            value={formatCurrency(totals.sixMonthInvoiced / 6)}
+            value={formatCurrency(sixMonthInvoiced / 6)}
             className="text-gray-500"
           />
           <SummaryRow
-            label="Paid (+VAT)"
-            value={formatCurrency(totals.sixMonthPaid)}
+            label="Paid (inc VAT)"
+            value={formatCurrency(invoices.total_paid || 0)}
             className="text-green-600"
           />
           <SummaryRow
-            label="Unpaid"
-            value={formatCurrency(totals.sixMonthUnpaid)}
+            label="Unpaid (inc VAT)"
+            value={formatCurrency(unPaid || 0)}
             className={sixMonthUnpaidColor}
           />
         </div>

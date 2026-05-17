@@ -231,21 +231,14 @@ class ProjectUnbilledSummarySerializer(serializers.Serializer):
     previous_invoice = InvoiceSerializer(read_only=True)
 
 class ProjectInvoicesSummarySerializer(serializers.Serializer):
-    project = ProjectSerializer(read_only=True)
-    total_invoiced = serializers.FloatField(read_only=True)
     subtotal_invoiced = serializers.FloatField(read_only=True)
+    total_invoiced = serializers.FloatField(read_only=True)
     total_paid = serializers.FloatField(read_only=True)
-    total_unpaid = serializers.FloatField(read_only=True)
     invoice_count = serializers.IntegerField(read_only=True)
-    six_month_subtotal_invoiced = serializers.FloatField(read_only=True)
-    six_month_total_invoiced = serializers.FloatField(read_only=True)
-    six_month_total_paid = serializers.FloatField(read_only=True)
-    six_month_total_unpaid = serializers.FloatField(read_only=True)
-    six_month_invoice_count = serializers.IntegerField(read_only=True)
 
 class ProjectSummarySerializer(serializers.Serializer):
     unbilled = ProjectUnbilledSummarySerializer(many=True)
-    invoices = ProjectInvoicesSummarySerializer(many=True)
+    invoices = ProjectInvoicesSummarySerializer()
 
 
 class TaskSummarySerializer(serializers.Serializer):

@@ -22,7 +22,7 @@ export * from './Note';
 export * from './OneTimeToken';
 export * from './Project';
 export * from './ProjectSummary';
-export * from './ProjectSummaryInvoicesInner';
+export * from './ProjectSummaryInvoices';
 export * from './ProjectSummaryUnbilledInner';
 export * from './ProjectSummaryUnbilledInnerPreviousInvoice';
 export * from './ProjectSummaryUnbilledInnerProject';

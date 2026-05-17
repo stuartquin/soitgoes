@@ -7,7 +7,7 @@
 Name | Type
 ------------ | -------------
 `unbilled` | [Array&lt;ProjectSummaryUnbilledInner&gt;](ProjectSummaryUnbilledInner.md)
-`invoices` | [Array&lt;ProjectSummaryInvoicesInner&gt;](ProjectSummaryInvoicesInner.md)
+`invoices` | [ProjectSummaryInvoices](ProjectSummaryInvoices.md)
 
 ## Example
 

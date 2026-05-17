@@ -1826,91 +1826,23 @@ components:
                 - tasks
                 readOnly: true
         invoices:
-          type: array
-          items:
-            type: object
-            properties:
-              project:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    readOnly: true
-                  name:
-                    type: string
-                    maxLength: 512
-                  contact:
-                    type: integer
-                  created_at:
-                    type: string
-                    format: date-time
-                    readOnly: true
-                  uninvoiced_hours:
-                    type: integer
-                    readOnly: true
-                  total_paid:
-                    type: integer
-                    readOnly: true
-                  hourly_rate:
-                    type: number
-                  weekly_rate:
-                    type: number
-                    multipleOf: 0.001
-                    maximum: 10000000
-                    minimum: -10000000
-                    nullable: true
-                  archived:
-                    type: boolean
-                  currency:
-                    type: string
-                    maxLength: 3
-                  default_task:
-                    type: integer
-                    nullable: true
-                  next_sequence_num:
-                    type: string
-                    readOnly: true
-                  billing_unit:
-                    enum:
-                    - HOUR
-                    - DAY
-                    - WEEK
-                    type: string
-                    nullable: true
-                required:
-                - name
-                - contact
-                readOnly: true
-              total_invoiced:
-                type: number
-                readOnly: true
-              subtotal_invoiced:
-                type: number
-                readOnly: true
-              total_paid:
-                type: number
-                readOnly: true
-              total_unpaid:
-                type: number
-                readOnly: true
-              invoice_count:
-                type: integer
-                readOnly: true
-              six_month_subtotal_invoiced:
-                type: number
-                readOnly: true
-              six_month_total_invoiced:
-                type: number
-                readOnly: true
-              six_month_total_paid:
-                type: number
-                readOnly: true
-              six_month_total_unpaid:
-                type: number
-                readOnly: true
-              six_month_invoice_count:
-                type: integer
-                readOnly: true
+          type: object
+          properties:
+            subtotal_invoiced:
+              type: number
+              readOnly: true
+            total_invoiced:
+              type: number
+              readOnly: true
+            total_paid:
+              type: number
+              readOnly: true
+            total_unpaid:
+              type: number
+              readOnly: true
+            invoice_count:
+              type: integer
+              readOnly: true
       required:
       - unbilled
       - invoices

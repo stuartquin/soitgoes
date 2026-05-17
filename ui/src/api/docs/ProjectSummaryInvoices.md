@@ -1,42 +1,30 @@
 
-# ProjectSummaryInvoicesInner
+# ProjectSummaryInvoices
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`project` | [ProjectSummaryUnbilledInnerProject](ProjectSummaryUnbilledInnerProject.md)
-`totalInvoiced` | number
 `subtotalInvoiced` | number
+`totalInvoiced` | number
 `totalPaid` | number
 `totalUnpaid` | number
 `invoiceCount` | number
-`sixMonthSubtotalInvoiced` | number
-`sixMonthTotalInvoiced` | number
-`sixMonthTotalPaid` | number
-`sixMonthTotalUnpaid` | number
-`sixMonthInvoiceCount` | number
 
 ## Example
 
 ```typescript
-import type { ProjectSummaryInvoicesInner } from ''
+import type { ProjectSummaryInvoices } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "project": null,
-  "totalInvoiced": null,
   "subtotalInvoiced": null,
+  "totalInvoiced": null,
   "totalPaid": null,
   "totalUnpaid": null,
   "invoiceCount": null,
-  "sixMonthSubtotalInvoiced": null,
-  "sixMonthTotalInvoiced": null,
-  "sixMonthTotalPaid": null,
-  "sixMonthTotalUnpaid": null,
-  "sixMonthInvoiceCount": null,
-} satisfies ProjectSummaryInvoicesInner
+} satisfies ProjectSummaryInvoices
 
 console.log(example)
 
@@ -45,7 +33,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as ProjectSummaryInvoicesInner
+const exampleParsed = JSON.parse(exampleJSON) as ProjectSummaryInvoices
 console.log(exampleParsed)
 ```
 

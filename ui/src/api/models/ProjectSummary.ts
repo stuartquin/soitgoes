@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { ProjectSummaryInvoicesInner } from './ProjectSummaryInvoicesInner';
+import type { ProjectSummaryInvoices } from './ProjectSummaryInvoices';
 import {
-    ProjectSummaryInvoicesInnerFromJSON,
-    ProjectSummaryInvoicesInnerFromJSONTyped,
-    ProjectSummaryInvoicesInnerToJSON,
-    ProjectSummaryInvoicesInnerToJSONTyped,
-} from './ProjectSummaryInvoicesInner';
+    ProjectSummaryInvoicesFromJSON,
+    ProjectSummaryInvoicesFromJSONTyped,
+    ProjectSummaryInvoicesToJSON,
+    ProjectSummaryInvoicesToJSONTyped,
+} from './ProjectSummaryInvoices';
 import type { ProjectSummaryUnbilledInner } from './ProjectSummaryUnbilledInner';
 import {
     ProjectSummaryUnbilledInnerFromJSON,
@@ -42,10 +42,10 @@ export interface ProjectSummary {
     unbilled: Array<ProjectSummaryUnbilledInner>;
     /**
      * 
-     * @type {Array<ProjectSummaryInvoicesInner>}
+     * @type {ProjectSummaryInvoices}
      * @memberof ProjectSummary
      */
-    invoices: Array<ProjectSummaryInvoicesInner>;
+    invoices: ProjectSummaryInvoices;
 }
 
 /**
@@ -68,7 +68,7 @@ export function ProjectSummaryFromJSONTyped(json: any, ignoreDiscriminator: bool
     return {
         
         'unbilled': ((json['unbilled'] as Array<any>).map(ProjectSummaryUnbilledInnerFromJSON)),
-        'invoices': ((json['invoices'] as Array<any>).map(ProjectSummaryInvoicesInnerFromJSON)),
+        'invoices': ProjectSummaryInvoicesFromJSON(json['invoices']),
     };
 }
 
@@ -84,7 +84,7 @@ export function ProjectSummaryToJSONTyped(value?: ProjectSummary | null, ignoreD
     return {
         
         'unbilled': ((value['unbilled'] as Array<any>).map(ProjectSummaryUnbilledInnerToJSON)),
-        'invoices': ((value['invoices'] as Array<any>).map(ProjectSummaryInvoicesInnerToJSON)),
+        'invoices': ProjectSummaryInvoicesToJSON(value['invoices']),
     };
 }
 
