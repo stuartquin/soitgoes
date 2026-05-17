@@ -68,6 +68,12 @@ export interface ProjectSummaryInvoicesInner {
      * @type {number}
      * @memberof ProjectSummaryInvoicesInner
      */
+    readonly sixMonthSubtotalInvoiced?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ProjectSummaryInvoicesInner
+     */
     readonly sixMonthTotalInvoiced?: number;
     /**
      * 
@@ -112,6 +118,7 @@ export function ProjectSummaryInvoicesInnerFromJSONTyped(json: any, ignoreDiscri
         'totalPaid': json['total_paid'] == null ? undefined : json['total_paid'],
         'totalUnpaid': json['total_unpaid'] == null ? undefined : json['total_unpaid'],
         'invoiceCount': json['invoice_count'] == null ? undefined : json['invoice_count'],
+        'sixMonthSubtotalInvoiced': json['six_month_subtotal_invoiced'] == null ? undefined : json['six_month_subtotal_invoiced'],
         'sixMonthTotalInvoiced': json['six_month_total_invoiced'] == null ? undefined : json['six_month_total_invoiced'],
         'sixMonthTotalPaid': json['six_month_total_paid'] == null ? undefined : json['six_month_total_paid'],
         'sixMonthTotalUnpaid': json['six_month_total_unpaid'] == null ? undefined : json['six_month_total_unpaid'],
@@ -123,7 +130,7 @@ export function ProjectSummaryInvoicesInnerToJSON(json: any): ProjectSummaryInvo
     return ProjectSummaryInvoicesInnerToJSONTyped(json, false);
 }
 
-export function ProjectSummaryInvoicesInnerToJSONTyped(value?: Omit<ProjectSummaryInvoicesInner, 'total_invoiced'|'subtotal_invoiced'|'total_paid'|'total_unpaid'|'invoice_count'|'six_month_total_invoiced'|'six_month_total_paid'|'six_month_total_unpaid'|'six_month_invoice_count'> | null, ignoreDiscriminator: boolean = false): any {
+export function ProjectSummaryInvoicesInnerToJSONTyped(value?: Omit<ProjectSummaryInvoicesInner, 'total_invoiced'|'subtotal_invoiced'|'total_paid'|'total_unpaid'|'invoice_count'|'six_month_subtotal_invoiced'|'six_month_total_invoiced'|'six_month_total_paid'|'six_month_total_unpaid'|'six_month_invoice_count'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

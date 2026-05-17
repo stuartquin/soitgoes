@@ -1896,6 +1896,9 @@ components:
               invoice_count:
                 type: integer
                 readOnly: true
+              six_month_subtotal_invoiced:
+                type: number
+                readOnly: true
               six_month_total_invoiced:
                 type: number
                 readOnly: true

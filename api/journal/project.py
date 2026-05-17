@@ -115,6 +115,7 @@ def get_invoices_summary(projects: QuerySet[Project], status: str | None = None)
                 total_paid=_safe(totals, p.pk)["total_paid"],
                 total_unpaid=(_safe(totals, p.pk)["total_invoiced"] or 0) - (_safe(totals, p.pk)["total_paid"] or 0),
                 invoice_count=_safe(totals, p.pk)["invoice_count"],
+                six_month_subtotal_invoiced=_safe(recent, p.pk)["total_invoiced"],
                 six_month_total_invoiced=_safe(recent, p.pk)["total_invoiced"],
                 six_month_total_paid=_safe(recent, p.pk)["total_paid"],
                 six_month_total_unpaid=(_safe(recent, p.pk)["total_invoiced"] or 0) - (_safe(recent, p.pk)["total_paid"] or 0),

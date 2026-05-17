@@ -12,6 +12,7 @@ Name | Type
 `totalPaid` | number
 `totalUnpaid` | number
 `invoiceCount` | number
+`sixMonthSubtotalInvoiced` | number
 `sixMonthTotalInvoiced` | number
 `sixMonthTotalPaid` | number
 `sixMonthTotalUnpaid` | number
@@ -30,6 +31,7 @@ const example = {
   "totalPaid": null,
   "totalUnpaid": null,
   "invoiceCount": null,
+  "sixMonthSubtotalInvoiced": null,
   "sixMonthTotalInvoiced": null,
   "sixMonthTotalPaid": null,
   "sixMonthTotalUnpaid": null,

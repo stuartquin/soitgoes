@@ -106,6 +106,7 @@ export type ProjectSummary = {
         readonly total_paid?: number;
         readonly total_unpaid?: number;
         readonly invoice_count?: number;
+        readonly six_month_subtotal_invoiced?: number;
         readonly six_month_total_invoiced?: number;
         readonly six_month_total_paid?: number;
         readonly six_month_total_unpaid?: number;

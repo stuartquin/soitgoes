@@ -34,7 +34,7 @@ function InvoiceSummaryPanel({ summary }: Props) {
         unpaid: acc.unpaid + (entry.total_unpaid || 0),
         count: acc.count + (entry.invoice_count || 0),
         sixMonthInvoiced:
-          acc.sixMonthInvoiced + (entry.six_month_total_invoiced || 0),
+          acc.sixMonthInvoiced + (entry.six_month_subtotal_invoiced || 0),
         sixMonthPaid: acc.sixMonthPaid + (entry.six_month_total_paid || 0),
         sixMonthUnpaid:
           acc.sixMonthUnpaid + (entry.six_month_total_unpaid || 0),
@@ -75,12 +75,12 @@ function InvoiceSummaryPanel({ summary }: Props) {
           />
           <SummaryRow
             label="Average weekly"
-            value={formatCurrency(totals.sixMonthPaid / 26)}
+            value={formatCurrency(totals.sixMonthInvoiced / 26)}
             className="text-gray-500"
           />
           <SummaryRow
             label="Average monthly"
-            value={formatCurrency(totals.sixMonthPaid / 6)}
+            value={formatCurrency(totals.sixMonthInvoiced / 6)}
             className="text-gray-500"
           />
           <SummaryRow
