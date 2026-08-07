@@ -1,5 +1,5 @@
 from django.urls import path
-from . import apiviews, views
+from . import apiviews, tracked_time_views, views
 
 urlpatterns = [
     path(r"api/projects/", apiviews.ProjectList.as_view()),
@@ -8,6 +8,16 @@ urlpatterns = [
     path(r"api/invoices/", apiviews.InvoiceListCreate.as_view()),
     path(r"api/timeslips/", apiviews.TimeSlipList.as_view(), name="timeslips-list"),
     path(r"api/timeslips/<int:pk>", apiviews.TimeSlipDetail.as_view()),
+    path(
+        r"api/tracked-times/",
+        tracked_time_views.TrackedTimeList.as_view(),
+        name="tracked-times-list",
+    ),
+    path(
+        r"api/tracked-times/<int:pk>",
+        tracked_time_views.TrackedTimeDetail.as_view(),
+        name="tracked-times-detail",
+    ),
     path(r"api/invoices/<int:pk>", apiviews.InvoiceDetail.as_view()),
     path(r"api/invoices/<int:pk>/pdf", apiviews.InvoicePDF.as_view()),
     path(r"api/invoices/zip", apiviews.BulkInvoicePDF.as_view()),

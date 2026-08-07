@@ -53,6 +53,21 @@ class HasTimeslipAccess(BasePermission):
         return request.user.id in users
 
 
+class HasTrackedTimeAccess(BasePermission):
+    def has_permission(self, request, view):
+        if request.method == "GET":
+            return True
+
+        if "project" in request.data:
+            project_ids = {request.data["project"]}
+        else:
+            project_ids = {data["project"] for data in request.data}
+
+        projects = models.Project.objects.filter(id__in=project_ids)
+        users = {u.id for p in projects for u in p.account.users.all()}
+        return request.user.id in users
+
+
 class HasTaskAccess(BasePermission):
     def has_object_permission(self, request, view, task: models.Task):
         return models.Project.objects.filter(

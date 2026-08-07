@@ -30,6 +30,7 @@ import type {
   ListProjects200Response,
   ListTasks200Response,
   ListTimeSlips200Response,
+  ListTrackedTimes200Response,
   Login,
   Note,
   OneTimeToken,
@@ -38,6 +39,7 @@ import type {
   Task,
   TaskSummary,
   TimeSlip,
+  TrackedTime,
   User,
   Version,
 } from '../models/index';
@@ -72,6 +74,8 @@ import {
     ListTasks200ResponseToJSON,
     ListTimeSlips200ResponseFromJSON,
     ListTimeSlips200ResponseToJSON,
+    ListTrackedTimes200ResponseFromJSON,
+    ListTrackedTimes200ResponseToJSON,
     LoginFromJSON,
     LoginToJSON,
     NoteFromJSON,
@@ -88,6 +92,8 @@ import {
     TaskSummaryToJSON,
     TimeSlipFromJSON,
     TimeSlipToJSON,
+    TrackedTimeFromJSON,
+    TrackedTimeToJSON,
     UserFromJSON,
     UserToJSON,
     VersionFromJSON,
@@ -130,6 +136,10 @@ export interface CreateTimeSlipRequest {
     timeSlip?: Omit<TimeSlip, 'id'|'cost'>;
 }
 
+export interface CreateTrackedTimeRequest {
+    trackedTime?: Omit<TrackedTime, 'id'|'created_at'|'duration'>;
+}
+
 export interface DestroyCompanyRequest {
     id: string;
 }
@@ -156,6 +166,10 @@ export interface DestroyTaskRequest {
 }
 
 export interface DestroyTimeSlipRequest {
+    id: string;
+}
+
+export interface DestroyTrackedTimeRequest {
     id: string;
 }
 
@@ -225,6 +239,17 @@ export interface ListTimeSlipsRequest {
     noInvoice?: string;
 }
 
+export interface ListTrackedTimesRequest {
+    limit?: number;
+    offset?: number;
+    project?: string;
+    task?: string;
+    timeSlip?: string;
+    start?: string;
+    end?: string;
+    open?: string;
+}
+
 export interface PartialUpdateCompanyRequest {
     id: string;
     company?: Omit<Company, 'id'>;
@@ -261,6 +286,11 @@ export interface PartialUpdateTimeSlipRequest {
     timeSlip?: Omit<TimeSlip, 'id'|'cost'>;
 }
 
+export interface PartialUpdateTrackedTimeRequest {
+    id: string;
+    trackedTime?: Omit<TrackedTime, 'id'|'created_at'|'duration'>;
+}
+
 export interface RetrieveCompanyRequest {
     id: string;
 }
@@ -291,6 +321,10 @@ export interface RetrieveTaskSummaryRequest {
 }
 
 export interface RetrieveTimeSlipRequest {
+    id: string;
+}
+
+export interface RetrieveTrackedTimeRequest {
     id: string;
 }
 
@@ -328,6 +362,11 @@ export interface UpdateTaskRequest {
 export interface UpdateTimeSlipRequest {
     id: string;
     timeSlip?: Omit<TimeSlip, 'id'|'cost'>;
+}
+
+export interface UpdateTrackedTimeRequest {
+    id: string;
+    trackedTime?: Omit<TrackedTime, 'id'|'created_at'|'duration'>;
 }
 
 /**
@@ -626,6 +665,38 @@ export class ApiApi extends runtime.BaseAPI {
     /**
      * 
      */
+    async createTrackedTimeRaw(requestParameters: CreateTrackedTimeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TrackedTime>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/api/tracked-times/`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TrackedTimeToJSON(requestParameters['trackedTime']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TrackedTimeFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     */
+    async createTrackedTime(requestParameters: CreateTrackedTimeRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TrackedTime> {
+        const response = await this.createTrackedTimeRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     */
     async destroyCompanyRaw(requestParameters: DestroyCompanyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
@@ -881,6 +952,42 @@ export class ApiApi extends runtime.BaseAPI {
      */
     async destroyTimeSlip(requestParameters: DestroyTimeSlipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.destroyTimeSlipRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * 
+     */
+    async destroyTrackedTimeRaw(requestParameters: DestroyTrackedTimeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling destroyTrackedTime().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/tracked-times/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * 
+     */
+    async destroyTrackedTime(requestParameters: DestroyTrackedTimeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.destroyTrackedTimeRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -1370,6 +1477,67 @@ export class ApiApi extends runtime.BaseAPI {
     /**
      * 
      */
+    async listTrackedTimesRaw(requestParameters: ListTrackedTimesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListTrackedTimes200Response>> {
+        const queryParameters: any = {};
+
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
+        }
+
+        if (requestParameters['offset'] != null) {
+            queryParameters['offset'] = requestParameters['offset'];
+        }
+
+        if (requestParameters['project'] != null) {
+            queryParameters['project'] = requestParameters['project'];
+        }
+
+        if (requestParameters['task'] != null) {
+            queryParameters['task'] = requestParameters['task'];
+        }
+
+        if (requestParameters['timeSlip'] != null) {
+            queryParameters['time_slip'] = requestParameters['timeSlip'];
+        }
+
+        if (requestParameters['start'] != null) {
+            queryParameters['start'] = requestParameters['start'];
+        }
+
+        if (requestParameters['end'] != null) {
+            queryParameters['end'] = requestParameters['end'];
+        }
+
+        if (requestParameters['open'] != null) {
+            queryParameters['open'] = requestParameters['open'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/tracked-times/`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListTrackedTimes200ResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     */
+    async listTrackedTimes(requestParameters: ListTrackedTimesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListTrackedTimes200Response> {
+        const response = await this.listTrackedTimesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     */
     async partialUpdateCompanyRaw(requestParameters: PartialUpdateCompanyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Company>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
@@ -1652,6 +1820,46 @@ export class ApiApi extends runtime.BaseAPI {
      */
     async partialUpdateTimeSlip(requestParameters: PartialUpdateTimeSlipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TimeSlip> {
         const response = await this.partialUpdateTimeSlipRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     */
+    async partialUpdateTrackedTimeRaw(requestParameters: PartialUpdateTrackedTimeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TrackedTime>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling partialUpdateTrackedTime().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/api/tracked-times/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TrackedTimeToJSON(requestParameters['trackedTime']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TrackedTimeFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     */
+    async partialUpdateTrackedTime(requestParameters: PartialUpdateTrackedTimeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TrackedTime> {
+        const response = await this.partialUpdateTrackedTimeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -2020,6 +2228,43 @@ export class ApiApi extends runtime.BaseAPI {
     /**
      * 
      */
+    async retrieveTrackedTimeRaw(requestParameters: RetrieveTrackedTimeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TrackedTime>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling retrieveTrackedTime().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/tracked-times/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TrackedTimeFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     */
+    async retrieveTrackedTime(requestParameters: RetrieveTrackedTimeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TrackedTime> {
+        const response = await this.retrieveTrackedTimeRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     */
     async retrieveUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>> {
         const queryParameters: any = {};
 
@@ -2360,6 +2605,46 @@ export class ApiApi extends runtime.BaseAPI {
      */
     async updateTimeSlip(requestParameters: UpdateTimeSlipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TimeSlip> {
         const response = await this.updateTimeSlipRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     */
+    async updateTrackedTimeRaw(requestParameters: UpdateTrackedTimeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TrackedTime>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateTrackedTime().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/api/tracked-times/{id}`;
+        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TrackedTimeToJSON(requestParameters['trackedTime']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TrackedTimeFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     */
+    async updateTrackedTime(requestParameters: UpdateTrackedTimeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TrackedTime> {
+        const response = await this.updateTrackedTimeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -71,3 +71,9 @@ class Task(admin.ModelAdmin):
 @admin.register(models.TaskInvoice)
 class TaskInvoiceAdmin(admin.ModelAdmin):
     list_display = ('task', 'invoice', 'cost', 'created_at')
+
+
+@admin.register(models.TrackedTime)
+class TrackedTimeAdmin(admin.ModelAdmin):
+    list_display = ('project', 'task', 'started_at', 'ended_at', 'user')
+    list_filter = ('project', 'user')

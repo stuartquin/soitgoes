@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TimeRouteImport } from './routes/time'
+import { Route as TrackingRouteRouteImport } from './routes/tracking/route'
 import { Route as InvoicesRouteRouteImport } from './routes/invoices/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ContactsIndexRouteImport } from './routes/contacts/index'
@@ -21,6 +22,11 @@ import { Route as InvoicesProjectIdInvoiceIdRouteImport } from './routes/invoice
 const TimeRoute = TimeRouteImport.update({
   id: '/time',
   path: '/time',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrackingRouteRoute = TrackingRouteRouteImport.update({
+  id: '/tracking',
+  path: '/tracking',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvoicesRouteRoute = InvoicesRouteRouteImport.update({
@@ -63,6 +69,7 @@ const InvoicesProjectIdInvoiceIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/invoices': typeof InvoicesRouteRouteWithChildren
+  '/tracking': typeof TrackingRouteRoute
   '/time': typeof TimeRoute
   '/contacts/$contactId': typeof ContactsContactIdRoute
   '/invoices/new': typeof InvoicesNewRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/invoices': typeof InvoicesRouteRouteWithChildren
+  '/tracking': typeof TrackingRouteRoute
   '/time': typeof TimeRoute
   '/contacts/$contactId': typeof ContactsContactIdRoute
   '/invoices/new': typeof InvoicesNewRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/invoices': typeof InvoicesRouteRouteWithChildren
+  '/tracking': typeof TrackingRouteRoute
   '/time': typeof TimeRoute
   '/contacts/$contactId': typeof ContactsContactIdRoute
   '/invoices/new': typeof InvoicesNewRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/invoices'
+    | '/tracking'
     | '/time'
     | '/contacts/$contactId'
     | '/invoices/new'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/invoices'
+    | '/tracking'
     | '/time'
     | '/contacts/$contactId'
     | '/invoices/new'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/invoices'
+    | '/tracking'
     | '/time'
     | '/contacts/$contactId'
     | '/invoices/new'
@@ -127,6 +139,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   InvoicesRouteRoute: typeof InvoicesRouteRouteWithChildren
+  TrackingRouteRoute: typeof TrackingRouteRoute
   TimeRoute: typeof TimeRoute
   ContactsContactIdRoute: typeof ContactsContactIdRoute
   ContactsIndexRoute: typeof ContactsIndexRoute
@@ -139,6 +152,13 @@ declare module '@tanstack/react-router' {
       path: '/time'
       fullPath: '/time'
       preLoaderRoute: typeof TimeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tracking': {
+      id: '/tracking'
+      path: '/tracking'
+      fullPath: '/tracking'
+      preLoaderRoute: typeof TrackingRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/invoices': {
@@ -212,6 +232,7 @@ const InvoicesRouteRouteWithChildren = InvoicesRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   InvoicesRouteRoute: InvoicesRouteRouteWithChildren,
+  TrackingRouteRoute: TrackingRouteRoute,
   TimeRoute: TimeRoute,
   ContactsContactIdRoute: ContactsContactIdRoute,
   ContactsIndexRoute: ContactsIndexRoute,

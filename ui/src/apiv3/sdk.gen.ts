@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreateCompanyData, CreateCompanyResponses, CreateContactData, CreateContactResponses, CreateInvoiceData, CreateInvoiceResponses, CreateLoginData, CreateLoginResponses, CreateNoteData, CreateNoteResponses, CreateProjectData, CreateProjectResponses, CreateSsoData, CreateSsoResponses, CreateTaskData, CreateTaskResponses, CreateTimeSlipData, CreateTimeSlipResponses, DestroyCompanyData, DestroyCompanyResponses, DestroyContactData, DestroyContactResponses, DestroyInvoiceData, DestroyInvoiceModifierData, DestroyInvoiceModifierResponses, DestroyInvoiceResponses, DestroyProjectData, DestroyProjectResponses, DestroyTaskData, DestroyTaskResponses, DestroyTimeSlipData, DestroyTimeSlipResponses, ListAccountsData, ListAccountsResponses, ListBulkInvoicePdfsData, ListBulkInvoicePdfsResponses, ListCompaniesData, ListCompaniesResponses, ListContactsData, ListContactsResponses, ListInvoiceModifiersData, ListInvoiceModifiersResponses, ListInvoicePdfsData, ListInvoicePdfsResponses, ListInvoicesData, ListInvoicesResponses, ListNotesData, ListNotesResponses, ListProjectsData, ListProjectsResponses, ListProjectSummariesData, ListProjectSummariesResponses, ListTasksData, ListTasksResponses, ListTimeSlipsData, ListTimeSlipsResponses, PartialUpdateCompanyData, PartialUpdateCompanyResponses, PartialUpdateContactData, PartialUpdateContactResponses, PartialUpdateInvoiceData, PartialUpdateInvoiceModifierData, PartialUpdateInvoiceModifierResponses, PartialUpdateInvoiceResponses, PartialUpdateProjectData, PartialUpdateProjectResponses, PartialUpdateTaskData, PartialUpdateTaskResponses, PartialUpdateTimeSlipData, PartialUpdateTimeSlipResponses, RetrieveCompanyData, RetrieveCompanyResponses, RetrieveContactData, RetrieveContactResponses, RetrieveExchangeRateData, RetrieveExchangeRateResponses, RetrieveInvoiceData, RetrieveInvoiceModifierData, RetrieveInvoiceModifierResponses, RetrieveInvoiceResponses, RetrieveOneTimeTokenData, RetrieveOneTimeTokenResponses, RetrieveProjectData, RetrieveProjectResponses, RetrieveTaskData, RetrieveTaskResponses, RetrieveTaskSummaryData, RetrieveTaskSummaryResponses, RetrieveTimeSlipData, RetrieveTimeSlipResponses, RetrieveUserData, RetrieveUserResponses, RetrieveVersionData, RetrieveVersionResponses, UpdateCompanyData, UpdateCompanyResponses, UpdateContactData, UpdateContactResponses, UpdateInvoiceData, UpdateInvoiceModifierData, UpdateInvoiceModifierResponses, UpdateInvoiceResponses, UpdateProjectData, UpdateProjectResponses, UpdateTaskData, UpdateTaskResponses, UpdateTimeSlipData, UpdateTimeSlipResponses } from './types.gen';
+import type { CreateCompanyData, CreateCompanyResponses, CreateContactData, CreateContactResponses, CreateInvoiceData, CreateInvoiceResponses, CreateLoginData, CreateLoginResponses, CreateNoteData, CreateNoteResponses, CreateProjectData, CreateProjectResponses, CreateSsoData, CreateSsoResponses, CreateTaskData, CreateTaskResponses, CreateTimeSlipData, CreateTimeSlipResponses, CreateTrackedTimeData, CreateTrackedTimeResponses, DestroyCompanyData, DestroyCompanyResponses, DestroyContactData, DestroyContactResponses, DestroyInvoiceData, DestroyInvoiceModifierData, DestroyInvoiceModifierResponses, DestroyInvoiceResponses, DestroyProjectData, DestroyProjectResponses, DestroyTaskData, DestroyTaskResponses, DestroyTimeSlipData, DestroyTimeSlipResponses, DestroyTrackedTimeData, DestroyTrackedTimeResponses, ListAccountsData, ListAccountsResponses, ListBulkInvoicePdfsData, ListBulkInvoicePdfsResponses, ListCompaniesData, ListCompaniesResponses, ListContactsData, ListContactsResponses, ListInvoiceModifiersData, ListInvoiceModifiersResponses, ListInvoicePdfsData, ListInvoicePdfsResponses, ListInvoicesData, ListInvoicesResponses, ListNotesData, ListNotesResponses, ListProjectsData, ListProjectsResponses, ListProjectSummariesData, ListProjectSummariesResponses, ListTasksData, ListTasksResponses, ListTimeSlipsData, ListTimeSlipsResponses, ListTrackedTimesData, ListTrackedTimesResponses, PartialUpdateCompanyData, PartialUpdateCompanyResponses, PartialUpdateContactData, PartialUpdateContactResponses, PartialUpdateInvoiceData, PartialUpdateInvoiceModifierData, PartialUpdateInvoiceModifierResponses, PartialUpdateInvoiceResponses, PartialUpdateProjectData, PartialUpdateProjectResponses, PartialUpdateTaskData, PartialUpdateTaskResponses, PartialUpdateTimeSlipData, PartialUpdateTimeSlipResponses, PartialUpdateTrackedTimeData, PartialUpdateTrackedTimeResponses, RetrieveCompanyData, RetrieveCompanyResponses, RetrieveContactData, RetrieveContactResponses, RetrieveExchangeRateData, RetrieveExchangeRateResponses, RetrieveInvoiceData, RetrieveInvoiceModifierData, RetrieveInvoiceModifierResponses, RetrieveInvoiceResponses, RetrieveOneTimeTokenData, RetrieveOneTimeTokenResponses, RetrieveProjectData, RetrieveProjectResponses, RetrieveTaskData, RetrieveTaskResponses, RetrieveTaskSummaryData, RetrieveTaskSummaryResponses, RetrieveTimeSlipData, RetrieveTimeSlipResponses, RetrieveTrackedTimeData, RetrieveTrackedTimeResponses, RetrieveUserData, RetrieveUserResponses, RetrieveVersionData, RetrieveVersionResponses, UpdateCompanyData, UpdateCompanyResponses, UpdateContactData, UpdateContactResponses, UpdateInvoiceData, UpdateInvoiceModifierData, UpdateInvoiceModifierResponses, UpdateInvoiceResponses, UpdateProjectData, UpdateProjectResponses, UpdateTaskData, UpdateTaskResponses, UpdateTimeSlipData, UpdateTimeSlipResponses, UpdateTrackedTimeData, UpdateTrackedTimeResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -175,6 +175,60 @@ export const partialUpdateTimeSlip = <ThrowOnError extends boolean = false>(opti
 export const updateTimeSlip = <ThrowOnError extends boolean = false>(options: Options<UpdateTimeSlipData, ThrowOnError>) => {
     return (options.client ?? client).put<UpdateTimeSlipResponses, unknown, ThrowOnError>({
         url: '/api/timeslips/{id}',
+        ...options,
+        headers: {
+            'Content-Type': 'application/json',
+            ...options.headers
+        }
+    });
+};
+
+export const listTrackedTimes = <ThrowOnError extends boolean = false>(options?: Options<ListTrackedTimesData, ThrowOnError>) => {
+    return (options?.client ?? client).get<ListTrackedTimesResponses, unknown, ThrowOnError>({
+        url: '/api/tracked-times/',
+        ...options
+    });
+};
+
+export const createTrackedTime = <ThrowOnError extends boolean = false>(options?: Options<CreateTrackedTimeData, ThrowOnError>) => {
+    return (options?.client ?? client).post<CreateTrackedTimeResponses, unknown, ThrowOnError>({
+        url: '/api/tracked-times/',
+        ...options,
+        headers: {
+            'Content-Type': 'application/json',
+            ...options?.headers
+        }
+    });
+};
+
+export const destroyTrackedTime = <ThrowOnError extends boolean = false>(options: Options<DestroyTrackedTimeData, ThrowOnError>) => {
+    return (options.client ?? client).delete<DestroyTrackedTimeResponses, unknown, ThrowOnError>({
+        url: '/api/tracked-times/{id}',
+        ...options
+    });
+};
+
+export const retrieveTrackedTime = <ThrowOnError extends boolean = false>(options: Options<RetrieveTrackedTimeData, ThrowOnError>) => {
+    return (options.client ?? client).get<RetrieveTrackedTimeResponses, unknown, ThrowOnError>({
+        url: '/api/tracked-times/{id}',
+        ...options
+    });
+};
+
+export const partialUpdateTrackedTime = <ThrowOnError extends boolean = false>(options: Options<PartialUpdateTrackedTimeData, ThrowOnError>) => {
+    return (options.client ?? client).patch<PartialUpdateTrackedTimeResponses, unknown, ThrowOnError>({
+        url: '/api/tracked-times/{id}',
+        ...options,
+        headers: {
+            'Content-Type': 'application/json',
+            ...options.headers
+        }
+    });
+};
+
+export const updateTrackedTime = <ThrowOnError extends boolean = false>(options: Options<UpdateTrackedTimeData, ThrowOnError>) => {
+    return (options.client ?? client).put<UpdateTrackedTimeResponses, unknown, ThrowOnError>({
+        url: '/api/tracked-times/{id}',
         ...options,
         headers: {
             'Content-Type': 'application/json',

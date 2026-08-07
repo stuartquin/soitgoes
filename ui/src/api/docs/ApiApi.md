@@ -13,6 +13,7 @@ All URIs are relative to *http://localhost*
 | [**createSSO**](ApiApi.md#createsso) | **POST** /api/users/sso/ |  |
 | [**createTask**](ApiApi.md#createtask) | **POST** /api/tasks/ |  |
 | [**createTimeSlip**](ApiApi.md#createtimeslip) | **POST** /api/timeslips/ |  |
+| [**createTrackedTime**](ApiApi.md#createtrackedtime) | **POST** /api/tracked-times/ |  |
 | [**destroyCompany**](ApiApi.md#destroycompany) | **DELETE** /api/companies/{id} |  |
 | [**destroyContact**](ApiApi.md#destroycontact) | **DELETE** /api/contacts/{id} |  |
 | [**destroyInvoice**](ApiApi.md#destroyinvoice) | **DELETE** /api/invoices/{id} |  |
@@ -20,6 +21,7 @@ All URIs are relative to *http://localhost*
 | [**destroyProject**](ApiApi.md#destroyproject) | **DELETE** /api/projects/{id} |  |
 | [**destroyTask**](ApiApi.md#destroytask) | **DELETE** /api/tasks/{id} |  |
 | [**destroyTimeSlip**](ApiApi.md#destroytimeslip) | **DELETE** /api/timeslips/{id} |  |
+| [**destroyTrackedTime**](ApiApi.md#destroytrackedtime) | **DELETE** /api/tracked-times/{id} |  |
 | [**listAccounts**](ApiApi.md#listaccounts) | **GET** /api/accounts/ |  |
 | [**listBulkInvoicePDFs**](ApiApi.md#listbulkinvoicepdfs) | **GET** /api/invoices/zip |  |
 | [**listCompanies**](ApiApi.md#listcompanies) | **GET** /api/companies/ |  |
@@ -32,6 +34,7 @@ All URIs are relative to *http://localhost*
 | [**listProjects**](ApiApi.md#listprojects) | **GET** /api/projects/ |  |
 | [**listTasks**](ApiApi.md#listtasks) | **GET** /api/tasks/ |  |
 | [**listTimeSlips**](ApiApi.md#listtimeslips) | **GET** /api/timeslips/ |  |
+| [**listTrackedTimes**](ApiApi.md#listtrackedtimes) | **GET** /api/tracked-times/ |  |
 | [**partialUpdateCompany**](ApiApi.md#partialupdatecompany) | **PATCH** /api/companies/{id} |  |
 | [**partialUpdateContact**](ApiApi.md#partialupdatecontact) | **PATCH** /api/contacts/{id} |  |
 | [**partialUpdateInvoice**](ApiApi.md#partialupdateinvoice) | **PATCH** /api/invoices/{id} |  |
@@ -39,6 +42,7 @@ All URIs are relative to *http://localhost*
 | [**partialUpdateProject**](ApiApi.md#partialupdateproject) | **PATCH** /api/projects/{id} |  |
 | [**partialUpdateTask**](ApiApi.md#partialupdatetask) | **PATCH** /api/tasks/{id} |  |
 | [**partialUpdateTimeSlip**](ApiApi.md#partialupdatetimeslip) | **PATCH** /api/timeslips/{id} |  |
+| [**partialUpdateTrackedTime**](ApiApi.md#partialupdatetrackedtime) | **PATCH** /api/tracked-times/{id} |  |
 | [**retrieveCompany**](ApiApi.md#retrievecompany) | **GET** /api/companies/{id} |  |
 | [**retrieveContact**](ApiApi.md#retrievecontact) | **GET** /api/contacts/{id} |  |
 | [**retrieveExchangeRate**](ApiApi.md#retrieveexchangerate) | **GET** /api/currency/rates/ |  |
@@ -49,6 +53,7 @@ All URIs are relative to *http://localhost*
 | [**retrieveTask**](ApiApi.md#retrievetask) | **GET** /api/tasks/{id} |  |
 | [**retrieveTaskSummary**](ApiApi.md#retrievetasksummary) | **GET** /api/tasks/{id}/summary |  |
 | [**retrieveTimeSlip**](ApiApi.md#retrievetimeslip) | **GET** /api/timeslips/{id} |  |
+| [**retrieveTrackedTime**](ApiApi.md#retrievetrackedtime) | **GET** /api/tracked-times/{id} |  |
 | [**retrieveUser**](ApiApi.md#retrieveuser) | **GET** /api/users/ |  |
 | [**retrieveVersion**](ApiApi.md#retrieveversion) | **GET** /api/version/ |  |
 | [**updateCompany**](ApiApi.md#updatecompany) | **PUT** /api/companies/{id} |  |
@@ -58,6 +63,7 @@ All URIs are relative to *http://localhost*
 | [**updateProject**](ApiApi.md#updateproject) | **PUT** /api/projects/{id} |  |
 | [**updateTask**](ApiApi.md#updatetask) | **PUT** /api/tasks/{id} |  |
 | [**updateTimeSlip**](ApiApi.md#updatetimeslip) | **PUT** /api/timeslips/{id} |  |
+| [**updateTrackedTime**](ApiApi.md#updatetrackedtime) | **PUT** /api/tracked-times/{id} |  |
 
 
 
@@ -664,6 +670,73 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## createTrackedTime
+
+> TrackedTime createTrackedTime(trackedTime)
+
+
+
+
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ApiApi,
+} from '';
+import type { CreateTrackedTimeRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new ApiApi();
+
+  const body = {
+    // TrackedTime (optional)
+    trackedTime: ...,
+  } satisfies CreateTrackedTimeRequest;
+
+  try {
+    const data = await api.createTrackedTime(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **trackedTime** | [TrackedTime](TrackedTime.md) |  | [Optional] |
+
+### Return type
+
+[**TrackedTime**](TrackedTime.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`, `application/x-www-form-urlencoded`, `multipart/form-data`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **201** |  |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## destroyCompany
 
 > destroyCompany(id)
@@ -1113,6 +1186,73 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **id** | `string` | A unique integer value identifying this time slip. | [Defaults to `undefined`] |
+
+### Return type
+
+`void` (Empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **204** |  |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## destroyTrackedTime
+
+> destroyTrackedTime(id)
+
+
+
+
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ApiApi,
+} from '';
+import type { DestroyTrackedTimeRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new ApiApi();
+
+  const body = {
+    // string | A unique integer value identifying this tracked time.
+    id: id_example,
+  } satisfies DestroyTrackedTimeRequest;
+
+  try {
+    const data = await api.destroyTrackedTime(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **id** | `string` | A unique integer value identifying this tracked time. | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -1998,6 +2138,94 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## listTrackedTimes
+
+> ListTrackedTimes200Response listTrackedTimes(limit, offset, project, task, timeSlip, start, end, open)
+
+
+
+
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ApiApi,
+} from '';
+import type { ListTrackedTimesRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new ApiApi();
+
+  const body = {
+    // number | Number of results to return per page. (optional)
+    limit: 56,
+    // number | The initial index from which to return the results. (optional)
+    offset: 56,
+    // string | project (optional)
+    project: project_example,
+    // string | task (optional)
+    task: task_example,
+    // string | time_slip (optional)
+    timeSlip: timeSlip_example,
+    // string | start (optional)
+    start: start_example,
+    // string | end (optional)
+    end: end_example,
+    // string | open (optional)
+    open: open_example,
+  } satisfies ListTrackedTimesRequest;
+
+  try {
+    const data = await api.listTrackedTimes(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **limit** | `number` | Number of results to return per page. | [Optional] [Defaults to `undefined`] |
+| **offset** | `number` | The initial index from which to return the results. | [Optional] [Defaults to `undefined`] |
+| **project** | `string` | project | [Optional] [Defaults to `undefined`] |
+| **task** | `string` | task | [Optional] [Defaults to `undefined`] |
+| **timeSlip** | `string` | time_slip | [Optional] [Defaults to `undefined`] |
+| **start** | `string` | start | [Optional] [Defaults to `undefined`] |
+| **end** | `string` | end | [Optional] [Defaults to `undefined`] |
+| **open** | `string` | open | [Optional] [Defaults to `undefined`] |
+
+### Return type
+
+[**ListTrackedTimes200Response**](ListTrackedTimes200Response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** |  |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## partialUpdateCompany
 
 > Company partialUpdateCompany(id, company)
@@ -2472,6 +2700,76 @@ example().catch(console.error);
 ### Return type
 
 [**TimeSlip**](TimeSlip.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`, `application/x-www-form-urlencoded`, `multipart/form-data`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** |  |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## partialUpdateTrackedTime
+
+> TrackedTime partialUpdateTrackedTime(id, trackedTime)
+
+
+
+
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ApiApi,
+} from '';
+import type { PartialUpdateTrackedTimeRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new ApiApi();
+
+  const body = {
+    // string | A unique integer value identifying this tracked time.
+    id: id_example,
+    // TrackedTime (optional)
+    trackedTime: ...,
+  } satisfies PartialUpdateTrackedTimeRequest;
+
+  try {
+    const data = await api.partialUpdateTrackedTime(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **id** | `string` | A unique integer value identifying this tracked time. | [Defaults to `undefined`] |
+| **trackedTime** | [TrackedTime](TrackedTime.md) |  | [Optional] |
+
+### Return type
+
+[**TrackedTime**](TrackedTime.md)
 
 ### Authorization
 
@@ -3148,6 +3446,73 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## retrieveTrackedTime
+
+> TrackedTime retrieveTrackedTime(id)
+
+
+
+
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ApiApi,
+} from '';
+import type { RetrieveTrackedTimeRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new ApiApi();
+
+  const body = {
+    // string | A unique integer value identifying this tracked time.
+    id: id_example,
+  } satisfies RetrieveTrackedTimeRequest;
+
+  try {
+    const data = await api.retrieveTrackedTime(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **id** | `string` | A unique integer value identifying this tracked time. | [Defaults to `undefined`] |
+
+### Return type
+
+[**TrackedTime**](TrackedTime.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** |  |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## retrieveUser
 
 > User retrieveUser()
@@ -3740,6 +4105,76 @@ example().catch(console.error);
 ### Return type
 
 [**TimeSlip**](TimeSlip.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`, `application/x-www-form-urlencoded`, `multipart/form-data`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** |  |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## updateTrackedTime
+
+> TrackedTime updateTrackedTime(id, trackedTime)
+
+
+
+
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ApiApi,
+} from '';
+import type { UpdateTrackedTimeRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new ApiApi();
+
+  const body = {
+    // string | A unique integer value identifying this tracked time.
+    id: id_example,
+    // TrackedTime (optional)
+    trackedTime: ...,
+  } satisfies UpdateTrackedTimeRequest;
+
+  try {
+    const data = await api.updateTrackedTime(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **id** | `string` | A unique integer value identifying this tracked time. | [Defaults to `undefined`] |
+| **trackedTime** | [TrackedTime](TrackedTime.md) |  | [Optional] |
+
+### Return type
+
+[**TrackedTime**](TrackedTime.md)
 
 ### Authorization
 

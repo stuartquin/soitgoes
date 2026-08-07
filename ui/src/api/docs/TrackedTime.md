@@ -1,28 +1,38 @@
 
-# ProjectSummaryInvoices
+# TrackedTime
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`subtotalInvoiced` | number
-`totalInvoiced` | number
-`totalPaid` | number
-`invoiceCount` | number
+`id` | number
+`project` | number
+`task` | number
+`timeSlip` | number
+`startedAt` | Date
+`endedAt` | Date
+`comment` | string
+`createdAt` | Date
+`duration` | string
 
 ## Example
 
 ```typescript
-import type { ProjectSummaryInvoices } from ''
+import type { TrackedTime } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "subtotalInvoiced": null,
-  "totalInvoiced": null,
-  "totalPaid": null,
-  "invoiceCount": null,
-} satisfies ProjectSummaryInvoices
+  "id": null,
+  "project": null,
+  "task": null,
+  "timeSlip": null,
+  "startedAt": null,
+  "endedAt": null,
+  "comment": null,
+  "createdAt": null,
+  "duration": null,
+} satisfies TrackedTime
 
 console.log(example)
 
@@ -31,7 +41,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as ProjectSummaryInvoices
+const exampleParsed = JSON.parse(exampleJSON) as TrackedTime
 console.log(exampleParsed)
 ```
 

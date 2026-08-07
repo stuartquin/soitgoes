@@ -19,6 +19,7 @@ docs/ListProjectSummaries200Response.md
 docs/ListProjects200Response.md
 docs/ListTasks200Response.md
 docs/ListTimeSlips200Response.md
+docs/ListTrackedTimes200Response.md
 docs/Login.md
 docs/Note.md
 docs/OneTimeToken.md
@@ -35,6 +36,7 @@ docs/TaskSummary.md
 docs/TaskSummaryInvoicesInner.md
 docs/TaskSummaryTimeslipsInner.md
 docs/TimeSlip.md
+docs/TrackedTime.md
 docs/User.md
 docs/Version.md
 index.ts
@@ -55,6 +57,7 @@ models/ListProjectSummaries200Response.ts
 models/ListProjects200Response.ts
 models/ListTasks200Response.ts
 models/ListTimeSlips200Response.ts
+models/ListTrackedTimes200Response.ts
 models/Login.ts
 models/Note.ts
 models/OneTimeToken.ts
@@ -71,6 +74,7 @@ models/TaskSummary.ts
 models/TaskSummaryInvoicesInner.ts
 models/TaskSummaryTimeslipsInner.ts
 models/TimeSlip.ts
+models/TrackedTime.ts
 models/User.ts
 models/Version.ts
 models/index.ts

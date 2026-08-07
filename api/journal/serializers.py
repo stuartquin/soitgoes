@@ -78,6 +78,26 @@ class TimeSlipSerializer(LogActivity):
         ]
 
 
+class TrackedTimeSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = models.TrackedTime
+        partial = True
+        fields = [
+            "id",
+            "user",
+            "project",
+            "task",
+            "time_slip",
+            "started_at",
+            "ended_at",
+            "comment",
+            "created_at",
+            "duration",
+        ]
+
+
 class UserTokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Token

@@ -33,6 +33,12 @@ function Layout({ onLogout }: Props) {
                 >
                   Contacts
                 </Link>
+                <Link
+                  to="/tracking"
+                  className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Tracking
+                </Link>
               </div>
             </div>
             <div

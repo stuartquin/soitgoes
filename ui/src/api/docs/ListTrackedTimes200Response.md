@@ -1,28 +1,28 @@
 
-# ProjectSummaryInvoices
+# ListTrackedTimes200Response
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`subtotalInvoiced` | number
-`totalInvoiced` | number
-`totalPaid` | number
-`invoiceCount` | number
+`count` | number
+`next` | string
+`previous` | string
+`results` | [Array&lt;TrackedTime&gt;](TrackedTime.md)
 
 ## Example
 
 ```typescript
-import type { ProjectSummaryInvoices } from ''
+import type { ListTrackedTimes200Response } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "subtotalInvoiced": null,
-  "totalInvoiced": null,
-  "totalPaid": null,
-  "invoiceCount": null,
-} satisfies ProjectSummaryInvoices
+  "count": 123,
+  "next": http://api.example.org/accounts/?offset=400&limit=100,
+  "previous": http://api.example.org/accounts/?offset=200&limit=100,
+  "results": null,
+} satisfies ListTrackedTimes200Response
 
 console.log(example)
 
@@ -31,7 +31,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as ProjectSummaryInvoices
+const exampleParsed = JSON.parse(exampleJSON) as ListTrackedTimes200Response
 console.log(exampleParsed)
 ```
 

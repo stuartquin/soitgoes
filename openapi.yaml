@@ -588,6 +588,208 @@ paths:
           description: ''
       tags:
       - api
+  /api/tracked-times/:
+    get:
+      operationId: listTrackedTimes
+      description: ''
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: project
+        required: false
+        in: query
+        description: project
+        schema:
+          type: string
+      - name: task
+        required: false
+        in: query
+        description: task
+        schema:
+          type: string
+      - name: time_slip
+        required: false
+        in: query
+        description: time_slip
+        schema:
+          type: string
+      - name: start
+        required: false
+        in: query
+        description: start
+        schema:
+          type: string
+      - name: end
+        required: false
+        in: query
+        description: end
+        schema:
+          type: string
+      - name: open
+        required: false
+        in: query
+        description: open
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - count
+                - results
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?offset=400&limit=100
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?offset=200&limit=100
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TrackedTime'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createTrackedTime
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackedTime'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TrackedTime'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TrackedTime'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackedTime'
+          description: ''
+      tags:
+      - api
+  /api/tracked-times/{id}:
+    get:
+      operationId: retrieveTrackedTime
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this tracked time.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackedTime'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateTrackedTime
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this tracked time.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackedTime'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TrackedTime'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TrackedTime'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackedTime'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateTrackedTime
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this tracked time.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackedTime'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TrackedTime'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TrackedTime'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackedTime'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyTrackedTime
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this tracked time.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
   /api/invoices/{id}:
     get:
       operationId: retrieveInvoice
@@ -1837,9 +2039,6 @@ components:
             total_paid:
               type: number
               readOnly: true
-            total_unpaid:
-              type: number
-              readOnly: true
             invoice_count:
               type: integer
               readOnly: true
@@ -1973,6 +2172,40 @@ components:
       - project
       - task
       - date
+    TrackedTime:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        project:
+          type: integer
+        task:
+          type: integer
+          nullable: true
+        time_slip:
+          type: integer
+          nullable: true
+        started_at:
+          type: string
+          format: date-time
+        ended_at:
+          type: string
+          format: date-time
+          nullable: true
+        comment:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        duration:
+          type: string
+          readOnly: true
+      required:
+      - project
+      - started_at
     InvoiceModifier:
       type: object
       properties:

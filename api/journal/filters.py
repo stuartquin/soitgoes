@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django_filters.filters import DateFilter, BooleanFilter, CharFilter
 from django_filters.rest_framework import FilterSet
-from journal.models import TimeSlip, Task, Invoice, Contact, Project
+from journal.models import TimeSlip, Task, Invoice, Contact, Project, TrackedTime
 
 
 class TimeSlipFilter(FilterSet):
@@ -35,3 +35,13 @@ class ContactFilter(FilterSet):
     class Meta:
         model = Contact
         fields = ["search"]
+
+
+class TrackedTimeFilter(FilterSet):
+    start = DateFilter(field_name="started_at", lookup_expr="gte")
+    end = DateFilter(field_name="started_at", lookup_expr="lte")
+    open = BooleanFilter(field_name="ended_at", lookup_expr="isnull")
+
+    class Meta:
+        model = TrackedTime
+        fields = ["project", "task", "time_slip", "start", "end", "open"]

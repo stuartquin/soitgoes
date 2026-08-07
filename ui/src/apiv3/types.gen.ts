@@ -89,7 +89,6 @@ export type ProjectSummary = {
         readonly subtotal_invoiced?: number;
         readonly total_invoiced?: number;
         readonly total_paid?: number;
-        readonly total_unpaid?: number;
         readonly invoice_count?: number;
     };
 };
@@ -129,6 +128,18 @@ export type TimeSlip = {
     invoice?: number | null;
     readonly cost?: number;
     date: string;
+};
+
+export type TrackedTime = {
+    readonly id?: number;
+    project: number;
+    task?: number | null;
+    time_slip?: number | null;
+    started_at: string;
+    ended_at?: string | null;
+    comment?: string | null;
+    readonly created_at?: string;
+    readonly duration?: string;
 };
 
 export type InvoiceModifier = {
@@ -306,6 +317,15 @@ export type TimeSlipWritable = {
     task: number | null;
     invoice?: number | null;
     date: string;
+};
+
+export type TrackedTimeWritable = {
+    project: number;
+    task?: number | null;
+    time_slip?: number | null;
+    started_at: string;
+    ended_at?: string | null;
+    comment?: string | null;
 };
 
 export type InvoiceModifierWritable = {
@@ -762,6 +782,142 @@ export type UpdateTimeSlipResponses = {
 };
 
 export type UpdateTimeSlipResponse = UpdateTimeSlipResponses[keyof UpdateTimeSlipResponses];
+
+export type ListTrackedTimesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Number of results to return per page.
+         */
+        limit?: number;
+        /**
+         * The initial index from which to return the results.
+         */
+        offset?: number;
+        /**
+         * project
+         */
+        project?: string;
+        /**
+         * task
+         */
+        task?: string;
+        /**
+         * time_slip
+         */
+        time_slip?: string;
+        /**
+         * start
+         */
+        start?: string;
+        /**
+         * end
+         */
+        end?: string;
+        /**
+         * open
+         */
+        open?: string;
+    };
+    url: '/api/tracked-times/';
+};
+
+export type ListTrackedTimesResponses = {
+    200: {
+        count: number;
+        next?: string | null;
+        previous?: string | null;
+        results: Array<TrackedTime>;
+    };
+};
+
+export type ListTrackedTimesResponse = ListTrackedTimesResponses[keyof ListTrackedTimesResponses];
+
+export type CreateTrackedTimeData = {
+    body?: TrackedTimeWritable;
+    path?: never;
+    query?: never;
+    url: '/api/tracked-times/';
+};
+
+export type CreateTrackedTimeResponses = {
+    201: TrackedTime;
+};
+
+export type CreateTrackedTimeResponse = CreateTrackedTimeResponses[keyof CreateTrackedTimeResponses];
+
+export type DestroyTrackedTimeData = {
+    body?: never;
+    path: {
+        /**
+         * A unique integer value identifying this tracked time.
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/api/tracked-times/{id}';
+};
+
+export type DestroyTrackedTimeResponses = {
+    204: void;
+};
+
+export type DestroyTrackedTimeResponse = DestroyTrackedTimeResponses[keyof DestroyTrackedTimeResponses];
+
+export type RetrieveTrackedTimeData = {
+    body?: never;
+    path: {
+        /**
+         * A unique integer value identifying this tracked time.
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/api/tracked-times/{id}';
+};
+
+export type RetrieveTrackedTimeResponses = {
+    200: TrackedTime;
+};
+
+export type RetrieveTrackedTimeResponse = RetrieveTrackedTimeResponses[keyof RetrieveTrackedTimeResponses];
+
+export type PartialUpdateTrackedTimeData = {
+    body?: TrackedTimeWritable;
+    path: {
+        /**
+         * A unique integer value identifying this tracked time.
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/api/tracked-times/{id}';
+};
+
+export type PartialUpdateTrackedTimeResponses = {
+    200: TrackedTime;
+};
+
+export type PartialUpdateTrackedTimeResponse = PartialUpdateTrackedTimeResponses[keyof PartialUpdateTrackedTimeResponses];
+
+export type UpdateTrackedTimeData = {
+    body?: TrackedTimeWritable;
+    path: {
+        /**
+         * A unique integer value identifying this tracked time.
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/api/tracked-times/{id}';
+};
+
+export type UpdateTrackedTimeResponses = {
+    200: TrackedTime;
+};
+
+export type UpdateTrackedTimeResponse = UpdateTrackedTimeResponses[keyof UpdateTrackedTimeResponses];
 
 export type DestroyInvoiceData = {
     body?: never;

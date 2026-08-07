@@ -3,8 +3,8 @@
 import { type DefaultError, type InfiniteData, infiniteQueryOptions, queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { createCompany, createContact, createInvoice, createLogin, createNote, createProject, createSso, createTask, createTimeSlip, destroyCompany, destroyContact, destroyInvoice, destroyInvoiceModifier, destroyProject, destroyTask, destroyTimeSlip, listAccounts, listBulkInvoicePdfs, listCompanies, listContacts, listInvoiceModifiers, listInvoicePdfs, listInvoices, listNotes, listProjects, listProjectSummaries, listTasks, listTimeSlips, type Options, partialUpdateCompany, partialUpdateContact, partialUpdateInvoice, partialUpdateInvoiceModifier, partialUpdateProject, partialUpdateTask, partialUpdateTimeSlip, retrieveCompany, retrieveContact, retrieveExchangeRate, retrieveInvoice, retrieveInvoiceModifier, retrieveOneTimeToken, retrieveProject, retrieveTask, retrieveTaskSummary, retrieveTimeSlip, retrieveUser, retrieveVersion, updateCompany, updateContact, updateInvoice, updateInvoiceModifier, updateProject, updateTask, updateTimeSlip } from '../sdk.gen';
-import type { CreateCompanyData, CreateCompanyResponse, CreateContactData, CreateContactResponse, CreateInvoiceData, CreateInvoiceResponse, CreateLoginData, CreateLoginResponse, CreateNoteData, CreateNoteResponse, CreateProjectData, CreateProjectResponse, CreateSsoData, CreateSsoResponse, CreateTaskData, CreateTaskResponse, CreateTimeSlipData, CreateTimeSlipResponse, DestroyCompanyData, DestroyCompanyResponse, DestroyContactData, DestroyContactResponse, DestroyInvoiceData, DestroyInvoiceModifierData, DestroyInvoiceModifierResponse, DestroyInvoiceResponse, DestroyProjectData, DestroyProjectResponse, DestroyTaskData, DestroyTaskResponse, DestroyTimeSlipData, DestroyTimeSlipResponse, ListAccountsData, ListAccountsResponse, ListBulkInvoicePdfsData, ListCompaniesData, ListCompaniesResponse, ListContactsData, ListContactsResponse, ListInvoiceModifiersData, ListInvoiceModifiersResponse, ListInvoicePdfsData, ListInvoicesData, ListInvoicesResponse, ListNotesData, ListNotesResponse, ListProjectsData, ListProjectsResponse, ListProjectSummariesData, ListProjectSummariesResponse, ListTasksData, ListTasksResponse, ListTimeSlipsData, ListTimeSlipsResponse, PartialUpdateCompanyData, PartialUpdateCompanyResponse, PartialUpdateContactData, PartialUpdateContactResponse, PartialUpdateInvoiceData, PartialUpdateInvoiceModifierData, PartialUpdateInvoiceModifierResponse, PartialUpdateInvoiceResponse, PartialUpdateProjectData, PartialUpdateProjectResponse, PartialUpdateTaskData, PartialUpdateTaskResponse, PartialUpdateTimeSlipData, PartialUpdateTimeSlipResponse, RetrieveCompanyData, RetrieveContactData, RetrieveExchangeRateData, RetrieveInvoiceData, RetrieveInvoiceModifierData, RetrieveOneTimeTokenData, RetrieveProjectData, RetrieveTaskData, RetrieveTaskSummaryData, RetrieveTimeSlipData, RetrieveUserData, RetrieveVersionData, UpdateCompanyData, UpdateCompanyResponse, UpdateContactData, UpdateContactResponse, UpdateInvoiceData, UpdateInvoiceModifierData, UpdateInvoiceModifierResponse, UpdateInvoiceResponse, UpdateProjectData, UpdateProjectResponse, UpdateTaskData, UpdateTaskResponse, UpdateTimeSlipData, UpdateTimeSlipResponse } from '../types.gen';
+import { createCompany, createContact, createInvoice, createLogin, createNote, createProject, createSso, createTask, createTimeSlip, createTrackedTime, destroyCompany, destroyContact, destroyInvoice, destroyInvoiceModifier, destroyProject, destroyTask, destroyTimeSlip, destroyTrackedTime, listAccounts, listBulkInvoicePdfs, listCompanies, listContacts, listInvoiceModifiers, listInvoicePdfs, listInvoices, listNotes, listProjects, listProjectSummaries, listTasks, listTimeSlips, listTrackedTimes, type Options, partialUpdateCompany, partialUpdateContact, partialUpdateInvoice, partialUpdateInvoiceModifier, partialUpdateProject, partialUpdateTask, partialUpdateTimeSlip, partialUpdateTrackedTime, retrieveCompany, retrieveContact, retrieveExchangeRate, retrieveInvoice, retrieveInvoiceModifier, retrieveOneTimeToken, retrieveProject, retrieveTask, retrieveTaskSummary, retrieveTimeSlip, retrieveTrackedTime, retrieveUser, retrieveVersion, updateCompany, updateContact, updateInvoice, updateInvoiceModifier, updateProject, updateTask, updateTimeSlip, updateTrackedTime } from '../sdk.gen';
+import type { CreateCompanyData, CreateCompanyResponse, CreateContactData, CreateContactResponse, CreateInvoiceData, CreateInvoiceResponse, CreateLoginData, CreateLoginResponse, CreateNoteData, CreateNoteResponse, CreateProjectData, CreateProjectResponse, CreateSsoData, CreateSsoResponse, CreateTaskData, CreateTaskResponse, CreateTimeSlipData, CreateTimeSlipResponse, CreateTrackedTimeData, CreateTrackedTimeResponse, DestroyCompanyData, DestroyCompanyResponse, DestroyContactData, DestroyContactResponse, DestroyInvoiceData, DestroyInvoiceModifierData, DestroyInvoiceModifierResponse, DestroyInvoiceResponse, DestroyProjectData, DestroyProjectResponse, DestroyTaskData, DestroyTaskResponse, DestroyTimeSlipData, DestroyTimeSlipResponse, DestroyTrackedTimeData, DestroyTrackedTimeResponse, ListAccountsData, ListAccountsResponse, ListBulkInvoicePdfsData, ListCompaniesData, ListCompaniesResponse, ListContactsData, ListContactsResponse, ListInvoiceModifiersData, ListInvoiceModifiersResponse, ListInvoicePdfsData, ListInvoicesData, ListInvoicesResponse, ListNotesData, ListNotesResponse, ListProjectsData, ListProjectsResponse, ListProjectSummariesData, ListProjectSummariesResponse, ListTasksData, ListTasksResponse, ListTimeSlipsData, ListTimeSlipsResponse, ListTrackedTimesData, ListTrackedTimesResponse, PartialUpdateCompanyData, PartialUpdateCompanyResponse, PartialUpdateContactData, PartialUpdateContactResponse, PartialUpdateInvoiceData, PartialUpdateInvoiceModifierData, PartialUpdateInvoiceModifierResponse, PartialUpdateInvoiceResponse, PartialUpdateProjectData, PartialUpdateProjectResponse, PartialUpdateTaskData, PartialUpdateTaskResponse, PartialUpdateTimeSlipData, PartialUpdateTimeSlipResponse, PartialUpdateTrackedTimeData, PartialUpdateTrackedTimeResponse, RetrieveCompanyData, RetrieveContactData, RetrieveExchangeRateData, RetrieveInvoiceData, RetrieveInvoiceModifierData, RetrieveOneTimeTokenData, RetrieveProjectData, RetrieveTaskData, RetrieveTaskSummaryData, RetrieveTimeSlipData, RetrieveTrackedTimeData, RetrieveUserData, RetrieveVersionData, UpdateCompanyData, UpdateCompanyResponse, UpdateContactData, UpdateContactResponse, UpdateInvoiceData, UpdateInvoiceModifierData, UpdateInvoiceModifierResponse, UpdateInvoiceResponse, UpdateProjectData, UpdateProjectResponse, UpdateTaskData, UpdateTaskResponse, UpdateTimeSlipData, UpdateTimeSlipResponse, UpdateTrackedTimeData, UpdateTrackedTimeResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -485,6 +485,122 @@ export const updateTimeSlipMutation = (options?: Partial<Options<UpdateTimeSlipD
     const mutationOptions: UseMutationOptions<UpdateTimeSlipResponse, DefaultError, Options<UpdateTimeSlipData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await updateTimeSlip({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const listTrackedTimesQueryKey = (options?: Options<ListTrackedTimesData>) => createQueryKey('listTrackedTimes', options);
+
+export const listTrackedTimesOptions = (options?: Options<ListTrackedTimesData>) => {
+    return queryOptions({
+        queryFn: async ({ queryKey, signal }) => {
+            const { data } = await listTrackedTimes({
+                ...options,
+                ...queryKey[0],
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: listTrackedTimesQueryKey(options)
+    });
+};
+
+export const listTrackedTimesInfiniteQueryKey = (options?: Options<ListTrackedTimesData>): QueryKey<Options<ListTrackedTimesData>> => createQueryKey('listTrackedTimes', options, true);
+
+export const listTrackedTimesInfiniteOptions = (options?: Options<ListTrackedTimesData>) => {
+    return infiniteQueryOptions<ListTrackedTimesResponse, DefaultError, InfiniteData<ListTrackedTimesResponse>, QueryKey<Options<ListTrackedTimesData>>, number | Pick<QueryKey<Options<ListTrackedTimesData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
+    // @ts-ignore
+    {
+        queryFn: async ({ pageParam, queryKey, signal }) => {
+            // @ts-ignore
+            const page: Pick<QueryKey<Options<ListTrackedTimesData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
+                query: {
+                    offset: pageParam
+                }
+            };
+            const params = createInfiniteParams(queryKey, page);
+            const { data } = await listTrackedTimes({
+                ...options,
+                ...params,
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: listTrackedTimesInfiniteQueryKey(options)
+    });
+};
+
+export const createTrackedTimeMutation = (options?: Partial<Options<CreateTrackedTimeData>>): UseMutationOptions<CreateTrackedTimeResponse, DefaultError, Options<CreateTrackedTimeData>> => {
+    const mutationOptions: UseMutationOptions<CreateTrackedTimeResponse, DefaultError, Options<CreateTrackedTimeData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await createTrackedTime({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const destroyTrackedTimeMutation = (options?: Partial<Options<DestroyTrackedTimeData>>): UseMutationOptions<DestroyTrackedTimeResponse, DefaultError, Options<DestroyTrackedTimeData>> => {
+    const mutationOptions: UseMutationOptions<DestroyTrackedTimeResponse, DefaultError, Options<DestroyTrackedTimeData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await destroyTrackedTime({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const retrieveTrackedTimeQueryKey = (options: Options<RetrieveTrackedTimeData>) => createQueryKey('retrieveTrackedTime', options);
+
+export const retrieveTrackedTimeOptions = (options: Options<RetrieveTrackedTimeData>) => {
+    return queryOptions({
+        queryFn: async ({ queryKey, signal }) => {
+            const { data } = await retrieveTrackedTime({
+                ...options,
+                ...queryKey[0],
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: retrieveTrackedTimeQueryKey(options)
+    });
+};
+
+export const partialUpdateTrackedTimeMutation = (options?: Partial<Options<PartialUpdateTrackedTimeData>>): UseMutationOptions<PartialUpdateTrackedTimeResponse, DefaultError, Options<PartialUpdateTrackedTimeData>> => {
+    const mutationOptions: UseMutationOptions<PartialUpdateTrackedTimeResponse, DefaultError, Options<PartialUpdateTrackedTimeData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await partialUpdateTrackedTime({
+                ...options,
+                ...fnOptions,
+                throwOnError: true
+            });
+            return data;
+        }
+    };
+    return mutationOptions;
+};
+
+export const updateTrackedTimeMutation = (options?: Partial<Options<UpdateTrackedTimeData>>): UseMutationOptions<UpdateTrackedTimeResponse, DefaultError, Options<UpdateTrackedTimeData>> => {
+    const mutationOptions: UseMutationOptions<UpdateTrackedTimeResponse, DefaultError, Options<UpdateTrackedTimeData>> = {
+        mutationFn: async (fnOptions) => {
+            const { data } = await updateTrackedTime({
                 ...options,
                 ...fnOptions,
                 throwOnError: true

@@ -370,6 +370,33 @@ class TaskNote(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
+class TrackedTime(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, blank=True, null=True, on_delete=models.CASCADE)
+    time_slip = models.ForeignKey(
+        TimeSlip,
+        models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="tracked_times",
+    )
+    started_at = models.DateTimeField()
+    ended_at = models.DateTimeField(blank=True, null=True)
+    comment = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def duration(self) -> int | None:
+        if self.started_at and self.ended_at:
+            return int((self.ended_at - self.started_at).total_seconds())
+        return None
+
+    def __str__(self):
+        return f"[{self.project.name}] {self.started_at} - {self.ended_at}"
+
+
+
 class Activity(models.Model):
     """Activity feed of some sort"""
 
