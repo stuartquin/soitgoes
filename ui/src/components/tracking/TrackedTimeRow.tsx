@@ -4,6 +4,7 @@ import { TrackedTime, Project } from "apiv3";
 import { getDate } from "lib/date";
 import IconPlay from "components/Icons/IconPlay";
 import IconStop from "components/Icons/IconStop";
+import { useEffect, useState } from "react";
 
 interface Props {
   trackedTime: TrackedTime;
@@ -12,6 +13,7 @@ interface Props {
   isPending: boolean;
   onStart: (trackedTime: TrackedTime) => void;
   onStop: (trackedTime: TrackedTime) => void;
+  onEdit: () => void;
 }
 
 function formatDuration(duration: number | string | null | undefined): string {
@@ -30,6 +32,25 @@ function formatDuration(duration: number | string | null | undefined): string {
   return hours > 0 ? `${hours}:${mm}:${ss}` : `${minutes}:${ss}`;
 }
 
+const LiveTime = ({ startedAt }: { startedAt: string }) => {
+  const start = new Date(startedAt).getTime();
+  const [duration, setDuration] = useState<number>(
+    (new Date().getTime() - start) / 1000
+  );
+  useEffect(() => {
+    console.log("start", start);
+    const interval = window.setInterval(() => {
+      const now = new Date();
+      setDuration((now.getTime() - start) / 1000);
+    }, 2000);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [start]);
+  return <div>{formatDuration(duration)}</div>;
+};
+
 function TrackedTimeRow({
   trackedTime,
   project,
@@ -37,11 +58,13 @@ function TrackedTimeRow({
   isPending,
   onStart,
   onStop,
+  onEdit,
 }: Props) {
   const startedAt = getDate(trackedTime.started_at);
   const endedAt = trackedTime.ended_at ? getDate(trackedTime.ended_at) : null;
 
-  const handleClick = () => {
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (isActive) {
       onStop(trackedTime);
     } else {
@@ -50,7 +73,10 @@ function TrackedTimeRow({
   };
 
   return (
-    <div className="flex items-center justify-between border-b border-gray-200 py-3 px-4 hover:bg-blue-50">
+    <div
+      onClick={onEdit}
+      className="flex items-center justify-between border-b border-gray-200 py-3 px-4 hover:bg-blue-50 cursor-pointer"
+    >
       <div className="flex-grow min-w-0">
         <div className="text-gray-800 text-sm md:text-base font-medium truncate">
           {project?.name ?? `Project #${trackedTime.project}`}
@@ -73,7 +99,11 @@ function TrackedTimeRow({
         )}
         <div className="text-right mr-4">
           <div className="text-gray-800 text-sm md:text-base font-mono">
-            {formatDuration(trackedTime.duration)}
+            {isActive ? (
+              <LiveTime startedAt={trackedTime.started_at} />
+            ) : (
+              formatDuration(trackedTime.duration)
+            )}
           </div>
           <div className="text-gray-400 text-xs capitalize">
             {isActive ? "tracking" : "complete"}
@@ -81,7 +111,7 @@ function TrackedTimeRow({
         </div>
         <button
           type="button"
-          onClick={handleClick}
+          onClick={handleButtonClick}
           disabled={isPending}
           title={isActive ? "Stop tracking" : "Start tracking"}
           aria-label={isActive ? "Stop tracking" : "Start tracking"}

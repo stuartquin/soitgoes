@@ -1,29 +1,37 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { format, isToday } from "date-fns";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "@tanstack/react-router";
+import { useRouter, useNavigate } from "@tanstack/react-router";
 
 import {
   TrackedTime,
   Project,
+  Task,
   createTrackedTime,
   partialUpdateTrackedTime,
 } from "apiv3";
 import { getDate } from "lib/date";
+import Button from "components/Button";
+import IconPlus from "components/Icons/IconPlus";
 import TrackedTimeRow from "components/tracking/TrackedTimeRow";
+import TrackedTimeEditor from "components/tracking/TrackedTimeEditor";
+import IconPlay from "components/Icons/IconPlay";
 
 interface Props {
   trackedTimes: TrackedTime[];
   projects: Project[];
+  tasks: Task[];
 }
 
 function isRowOpen(tt: TrackedTime): boolean {
   return !tt.ended_at;
 }
 
-function TrackedTimeList({ trackedTimes, projects }: Props) {
+function TrackedTimeList({ trackedTimes, projects, tasks }: Props) {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const [editorOpen, setEditorOpen] = useState(false);
+  const [editorTarget, setEditorTarget] = useState<TrackedTime | null>(null);
 
   const projectLookup = useMemo(() => {
     const map = new Map<number, Project>();
@@ -157,46 +165,96 @@ function TrackedTimeList({ trackedTimes, projects }: Props) {
       });
   }, [trackedTimes]);
 
+  const openEditor = useCallback((trackedTime: TrackedTime | null) => {
+    setEditorTarget(trackedTime);
+    setEditorOpen(true);
+  }, []);
+
+  const closeEditor = useCallback(() => setEditorOpen(false), []);
+
+  const navigate = useNavigate();
+  const handleEdit = useCallback(
+    (trackedTime: TrackedTime) => {
+      navigate({ to: "/tracking/$trackingId", params: { trackingId: String(trackedTime.id) } });
+    },
+    [navigate]
+  );
+
+  const renderEditor = (
+    <TrackedTimeEditor
+      isOpen={editorOpen}
+      trackedTime={editorTarget}
+      projects={projects}
+      tasks={tasks}
+      onClose={closeEditor}
+      onSaved={refresh}
+    />
+  );
+
+  const header = (
+    <div className="flex flex-wrap items-center justify-between gap-2 my-4 w-full px-2 sm:px-0">
+      <h1 className="text-lg sm:text-xl font-semibold text-gray-800">
+        Tracked Time
+      </h1>
+      <button
+        type="button"
+        onClick={() => openEditor(null)}
+        className="h-8 w-8 flex items-center justify-center rounded-full text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-green-500 hover:bg-green-600"
+      >
+        <IconPlay className="h-4 w-4" />
+      </button>
+    </div>
+  );
+
   if (!groupedDays.length) {
     return (
-      <div className="text-gray-500 text-center py-12">
-        No tracked time yet.
+      <div>
+        {header}
+        <div className="text-gray-500 text-center py-12">
+          No tracked time yet.
+        </div>
+        {renderEditor}
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {groupedDays.map(({ dayKey, entries }) => {
-        const dayDate = getDate(dayKey);
-        const dayLabel = isToday(dayDate)
-          ? "Today"
-          : format(dayDate, "EEEE, d MMMM yyyy");
-        return (
-          <div
-            key={dayKey}
-            className="bg-white rounded-md shadow-sm overflow-hidden"
-          >
-            <div className="bg-gray-100 flex justify-between items-center px-4 py-2 text-gray-700 text-sm font-semibold">
-              <span>{dayLabel}</span>
-              <span className="text-gray-400 text-xs font-normal uppercase tracking-wide">
-                {entries.length} {entries.length === 1 ? "entry" : "entries"}
-              </span>
+    <div>
+      {header}
+      <div className="space-y-6">
+        {groupedDays.map(({ dayKey, entries }) => {
+          const dayDate = getDate(dayKey);
+          const dayLabel = isToday(dayDate)
+            ? "Today"
+            : format(dayDate, "EEEE, d MMMM yyyy");
+          return (
+            <div
+              key={dayKey}
+              className="bg-white rounded-md shadow-sm overflow-hidden"
+            >
+              <div className="bg-gray-100 flex justify-between items-center px-4 py-2 text-gray-700 text-sm font-semibold">
+                <span>{dayLabel}</span>
+                <span className="text-gray-400 text-xs font-normal uppercase tracking-wide">
+                  {entries.length} {entries.length === 1 ? "entry" : "entries"}
+                </span>
+              </div>
+              {entries.map((trackedTime) => (
+                <TrackedTimeRow
+                  key={trackedTime.id}
+                  trackedTime={trackedTime}
+                  project={projectLookup.get(trackedTime.project)}
+                  isActive={isRowOpen(trackedTime)}
+                  isPending={startMutation.isPending || stopMutation.isPending}
+                  onStart={handleStart}
+                  onStop={handleStop}
+                  onEdit={() => handleEdit(trackedTime)}
+                />
+              ))}
             </div>
-            {entries.map((trackedTime) => (
-              <TrackedTimeRow
-                key={trackedTime.id}
-                trackedTime={trackedTime}
-                project={projectLookup.get(trackedTime.project)}
-                isActive={isRowOpen(trackedTime)}
-                isPending={startMutation.isPending || stopMutation.isPending}
-                onStart={handleStart}
-                onStop={handleStop}
-              />
-            ))}
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
+      {renderEditor}
     </div>
   );
 }
