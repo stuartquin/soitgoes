@@ -10,24 +10,33 @@ import {
   createTrackedTime,
   partialUpdateTrackedTime,
 } from "apiv3";
-import { getDate } from "lib/date";
+import { formatQuery, getDate } from "lib/date";
 import Button from "components/Button";
 import IconPlus from "components/Icons/IconPlus";
 import TrackedTimeRow from "components/tracking/TrackedTimeRow";
 import TrackedTimeEditor from "components/tracking/TrackedTimeEditor";
+import TrackingSummaryPanel from "components/tracking/TrackingSummaryPanel";
+import DateFilterPopover from "components/tracking/DateFilterPopover";
 import IconPlay from "components/Icons/IconPlay";
+
+export interface TrackingFilters {
+  project?: number;
+  start?: Date;
+  end?: Date;
+}
 
 interface Props {
   trackedTimes: TrackedTime[];
   projects: Project[];
   tasks: Task[];
+  filters: TrackingFilters;
 }
 
 function isRowOpen(tt: TrackedTime): boolean {
   return !tt.ended_at;
 }
 
-function TrackedTimeList({ trackedTimes, projects, tasks }: Props) {
+function TrackedTimeList({ trackedTimes, projects, tasks, filters }: Props) {
   const queryClient = useQueryClient();
   const router = useRouter();
   const [editorOpen, setEditorOpen] = useState(false);
@@ -180,6 +189,27 @@ function TrackedTimeList({ trackedTimes, projects, tasks }: Props) {
     [navigate]
   );
 
+  const handleProjectChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const value = e.target.value ? Number(e.target.value) : undefined;
+      navigate({
+        to: "/tracking",
+        search: (prev) => ({ ...prev, project: value }),
+      });
+    },
+    [navigate]
+  );
+
+  const handlePresetApply = useCallback(
+    ({ start: newStart, end: newEnd }: { start?: string; end?: string }) => {
+      navigate({
+        to: "/tracking",
+        search: (prev) => ({ ...prev, start: newStart, end: newEnd }),
+      });
+    },
+    [navigate]
+  );
+
   const renderEditor = (
     <TrackedTimeEditor
       isOpen={editorOpen}
@@ -193,13 +223,30 @@ function TrackedTimeList({ trackedTimes, projects, tasks }: Props) {
 
   const header = (
     <div className="flex flex-wrap items-center justify-between gap-2 my-4 w-full px-2 sm:px-0">
-      <h1 className="text-lg sm:text-xl font-semibold text-gray-800">
-        Tracked Time
-      </h1>
+      <div className="flex gap-2 items-center">
+        <select
+          className="select"
+          value={filters.project ?? ""}
+          onChange={handleProjectChange}
+        >
+          <option value="">All projects</option>
+          {projects.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.name}
+            </option>
+          ))}
+        </select>
+        <DateFilterPopover
+          start={filters.start ? formatQuery(filters.start) : undefined}
+          end={filters.end ? formatQuery(filters.end) : undefined}
+          onChange={handlePresetApply}
+        />
+      </div>
       <button
         type="button"
         onClick={() => openEditor(null)}
         className="h-8 w-8 flex items-center justify-center rounded-full text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-green-500 hover:bg-green-600"
+        title="Start tracking"
       >
         <IconPlay className="h-4 w-4" />
       </button>
@@ -208,7 +255,7 @@ function TrackedTimeList({ trackedTimes, projects, tasks }: Props) {
 
   if (!groupedDays.length) {
     return (
-      <div>
+      <div className="w-full">
         {header}
         <div className="text-gray-500 text-center py-12">
           No tracked time yet.
@@ -219,40 +266,45 @@ function TrackedTimeList({ trackedTimes, projects, tasks }: Props) {
   }
 
   return (
-    <div>
+    <div className="w-full">
       {header}
-      <div className="space-y-6">
-        {groupedDays.map(({ dayKey, entries }) => {
-          const dayDate = getDate(dayKey);
-          const dayLabel = isToday(dayDate)
-            ? "Today"
-            : format(dayDate, "EEEE, d MMMM yyyy");
-          return (
-            <div
-              key={dayKey}
-              className="bg-white rounded-md shadow-sm overflow-hidden"
-            >
-              <div className="bg-gray-100 flex justify-between items-center px-4 py-2 text-gray-700 text-sm font-semibold">
-                <span>{dayLabel}</span>
-                <span className="text-gray-400 text-xs font-normal uppercase tracking-wide">
-                  {entries.length} {entries.length === 1 ? "entry" : "entries"}
-                </span>
+      <div className="px-2 sm:px-0 flex flex-col lg:flex-row lg:gap-4">
+        <div className="space-y-6 lg:w-2/3">
+          {groupedDays.map(({ dayKey, entries }) => {
+            const dayDate = getDate(dayKey);
+            const dayLabel = isToday(dayDate)
+              ? "Today"
+              : format(dayDate, "EEEE, d MMMM yyyy");
+            return (
+              <div
+                key={dayKey}
+                className="bg-white rounded-md shadow-sm overflow-hidden"
+              >
+                <div className="bg-gray-100 flex justify-between items-center px-4 py-2 text-gray-700 text-sm font-semibold">
+                  <span>{dayLabel}</span>
+                  <span className="text-gray-400 text-xs font-normal uppercase tracking-wide">
+                    {entries.length} {entries.length === 1 ? "entry" : "entries"}
+                  </span>
+                </div>
+                {entries.map((trackedTime) => (
+                  <TrackedTimeRow
+                    key={trackedTime.id}
+                    trackedTime={trackedTime}
+                    project={projectLookup.get(trackedTime.project)}
+                    isActive={isRowOpen(trackedTime)}
+                    isPending={startMutation.isPending || stopMutation.isPending}
+                    onStart={handleStart}
+                    onStop={handleStop}
+                    onEdit={() => handleEdit(trackedTime)}
+                  />
+                ))}
               </div>
-              {entries.map((trackedTime) => (
-                <TrackedTimeRow
-                  key={trackedTime.id}
-                  trackedTime={trackedTime}
-                  project={projectLookup.get(trackedTime.project)}
-                  isActive={isRowOpen(trackedTime)}
-                  isPending={startMutation.isPending || stopMutation.isPending}
-                  onStart={handleStart}
-                  onStop={handleStop}
-                  onEdit={() => handleEdit(trackedTime)}
-                />
-              ))}
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+        <div className="my-4 lg:w-1/3 space-y-4 hidden lg:block">
+          <TrackingSummaryPanel trackedTimes={trackedTimes} />
+        </div>
       </div>
       {renderEditor}
     </div>

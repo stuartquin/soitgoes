@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 
 import { ensure } from "typeHelpers";
@@ -8,7 +8,6 @@ import UnbilledProjectsPanel from "components/Invoices/UnbilledProjectsPanel";
 import Button from "components/Button";
 import SlideOver from "components/SlideOver";
 import { Invoice, Project, ProjectSummary } from "apiv3";
-import { OneTimeToken } from "api";
 
 interface Filters {
   status?: Invoice["status"];
@@ -86,7 +85,7 @@ function Invoices({ projects, summary, invoices, filters }: Props) {
       <div className="flex flex-wrap items-center justify-between gap-2 my-4 w-full px-2 sm:px-0">
         <div className="flex gap-2">
           <select
-            className="border border-gray-300 rounded px-2 py-1 text-sm"
+            className="select"
             value={filters.status ?? ""}
             onChange={handleStatusChange}
           >
@@ -97,7 +96,7 @@ function Invoices({ projects, summary, invoices, filters }: Props) {
             ))}
           </select>
           <select
-            className="border border-gray-300 rounded px-2 py-1 text-sm"
+            className="select"
             value={filters.project ?? ""}
             onChange={handleProjectChange}
           >
