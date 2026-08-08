@@ -11,13 +11,12 @@ import {
   partialUpdateTrackedTime,
 } from "apiv3";
 import { formatQuery, getDate } from "lib/date";
-import Button from "components/Button";
-import IconPlus from "components/Icons/IconPlus";
+import SlideOver from "components/SlideOver";
 import TrackedTimeRow from "components/tracking/TrackedTimeRow";
-import TrackedTimeEditor from "components/tracking/TrackedTimeEditor";
 import TrackingSummaryPanel from "components/tracking/TrackingSummaryPanel";
+import TrackingReport from "components/tracking/TrackingReport";
 import DateFilterPopover from "components/tracking/DateFilterPopover";
-import IconPlay from "components/Icons/IconPlay";
+import StartTrackingPopover from "components/tracking/StartTrackingPopover";
 
 export interface TrackingFilters {
   project?: number;
@@ -39,8 +38,7 @@ function isRowOpen(tt: TrackedTime): boolean {
 function TrackedTimeList({ trackedTimes, projects, tasks, filters }: Props) {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const [editorOpen, setEditorOpen] = useState(false);
-  const [editorTarget, setEditorTarget] = useState<TrackedTime | null>(null);
+  const [reportOpen, setReportOpen] = useState(false);
 
   const projectLookup = useMemo(() => {
     const map = new Map<number, Project>();
@@ -144,6 +142,23 @@ function TrackedTimeList({ trackedTimes, projects, tasks, filters }: Props) {
     [stopMutation]
   );
 
+  // Start a brand-new tracking session for the chosen project, closing any
+  // in-progress row for that project first (one open session per project).
+  const handleStartProject = useCallback(
+    (project: Project) => {
+      startMutation.mutate({
+        trackedTime: {
+          project: project.id as number,
+          task: project.default_task ?? null,
+          started_at: "",
+        },
+        openToClose: openByProject.get(project.id as number),
+        started_at: new Date().toISOString(),
+      });
+    },
+    [openByProject, startMutation]
+  );
+
   // Group TrackedTime entries by the day of their `started_at`, then render
   // each day group (most recent day first) with a day header. Within a day,
   // in-progress rows sort first, then by `started_at` DESC.
@@ -174,17 +189,13 @@ function TrackedTimeList({ trackedTimes, projects, tasks, filters }: Props) {
       });
   }, [trackedTimes]);
 
-  const openEditor = useCallback((trackedTime: TrackedTime | null) => {
-    setEditorTarget(trackedTime);
-    setEditorOpen(true);
-  }, []);
-
-  const closeEditor = useCallback(() => setEditorOpen(false), []);
-
   const navigate = useNavigate();
   const handleEdit = useCallback(
     (trackedTime: TrackedTime) => {
-      navigate({ to: "/tracking/$trackingId", params: { trackingId: String(trackedTime.id) } });
+      navigate({
+        to: "/tracking/$trackingId",
+        params: { trackingId: String(trackedTime.id) },
+      });
     },
     [navigate]
   );
@@ -210,16 +221,27 @@ function TrackedTimeList({ trackedTimes, projects, tasks, filters }: Props) {
     [navigate]
   );
 
-  const renderEditor = (
-    <TrackedTimeEditor
-      isOpen={editorOpen}
-      trackedTime={editorTarget}
-      projects={projects}
-      tasks={tasks}
-      onClose={closeEditor}
-      onSaved={refresh}
-    />
-  );
+  const reportFilters = useMemo(() => {
+    const projectName = filters.project
+      ? projects.find((p) => p.id === filters.project)?.name ??
+        `Project ${filters.project}`
+      : "All projects";
+    if (filters.start && filters.end) {
+      return {
+        projectName,
+        dateRange: `${formatQuery(filters.start)} to ${formatQuery(
+          filters.end
+        )}`,
+      };
+    }
+    if (filters.start) {
+      return { projectName, dateRange: `from ${formatQuery(filters.start)}` };
+    }
+    if (filters.end) {
+      return { projectName, dateRange: `up to ${formatQuery(filters.end)}` };
+    }
+    return { projectName, dateRange: "all time" };
+  }, [filters.project, filters.start, filters.end, projects]);
 
   const header = (
     <div className="flex flex-wrap items-center justify-between gap-2 my-4 w-full px-2 sm:px-0">
@@ -241,16 +263,37 @@ function TrackedTimeList({ trackedTimes, projects, tasks, filters }: Props) {
           end={filters.end ? formatQuery(filters.end) : undefined}
           onChange={handlePresetApply}
         />
+        <button
+          type="button"
+          onClick={() => setReportOpen(true)}
+          className="h-8 px-2 flex items-center justify-center rounded border border-gray-300 bg-white text-gray-600 text-sm transition-colors hover:bg-gray-100"
+          title="View report"
+        >
+          View Report
+        </button>
       </div>
-      <button
-        type="button"
-        onClick={() => openEditor(null)}
-        className="h-8 w-8 flex items-center justify-center rounded-full text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-green-500 hover:bg-green-600"
-        title="Start tracking"
-      >
-        <IconPlay className="h-4 w-4" />
-      </button>
+      <StartTrackingPopover
+        projects={projects}
+        trackedTimes={trackedTimes}
+        onSelect={handleStartProject}
+        disabled={startMutation.isPending}
+      />
     </div>
+  );
+
+  const renderReport = (
+    <SlideOver
+      isOpen={reportOpen}
+      onClose={() => setReportOpen(false)}
+      className="report-slideover"
+    >
+      <TrackingReport
+        trackedTimes={trackedTimes}
+        projects={projects}
+        tasks={tasks}
+        filters={reportFilters}
+      />
+    </SlideOver>
   );
 
   if (!groupedDays.length) {
@@ -260,7 +303,7 @@ function TrackedTimeList({ trackedTimes, projects, tasks, filters }: Props) {
         <div className="text-gray-500 text-center py-12">
           No tracked time yet.
         </div>
-        {renderEditor}
+        {renderReport}
       </div>
     );
   }
@@ -283,7 +326,8 @@ function TrackedTimeList({ trackedTimes, projects, tasks, filters }: Props) {
                 <div className="bg-gray-100 flex justify-between items-center px-4 py-2 text-gray-700 text-sm font-semibold">
                   <span>{dayLabel}</span>
                   <span className="text-gray-400 text-xs font-normal uppercase tracking-wide">
-                    {entries.length} {entries.length === 1 ? "entry" : "entries"}
+                    {entries.length}{" "}
+                    {entries.length === 1 ? "entry" : "entries"}
                   </span>
                 </div>
                 {entries.map((trackedTime) => (
@@ -292,7 +336,9 @@ function TrackedTimeList({ trackedTimes, projects, tasks, filters }: Props) {
                     trackedTime={trackedTime}
                     project={projectLookup.get(trackedTime.project)}
                     isActive={isRowOpen(trackedTime)}
-                    isPending={startMutation.isPending || stopMutation.isPending}
+                    isPending={
+                      startMutation.isPending || stopMutation.isPending
+                    }
                     onStart={handleStart}
                     onStop={handleStop}
                     onEdit={() => handleEdit(trackedTime)}
@@ -306,7 +352,7 @@ function TrackedTimeList({ trackedTimes, projects, tasks, filters }: Props) {
           <TrackingSummaryPanel trackedTimes={trackedTimes} />
         </div>
       </div>
-      {renderEditor}
+      {renderReport}
     </div>
   );
 }

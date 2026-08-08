@@ -1,21 +1,25 @@
 import React from "react";
+import { createPortal } from "react-dom";
 
 interface Props {
   children: React.ReactNode;
   isOpen: boolean;
   onClose: () => void;
+  className?: string;
 }
 
-function SlideOver({ children, isOpen, onClose }: Props) {
+function SlideOver({ children, isOpen, onClose, className }: Props) {
   const slideOver = isOpen ? "translate-x-0" : "translate-x-full";
 
-  return (
+  return createPortal(
     <div
-      className={`fixed top-0 bottom-0 right-0 w-full sm:w-1/2 max-w-md transform ease-in-out duration-300 ${slideOver}`}
+      className={`fixed top-0 bottom-0 right-0 w-full sm:w-1/2 max-w-md transform ease-in-out duration-300 ${slideOver} ${
+        className || ""
+      }`}
     >
       {isOpen && (
         <div
-          className="absolute top-0 left-12 sm:left-0 -ml-8 pt-4 pr-2 flex sm:-ml-10 sm:pr-4 translate-x-1/2"
+          className="absolute top-0 left-12 sm:left-0 -ml-8 pt-4 pr-2 flex sm:-ml-10 sm:pr-4 translate-x-1/2 print:hidden"
           onClick={onClose}
         >
           <button className="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
@@ -38,10 +42,11 @@ function SlideOver({ children, isOpen, onClose }: Props) {
         </div>
       )}
 
-      <div className="h-full flex flex-col py-6 bg-white shadow-xl overflow-y-scroll">
+      <div className="h-full flex flex-col py-6 bg-white shadow-xl print:shadow-none overflow-y-scroll print:p-12">
         <div className="px-4 sm:px-6 mt-6 sm:mt-0">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

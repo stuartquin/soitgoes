@@ -1,10 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 
-import { TrackedTime, Project, Task, createTrackedTime, partialUpdateTrackedTime } from "apiv3";
+import {
+  TrackedTime,
+  Project,
+  Task,
+  createTrackedTime,
+  partialUpdateTrackedTime,
+  destroyTrackedTime,
+} from "apiv3";
+import { TrashIcon } from "@heroicons/react/outline";
 import SlideOver from "components/SlideOver";
 import Button from "components/Button";
-import TrackedTimeForm, { TrackedTimeDraft } from "components/tracking/TrackedTimeForm";
+import TrackedTimeForm, {
+  TrackedTimeDraft,
+} from "components/tracking/TrackedTimeForm";
 
 interface Props {
   isOpen: boolean;
@@ -42,7 +52,9 @@ export function TrackedTimeEditorPanel({
   onSaved,
   onClose,
 }: EditorPanelProps) {
-  const [draft, setDraft] = useState<TrackedTimeDraft>(() => toDraft(trackedTime));
+  const [draft, setDraft] = useState<TrackedTimeDraft>(() =>
+    toDraft(trackedTime)
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -85,7 +97,10 @@ export function TrackedTimeEditorPanel({
       };
 
       if (isEdit) {
-        await partialUpdateTrackedTime({ path: { id: String(draft.id) }, body });
+        await partialUpdateTrackedTime({
+          path: { id: String(draft.id) },
+          body,
+        });
       } else {
         await createTrackedTime({ body });
       }
@@ -98,19 +113,54 @@ export function TrackedTimeEditorPanel({
     }
   }, [draft, isEdit, projectValid, onSaved, onClose]);
 
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = useCallback(async () => {
+    if (!isEdit || draft.id == null) return;
+    if (
+      !window.confirm("Delete this tracked time entry? This cannot be undone.")
+    ) {
+      return;
+    }
+    setDeleting(true);
+    setError(null);
+    try {
+      await destroyTrackedTime({ path: { id: String(draft.id) } });
+      onSaved();
+      onClose();
+    } catch (e) {
+      setError("Failed to delete tracked time");
+    } finally {
+      setDeleting(false);
+    }
+  }, [draft.id, isEdit, onSaved, onClose]);
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex justify-between items-center mb-6">
         <div className="text-gray-800 text-lg font-medium">
           {isEdit ? "Edit Tracked Time" : "New Tracked Time"}
         </div>
-        <Button
-          variant="success"
-          onClick={handleSave}
-          disabled={saving || !projectValid}
-        >
-          {saving ? "Saving..." : "Save"}
-        </Button>
+        <div className="flex items-center gap-2">
+          {isEdit && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={deleting || saving}
+              className="h-8 w-8 flex items-center justify-center rounded text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-red-500 hover:bg-red-600"
+              title="Delete tracked time"
+            >
+              <TrashIcon className="h-6 w-6" />
+            </button>
+          )}
+          <Button
+            variant="success"
+            onClick={handleSave}
+            disabled={saving || !projectValid}
+          >
+            {saving ? "Saving..." : "Save"}
+          </Button>
+        </div>
       </div>
 
       {error && (

@@ -57,3 +57,9 @@ export const fromDatetimeLocal = (
   const d = new Date(value);
   return Number.isNaN(d.getTime()) ? null : d.toISOString();
 };
+
+export const formatAbbreviated = (
+  date: Date | string | undefined | null
+): string => {
+  return format(getDate(date), "EEE, d MMM yyyy");
+};

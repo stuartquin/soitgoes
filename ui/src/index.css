@@ -21,3 +21,31 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@media print {
+  /* The report SlideOver is portaled to <body>, so hiding #root removes all
+     other app chrome (nav, tracked-time list, etc.) from the printed document
+     without leaving the blank pages that a visibility-only hide would. */
+  #root {
+    display: none !important;
+  }
+
+  /* Neutralize the SlideOver's fixed, right-aligned, half-width, transformed
+     container so the report prints edge-to-edge across the full page. */
+  .report-slideover {
+    position: static !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: 0 !important;
+    right: auto !important;
+    width: 100% !important;
+    max-width: none !important;
+    transform: none !important;
+  }
+  .report-content {
+    position: static !important;
+    width: 100%;
+    padding: 1rem;
+  }
+
+}
