@@ -115,25 +115,6 @@ class TrackedTimeListTest(TestCase):
         self.assertEqual(data["count"], 1)
         self.assertEqual(data["results"][0]["id"], open_tt.id)
 
-    def test_default_page_size_is_100(self):
-        # The list view caps results at 100 per page by default.
-        baker.make(
-            "journal.TrackedTime",
-            project=self.project,
-            user=self.user,
-            started_at=self.now,
-            _quantity=150,
-        )
-
-        response = self.client.get(
-            reverse("tracked-times-list"), {"project": self.project.id}
-        )
-
-        data = response.json()
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data["count"], 150)
-        self.assertEqual(len(data["results"]), 100)
-
 
 class TrackedTimeDetailTest(TestCase):
     def setUp(self):

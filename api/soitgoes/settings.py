@@ -56,14 +56,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    # "corsheaders.middleware.CorsMiddleware",
-    # "django.middleware.security.SecurityMiddleware",
-    # "django.contrib.sessions.middleware.SessionMiddleware",
-    # "django.middleware.common.CommonMiddleware",
-    # "django.middleware.csrf.CsrfViewMiddleware",
-    # "django.contrib.auth.middleware.AuthenticationMiddleware",
-    # "django.contrib.messages.middleware.MessageMiddleware",
-    # "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # CorsMiddleware must run before any middleware that generates
+    # responses (CommonMiddleware, etc.) so CORS headers are applied to all
+    # responses, including preflight OPTIONS for the Firefox extension.
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -73,7 +69,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+# django-cors-headers 4.x renamed CORS_ORIGIN_ALLOW_ALL to
+# CORS_ALLOW_ALL_ORIGINS (the old name is kept for backwards compat but
+# set the new one to be explicit). The Firefox extension talks to the API
+# from a moz-extension:// origin and needs CORS headers on responses.
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = "soitgoes.urls"
 
@@ -191,15 +191,36 @@ REST_FRAMEWORK = {
 }
 
 
-# TODO Is ths OK?
-SESSION_COOKIE_HTTPONLY = False
+# --- Security / cookie hardening -----------------------------------------
+# Dev stays permissive; production (no DEV env var) enforces HTTPS-only
+# cookies and trusts the X-Forwarded-Proto header so request.is_secure()
+# returns True behind a TLS-terminating proxy.
+if not DEBUG:
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    # HTTPS redirection is handled by the reverse proxy / load balancer that
+    # terminates TLS. Doing it here too would (a) break the Django test client,
+    # which makes plain-HTTP requests that SecurityMiddleware would 301 to a
+    # text/html HTTPS page, and (b) risk a redirect loop if the proxy also
+    # redirects. Keep app-level redirect off and let the proxy own it.
+    # SECURE_SSL_REDIRECT = True
+
+# Session cookies should be inaccessible to JavaScript (Django's default is
+# True). The previous SESSION_COOKIE_HTTPONLY = False exposed the session id
+# to XSS, so restore the default by simply not overriding it.
+
+# CSRF_COOKIE_SAMESITE and SESSION_COOKIE_SAMESITE default to "Lax", which is
+# correct: it blocks cookies on cross-site POSTs without breaking top-level
+# navigation. Don't set them to "None" unless you have a genuine cross-site
+# session-authenticated SPA.
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
     "http://localhost:8080",
     "http://localhost:8000",
     "https://tracking.cloud.stuartquin.com",
-    "https://tracking-dev.cloud.stuartquin.com"
+    "https://tracking-dev.cloud.stuartquin.com",
 ]
 
 OPEN_EXCHANGE_RATES_APP_ID = os.environ.get("OPEN_EXCHANGE_RATES_APP_ID")
