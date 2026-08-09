@@ -28,14 +28,8 @@ function durationSeconds(tt: TrackedTime): number {
 function formatDuration(seconds: number): string {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
-  const secs = Math.floor(seconds % 60);
   const mm = String(minutes).padStart(2, "0");
-  const ss = String(secs).padStart(2, "0");
   return `${hours}h ${mm}m`;
-}
-
-function formatHours(seconds: number): string {
-  return `${(seconds / 3600).toFixed(2)}h`;
 }
 
 function TrackingReport({ trackedTimes, projects, tasks, filters }: Props) {
@@ -106,20 +100,16 @@ function TrackingReport({ trackedTimes, projects, tasks, filters }: Props) {
 
       <div className="report-content">
         <div className="flex justify-between items-center">
-          <div className="mb-4">
+          <div className="mb-2">
             <h1 className="text-lg font-semibold text-gray-800">
               Time report for {filters.projectName}
             </h1>
             <p className="text-sm text-gray-500">{filters.dateRange}</p>
           </div>
           <div>
-            <span className="text-lg font-medium text-gray-800 tabular-nums">
-              {formatHours(grandTotal)}
-              <span className="text-gray-400 font-normal ml-2">
-                ({groupedDays.length}{" "}
-                {groupedDays.length === 1 ? "day" : "days"})
-              </span>
-            </span>
+            <div className="text-lg font-medium text-gray-800 tabular-nums">
+              {formatDuration(grandTotal)}
+            </div>
           </div>
         </div>
 
@@ -134,7 +124,7 @@ function TrackingReport({ trackedTimes, projects, tasks, filters }: Props) {
                 <th className="border border-gray-200 px-2 py-1 text-left bg-gray-100 font-semibold">
                   Date
                 </th>
-                <th className="border border-gray-200 px-2 py-1 text-left bg-gray-100 font-semibold">
+                <th className="border border-gray-200 px-2 py-1 text-right bg-gray-100 font-semibold">
                   Duration
                 </th>
               </tr>
@@ -145,7 +135,7 @@ function TrackingReport({ trackedTimes, projects, tasks, filters }: Props) {
                   <td className="px-2 py-2 text-sm">
                     {formatAbbreviated(dayKey)}
                   </td>
-                  <td className="px-2 py-2 text-sm">
+                  <td className="px-2 py-2 text-sm text-right">
                     {formatDuration(dayTotal)}
                   </td>
                 </tr>
@@ -156,7 +146,7 @@ function TrackingReport({ trackedTimes, projects, tasks, filters }: Props) {
                 <td className="border border-gray-200 px-2 py-1 bg-gray-100 font-bold">
                   Total
                 </td>
-                <td className="border border-gray-200 px-2 py-1 bg-gray-100 font-bold text-right tabular-nums">
+                <td className="border border-gray-200 px-2 py-1 bg-gray-100 font-bold text-right tabular-nums text-right">
                   {formatDuration(grandTotal)}
                 </td>
               </tr>

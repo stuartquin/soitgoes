@@ -42,7 +42,7 @@ function SlideOver({ children, isOpen, onClose, className }: Props) {
         </div>
       )}
 
-      <div className="h-full flex flex-col py-6 bg-white shadow-xl print:shadow-none overflow-y-scroll print:p-12">
+      <div className="h-full flex flex-col py-6 bg-white shadow-xl print:shadow-none overflow-y-scroll print:overflow-y-hidden print:overflow-hidden">
         <div className="px-4 sm:px-6 mt-6 sm:mt-0">{children}</div>
       </div>
     </div>,
