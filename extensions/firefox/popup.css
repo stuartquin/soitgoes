@@ -107,6 +107,13 @@ body {
   justify-content: space-between;
   padding: 8px 12px;
   border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.row:hover,
+.row:focus-visible {
+  background: #f3f4f6;
 }
 
 .row:last-child {

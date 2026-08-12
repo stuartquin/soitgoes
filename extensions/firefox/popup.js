@@ -512,6 +512,7 @@ function renderRow(tt, projectLookup, openByProject) {
   button.innerHTML = active ? ICON_STOP : ICON_PLAY;
   button.addEventListener("click", async (e) => {
     e.stopPropagation();
+    e.preventDefault();
     button.disabled = true;
     mutationInFlight = true;
     try {
@@ -533,9 +534,29 @@ function renderRow(tt, projectLookup, openByProject) {
     }
   });
 
+  const openEntry = () => {
+    try {
+      browser.tabs.create({ url: TRACKING_URL(tt.id) });
+    } catch {
+      window.open(TRACKING_URL(tt.id), "_blank", "noopener");
+    }
+  };
+
   return el(
     "div",
-    { class: "row" },
+    {
+      class: "row",
+      role: "link",
+      tabindex: "0",
+      title: "Open in web app",
+      onclick: openEntry,
+      onkeydown: (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openEntry();
+        }
+      },
+    },
     el(
       "div",
       {},

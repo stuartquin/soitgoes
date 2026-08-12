@@ -6,6 +6,9 @@
 //const API_BASE = "http://localhost:8001";
 const API_BASE = "https://tracking.cloud.stuartquin.com";
 
+// Web UI URL for an individual tracked-time entry (not the API host).
+const TRACKING_URL = (id) => `https://tracking.cloud.stuartquin.com/tracking/${id}`;
+
 const ENDPOINTS = {
   login: `${API_BASE}/api/users/login/`,
   trackedTimes: `${API_BASE}/api/tracked-times/`,
