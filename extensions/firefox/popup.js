@@ -51,6 +51,57 @@ function isToday(date) {
   );
 }
 
+// Total tracked duration (seconds) for a day's entries, counting any
+// in-progress row up to the current moment so the header total ticks
+// live alongside the running row durations.
+function dayTotalSeconds(entries) {
+  let total = 0;
+  for (const tt of entries) {
+    if (isRowOpen(tt)) {
+      total += (Date.now() - new Date(tt.started_at).getTime()) / 1000;
+    } else {
+      total += Number(tt.duration) || 0;
+    }
+  }
+  return total;
+}
+
+// Format a duration (seconds) as "<H>h <M>m" with zero-padded minutes,
+// e.g. 2h 32m, 0h 05m.
+function formatDayTotal(seconds) {
+  const s = Math.floor(Number(seconds) || 0);
+  const hours = Math.floor(s / 3600);
+  const minutes = Math.floor((s % 3600) / 60);
+  return `${hours}h ${String(minutes).padStart(2, "0")}m`;
+}
+
+// Start of the current week as a Date. Weeks start on Monday, matching
+// lib/date.ts getStartOfWeek (weekStartsOn: 1) used by the webapp's
+// TrackingSummaryPanel.
+function startOfWeek(date = new Date()) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  const dow = (d.getDay() + 6) % 7; // Mon=0 ... Sun=6
+  d.setDate(d.getDate() - dow);
+  return d;
+}
+
+// Total tracked duration (seconds) for entries that started in the current
+// week. In-progress rows count up to now. Mirrors TrackingSummaryPanel.
+function weekTotalSeconds(trackedTimes) {
+  const start = startOfWeek().getTime();
+  let total = 0;
+  for (const tt of trackedTimes) {
+    if (new Date(tt.started_at).getTime() < start) continue;
+    if (isRowOpen(tt)) {
+      total += (Date.now() - new Date(tt.started_at).getTime()) / 1000;
+    } else {
+      total += Number(tt.duration) || 0;
+    }
+  }
+  return total;
+}
+
 function dayLabel(key) {
   const d = new Date(key + "T00:00:00");
   if (isToday(d)) return "Today";
@@ -329,9 +380,11 @@ function drawListView(trackedTimes, projects) {
     renderLogin();
   });
 
+  const weekSummary = el("span", { class: "week-summary" }, "This week: …");
+
   app.append(
     el("div", { class: "header" }, select, startBtn),
-    el("div", { class: "logout-bar" }, logoutBtn)
+    el("div", { class: "logout-bar" }, weekSummary)
   );
 
   // ---- list body ----
@@ -339,6 +392,9 @@ function drawListView(trackedTimes, projects) {
   // can populate it without rebuilding the header or resetting the select.
   const listRoot = el("div", {});
   app.append(listRoot);
+
+  // Footer logout, pinned to the bottom of the pane.
+  app.append(el("div", { class: "logout-bar logout-bar--bottom" }, logoutBtn));
 
   // Group by day (most recent first); within a day, open rows first then
   // started_at DESC — same rules as TrackedTimeList.groupedDays.
@@ -373,6 +429,7 @@ function drawListView(trackedTimes, projects) {
 
   function drawBody() {
     listRoot.innerHTML = "";
+    weekSummary.textContent = `This week: ${formatDayTotal(weekTotalSeconds(trackedTimes))}`;
     if (!groups.length) {
       listRoot.append(el("div", { class: "message" }, "No tracked time yet."));
       return;
@@ -387,7 +444,7 @@ function drawListView(trackedTimes, projects) {
           el(
             "span",
             { class: "count" },
-            `${entries.length} ${entries.length === 1 ? "entry" : "entries"}`
+            formatDayTotal(dayTotalSeconds(entries))
           )
         )
       );

@@ -250,6 +250,11 @@ body {
   padding: 4px 12px 0;
 }
 
+.logout-bar .week-summary {
+  color: #6b7280;
+  font-size: 11px;
+}
+
 .logout-bar button {
   border: none;
   background: none;
@@ -261,4 +266,17 @@ body {
 
 .logout-bar button:hover {
   color: #6b7280;
+}
+
+.logout-bar--bottom {
+  justify-content: center;
+  padding: 8px 12px;
+  position: sticky;
+  bottom: 0;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.logout-bar--bottom button {
+  font-size: 11px;
 }

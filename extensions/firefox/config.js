@@ -3,7 +3,8 @@
 // The UI dev server proxies "/api" -> http://localhost:8001; a Firefox
 // extension cannot rely on that proxy, so we talk to the API host directly.
 // Point this at your local Django server for development.
-const API_BASE = "http://localhost:8001";
+//const API_BASE = "http://localhost:8001";
+const API_BASE = "https://tracking.cloud.stuartquin.com";
 
 const ENDPOINTS = {
   login: `${API_BASE}/api/users/login/`,

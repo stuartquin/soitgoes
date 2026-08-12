@@ -16,7 +16,7 @@
 
   "permissions": ["storage", "alarms"],
 
-  "host_permissions": ["http://localhost/*"],
+  "host_permissions": ["http://localhost/*", "https://tracking.cloud.stuartquin.com/*"],
 
   "background": {
     "scripts": ["config.js", "background.js"]
