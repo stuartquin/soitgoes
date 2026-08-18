@@ -2,7 +2,12 @@ import { useMemo } from "react";
 import { format } from "date-fns";
 
 import { TrackedTime, Project, Task } from "apiv3";
-import { formatAbbreviated, getDate } from "lib/date";
+import {
+  formatAbbreviated,
+  getDate,
+  getStartOfWeek,
+  getEndOfWeek,
+} from "lib/date";
 
 interface Props {
   trackedTimes: TrackedTime[];
@@ -33,24 +38,10 @@ function formatDuration(seconds: number): string {
 }
 
 function TrackingReport({ trackedTimes, projects, tasks, filters }: Props) {
-  const projectLookup = useMemo(() => {
-    const map = new Map<number, Project>();
-    projects.forEach((p) => {
-      if (p.id !== undefined) map.set(p.id, p);
-    });
-    return map;
-  }, [projects]);
-
-  const taskLookup = useMemo(() => {
-    const map = new Map<number, Task>();
-    tasks.forEach((t) => {
-      if (t.id !== undefined) map.set(t.id, t);
-    });
-    return map;
-  }, [tasks]);
-
   // Group by day ascending, compute per-day totals.
-  const groupedDays = useMemo(() => {
+  // Group days ascending, then bucket days by calendar week
+  // (Monday-start) with per-week totals.
+  const groupedWeeks = useMemo(() => {
     const byDay = new Map<string, TrackedTime[]>();
     trackedTimes.forEach((tt) => {
       const dayKey = format(getDate(tt.started_at), "yyyy-MM-dd");
@@ -58,7 +49,8 @@ function TrackingReport({ trackedTimes, projects, tasks, filters }: Props) {
       if (bucket) bucket.push(tt);
       else byDay.set(dayKey, [tt]);
     });
-    return [...byDay.entries()]
+
+    const days = [...byDay.entries()]
       .sort(([dayA], [dayB]) => dayA.localeCompare(dayB))
       .map(([dayKey, entries]) => {
         const sorted = [...entries].sort(
@@ -71,20 +63,35 @@ function TrackingReport({ trackedTimes, projects, tasks, filters }: Props) {
         );
         return { dayKey, entries: sorted, dayTotal };
       });
+
+    const byWeek = new Map<string, { days: typeof days; weekTotal: number }>();
+    days.forEach((day) => {
+      const weekKey = format(getStartOfWeek(day.dayKey), "yyyy-MM-dd");
+      const bucket = byWeek.get(weekKey);
+      if (bucket) {
+        bucket.days.push(day);
+        bucket.weekTotal += day.dayTotal;
+      } else {
+        byWeek.set(weekKey, {
+          days: [day],
+          weekTotal: day.dayTotal,
+        });
+      }
+    });
+
+    return [...byWeek.entries()]
+      .sort(([weekA], [weekB]) => weekA.localeCompare(weekB))
+      .map(([weekKey, { days: weekDays, weekTotal }]) => ({
+        weekKey,
+        days: weekDays,
+        weekTotal,
+      }));
   }, [trackedTimes]);
 
   const grandTotal = useMemo(
-    () => groupedDays.reduce((sum, d) => sum + d.dayTotal, 0),
-    [groupedDays]
+    () => groupedWeeks.reduce((sum, w) => sum + w.weekTotal, 0),
+    [groupedWeeks]
   );
-
-  const hasTask = useMemo(() => {
-    return trackedTimes.some((t) => Boolean(t.task));
-  }, [trackedTimes]);
-
-  const hasComment = useMemo(() => {
-    return trackedTimes.some((t) => Boolean(t.comment));
-  }, [trackedTimes]);
 
   return (
     <div className="flex flex-col h-full">
@@ -113,7 +120,7 @@ function TrackingReport({ trackedTimes, projects, tasks, filters }: Props) {
           </div>
         </div>
 
-        {groupedDays.length === 0 ? (
+        {groupedWeeks.length === 0 ? (
           <div className="text-gray-500 text-center py-12">
             No tracked time for the selected filters.
           </div>
@@ -129,24 +136,43 @@ function TrackingReport({ trackedTimes, projects, tasks, filters }: Props) {
                 </th>
               </tr>
             </thead>
-            {groupedDays.map(({ dayKey, dayTotal }) => (
-              <tbody key={dayKey}>
-                <tr>
-                  <td className="px-2 py-2 text-sm">
-                    {formatAbbreviated(dayKey)}
-                  </td>
-                  <td className="px-2 py-2 text-sm text-right">
-                    {formatDuration(dayTotal)}
-                  </td>
-                </tr>
-              </tbody>
-            ))}
+            {groupedWeeks.map(({ weekKey, days, weekTotal }) =>
+              days.map(({ dayKey, dayTotal }, dayIndex) => {
+                const isLastInWeek = dayIndex === days.length - 1;
+                return (
+                  <tbody key={dayKey}>
+                    <tr>
+                      <td className="px-2 py-2 text-sm">
+                        {formatAbbreviated(dayKey)}
+                      </td>
+                      <td className="px-2 py-2 text-sm text-right tabular-nums">
+                        {formatDuration(dayTotal)}
+                      </td>
+                    </tr>
+                    {isLastInWeek && (
+                      <tr
+                        className="print:hidden"
+                        style={{
+                          background: "#F7F7F7",
+                          color: "#7a7a7a",
+                        }}
+                      >
+                        <td className="px-2 py-2 text-sm">Week total</td>
+                        <td className="px-2 py-2 text-sm text-right tabular-nums">
+                          {formatDuration(weekTotal)}
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                );
+              })
+            )}
             <tfoot>
               <tr>
                 <td className="border border-gray-200 px-2 py-1 bg-gray-100 font-bold">
                   Total
                 </td>
-                <td className="border border-gray-200 px-2 py-1 bg-gray-100 font-bold text-right tabular-nums text-right">
+                <td className="border border-gray-200 px-2 py-1 bg-gray-100 font-bold text-right tabular-nums">
                   {formatDuration(grandTotal)}
                 </td>
               </tr>
