@@ -41,6 +41,20 @@ export const getTimeSlipQueryRange = (
   return [formatQuery(startDate), formatQuery(addWeeks(getEndOfWeek(date), 1))];
 };
 
+/**
+ * Return a new ISO string with the date portion replaced by `day`
+ * (`yyyy-MM-dd`), preserving the time of day.
+ */
+export const setDay = (
+  date: Date | string | undefined | null,
+  day: string
+): string => {
+  const d = new Date(getDate(date));
+  const [year, month, dayOfMonth] = day.split("-").map(Number);
+  d.setFullYear(year, (month ?? 1) - 1, dayOfMonth ?? 1);
+  return d.toISOString();
+};
+
 /** Format a date/string as the value for an `<input type="datetime-local">`. */
 export const toDatetimeLocal = (
   date: Date | string | undefined | null

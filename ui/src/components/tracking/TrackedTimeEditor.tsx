@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 
 import {
   TrackedTime,
@@ -11,7 +11,9 @@ import {
 } from "apiv3";
 import { TrashIcon } from "@heroicons/react/outline";
 import SlideOver from "components/SlideOver";
+import { setDay } from "lib/date";
 import Button from "components/Button";
+import CopyTrackedTimePopover from "components/tracking/CopyTrackedTimePopover";
 import TrackedTimeForm, {
   TrackedTimeDraft,
 } from "components/tracking/TrackedTimeForm";
@@ -67,6 +69,8 @@ export function TrackedTimeEditorPanel({
 
   const isEdit = draft.id != null;
   const projectValid = draft.project != null;
+  // "Copy To" is only available for existing entries with an end date.
+  const canCopy = isEdit && Boolean(draft.ended_at);
 
   const handleSave = useCallback(async () => {
     if (!projectValid) {
@@ -113,6 +117,46 @@ export function TrackedTimeEditorPanel({
     }
   }, [draft, isEdit, projectValid, onSaved, onClose]);
 
+  const navigate = useNavigate();
+
+  // Create a duplicate of the entry on the chosen day (preserving time of
+  // day and duration), then navigate to the new copy. Rejections propagate
+  // so CopyTrackedTimePopover can surface the error.
+  const handleCopyToDate = useCallback(
+    async (copyDate: string) => {
+      if (!trackedTime?.project || !draft.ended_at || !copyDate) return;
+
+      const started_at = setDay(draft.started_at, copyDate);
+      const ended_at = setDay(draft.ended_at, copyDate);
+      const response = await createTrackedTime({
+        body: {
+          project: trackedTime.project,
+          task: draft.task ?? null,
+          started_at,
+          ended_at,
+          comment: draft.comment ?? null,
+        },
+      });
+      onSaved();
+      const created = response.data;
+      if (created?.id != null) {
+        navigate({
+          to: "/tracking/$trackingId",
+          params: { trackingId: String(created.id) },
+        });
+      }
+    },
+    [
+      draft.comment,
+      draft.ended_at,
+      draft.started_at,
+      draft.task,
+      navigate,
+      onSaved,
+      trackedTime,
+    ]
+  );
+
   const [deleting, setDeleting] = useState(false);
 
   const handleDelete = useCallback(async () => {
@@ -142,6 +186,15 @@ export function TrackedTimeEditorPanel({
           {isEdit ? "Edit Tracked Time" : "New Tracked Time"}
         </div>
         <div className="flex items-center gap-2">
+          {canCopy && (
+            <CopyTrackedTimePopover
+              // Reset the popover state whenever the target entry changes.
+              key={trackedTime?.id ?? "new"}
+              startedAt={draft.started_at}
+              onCopy={handleCopyToDate}
+              disabled={saving}
+            />
+          )}
           {isEdit && (
             <button
               type="button"
