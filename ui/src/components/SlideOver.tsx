@@ -6,6 +6,7 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   className?: string;
+  closeText?: string;
 }
 
 function SlideOver({ children, isOpen, onClose, className }: Props) {
@@ -19,10 +20,10 @@ function SlideOver({ children, isOpen, onClose, className }: Props) {
     >
       {isOpen && (
         <div
-          className="absolute top-0 left-12 sm:left-0 -ml-8 pt-4 pr-2 flex sm:-ml-10 sm:pr-4 translate-x-1/2 print:hidden"
+          className="absolute top-0 sm:left-0 pt-4 pr-2 flex sm:pr-4 translate-x-1/2 print:hidden"
           onClick={onClose}
         >
-          <button className="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
+          <button className="rounded-md block text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white">
             <span className="sr-only">Close panel</span>
             <svg
               className="h-6 w-6"
@@ -43,7 +44,7 @@ function SlideOver({ children, isOpen, onClose, className }: Props) {
       )}
 
       <div className="h-full flex flex-col py-6 bg-white shadow-xl print:shadow-none overflow-y-scroll print:overflow-y-hidden print:overflow-hidden">
-        <div className="px-4 sm:px-6 mt-6 sm:mt-0">{children}</div>
+        <div className="px-4 sm:px-6 mt-6 sm:mt-0 pt-8">{children}</div>
       </div>
     </div>,
     document.body

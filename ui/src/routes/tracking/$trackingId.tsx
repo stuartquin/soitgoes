@@ -40,14 +40,6 @@ function TrackedTimeDetailRoute() {
   return (
     <SlideOver isOpen={Boolean(trackedTime)} onClose={handleClose}>
       <div className="px-2 sm:px-0">
-        <div className="mb-4">
-          <Link
-            to="/tracking"
-            className="text-sm text-gray-500 hover:text-gray-700"
-          >
-            ← Back to Tracked Time
-          </Link>
-        </div>
         <div className="bg-gray-100 p-4 rounded-md">
           <TrackedTimeEditorPanel
             trackedTime={trackedTime}
