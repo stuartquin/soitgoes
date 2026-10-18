@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreateCompanyData, CreateCompanyResponses, CreateContactData, CreateContactResponses, CreateInvoiceData, CreateInvoiceResponses, CreateLoginData, CreateLoginResponses, CreateNoteData, CreateNoteResponses, CreateProjectData, CreateProjectResponses, CreateSsoData, CreateSsoResponses, CreateTaskData, CreateTaskResponses, CreateTimeSlipData, CreateTimeSlipResponses, CreateTrackedTimeData, CreateTrackedTimeResponses, DestroyCompanyData, DestroyCompanyResponses, DestroyContactData, DestroyContactResponses, DestroyInvoiceData, DestroyInvoiceModifierData, DestroyInvoiceModifierResponses, DestroyInvoiceResponses, DestroyProjectData, DestroyProjectResponses, DestroyTaskData, DestroyTaskResponses, DestroyTimeSlipData, DestroyTimeSlipResponses, DestroyTrackedTimeData, DestroyTrackedTimeResponses, ListAccountsData, ListAccountsResponses, ListBulkInvoicePdfsData, ListBulkInvoicePdfsResponses, ListCompaniesData, ListCompaniesResponses, ListContactsData, ListContactsResponses, ListInvoiceModifiersData, ListInvoiceModifiersResponses, ListInvoicePdfsData, ListInvoicePdfsResponses, ListInvoicesData, ListInvoicesResponses, ListNotesData, ListNotesResponses, ListProjectsData, ListProjectsResponses, ListProjectSummariesData, ListProjectSummariesResponses, ListTasksData, ListTasksResponses, ListTimeSlipsData, ListTimeSlipsResponses, ListTrackedTimesData, ListTrackedTimesResponses, PartialUpdateCompanyData, PartialUpdateCompanyResponses, PartialUpdateContactData, PartialUpdateContactResponses, PartialUpdateInvoiceData, PartialUpdateInvoiceModifierData, PartialUpdateInvoiceModifierResponses, PartialUpdateInvoiceResponses, PartialUpdateProjectData, PartialUpdateProjectResponses, PartialUpdateTaskData, PartialUpdateTaskResponses, PartialUpdateTimeSlipData, PartialUpdateTimeSlipResponses, PartialUpdateTrackedTimeData, PartialUpdateTrackedTimeResponses, RetrieveCompanyData, RetrieveCompanyResponses, RetrieveContactData, RetrieveContactResponses, RetrieveExchangeRateData, RetrieveExchangeRateResponses, RetrieveInvoiceData, RetrieveInvoiceModifierData, RetrieveInvoiceModifierResponses, RetrieveInvoiceResponses, RetrieveOneTimeTokenData, RetrieveOneTimeTokenResponses, RetrieveProjectData, RetrieveProjectResponses, RetrieveTaskData, RetrieveTaskResponses, RetrieveTaskSummaryData, RetrieveTaskSummaryResponses, RetrieveTimeSlipData, RetrieveTimeSlipResponses, RetrieveTrackedTimeData, RetrieveTrackedTimeResponses, RetrieveUserData, RetrieveUserResponses, RetrieveVersionData, RetrieveVersionResponses, UpdateCompanyData, UpdateCompanyResponses, UpdateContactData, UpdateContactResponses, UpdateInvoiceData, UpdateInvoiceModifierData, UpdateInvoiceModifierResponses, UpdateInvoiceResponses, UpdateProjectData, UpdateProjectResponses, UpdateTaskData, UpdateTaskResponses, UpdateTimeSlipData, UpdateTimeSlipResponses, UpdateTrackedTimeData, UpdateTrackedTimeResponses } from './types.gen';
+import type { CreateCompanyData, CreateCompanyResponses, CreateContactData, CreateContactResponses, CreateInvoiceData, CreateInvoiceResponses, CreateLoginData, CreateLoginResponses, CreateNoteData, CreateNoteResponses, CreateProjectData, CreateProjectResponses, CreateSsoData, CreateSsoResponses, CreateTaskData, CreateTaskResponses, CreateTimeSlipData, CreateTimeSlipResponses, CreateTrackedTimeData, CreateTrackedTimeResponses, DestroyCompanyData, DestroyCompanyResponses, DestroyContactData, DestroyContactResponses, DestroyInvoiceData, DestroyInvoiceModifierData, DestroyInvoiceModifierResponses, DestroyInvoiceResponses, DestroyProjectData, DestroyProjectResponses, DestroyTaskData, DestroyTaskResponses, DestroyTimeSlipData, DestroyTimeSlipResponses, DestroyTrackedTimeData, DestroyTrackedTimeResponses, ListAccountsData, ListAccountsResponses, ListBankAccountsData, ListBankAccountsResponses, ListBankTransactionsData, ListBankTransactionsResponses, ListBulkInvoicePdfsData, ListBulkInvoicePdfsResponses, ListCompaniesData, ListCompaniesResponses, ListContactsData, ListContactsResponses, ListInvoiceModifiersData, ListInvoiceModifiersResponses, ListInvoicePdfsData, ListInvoicePdfsResponses, ListInvoicesData, ListInvoicesResponses, ListNotesData, ListNotesResponses, ListProjectsData, ListProjectsResponses, ListProjectSummariesData, ListProjectSummariesResponses, ListTagTypesData, ListTagTypesResponses, ListTasksData, ListTasksResponses, ListTimeSlipsData, ListTimeSlipsResponses, ListTrackedTimesData, ListTrackedTimesResponses, PartialUpdateCompanyData, PartialUpdateCompanyResponses, PartialUpdateContactData, PartialUpdateContactResponses, PartialUpdateInvoiceData, PartialUpdateInvoiceModifierData, PartialUpdateInvoiceModifierResponses, PartialUpdateInvoiceResponses, PartialUpdateProjectData, PartialUpdateProjectResponses, PartialUpdateTaskData, PartialUpdateTaskResponses, PartialUpdateTimeSlipData, PartialUpdateTimeSlipResponses, PartialUpdateTrackedTimeData, PartialUpdateTrackedTimeResponses, RetrieveCompanyData, RetrieveCompanyResponses, RetrieveContactData, RetrieveContactResponses, RetrieveExchangeRateData, RetrieveExchangeRateResponses, RetrieveInvoiceData, RetrieveInvoiceModifierData, RetrieveInvoiceModifierResponses, RetrieveInvoiceResponses, RetrieveOneTimeTokenData, RetrieveOneTimeTokenResponses, RetrieveProjectData, RetrieveProjectResponses, RetrieveTaskData, RetrieveTaskResponses, RetrieveTaskSummaryData, RetrieveTaskSummaryResponses, RetrieveTimeSlipData, RetrieveTimeSlipResponses, RetrieveTrackedTimeData, RetrieveTrackedTimeResponses, RetrieveUserData, RetrieveUserResponses, RetrieveVersionData, RetrieveVersionResponses, UpdateCompanyData, UpdateCompanyResponses, UpdateContactData, UpdateContactResponses, UpdateInvoiceData, UpdateInvoiceModifierData, UpdateInvoiceModifierResponses, UpdateInvoiceResponses, UpdateProjectData, UpdateProjectResponses, UpdateTaskData, UpdateTaskResponses, UpdateTimeSlipData, UpdateTimeSlipResponses, UpdateTrackedTimeData, UpdateTrackedTimeResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -47,6 +47,27 @@ export const createNote = <ThrowOnError extends boolean = false>(options?: Optio
             'Content-Type': 'application/json',
             ...options?.headers
         }
+    });
+};
+
+export const listBankTransactions = <ThrowOnError extends boolean = false>(options?: Options<ListBankTransactionsData, ThrowOnError>) => {
+    return (options?.client ?? client).get<ListBankTransactionsResponses, unknown, ThrowOnError>({
+        url: '/api/finance/transactions/',
+        ...options
+    });
+};
+
+export const listTagTypes = <ThrowOnError extends boolean = false>(options?: Options<ListTagTypesData, ThrowOnError>) => {
+    return (options?.client ?? client).get<ListTagTypesResponses, unknown, ThrowOnError>({
+        url: '/api/finance/tag_type/',
+        ...options
+    });
+};
+
+export const listBankAccounts = <ThrowOnError extends boolean = false>(options?: Options<ListBankAccountsData, ThrowOnError>) => {
+    return (options?.client ?? client).get<ListBankAccountsResponses, unknown, ThrowOnError>({
+        url: '/api/finance/bank_account/',
+        ...options
     });
 };
 

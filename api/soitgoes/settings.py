@@ -10,9 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
+import logging
 import os
 import sys
-import logging
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "journal",
     "users",
     "crm",
+    "financeapp",
     "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
@@ -229,4 +230,3 @@ OSSSO_API_URL = os.environ.get("OSSSO_API_URL")
 OSSSO_API_TOKEN = os.environ.get("OSSSO_API_TOKEN")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-

@@ -24,6 +24,37 @@ export type Note = {
     readonly created_at?: string;
 };
 
+export type BankTransaction = {
+    bank_account: number;
+    readonly transaction_id?: string;
+    readonly date?: string;
+    readonly amount?: number;
+    readonly balance?: number;
+    readonly source?: string;
+    readonly description?: string;
+    readonly transaction_type?: string;
+    tags: Array<{
+        created_at: string;
+        rule: number;
+        tag_type: string;
+        value: string;
+        display_value: string;
+    }>;
+};
+
+export type TagType = {
+    tag_type: string;
+    value: string;
+    display_value: string;
+    count: number;
+};
+
+export type BankAccount = {
+    id: number;
+    name: string;
+    bank_name: string;
+};
+
 export type Project = {
     readonly id?: number;
     name: string;
@@ -274,6 +305,17 @@ export type NoteWritable = {
     contact: number;
 };
 
+export type BankTransactionWritable = {
+    bank_account: number;
+    tags: Array<{
+        created_at: string;
+        rule: number;
+        tag_type: string;
+        value: string;
+        display_value: string;
+    }>;
+};
+
 export type ProjectWritable = {
     name: string;
     contact: number;
@@ -471,6 +513,103 @@ export type CreateNoteResponses = {
 };
 
 export type CreateNoteResponse = CreateNoteResponses[keyof CreateNoteResponses];
+
+export type ListBankTransactionsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Number of results to return per page.
+         */
+        limit?: number;
+        /**
+         * The initial index from which to return the results.
+         */
+        offset?: number;
+        /**
+         * bank_account
+         */
+        bank_account?: string;
+        /**
+         * start
+         */
+        start?: string;
+        /**
+         * end
+         */
+        end?: string;
+        /**
+         * query
+         */
+        query?: string;
+    };
+    url: '/api/finance/transactions/';
+};
+
+export type ListBankTransactionsResponses = {
+    200: {
+        count: number;
+        next?: string | null;
+        previous?: string | null;
+        results: Array<BankTransaction>;
+    };
+};
+
+export type ListBankTransactionsResponse = ListBankTransactionsResponses[keyof ListBankTransactionsResponses];
+
+export type ListTagTypesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Number of results to return per page.
+         */
+        limit?: number;
+        /**
+         * The initial index from which to return the results.
+         */
+        offset?: number;
+    };
+    url: '/api/finance/tag_type/';
+};
+
+export type ListTagTypesResponses = {
+    200: {
+        count: number;
+        next?: string | null;
+        previous?: string | null;
+        results: Array<TagType>;
+    };
+};
+
+export type ListTagTypesResponse = ListTagTypesResponses[keyof ListTagTypesResponses];
+
+export type ListBankAccountsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Number of results to return per page.
+         */
+        limit?: number;
+        /**
+         * The initial index from which to return the results.
+         */
+        offset?: number;
+    };
+    url: '/api/finance/bank_account/';
+};
+
+export type ListBankAccountsResponses = {
+    200: {
+        count: number;
+        next?: string | null;
+        previous?: string | null;
+        results: Array<BankAccount>;
+    };
+};
+
+export type ListBankAccountsResponse = ListBankAccountsResponses[keyof ListBankAccountsResponses];
 
 export type ListProjectsData = {
     body?: never;

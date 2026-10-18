@@ -3,8 +3,8 @@
 import { type DefaultError, type InfiniteData, infiniteQueryOptions, queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { createCompany, createContact, createInvoice, createLogin, createNote, createProject, createSso, createTask, createTimeSlip, createTrackedTime, destroyCompany, destroyContact, destroyInvoice, destroyInvoiceModifier, destroyProject, destroyTask, destroyTimeSlip, destroyTrackedTime, listAccounts, listBulkInvoicePdfs, listCompanies, listContacts, listInvoiceModifiers, listInvoicePdfs, listInvoices, listNotes, listProjects, listProjectSummaries, listTasks, listTimeSlips, listTrackedTimes, type Options, partialUpdateCompany, partialUpdateContact, partialUpdateInvoice, partialUpdateInvoiceModifier, partialUpdateProject, partialUpdateTask, partialUpdateTimeSlip, partialUpdateTrackedTime, retrieveCompany, retrieveContact, retrieveExchangeRate, retrieveInvoice, retrieveInvoiceModifier, retrieveOneTimeToken, retrieveProject, retrieveTask, retrieveTaskSummary, retrieveTimeSlip, retrieveTrackedTime, retrieveUser, retrieveVersion, updateCompany, updateContact, updateInvoice, updateInvoiceModifier, updateProject, updateTask, updateTimeSlip, updateTrackedTime } from '../sdk.gen';
-import type { CreateCompanyData, CreateCompanyResponse, CreateContactData, CreateContactResponse, CreateInvoiceData, CreateInvoiceResponse, CreateLoginData, CreateLoginResponse, CreateNoteData, CreateNoteResponse, CreateProjectData, CreateProjectResponse, CreateSsoData, CreateSsoResponse, CreateTaskData, CreateTaskResponse, CreateTimeSlipData, CreateTimeSlipResponse, CreateTrackedTimeData, CreateTrackedTimeResponse, DestroyCompanyData, DestroyCompanyResponse, DestroyContactData, DestroyContactResponse, DestroyInvoiceData, DestroyInvoiceModifierData, DestroyInvoiceModifierResponse, DestroyInvoiceResponse, DestroyProjectData, DestroyProjectResponse, DestroyTaskData, DestroyTaskResponse, DestroyTimeSlipData, DestroyTimeSlipResponse, DestroyTrackedTimeData, DestroyTrackedTimeResponse, ListAccountsData, ListAccountsResponse, ListBulkInvoicePdfsData, ListCompaniesData, ListCompaniesResponse, ListContactsData, ListContactsResponse, ListInvoiceModifiersData, ListInvoiceModifiersResponse, ListInvoicePdfsData, ListInvoicesData, ListInvoicesResponse, ListNotesData, ListNotesResponse, ListProjectsData, ListProjectsResponse, ListProjectSummariesData, ListProjectSummariesResponse, ListTasksData, ListTasksResponse, ListTimeSlipsData, ListTimeSlipsResponse, ListTrackedTimesData, ListTrackedTimesResponse, PartialUpdateCompanyData, PartialUpdateCompanyResponse, PartialUpdateContactData, PartialUpdateContactResponse, PartialUpdateInvoiceData, PartialUpdateInvoiceModifierData, PartialUpdateInvoiceModifierResponse, PartialUpdateInvoiceResponse, PartialUpdateProjectData, PartialUpdateProjectResponse, PartialUpdateTaskData, PartialUpdateTaskResponse, PartialUpdateTimeSlipData, PartialUpdateTimeSlipResponse, PartialUpdateTrackedTimeData, PartialUpdateTrackedTimeResponse, RetrieveCompanyData, RetrieveContactData, RetrieveExchangeRateData, RetrieveInvoiceData, RetrieveInvoiceModifierData, RetrieveOneTimeTokenData, RetrieveProjectData, RetrieveTaskData, RetrieveTaskSummaryData, RetrieveTimeSlipData, RetrieveTrackedTimeData, RetrieveUserData, RetrieveVersionData, UpdateCompanyData, UpdateCompanyResponse, UpdateContactData, UpdateContactResponse, UpdateInvoiceData, UpdateInvoiceModifierData, UpdateInvoiceModifierResponse, UpdateInvoiceResponse, UpdateProjectData, UpdateProjectResponse, UpdateTaskData, UpdateTaskResponse, UpdateTimeSlipData, UpdateTimeSlipResponse, UpdateTrackedTimeData, UpdateTrackedTimeResponse } from '../types.gen';
+import { createCompany, createContact, createInvoice, createLogin, createNote, createProject, createSso, createTask, createTimeSlip, createTrackedTime, destroyCompany, destroyContact, destroyInvoice, destroyInvoiceModifier, destroyProject, destroyTask, destroyTimeSlip, destroyTrackedTime, listAccounts, listBankAccounts, listBankTransactions, listBulkInvoicePdfs, listCompanies, listContacts, listInvoiceModifiers, listInvoicePdfs, listInvoices, listNotes, listProjects, listProjectSummaries, listTagTypes, listTasks, listTimeSlips, listTrackedTimes, type Options, partialUpdateCompany, partialUpdateContact, partialUpdateInvoice, partialUpdateInvoiceModifier, partialUpdateProject, partialUpdateTask, partialUpdateTimeSlip, partialUpdateTrackedTime, retrieveCompany, retrieveContact, retrieveExchangeRate, retrieveInvoice, retrieveInvoiceModifier, retrieveOneTimeToken, retrieveProject, retrieveTask, retrieveTaskSummary, retrieveTimeSlip, retrieveTrackedTime, retrieveUser, retrieveVersion, updateCompany, updateContact, updateInvoice, updateInvoiceModifier, updateProject, updateTask, updateTimeSlip, updateTrackedTime } from '../sdk.gen';
+import type { CreateCompanyData, CreateCompanyResponse, CreateContactData, CreateContactResponse, CreateInvoiceData, CreateInvoiceResponse, CreateLoginData, CreateLoginResponse, CreateNoteData, CreateNoteResponse, CreateProjectData, CreateProjectResponse, CreateSsoData, CreateSsoResponse, CreateTaskData, CreateTaskResponse, CreateTimeSlipData, CreateTimeSlipResponse, CreateTrackedTimeData, CreateTrackedTimeResponse, DestroyCompanyData, DestroyCompanyResponse, DestroyContactData, DestroyContactResponse, DestroyInvoiceData, DestroyInvoiceModifierData, DestroyInvoiceModifierResponse, DestroyInvoiceResponse, DestroyProjectData, DestroyProjectResponse, DestroyTaskData, DestroyTaskResponse, DestroyTimeSlipData, DestroyTimeSlipResponse, DestroyTrackedTimeData, DestroyTrackedTimeResponse, ListAccountsData, ListAccountsResponse, ListBankAccountsData, ListBankAccountsResponse, ListBankTransactionsData, ListBankTransactionsResponse, ListBulkInvoicePdfsData, ListCompaniesData, ListCompaniesResponse, ListContactsData, ListContactsResponse, ListInvoiceModifiersData, ListInvoiceModifiersResponse, ListInvoicePdfsData, ListInvoicesData, ListInvoicesResponse, ListNotesData, ListNotesResponse, ListProjectsData, ListProjectsResponse, ListProjectSummariesData, ListProjectSummariesResponse, ListTagTypesData, ListTagTypesResponse, ListTasksData, ListTasksResponse, ListTimeSlipsData, ListTimeSlipsResponse, ListTrackedTimesData, ListTrackedTimesResponse, PartialUpdateCompanyData, PartialUpdateCompanyResponse, PartialUpdateContactData, PartialUpdateContactResponse, PartialUpdateInvoiceData, PartialUpdateInvoiceModifierData, PartialUpdateInvoiceModifierResponse, PartialUpdateInvoiceResponse, PartialUpdateProjectData, PartialUpdateProjectResponse, PartialUpdateTaskData, PartialUpdateTaskResponse, PartialUpdateTimeSlipData, PartialUpdateTimeSlipResponse, PartialUpdateTrackedTimeData, PartialUpdateTrackedTimeResponse, RetrieveCompanyData, RetrieveContactData, RetrieveExchangeRateData, RetrieveInvoiceData, RetrieveInvoiceModifierData, RetrieveOneTimeTokenData, RetrieveProjectData, RetrieveTaskData, RetrieveTaskSummaryData, RetrieveTimeSlipData, RetrieveTrackedTimeData, RetrieveUserData, RetrieveVersionData, UpdateCompanyData, UpdateCompanyResponse, UpdateContactData, UpdateContactResponse, UpdateInvoiceData, UpdateInvoiceModifierData, UpdateInvoiceModifierResponse, UpdateInvoiceResponse, UpdateProjectData, UpdateProjectResponse, UpdateTaskData, UpdateTaskResponse, UpdateTimeSlipData, UpdateTimeSlipResponse, UpdateTrackedTimeData, UpdateTrackedTimeResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -161,6 +161,135 @@ export const createNoteMutation = (options?: Partial<Options<CreateNoteData>>): 
         }
     };
     return mutationOptions;
+};
+
+export const listBankTransactionsQueryKey = (options?: Options<ListBankTransactionsData>) => createQueryKey('listBankTransactions', options);
+
+export const listBankTransactionsOptions = (options?: Options<ListBankTransactionsData>) => {
+    return queryOptions({
+        queryFn: async ({ queryKey, signal }) => {
+            const { data } = await listBankTransactions({
+                ...options,
+                ...queryKey[0],
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: listBankTransactionsQueryKey(options)
+    });
+};
+
+export const listBankTransactionsInfiniteQueryKey = (options?: Options<ListBankTransactionsData>): QueryKey<Options<ListBankTransactionsData>> => createQueryKey('listBankTransactions', options, true);
+
+export const listBankTransactionsInfiniteOptions = (options?: Options<ListBankTransactionsData>) => {
+    return infiniteQueryOptions<ListBankTransactionsResponse, DefaultError, InfiniteData<ListBankTransactionsResponse>, QueryKey<Options<ListBankTransactionsData>>, number | Pick<QueryKey<Options<ListBankTransactionsData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
+    // @ts-ignore
+    {
+        queryFn: async ({ pageParam, queryKey, signal }) => {
+            // @ts-ignore
+            const page: Pick<QueryKey<Options<ListBankTransactionsData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
+                query: {
+                    offset: pageParam
+                }
+            };
+            const params = createInfiniteParams(queryKey, page);
+            const { data } = await listBankTransactions({
+                ...options,
+                ...params,
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: listBankTransactionsInfiniteQueryKey(options)
+    });
+};
+
+export const listTagTypesQueryKey = (options?: Options<ListTagTypesData>) => createQueryKey('listTagTypes', options);
+
+export const listTagTypesOptions = (options?: Options<ListTagTypesData>) => {
+    return queryOptions({
+        queryFn: async ({ queryKey, signal }) => {
+            const { data } = await listTagTypes({
+                ...options,
+                ...queryKey[0],
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: listTagTypesQueryKey(options)
+    });
+};
+
+export const listTagTypesInfiniteQueryKey = (options?: Options<ListTagTypesData>): QueryKey<Options<ListTagTypesData>> => createQueryKey('listTagTypes', options, true);
+
+export const listTagTypesInfiniteOptions = (options?: Options<ListTagTypesData>) => {
+    return infiniteQueryOptions<ListTagTypesResponse, DefaultError, InfiniteData<ListTagTypesResponse>, QueryKey<Options<ListTagTypesData>>, number | Pick<QueryKey<Options<ListTagTypesData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
+    // @ts-ignore
+    {
+        queryFn: async ({ pageParam, queryKey, signal }) => {
+            // @ts-ignore
+            const page: Pick<QueryKey<Options<ListTagTypesData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
+                query: {
+                    offset: pageParam
+                }
+            };
+            const params = createInfiniteParams(queryKey, page);
+            const { data } = await listTagTypes({
+                ...options,
+                ...params,
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: listTagTypesInfiniteQueryKey(options)
+    });
+};
+
+export const listBankAccountsQueryKey = (options?: Options<ListBankAccountsData>) => createQueryKey('listBankAccounts', options);
+
+export const listBankAccountsOptions = (options?: Options<ListBankAccountsData>) => {
+    return queryOptions({
+        queryFn: async ({ queryKey, signal }) => {
+            const { data } = await listBankAccounts({
+                ...options,
+                ...queryKey[0],
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: listBankAccountsQueryKey(options)
+    });
+};
+
+export const listBankAccountsInfiniteQueryKey = (options?: Options<ListBankAccountsData>): QueryKey<Options<ListBankAccountsData>> => createQueryKey('listBankAccounts', options, true);
+
+export const listBankAccountsInfiniteOptions = (options?: Options<ListBankAccountsData>) => {
+    return infiniteQueryOptions<ListBankAccountsResponse, DefaultError, InfiniteData<ListBankAccountsResponse>, QueryKey<Options<ListBankAccountsData>>, number | Pick<QueryKey<Options<ListBankAccountsData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
+    // @ts-ignore
+    {
+        queryFn: async ({ pageParam, queryKey, signal }) => {
+            // @ts-ignore
+            const page: Pick<QueryKey<Options<ListBankAccountsData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
+                query: {
+                    offset: pageParam
+                }
+            };
+            const params = createInfiniteParams(queryKey, page);
+            const { data } = await listBankAccounts({
+                ...options,
+                ...params,
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: listBankAccountsInfiniteQueryKey(options)
+    });
 };
 
 export const listProjectsQueryKey = (options?: Options<ListProjectsData>) => createQueryKey('listProjects', options);

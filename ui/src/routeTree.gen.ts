@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TimeRouteImport } from './routes/time'
 import { Route as TrackingRouteRouteImport } from './routes/tracking/route'
 import { Route as InvoicesRouteRouteImport } from './routes/invoices/route'
+import { Route as FinanceRouteRouteImport } from './routes/finance/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ContactsIndexRouteImport } from './routes/contacts/index'
 import { Route as TrackingTrackingIdRouteImport } from './routes/tracking/$trackingId'
@@ -33,6 +34,11 @@ const TrackingRouteRoute = TrackingRouteRouteImport.update({
 const InvoicesRouteRoute = InvoicesRouteRouteImport.update({
   id: '/invoices',
   path: '/invoices',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinanceRouteRoute = FinanceRouteRouteImport.update({
+  id: '/finance',
+  path: '/finance',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -74,6 +80,7 @@ const InvoicesProjectIdInvoiceIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/finance': typeof FinanceRouteRoute
   '/invoices': typeof InvoicesRouteRouteWithChildren
   '/tracking': typeof TrackingRouteRouteWithChildren
   '/time': typeof TimeRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/finance': typeof FinanceRouteRoute
   '/invoices': typeof InvoicesRouteRouteWithChildren
   '/tracking': typeof TrackingRouteRouteWithChildren
   '/time': typeof TimeRoute
@@ -99,6 +107,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/finance': typeof FinanceRouteRoute
   '/invoices': typeof InvoicesRouteRouteWithChildren
   '/tracking': typeof TrackingRouteRouteWithChildren
   '/time': typeof TimeRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/finance'
     | '/invoices'
     | '/tracking'
     | '/time'
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/finance'
     | '/invoices'
     | '/tracking'
     | '/time'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/finance'
     | '/invoices'
     | '/tracking'
     | '/time'
@@ -150,6 +162,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FinanceRouteRoute: typeof FinanceRouteRoute
   InvoicesRouteRoute: typeof InvoicesRouteRouteWithChildren
   TrackingRouteRoute: typeof TrackingRouteRouteWithChildren
   TimeRoute: typeof TimeRoute
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       path: '/invoices'
       fullPath: '/invoices'
       preLoaderRoute: typeof InvoicesRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/finance': {
+      id: '/finance'
+      path: '/finance'
+      fullPath: '/finance'
+      preLoaderRoute: typeof FinanceRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -262,6 +282,7 @@ const TrackingRouteRouteWithChildren = TrackingRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FinanceRouteRoute: FinanceRouteRoute,
   InvoicesRouteRoute: InvoicesRouteRouteWithChildren,
   TrackingRouteRoute: TrackingRouteRouteWithChildren,
   TimeRoute: TimeRoute,
