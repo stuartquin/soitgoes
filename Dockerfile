@@ -1,6 +1,6 @@
 FROM python:3.12-bullseye
 
-RUN pip install poetry --progress-bar off
+COPY --from=ghcr.io/astral-sh/uv:0.13.6 /uv /uvx /bin/
 
 WORKDIR /app
 
@@ -10,10 +10,11 @@ RUN ln -s /app/wkhtmltox/bin/wkhtmltopdf /usr/bin/wkhtmltopdf
 
 WORKDIR /app/api
 COPY api/pyproject.toml /app/api
-COPY api/poetry.lock /app/api
+COPY api/uv.lock /app/api
 
-RUN poetry config virtualenvs.create false
-RUN poetry install --without dev --no-root
+ENV UV_PROJECT_ENVIRONMENT=/app/.venv
+RUN uv sync --frozen --no-dev --no-install-project
+ENV PATH="/app/.venv/bin:$PATH"
 
 WORKDIR /app
 ADD ui/package.json /app/ui/package.json
